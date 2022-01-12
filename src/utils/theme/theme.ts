@@ -52,6 +52,11 @@ const fonts: Font = {
   description2: `400 0.75rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
 };
 
+export interface Theme {
+  colors: Color;
+  fonts: Font;
+}
+
 const colors: Color = {
   background: "#F3F2F7",
   primary: {
@@ -80,4 +85,9 @@ const colors: Color = {
   },
 };
 
-export {};
+const theme: Theme = {
+  colors,
+  fonts,
+};
+
+export default theme;
