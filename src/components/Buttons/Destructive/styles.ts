@@ -1,8 +1,11 @@
-import styled from "styled-components/native";
+import { useContext } from "react";
+import styled, { ThemeContext } from "styled-components/native";
+import { LabelProps } from "..";
 import * as I from "../styles";
 
 export const Container = styled(I.DefaultButtonStyle)`
-  background-color: ${({ theme }) => theme.colors.red.default};
+  background-color: ${({ theme, disabled }) =>
+    disabled ? theme.colors.grayscale.scale30 : theme.colors.red.default};
   border: 0;
 `;
 
