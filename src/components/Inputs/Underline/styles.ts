@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import { FocusProps } from "..";
 
 export const Input = styled.TextInput`
   padding: 0;
@@ -8,10 +9,11 @@ export const Input = styled.TextInput`
   outline-width: 0px;
 `;
 
-export const Line = styled.View`
+export const Line = styled.View<FocusProps>`
   height: 1px;
   margin-top: 2px;
-  background-color: ${({ theme }) => theme.colors.grayscale.scale30};
+  background-color: ${({ theme, isFocus }) =>
+    isFocus ? theme.colors.primary.default : theme.colors.grayscale.scale30};
 `;
 
 export const Container = styled.View`
