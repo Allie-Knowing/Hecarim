@@ -1,4 +1,3 @@
-import useFocus from "hooks/useFocus";
 import { useContext } from "react";
 import { TextInput, TextInputProps } from "react-native";
 import { ThemeContext } from "styled-components/native";
