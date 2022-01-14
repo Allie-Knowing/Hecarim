@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import { LabelProps } from "..";
 import * as I from "../styles";
 
 export const Container = styled(I.DefaultButtonStyle)`
@@ -8,7 +9,7 @@ export const Container = styled(I.DefaultButtonStyle)`
       disabled ? theme.colors.grayscale.scale30 : theme.colors.red.default};
 `;
 
-export const Label = styled(I.DefaultLabelStyle)`
+export const Label = styled(I.DefaultLabelStyle)<LabelProps>`
   color: ${({ theme, disabled }) =>
     disabled ? theme.colors.grayscale.scale30 : theme.colors.red.default};
 `;
