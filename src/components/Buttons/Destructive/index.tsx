@@ -3,7 +3,7 @@ import { ThemeContext } from "styled-components/native";
 import { ButtonProps } from "..";
 import * as S from "./styles";
 
-export const Destructive = ({ onPress, children }: ButtonProps) => {
+export const DestructiveButton = ({ onPress, children }: ButtonProps) => {
   const themeContext = useContext(ThemeContext);
 
   return (
@@ -15,4 +15,4 @@ export const Destructive = ({ onPress, children }: ButtonProps) => {
   );
 };
 
-export default Destructive;
+export default DestructiveButton;
