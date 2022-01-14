@@ -13,7 +13,7 @@ export const OutlineDestructiveButton = ({ onPress, children, disabled }: Button
         onPress={onPress}
         underlayColor={themeContext.colors.grayscale.scale20}
       >
-        <S.Label>{children}</S.Label>
+        <S.Label {...{ disabled }}>{children}</S.Label>
       </S.Container>
     </>
   );
