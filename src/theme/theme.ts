@@ -40,16 +40,16 @@ interface Color {
 }
 
 const fonts: Font = {
-  h1: `bold 2rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  h2: `bold 1.75rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  h3: `bold 1.5rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  subtitle1: `bold 1.25rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  subtitle2: `500 1.25rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  body1: `bold 1rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  body2: `500 1rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  body3: `400 1rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  description1: `400 0.875rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
-  description2: `400 0.75rem/130% 'Spoqa Han Sans Neo', 'sans-serif'`,
+  h1: `normal normal bold 2rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  h2: `normal normal bold 1.75rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  h3: `normal normal bold 1.5rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  subtitle1: `normal normal bold 1.25rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  subtitle2: `normal normal 500 1.25rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  body1: `normal normal bold 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  body2: `normal normal 500 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  body3: `normal normal 400 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  description1: `normal normal 400 0.875rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  description2: `normal normal 400 0.75rem 'Spoqa Han Sans Neo'; line-height: 130%`,
 };
 
 export interface Theme {
