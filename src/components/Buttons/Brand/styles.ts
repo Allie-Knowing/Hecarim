@@ -1,12 +1,11 @@
-import styled from "styled-components";
-import { DefaultButtonStyle } from "../styles";
+import styled from "styled-components/native";
+import * as I from "../styles";
 
-export const Button = styled(DefaultButtonStyle)`
+export const Container = styled(I.DefaultButtonStyle)`
   background-color: ${({ theme }) => theme.colors.primary.default};
-  color: ${({ theme }) => theme.colors.grayscale.scale10};
   border: 0;
+`;
 
-  &:active {
-    background-color: ${({ theme }) => theme.colors.primary.click};
-  }
+export const Label = styled(I.DefaultLabelStyle)`
+  color: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
