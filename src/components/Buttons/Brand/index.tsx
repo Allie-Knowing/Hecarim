@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { TouchableHighlight } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import { ButtonProps } from "..";
 import * as S from "./styles";
