@@ -13,7 +13,6 @@ const OutlineInput = (props: TextInputProps) => {
       {...(props as TextInput)}
       {...inputProps}
       {...{ isFocus }}
-      placeholder="hello wo"
       placeholderTextColor={themeContext.colors.grayscale.scale30}
     />
   );
