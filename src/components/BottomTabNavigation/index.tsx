@@ -29,7 +29,10 @@ const BottomTabNavigation = () => {
           width: "100%",
           backgroundColor: themeContext.colors.grayscale.scale10,
           justifyContent: "center",
+          borderTopWidth: 0,
+          shadowOpacity: 0,
         },
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let tabIcon = iconMap.get(route.name)!;
 
