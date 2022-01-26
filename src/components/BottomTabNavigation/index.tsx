@@ -1,14 +1,13 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { LabelPosition } from "@react-navigation/bottom-tabs/lib/typescript/src/types";
 import React, { useContext } from "react";
-import { Image, Text } from "react-native";
+import { Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.svg");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.svg");
 const SearchIcon = require("../../assets/icons/navigation/search.svg");
-const WalletIcon = require("../../assets/icons/navigation/wallet.svg");
+const QuestionIcon = require("../../assets/icons/navigation/question.svg");
 
 const Tab = createBottomTabNavigator();
 
@@ -33,16 +32,16 @@ const screens: Screen[] = [
     component: () => <Text>search</Text>,
   },
   {
+    name: "question",
+    label: "질문",
+    icon: QuestionIcon,
+    component: () => <Text>question</Text>,
+  },
+  {
     name: "mypage",
     label: "MY",
     icon: MyPageIcon,
     component: () => <Text>mypage</Text>,
-  },
-  {
-    name: "wallet",
-    label: "지갑",
-    icon: WalletIcon,
-    component: () => <Text>wallet</Text>,
   },
 ];
 
@@ -56,7 +55,6 @@ const BottomTabNavigation = () => {
           height: "50px",
           width: "100%",
           backgroundColor: themeContext.colors.grayscale.scale10,
-          justifyContent: "center",
           borderTopWidth: 0,
           shadowOpacity: 0,
         },
