@@ -24,16 +24,22 @@ const BottomTabNavigation = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        tabBarStyle: {
+          height: "50px",
+          width: "100%",
+          backgroundColor: themeContext.colors.grayscale.scale10,
+          justifyContent: "center",
+        },
         tabBarIcon: ({ focused, color, size }) => {
           let tabIcon = iconMap.get(route.name)!;
 
           return (
             <Image
               source={tabIcon}
-              resizeMode="contain"
+              resizeMode="cover"
               style={{
-                height: 30,
-                width: 30,
+                height: 20,
+                width: 20,
                 tintColor: !focused
                   ? themeContext.colors.grayscale.scale30
                   : themeContext.colors.primary.default,
