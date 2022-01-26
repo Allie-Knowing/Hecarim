@@ -7,7 +7,6 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noImplicitAny": true,
-    "baseUrl": "./src",
-    "typeRoots": ["./src/@types"]
+    "baseUrl": "./src"
   }
 }
