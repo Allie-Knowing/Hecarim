@@ -10,7 +10,7 @@ interface PropsType {
 }
 
 const Icon =
-  (name: string, icon: any, label: string) =>
+  (icon: any, label: string) =>
   ({ focused }: PropsType) => {
     const themeContext = useContext(ThemeContext);
 

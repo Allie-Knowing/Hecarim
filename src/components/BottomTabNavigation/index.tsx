@@ -64,10 +64,10 @@ const BottomTabNavigation = () => {
       {screens.map((value) => (
         <Tab.Screen
           name={value.name}
-          options={({ route }) => ({
-            tabBarIcon: Icon(route.name, value.icon, value.label),
+          options={{
+            tabBarIcon: Icon(value.icon, value.label),
             tabBarShowLabel: false,
-          })}
+          }}
           component={value.component}
         />
       ))}
