@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Image } from "react-native";
 import { ThemeContext } from "styled-components/native";
+import * as S from "./styles";
 
 const FeedIconDisable = require("../../assets/icons/navigation/feed/deactive.svg");
 const MyPageIconDisable = require("../../assets/icons/navigation/mypage/deactive.svg");
@@ -19,6 +20,12 @@ const iconMap = new Map<string, any>()
   .set("search", SearchIconDisable)
   .set("wallet", WalletIconDisable);
 
+const labelMap = new Map<string, string>()
+  .set("feed", "피드")
+  .set("mypage", "MY")
+  .set("search", "검색")
+  .set("wallet", "지갑");
+
 const Icon =
   (name: string) =>
   ({ focused }: PropsType) => {
@@ -26,17 +33,20 @@ const Icon =
     let tabIcon = iconMap.get(name)!;
 
     return (
-      <Image
-        source={tabIcon}
-        resizeMode="cover"
-        style={{
-          height: 20,
-          width: 20,
-          tintColor: !focused
-            ? themeContext.colors.grayscale.scale30
-            : themeContext.colors.primary.default,
-        }}
-      />
+      <S.Container>
+        <Image
+          source={tabIcon}
+          resizeMode="cover"
+          style={{
+            height: 20,
+            width: 20,
+            tintColor: !focused
+              ? themeContext.colors.grayscale.scale30
+              : themeContext.colors.primary.default,
+          }}
+        />
+        <S.Label focused={focused}>{labelMap.get(name)}</S.Label>
+      </S.Container>
     );
   };
 
