@@ -12,38 +12,36 @@ const WalletIcon = require("../../assets/icons/navigation/wallet.svg");
 
 const Tab = createBottomTabNavigator();
 
-const iconMap = new Map<string, any>()
-  .set("feed", FeedIcon)
-  .set("mypage", MyPageIcon)
-  .set("search", SearchIcon)
-  .set("wallet", WalletIcon);
-
-const labelMap = new Map<string, string>()
-  .set("feed", "피드")
-  .set("mypage", "MY")
-  .set("search", "검색")
-  .set("wallet", "지갑");
-
 interface Screen {
   name: string;
+  label: string;
+  icon: any;
   component: React.ComponentType<any>;
 }
 
 const screens: Screen[] = [
   {
     name: "feed",
+    label: "피드",
+    icon: FeedIcon,
     component: () => <Text>feed</Text>,
   },
   {
     name: "search",
+    label: "검색",
+    icon: SearchIcon,
     component: () => <Text>search</Text>,
   },
   {
     name: "mypage",
+    label: "MY",
+    icon: MyPageIcon,
     component: () => <Text>mypage</Text>,
   },
   {
     name: "wallet",
+    label: "지갑",
+    icon: WalletIcon,
     component: () => <Text>wallet</Text>,
   },
 ];
@@ -53,7 +51,7 @@ const BottomTabNavigation = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={{
         tabBarStyle: {
           height: "50px",
           width: "100%",
@@ -63,13 +61,15 @@ const BottomTabNavigation = () => {
           shadowOpacity: 0,
         },
         headerShown: false,
-        tabBarIcon: Icon(route.name, iconMap, labelMap),
-      })}
+      }}
     >
       {screens.map((value) => (
         <Tab.Screen
           name={value.name}
-          options={{ tabBarShowLabel: false }}
+          options={({ route }) => ({
+            tabBarIcon: Icon(route.name, value.icon, value.label),
+            tabBarShowLabel: false,
+          })}
           component={value.component}
         />
       ))}

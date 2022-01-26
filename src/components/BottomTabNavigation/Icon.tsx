@@ -10,15 +10,14 @@ interface PropsType {
 }
 
 const Icon =
-  (name: string, iconMap: Map<string, any>, labelMap: Map<string, string>) =>
+  (name: string, icon: any, label: string) =>
   ({ focused }: PropsType) => {
     const themeContext = useContext(ThemeContext);
-    let tabIcon = iconMap.get(name)!;
 
     return (
       <S.Container>
         <Image
-          source={tabIcon}
+          source={icon}
           resizeMode="cover"
           style={{
             height: 20,
@@ -28,7 +27,7 @@ const Icon =
               : themeContext.colors.primary.default,
           }}
         />
-        <S.Label focused={focused}>{labelMap.get(name)}</S.Label>
+        <S.Label focused={focused}>{label}</S.Label>
       </S.Container>
     );
   };
