@@ -3,10 +3,10 @@ import { Image } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import * as S from "./styles";
 
-const FeedIconDisable = require("../../assets/icons/navigation/feed/deactive.svg");
-const MyPageIconDisable = require("../../assets/icons/navigation/mypage/deactive.svg");
-const SearchIconDisable = require("../../assets/icons/navigation/search/deactive.svg");
-const WalletIconDisable = require("../../assets/icons/navigation/wallet/deactive.svg");
+const FeedIcon = require("../../assets/icons/navigation/feed.svg");
+const MyPageIcon = require("../../assets/icons/navigation/mypage.svg");
+const SearchIcon = require("../../assets/icons/navigation/search.svg");
+const WalletIcon = require("../../assets/icons/navigation/wallet.svg");
 
 interface PropsType {
   focused: boolean;
@@ -15,10 +15,10 @@ interface PropsType {
 }
 
 const iconMap = new Map<string, any>()
-  .set("feed", FeedIconDisable)
-  .set("mypage", MyPageIconDisable)
-  .set("search", SearchIconDisable)
-  .set("wallet", WalletIconDisable);
+  .set("feed", FeedIcon)
+  .set("mypage", MyPageIcon)
+  .set("search", SearchIcon)
+  .set("wallet", WalletIcon);
 
 const labelMap = new Map<string, string>()
   .set("feed", "피드")

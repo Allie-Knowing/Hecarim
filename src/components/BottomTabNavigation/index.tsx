@@ -5,18 +5,7 @@ import { Image, Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 
-const FeedIconDisable = require("../../assets/icons/navigation/feed/deactive.svg");
-const MyPageIconDisable = require("../../assets/icons/navigation/mypage/deactive.svg");
-const SearchIconDisable = require("../../assets/icons/navigation/search/deactive.svg");
-const WalletIconDisable = require("../../assets/icons/navigation/wallet/deactive.svg");
-
 const Tab = createBottomTabNavigator();
-
-const iconMap = new Map<string, any>()
-  .set("feed", FeedIconDisable)
-  .set("mypage", MyPageIconDisable)
-  .set("search", SearchIconDisable)
-  .set("wallet", WalletIconDisable);
 
 const BottomTabNavigation = () => {
   const themeContext = useContext(ThemeContext);
