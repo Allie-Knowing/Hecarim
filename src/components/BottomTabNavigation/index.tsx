@@ -24,6 +24,30 @@ const labelMap = new Map<string, string>()
   .set("search", "검색")
   .set("wallet", "지갑");
 
+interface Screen {
+  name: string;
+  component: React.ComponentType<any>;
+}
+
+const screens: Screen[] = [
+  {
+    name: "feed",
+    component: () => <Text>feed</Text>,
+  },
+  {
+    name: "search",
+    component: () => <Text>search</Text>,
+  },
+  {
+    name: "mypage",
+    component: () => <Text>mypage</Text>,
+  },
+  {
+    name: "wallet",
+    component: () => <Text>wallet</Text>,
+  },
+];
+
 const BottomTabNavigation = () => {
   const themeContext = useContext(ThemeContext);
 
@@ -42,26 +66,13 @@ const BottomTabNavigation = () => {
         tabBarIcon: Icon(route.name, iconMap, labelMap),
       })}
     >
-      <Tab.Screen
-        name="feed"
-        options={{ tabBarShowLabel: false }}
-        component={() => <Text>feed</Text>}
-      />
-      <Tab.Screen
-        name="mypage"
-        options={{ tabBarShowLabel: false }}
-        component={() => <Text>mypage</Text>}
-      />
-      <Tab.Screen
-        name="search"
-        options={{ tabBarShowLabel: false }}
-        component={() => <Text>search</Text>}
-      />
-      <Tab.Screen
-        name="wallet"
-        options={{ tabBarShowLabel: false }}
-        component={() => <Text>wallet</Text>}
-      />
+      {screens.map((value) => (
+        <Tab.Screen
+          name={value.name}
+          options={{ tabBarShowLabel: false }}
+          component={value.component}
+        />
+      ))}
     </Tab.Navigator>
   );
 };
