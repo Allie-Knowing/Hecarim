@@ -3,7 +3,6 @@ import { LabelPosition } from "@react-navigation/bottom-tabs/lib/typescript/src/
 import React, { useContext } from "react";
 import { Image, Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
-import Label from "./Label";
 import Icon from "./Icon";
 
 const FeedIconDisable = require("../../assets/icons/navigation/feed/deactive.svg");
@@ -39,22 +38,22 @@ const BottomTabNavigation = () => {
     >
       <Tab.Screen
         name="feed"
-        options={{ tabBarLabel: Label("피드") }}
+        options={{ tabBarShowLabel: false }}
         component={() => <Text>feed</Text>}
       />
       <Tab.Screen
         name="mypage"
-        options={{ tabBarLabel: Label("MY") }}
+        options={{ tabBarShowLabel: false }}
         component={() => <Text>mypage</Text>}
       />
       <Tab.Screen
         name="search"
-        options={{ tabBarLabel: Label("검색") }}
+        options={{ tabBarShowLabel: false }}
         component={() => <Text>search</Text>}
       />
       <Tab.Screen
         name="wallet"
-        options={{ tabBarLabel: Label("지갑") }}
+        options={{ tabBarShowLabel: false }}
         component={() => <Text>wallet</Text>}
       />
     </Tab.Navigator>
