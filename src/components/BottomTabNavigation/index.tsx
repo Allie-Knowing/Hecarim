@@ -5,7 +5,24 @@ import { Image, Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 
+const FeedIcon = require("../../assets/icons/navigation/feed.svg");
+const MyPageIcon = require("../../assets/icons/navigation/mypage.svg");
+const SearchIcon = require("../../assets/icons/navigation/search.svg");
+const WalletIcon = require("../../assets/icons/navigation/wallet.svg");
+
 const Tab = createBottomTabNavigator();
+
+const iconMap = new Map<string, any>()
+  .set("feed", FeedIcon)
+  .set("mypage", MyPageIcon)
+  .set("search", SearchIcon)
+  .set("wallet", WalletIcon);
+
+const labelMap = new Map<string, string>()
+  .set("feed", "피드")
+  .set("mypage", "MY")
+  .set("search", "검색")
+  .set("wallet", "지갑");
 
 const BottomTabNavigation = () => {
   const themeContext = useContext(ThemeContext);
@@ -22,7 +39,7 @@ const BottomTabNavigation = () => {
           shadowOpacity: 0,
         },
         headerShown: false,
-        tabBarIcon: Icon(route.name),
+        tabBarIcon: Icon(route.name, iconMap, labelMap),
       })}
     >
       <Tab.Screen
