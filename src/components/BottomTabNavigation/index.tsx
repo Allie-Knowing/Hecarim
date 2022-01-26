@@ -48,9 +48,21 @@ const BottomTabNavigation = () => {
         options={{ tabBarLabel: Label("피드") }}
         component={() => <Text>feed</Text>}
       />
-      <Tab.Screen name="mypage" component={() => <Text>mypage</Text>} />
-      <Tab.Screen name="search" component={() => <Text>search</Text>} />
-      <Tab.Screen name="wallet" component={() => <Text>wallet</Text>} />
+      <Tab.Screen
+        name="mypage"
+        options={{ tabBarLabel: Label("MY") }}
+        component={() => <Text>mypage</Text>}
+      />
+      <Tab.Screen
+        name="search"
+        options={{ tabBarLabel: Label("검색") }}
+        component={() => <Text>search</Text>}
+      />
+      <Tab.Screen
+        name="wallet"
+        options={{ tabBarLabel: Label("지갑") }}
+        component={() => <Text>wallet</Text>}
+      />
     </Tab.Navigator>
   );
 };
