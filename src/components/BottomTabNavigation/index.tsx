@@ -4,6 +4,7 @@ import React, { useContext } from "react";
 import { Image, Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import Label from "./Label";
+import Icon from "./Icon";
 
 const FeedIconDisable = require("../../assets/icons/navigation/feed/deactive.svg");
 const MyPageIconDisable = require("../../assets/icons/navigation/mypage/deactive.svg");
@@ -33,23 +34,7 @@ const BottomTabNavigation = () => {
           shadowOpacity: 0,
         },
         headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => {
-          let tabIcon = iconMap.get(route.name)!;
-
-          return (
-            <Image
-              source={tabIcon}
-              resizeMode="cover"
-              style={{
-                height: 20,
-                width: 20,
-                tintColor: !focused
-                  ? themeContext.colors.grayscale.scale30
-                  : themeContext.colors.primary.default,
-              }}
-            />
-          );
-        },
+        tabBarIcon: Icon(route.name),
       })}
     >
       <Tab.Screen
