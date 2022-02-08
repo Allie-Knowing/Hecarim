@@ -1,4 +1,3 @@
-import { Image } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -10,7 +9,7 @@ export const Container = styled.View`
   left: 0px;
 `;
 
-export const Video = styled(Image)`
+export const Video = styled.Image`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -53,17 +52,39 @@ export const Q = styled.Text`
 export const Description = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   font: ${({ theme }) => theme.fonts.description2};
-`;
-
-export const InvisiblePadding = styled.Text`
-  color: transparent;
-  font: ${({ theme }) => theme.fonts.h2};
+  margin-left: 35px;
 `;
 
 export const Icons = styled.View`
   flex-direction: column;
   row-gap: 20px;
   justify-content: flex-end;
+  align-items: center;
 `;
 
-export const IconContainer = styled.View``;
+export const ProfileImage = styled.Image`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+`;
+
+export const IconContainer = styled.View`
+  justify-content: center;
+  row-gap: 3px;
+  align-items: center;
+`;
+
+export const Icon = styled.Image`
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  object-position: center;
+`;
+
+export const IconLabel = styled.Text`
+  color: ${({ theme }) => theme.colors.grayscale.scale10};
+  font: ${({ theme }) => theme.fonts.description2};
+  text-align: center;
+`;
