@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Feed from "components/Feed";
 import React, { useContext } from "react";
 import { Text } from "react-native";
 import { ThemeContext } from "styled-components/native";
@@ -23,7 +24,7 @@ const screens: Screen[] = [
     name: "feed",
     label: "피드",
     icon: FeedIcon,
-    component: () => <Text>feed</Text>,
+    component: Feed,
   },
   {
     name: "search",
