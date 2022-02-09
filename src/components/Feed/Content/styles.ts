@@ -1,5 +1,9 @@
 import styled from "styled-components/native";
 
+interface MoreProps {
+  isMore: boolean;
+}
+
 export const Container = styled.View`
   position: relative;
   width: 100%;
@@ -29,6 +33,10 @@ export const Content = styled.View`
   align-items: flex-end;
   column-gap: 20px;
   flex-direction: row;
+`;
+
+export const InfoOuter = styled.TouchableWithoutFeedback`
+  flex: 1;
 `;
 
 export const InfoContainer = styled.View`
@@ -89,4 +97,8 @@ export const IconLabel = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   font: ${({ theme }) => theme.fonts.description2};
   text-align: center;
+`;
+
+export const HashTag = styled(Description)`
+  color: ${({ theme }) => theme.colors.primary.default};
 `;

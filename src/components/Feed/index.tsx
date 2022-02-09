@@ -1,5 +1,3 @@
-import { ScrollView, StyleSheet, View } from "react-native";
-import { Text } from "react-native";
 import Content from "./Content";
 import * as S from "./styles";
 import { Dimensions } from "react-native";
@@ -28,8 +26,8 @@ const Feed = () => {
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
-      data={[1, 2, 3, 4]}
       keyExtractor={(_, index) => index.toString()}
+      data={[1, 2, 3, 4]}
       renderItem={() => <Content />}
     />
   );
