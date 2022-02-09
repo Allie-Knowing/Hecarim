@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
 import * as S from "./styles";
 
 const Test = require("../../../assets/feed_test.jpg");
@@ -6,9 +6,11 @@ const Heart = require("../../../assets/icons/heart.svg");
 const Comment = require("../../../assets/icons/comment.svg");
 const More = require("../../../assets/icons/more.svg");
 
+const { height } = Dimensions.get("screen");
+
 const Content = () => {
   return (
-    <S.Container>
+    <S.Container style={{ height: `${height}px` }}>
       <S.Video source={Test} />
       <S.Content>
         <S.InfoContainer>

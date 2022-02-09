@@ -1,8 +1,7 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  flex: 1;
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 100%;
   top: 0px;
@@ -10,6 +9,9 @@ export const Container = styled.View`
 `;
 
 export const Video = styled.Image`
+  position: relative;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 100%;
   object-fit: cover;
