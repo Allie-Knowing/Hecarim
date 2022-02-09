@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components/native";
 
 interface MoreProps {
@@ -101,4 +102,13 @@ export const IconLabel = styled.Text`
 
 export const HashTag = styled(Description)`
   color: ${({ theme }) => theme.colors.primary.default};
+  margin-top: 5px;
+`;
+
+export const BackBlack = styled(LinearGradient)`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  height: 50%;
+  width: 100%;
 `;

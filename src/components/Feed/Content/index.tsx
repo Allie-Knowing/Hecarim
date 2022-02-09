@@ -1,7 +1,15 @@
-import React, { useState } from "react";
-import { Dimensions, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  LayoutAnimation,
+  Platform,
+  Text,
+  UIManager,
+  View,
+} from "react-native";
 import * as S from "./styles";
+import { ThemeContext } from "styled-components/native";
 
 const Test = require("../../../assets/feed_test.jpg");
 const Heart = require("../../../assets/icons/heart.svg");
@@ -12,12 +20,22 @@ const { height } = Dimensions.get("screen");
 
 const Content = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
+  const themeContext = useContext(ThemeContext);
 
   return (
     <S.Container style={{ height: `${height}px` }}>
       <S.Video source={Test} />
+      <S.BackBlack
+        colors={["transparent", themeContext.colors.grayscale.scale100]}
+        style={{ height: `${isMore ? 50 : 0}%` }}
+      />
       <S.Content>
-        <S.InfoOuter onPress={() => setIsMore(!isMore)}>
+        <S.InfoOuter
+          onPress={() => {
+            LayoutAnimation.easeInEaseOut();
+            setIsMore(!isMore);
+          }}
+        >
           <S.InfoContainer>
             <S.TitleContainer>
               <View>
