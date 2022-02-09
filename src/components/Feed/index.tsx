@@ -10,8 +10,9 @@ const Feed = () => {
   return (
     <S.Container
       decelerationRate="fast"
-      contentContainerStyle={{ flexGrow: 1 }}
       snapToAlignment="start"
+      pagingEnabled
+      contentContainerStyle={{ flexGrow: 1 }}
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       data={[1, 2, 3, 4]}
