@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Dimensions, LayoutAnimation, View } from "react-native";
+import React, { FC, useContext, useState } from "react";
+import { Dimensions, GestureResponderEvent, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -11,6 +11,11 @@ const More = require("../../../assets/icons/more.svg");
 
 const { height } = Dimensions.get("screen");
 
+interface Icon {
+  onPress?: (e: GestureResponderEvent) => void;
+  component: FC;
+}
+
 const Content = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
@@ -19,6 +24,31 @@ const Content = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
+
+  const icons: Icon[] = [
+    {
+      component: () => <S.ProfileImage source={Test} />,
+    },
+    {
+      component: () => (
+        <>
+          <S.Icon resizeMode="contain" source={Heart} />
+          <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
+        </>
+      ),
+    },
+    {
+      component: () => (
+        <>
+          <S.Icon resizeMode="contain" source={Comment} />
+          <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
+        </>
+      ),
+    },
+    {
+      component: () => <S.Icon resizeMode="contain" source={More} />,
+    },
+  ];
 
   return (
     <S.Container style={{ height: `${height}px` }}>
@@ -51,16 +81,11 @@ const Content = () => {
         </S.InfoOuter>
         <View>
           <S.Icons>
-            <S.ProfileImage source={Test} />
-            <S.IconContainer>
-              <S.Icon resizeMode="contain" source={Heart} />
-              <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
-            </S.IconContainer>
-            <S.IconContainer>
-              <S.Icon resizeMode="contain" source={Comment} />
-              <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
-            </S.IconContainer>
-            <S.Icon resizeMode="contain" source={More} />
+            {icons.map((value, index) => (
+              <S.IconContainer key={index} onPress={value.onPress}>
+                {React.createElement(value.component)}
+              </S.IconContainer>
+            ))}
           </S.Icons>
         </View>
       </S.Content>

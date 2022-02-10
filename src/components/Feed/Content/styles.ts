@@ -81,7 +81,7 @@ export const ProfileImage = styled.Image`
   object-position: center;
 `;
 
-export const IconContainer = styled.View`
+export const IconContainer = styled.TouchableOpacity`
   justify-content: center;
   row-gap: 3px;
   align-items: center;
