@@ -1,13 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Dimensions,
-  LayoutAnimation,
-  Platform,
-  Text,
-  UIManager,
-  View,
-} from "react-native";
+import React, { useContext, useState } from "react";
+import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -23,6 +15,11 @@ const Content = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
 
+  const onMorePress = () => {
+    LayoutAnimation.easeInEaseOut();
+    setIsMore(!isMore);
+  };
+
   return (
     <S.Container style={{ height: `${height}px` }}>
       <S.Video source={Test} />
@@ -31,12 +28,7 @@ const Content = () => {
         style={{ height: `${isMore ? 50 : 0}%` }}
       />
       <S.Content>
-        <S.InfoOuter
-          onPress={() => {
-            LayoutAnimation.easeInEaseOut();
-            setIsMore(!isMore);
-          }}
-        >
+        <S.InfoOuter onPress={onMorePress}>
           <S.InfoContainer>
             <S.TitleContainer>
               <View>
