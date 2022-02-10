@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
+import formattedNumber from "constant/formattedNumber";
 
 const Test = require("../../../assets/feed_test.jpg");
 const Heart = require("../../../assets/icons/heart.svg");
@@ -50,7 +51,8 @@ const Content = () => {
             </S.Description>
             {isMore && (
               <S.HashTag>
-                #쇼미#쇼미10#국힙원탑#이찬혁#힙합#노래 #디자인#개하기#싫다#임연상#니가#하라고
+                #쇼미 #쇼미10 #국힙원탑 #이찬혁 #힙합 #노래 #디자인 #개하기 #싫다 #임연상 #니가
+                #하라고
               </S.HashTag>
             )}
           </S.InfoContainer>
@@ -60,11 +62,11 @@ const Content = () => {
             <S.ProfileImage source={Test} />
             <S.IconContainer>
               <S.Icon resizeMode="contain" source={Heart} />
-              <S.IconLabel>123.4k</S.IconLabel>
+              <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
             </S.IconContainer>
             <S.IconContainer>
               <S.Icon resizeMode="contain" source={Comment} />
-              <S.IconLabel>56</S.IconLabel>
+              <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
             </S.IconContainer>
             <S.Icon resizeMode="contain" source={More} />
           </S.Icons>
