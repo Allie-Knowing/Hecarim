@@ -39,17 +39,21 @@ interface Color {
   };
 }
 
+const calcPxByPercent = (fontSize: number, percent: number): string => {
+  return `${fontSize * percent}px`;
+}
+
 const fonts: Font = {
-  h1: `normal normal bold 2rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  h2: `normal normal bold 1.75rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  h3: `normal normal bold 1.5rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  subtitle1: `normal normal bold 1.25rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  subtitle2: `normal normal 500 1.25rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  body1: `normal normal bold 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  body2: `normal normal 500 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  body3: `normal normal 400 1rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  description1: `normal normal 400 0.875rem 'Spoqa Han Sans Neo'; line-height: 130%`,
-  description2: `normal normal 400 0.75rem 'Spoqa Han Sans Neo'; line-height: 130%`,
+  h1: `normal normal bold 32px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(32, 130)}`,
+  h2: `normal normal bold 28px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(28, 130)}`,
+  h3: `normal normal bold 24px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(24, 130)}`,
+  subtitle1: `normal normal bold 20px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(20, 130)}`,
+  subtitle2: `normal normal 500 20px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(20, 130)}`,
+  body1: `normal normal bold 16px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(16, 130)}`,
+  body2: `normal normal 500 16px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(16, 130)}`,
+  body3: `normal normal 400 16px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(16, 130)}`,
+  description1: `normal normal 400 14px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(14, 130)}`,
+  description2: `normal normal 400 12px 'Spoqa Han Sans Neo'; line-height: ${calcPxByPercent(12, 130)}`,
 };
 
 export interface Theme {
