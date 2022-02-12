@@ -19,6 +19,7 @@ const Feed = () => {
 
   return (
     <S.Container
+      style={{height: `${height}px`}}
       decelerationRate="fast"
       snapToAlignment="start"
       pagingEnabled

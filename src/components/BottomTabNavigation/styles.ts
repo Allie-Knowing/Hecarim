@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Image } from "react-native";
+import { Image, StyleSheet } from "react-native";
 
 export const Label = styled.Text<{ focused: boolean }>`
   font: ${({ theme }) => theme.fonts.description2};

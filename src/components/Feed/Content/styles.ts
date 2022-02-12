@@ -19,8 +19,6 @@ export const Video = styled.Image`
   left: 0px;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
 `;
 
 export const Content = styled.View`
@@ -77,8 +75,6 @@ export const ProfileImage = styled.Image`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
 `;
 
 export const IconContainer = styled.TouchableOpacity`
@@ -90,8 +86,6 @@ export const IconContainer = styled.TouchableOpacity`
 export const Icon = styled.Image`
   width: 25px;
   height: 25px;
-  object-fit: contain;
-  object-position: center;
 `;
 
 export const IconLabel = styled.Text`
