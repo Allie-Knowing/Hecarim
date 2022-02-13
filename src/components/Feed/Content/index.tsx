@@ -11,9 +11,9 @@ import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const Test = require("../../../assets/feed_test.jpg");
-const Heart = require("../../../assets/icons/heart.svg");
-const Comment = require("../../../assets/icons/comment.svg");
-const More = require("../../../assets/icons/more.svg");
+const Heart = require("../../../assets/icons/heart.png");
+const Comment = require("../../../assets/icons/comment.png");
+const More = require("../../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
