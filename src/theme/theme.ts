@@ -40,7 +40,7 @@ interface Color {
 }
 
 const calcPxByPercent = (fontSize: number, percent: number): string => {
-  return `${fontSize * percent}px`;
+  return `${fontSize * 1.2 * (percent / 100)}px`;
 };
 
 const h1LineHeight = calcPxByPercent(32, 130);
