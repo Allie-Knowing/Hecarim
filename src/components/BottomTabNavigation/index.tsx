@@ -1,7 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Feed from "components/Feed";
 import React, { useContext } from "react";
+import { Dimensions } from "react-native";
 import { Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 
@@ -46,18 +48,23 @@ const screens: Screen[] = [
   },
 ];
 
+const { width } = Dimensions.get("window");
+
 const BottomTabNavigation = () => {
   const themeContext = useContext(ThemeContext);
+  const { bottom: bottomPad } = useSafeAreaInsets();
 
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: {
-          height: "50px",
-          width: "100%",
+          position: "absolute",
+          height: 50 + bottomPad,
+          width: width,
           backgroundColor: themeContext.colors.grayscale.scale10,
           borderTopWidth: 0,
           shadowOpacity: 0,
+          paddingBottom: bottomPad,
         },
         headerShown: false,
       }}
