@@ -30,7 +30,7 @@ export const Content = styled.View`
   padding: 20px;
   padding-bottom: 80px;
   align-items: flex-end;
-  column-gap: 20px;
+  /* gap: 20px; */
   flex-direction: row;
 `;
 
@@ -40,7 +40,7 @@ export const InfoOuter = styled.TouchableWithoutFeedback`
 
 export const InfoContainer = styled.View`
   flex: 1;
-  row-gap: 5px;
+  /* gap: 5px; */
 `;
 
 export const TitleContainer = styled.View`
@@ -66,7 +66,7 @@ export const Description = styled.Text`
 
 export const Icons = styled.View`
   flex-direction: column;
-  row-gap: 20px;
+  /* gap: 20px; */
   justify-content: flex-end;
   align-items: center;
 `;
@@ -74,12 +74,12 @@ export const Icons = styled.View`
 export const ProfileImage = styled.Image`
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  /* border-radius: 50%; */
 `;
 
 export const IconContainer = styled.TouchableOpacity`
   justify-content: center;
-  row-gap: 3px;
+  /* gap: 3px; */
   align-items: center;
 `;
 
