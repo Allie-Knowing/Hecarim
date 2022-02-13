@@ -28,7 +28,6 @@ export const Content = styled.View`
   width: 100%;
   height: 100%;
   padding: 20px;
-  padding-bottom: 80px;
   align-items: flex-end;
   /* gap: 20px; */
   flex-direction: row;

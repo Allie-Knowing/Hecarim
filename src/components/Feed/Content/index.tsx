@@ -8,6 +8,7 @@ import {
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const Test = require("../../../assets/feed_test.jpg");
 const Heart = require("../../../assets/icons/heart.svg");
@@ -24,6 +25,7 @@ interface Icon {
 const Content = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
+  const tabBarHeight = useBottomTabBarHeight();
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -62,7 +64,7 @@ const Content = () => {
         colors={["transparent", themeContext.colors.grayscale.scale100]}
         style={{ height: `${isMore ? 50 : 0}%` }}
       />
-      <S.Content>
+      <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
         <S.InfoOuter onPress={onMorePress}>
           <S.InfoContainer>
             <S.TitleContainer>
