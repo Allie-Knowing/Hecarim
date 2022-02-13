@@ -1,6 +1,10 @@
 import Content from "./Content";
 import * as S from "./styles";
-import { Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import {
+  Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 import { useEffect, useState } from "react";
 
 const { height } = Dimensions.get("screen");
@@ -19,7 +23,7 @@ const Feed = () => {
 
   return (
     <S.Container
-      style={{height: `${height}px`}}
+      style={{ height }}
       decelerationRate="fast"
       snapToAlignment="start"
       pagingEnabled

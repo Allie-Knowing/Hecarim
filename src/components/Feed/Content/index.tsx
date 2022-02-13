@@ -1,5 +1,10 @@
 import React, { FC, useContext, useState } from "react";
-import { Dimensions, GestureResponderEvent, LayoutAnimation, View } from "react-native";
+import {
+  Dimensions,
+  GestureResponderEvent,
+  LayoutAnimation,
+  View,
+} from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -51,7 +56,7 @@ const Content = () => {
   ];
 
   return (
-    <S.Container style={{ height: `${height}px` }}>
+    <S.Container style={{ height }}>
       <S.Video source={Test} />
       <S.BackBlack
         colors={["transparent", themeContext.colors.grayscale.scale100]}
@@ -68,13 +73,13 @@ const Content = () => {
             </S.TitleContainer>
             {isMore && <S.Description>2021년 12월 19일</S.Description>}
             <S.Description numberOfLines={isMore ? undefined : 1}>
-              제가 흥얼거리는 노래 제목 알려주세요 대충가사는 이래요 어느새부터 힙합은 안 멋져 이건
-              하나의 유행 혹은 TV쇼
+              제가 흥얼거리는 노래 제목 알려주세요 대충가사는 이래요 어느새부터
+              힙합은 안 멋져 이건 하나의 유행 혹은 TV쇼
             </S.Description>
             {isMore && (
               <S.HashTag>
-                #쇼미 #쇼미10 #국힙원탑 #이찬혁 #힙합 #노래 #디자인 #개하기 #싫다 #임연상 #니가
-                #하라고
+                #쇼미 #쇼미10 #국힙원탑 #이찬혁 #힙합 #노래 #디자인 #개하기
+                #싫다 #임연상 #니가 #하라고
               </S.HashTag>
             )}
           </S.InfoContainer>
