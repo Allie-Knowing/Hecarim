@@ -74,13 +74,13 @@ export const Icons = styled.View`
 export const ProfileImage = styled.Image`
   width: 40px;
   height: 40px;
-  /* border-radius: 50%; */
+  border-radius: 1000px;
 `;
 
 export const IconContainer = styled.TouchableOpacity`
   justify-content: center;
-  /* gap: 3px; */
   align-items: center;
+  margin-top: 20px;
 `;
 
 export const Icon = styled.Image`
@@ -92,6 +92,7 @@ export const IconLabel = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   font: ${({ theme }) => theme.fonts.description2};
   text-align: center;
+  margin-top: 3px;
 `;
 
 export const HashTag = styled(Description)`
