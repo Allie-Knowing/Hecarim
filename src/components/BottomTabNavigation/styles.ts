@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import { Image, StyleSheet } from "react-native";
 
 export const Label = styled.Text<{ focused: boolean }>`
   font: ${({ theme }) => theme.fonts.description2};
@@ -11,4 +10,7 @@ export const Label = styled.Text<{ focused: boolean }>`
 export const Container = styled.View`
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  justify-content: center;
+  padding: 6px 0px;
 `;

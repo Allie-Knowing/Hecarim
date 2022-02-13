@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import { Image } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import * as S from "./styles";
-import { SvgCssUri } from "react-native-svg";
+import { Image } from "react-native";
 
 interface PropsType {
   focused: boolean;
@@ -17,17 +16,16 @@ const Icon =
 
     return (
       <S.Container>
-        <SvgCssUri
-          uri={icon}
-          fill={
-            !focused
-              ? themeContext.colors.grayscale.scale30
-              : themeContext.colors.primary.default
-          }
+        <Image
+          source={icon}
           style={{
+            tintColor: !focused
+              ? themeContext.colors.grayscale.scale30
+              : themeContext.colors.primary.default,
             height: 20,
             width: 20,
           }}
+          resizeMode="contain"
         />
         <S.Label focused={focused}>{label}</S.Label>
       </S.Container>
