@@ -32,11 +32,7 @@ const DefaultBackDropComponent: FC<BottomSheetBackdropProps> = ({
     height,
   }));
 
-  return (
-    <Fragment>
-      <Animated.View style={containerAnimatedStyle} pointerEvents="none" />
-    </Fragment>
-  );
+  return <Animated.View style={containerAnimatedStyle} pointerEvents="none" />;
 };
 
 export default DefaultBackDropComponent;
