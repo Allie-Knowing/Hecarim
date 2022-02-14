@@ -58,7 +58,6 @@ const BottomTabNavigation = () => {
 
   return (
     <Tab.Navigator
-      screenListeners={{}}
       screenOptions={{
         tabBarStyle: {
           position: "absolute",
@@ -84,7 +83,7 @@ const BottomTabNavigation = () => {
             tabPress: () => setPressName(value.name),
           }}
           options={{
-            tabBarIcon: Icon(value.icon, value.label),
+            tabBarIcon: Icon(value.icon, value.label, pressName),
             tabBarShowLabel: false,
           }}
           component={value.component}

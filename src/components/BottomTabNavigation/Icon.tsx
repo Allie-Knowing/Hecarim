@@ -10,7 +10,7 @@ interface PropsType {
 }
 
 const Icon =
-  (icon: any, label: string) =>
+  (icon: any, label: string, routeName: string) =>
   ({ focused }: PropsType) => {
     const themeContext = useContext(ThemeContext);
 
@@ -20,12 +20,14 @@ const Icon =
           source={icon}
           style={{
             tintColor: !focused
-              ? themeContext.colors.grayscale.scale30
+              ? routeName === "feed"
+                ? themeContext.colors.grayscale.scale10
+                : themeContext.colors.grayscale.scale30
               : themeContext.colors.primary.default,
             height: 20,
             width: 20,
+            resizeMode: "stretch",
           }}
-          resizeMode="contain"
         />
         <S.Label focused={focused}>{label}</S.Label>
       </S.Container>
