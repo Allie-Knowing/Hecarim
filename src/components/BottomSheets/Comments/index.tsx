@@ -11,7 +11,9 @@ import {
   useRef,
 } from "react";
 import { Text, View } from "react-native";
+import Animated from "react-native-reanimated";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
+import DefaultBackgroundComponent from "../DefaultBackgroundComponent";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -41,9 +43,10 @@ const CommentBottomSheet = forwardRef<CommentBottomSheetRefProps>((_, ref) => {
       ref={sheetRef}
       enablePanDownToClose
       backdropComponent={DefaultBackDropComponent}
+      backgroundComponent={DefaultBackgroundComponent}
       snapPoints={["60%"]}
       index={-1}
-      style={{ zIndex: 1000 }}
+      style={{ zIndex: 3 }}
     >
       <View>
         <Text>hello world!</Text>
