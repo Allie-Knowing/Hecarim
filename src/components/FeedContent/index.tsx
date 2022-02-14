@@ -10,10 +10,10 @@ import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-const Test = require("../../../assets/feed_test.jpg");
-const Heart = require("../../../assets/icons/heart.png");
-const Comment = require("../../../assets/icons/comment.png");
-const More = require("../../../assets/icons/more.png");
+const Test = require("../../assets/feed_test.jpg");
+const Heart = require("../../assets/icons/heart.png");
+const Comment = require("../../assets/icons/comment.png");
+const More = require("../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -22,7 +22,11 @@ interface Icon {
   component: FC;
 }
 
-const Content = () => {
+interface PropsType {
+  openCommentBottomSheet: () => void;
+}
+
+const Content: FC<PropsType> = ({ openCommentBottomSheet }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
@@ -54,6 +58,7 @@ const Content = () => {
           <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
         </>
       ),
+      onPress: openCommentBottomSheet,
     },
     //더보기 아이콘
     {
