@@ -22,6 +22,10 @@ interface Screen {
   component: React.ComponentType<any>;
 }
 
+const testRender = (text: string) => () => {
+  return <Text>{text}</Text>;
+};
+
 const screens: Screen[] = [
   {
     name: "feed",
@@ -33,19 +37,19 @@ const screens: Screen[] = [
     name: "search",
     label: "검색",
     icon: SearchIcon,
-    component: () => <Text>search</Text>,
+    component: testRender("search"),
   },
   {
     name: "question",
     label: "질문",
     icon: QuestionIcon,
-    component: () => <Text>question</Text>,
+    component: testRender("search"),
   },
   {
     name: "mypage",
     label: "MY",
     icon: MyPageIcon,
-    component: () => <Text>mypage</Text>,
+    component: testRender("search"),
   },
 ];
 
@@ -65,7 +69,7 @@ const BottomTabNavigation = () => {
           width: width,
           backgroundColor:
             pressName === "feed"
-              ? "#00000000"
+              ? "transparent"
               : themeContext.colors.grayscale.scale10,
           borderTopWidth: 0,
           shadowOpacity: 0,
