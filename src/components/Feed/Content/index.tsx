@@ -33,9 +33,11 @@ const Content = () => {
   };
 
   const icons: Icon[] = [
+    //프로필 사진
     {
       component: () => <S.ProfileImage source={Test} />,
     },
+    //좋아요 아이콘
     {
       component: () => (
         <>
@@ -44,6 +46,7 @@ const Content = () => {
         </>
       ),
     },
+    //댓글 아이콘
     {
       component: () => (
         <>
@@ -52,8 +55,10 @@ const Content = () => {
         </>
       ),
     },
+    //더보기 아이콘
     {
       component: () => <S.Icon resizeMode="contain" source={More} />,
+      onPress: onMorePress,
     },
   ];
 
@@ -65,7 +70,7 @@ const Content = () => {
         style={{ height: `${isMore ? 50 : 0}%` }}
       />
       <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
-        <S.InfoOuter onPress={onMorePress}>
+        <S.InfoOuter>
           <S.InfoContainer>
             <S.TitleContainer>
               <View>

@@ -29,7 +29,6 @@ export const Content = styled.View`
   height: 100%;
   padding: 20px;
   align-items: flex-end;
-  /* gap: 20px; */
   flex-direction: row;
 `;
 
@@ -39,7 +38,6 @@ export const InfoOuter = styled.TouchableWithoutFeedback`
 
 export const InfoContainer = styled.View`
   flex: 1;
-  /* gap: 5px; */
 `;
 
 export const TitleContainer = styled.View`
@@ -61,11 +59,11 @@ export const Description = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   font: ${({ theme }) => theme.fonts.description2};
   margin-left: 35px;
+  margin-top: 5px;
 `;
 
 export const Icons = styled.View`
   flex-direction: column;
-  /* gap: 20px; */
   justify-content: flex-end;
   align-items: center;
 `;
