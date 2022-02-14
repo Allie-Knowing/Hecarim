@@ -43,6 +43,7 @@ const CommentBottomSheet = forwardRef<CommentBottomSheetRefProps>((_, ref) => {
       backdropComponent={DefaultBackDropComponent}
       snapPoints={["60%"]}
       index={-1}
+      style={{ zIndex: 1000 }}
     >
       <View>
         <Text>hello world!</Text>

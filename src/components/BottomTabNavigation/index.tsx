@@ -75,9 +75,11 @@ const BottomTabNavigation = () => {
           shadowOpacity: 0,
           paddingTop: 6,
           paddingBottom: bottomPad,
+          zIndex: 100,
         },
         headerShown: false,
       }}
+      initialRouteName="feed"
     >
       {screens.map((value) => (
         <Tab.Screen
