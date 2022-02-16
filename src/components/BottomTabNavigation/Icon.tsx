@@ -29,7 +29,17 @@ const Icon =
             resizeMode: "stretch",
           }}
         />
-        <S.Label focused={focused}>{label}</S.Label>
+        <S.Label
+          style={{
+            color: focused
+              ? themeContext.colors.primary.default
+              : routeName === "feed"
+              ? themeContext.colors.grayscale.scale10
+              : themeContext.colors.grayscale.scale30,
+          }}
+        >
+          {label}
+        </S.Label>
       </S.Container>
     );
   };
