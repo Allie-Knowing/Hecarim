@@ -1,7 +1,7 @@
 import { useContext } from "react";
-import { Image } from "react-native";
 import { ThemeContext } from "styled-components/native";
 import * as S from "./styles";
+import { Image } from "react-native";
 
 interface PropsType {
   focused: boolean;
@@ -10,7 +10,7 @@ interface PropsType {
 }
 
 const Icon =
-  (icon: any, label: string) =>
+  (icon: any, label: string, routeName: string) =>
   ({ focused }: PropsType) => {
     const themeContext = useContext(ThemeContext);
 
@@ -18,16 +18,28 @@ const Icon =
       <S.Container>
         <Image
           source={icon}
-          resizeMode="cover"
           style={{
+            tintColor: !focused
+              ? routeName === "feed"
+                ? themeContext.colors.grayscale.scale10
+                : themeContext.colors.grayscale.scale30
+              : themeContext.colors.primary.default,
             height: 20,
             width: 20,
-            tintColor: !focused
-              ? themeContext.colors.grayscale.scale30
-              : themeContext.colors.primary.default,
+            resizeMode: "stretch",
           }}
         />
-        <S.Label focused={focused}>{label}</S.Label>
+        <S.Label
+          style={{
+            color: focused
+              ? themeContext.colors.primary.default
+              : routeName === "feed"
+              ? themeContext.colors.grayscale.scale10
+              : themeContext.colors.grayscale.scale30,
+          }}
+        >
+          {label}
+        </S.Label>
       </S.Container>
     );
   };

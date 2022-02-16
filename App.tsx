@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components/native";
 import theme from "theme/theme";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -19,10 +20,14 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <BottomTabNavigation />
-      </NavigationContainer>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+        <ThemeProvider theme={theme}>
+          <NavigationContainer>
+            <BottomTabNavigation />
+          </NavigationContainer>
+        </ThemeProvider>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
