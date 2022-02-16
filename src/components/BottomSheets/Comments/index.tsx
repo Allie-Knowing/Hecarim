@@ -1,7 +1,9 @@
+import Comment from "components/Comment";
 import { forwardRef, useContext } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, ScrollView, Text, View } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ThemeContext } from "styled-components/native";
+import * as S from "./styles";
 
 const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
@@ -27,9 +29,22 @@ const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
         },
       }}
     >
-      <View>
-        <Text>hello world!</Text>
-      </View>
+      <S.Container>
+        <ScrollView>
+          <View>
+            <S.Title>댓글</S.Title>
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+            <Comment />
+          </View>
+        </ScrollView>
+      </S.Container>
     </RBSheet>
   );
 });
