@@ -6,16 +6,16 @@ import {
   NativeScrollEvent,
 } from "react-native";
 import { Fragment, useEffect, useState } from "react";
-import CommentBottomSheet, {
-  CommentBottomSheetRefProps,
-} from "components/BottomSheets/Comments";
 import { useRef } from "react";
+import { View } from "react-native";
+import { Text } from "react-native";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 const { height } = Dimensions.get("screen");
 
 const Feed = () => {
   const [page, setPage] = useState(0);
-  const commentBottomSheetRef = useRef<CommentBottomSheetRefProps>(null);
+  const commentBottomSheetRef = useRef<RBSheet>(null);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
