@@ -12,7 +12,7 @@ const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
     <RBSheet
       ref={ref}
       height={height * 0.6}
-      openDuration={250}
+      openDuration={400}
       closeOnDragDown
       closeOnPressMask
     >
