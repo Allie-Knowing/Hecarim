@@ -5,12 +5,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { Fragment, useEffect, useState } from "react";
-import { useRef } from "react";
-import { View } from "react-native";
-import { Text } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet";
-import CommentBottomSheet from "components/BottomSheets/Comments";
+import { useEffect, useState } from "react";
 
 const { height } = Dimensions.get("screen");
 
