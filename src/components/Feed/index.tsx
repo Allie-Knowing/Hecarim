@@ -47,7 +47,17 @@ const Feed = () => {
           />
         )}
       />
-      <CommentBottomSheet ref={commentBottomSheetRef} />
+      <RBSheet
+        ref={commentBottomSheetRef}
+        height={height * 0.6}
+        openDuration={250}
+        closeOnDragDown
+        closeOnPressMask
+      >
+        <View>
+          <Text>hello world!</Text>
+        </View>
+      </RBSheet>
     </Fragment>
   );
 };
