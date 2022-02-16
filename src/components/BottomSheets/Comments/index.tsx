@@ -1,13 +1,6 @@
 import Comment from "components/Comment";
 import { forwardRef, useContext } from "react";
-import {
-  Dimensions,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Dimensions, TouchableWithoutFeedback, View } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
@@ -17,6 +10,8 @@ const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
   open: () => void;
 }
+
+const TestImage = require("../../../assets/feed_test.jpg");
 
 const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
   const themeContext = useContext(ThemeContext);
@@ -56,10 +51,20 @@ const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
             </S.ScrollInner>
           </S.Scroll>
         </S.Container>
-        <S.Input
-          placeholder="Write a comment..."
-          style={{ paddingBottom: bottomPad }}
-        />
+        <S.InputContainer style={{ paddingBottom: bottomPad }}>
+          <S.InputWrapper>
+            <S.InputInner>
+              <S.ProfileImage source={TestImage} />
+              <S.Input
+                placeholder="KJG04로 답변 추가"
+                placeholderTextColor={themeContext.colors.grayscale.scale30}
+              />
+            </S.InputInner>
+            <TouchableWithoutFeedback>
+              <S.Submit>추가</S.Submit>
+            </TouchableWithoutFeedback>
+          </S.InputWrapper>
+        </S.InputContainer>
       </View>
     </RBSheet>
   );
