@@ -10,6 +10,7 @@ import { useRef } from "react";
 import { View } from "react-native";
 import { Text } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
+import CommentBottomSheet from "components/BottomSheets/Comments";
 
 const { height } = Dimensions.get("screen");
 
@@ -47,17 +48,7 @@ const Feed = () => {
           />
         )}
       />
-      <RBSheet
-        ref={commentBottomSheetRef}
-        height={height * 0.6}
-        openDuration={250}
-        closeOnDragDown
-        closeOnPressMask
-      >
-        <View>
-          <Text>hello world!</Text>
-        </View>
-      </RBSheet>
+      <CommentBottomSheet ref={commentBottomSheetRef} />
     </Fragment>
   );
 };
