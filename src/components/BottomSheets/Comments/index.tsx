@@ -1,6 +1,6 @@
 import Comment from "components/Comment";
 import { forwardRef, useContext } from "react";
-import { Dimensions, TouchableWithoutFeedback, View } from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
@@ -60,9 +60,9 @@ const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
                 placeholderTextColor={themeContext.colors.grayscale.scale30}
               />
             </S.InputInner>
-            <TouchableWithoutFeedback>
+            <TouchableOpacity onPress={() => {}}>
               <S.Submit>추가</S.Submit>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           </S.InputWrapper>
         </S.InputContainer>
       </View>
