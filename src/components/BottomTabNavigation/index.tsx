@@ -67,6 +67,8 @@ const BottomTabNavigation = () => {
           position: "absolute",
           height: 50 + bottomPad,
           width: width,
+          bottom: 0,
+          left: 0,
           backgroundColor:
             pressName === "feed"
               ? "transparent"
@@ -76,6 +78,7 @@ const BottomTabNavigation = () => {
           paddingTop: 6,
           paddingBottom: bottomPad,
           zIndex: 2,
+          elevation: 2,
         },
         headerShown: false,
       }}
