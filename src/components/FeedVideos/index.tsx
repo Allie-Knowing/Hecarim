@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { FC, useEffect, useState } from "react";
 
-const { height } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
 
 const FeedVideos: FC = () => {
   const [page, setPage] = useState(0);
@@ -23,7 +23,7 @@ const FeedVideos: FC = () => {
 
   return (
     <S.Container
-      style={{ height }}
+      style={{ width, height }}
       decelerationRate="fast"
       snapToAlignment="start"
       pagingEnabled
