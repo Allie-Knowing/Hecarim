@@ -9,7 +9,7 @@ import { FC, useEffect, useState } from "react";
 
 const { height } = Dimensions.get("screen");
 
-const Feed: FC = () => {
+const FeedVideos: FC = () => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -38,4 +38,4 @@ const Feed: FC = () => {
   );
 };
 
-export default Feed;
+export default FeedVideos;

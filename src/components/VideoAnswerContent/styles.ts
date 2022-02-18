@@ -50,7 +50,7 @@ export const Title = styled.Text`
   align-self: flex-end;
 `;
 
-export const Q = styled.Text`
+export const A = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   font: ${({ theme }) => theme.fonts.h2};
 `;

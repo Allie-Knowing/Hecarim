@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Feed from "components/FeedVideos";
+import FeedVideos from "components/FeedVideos";
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
@@ -31,7 +31,7 @@ const screens: Screen[] = [
     name: "feed",
     label: "피드",
     icon: FeedIcon,
-    component: Feed,
+    component: FeedVideos,
   },
   {
     name: "search",
