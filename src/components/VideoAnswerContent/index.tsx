@@ -1,12 +1,6 @@
-import React, { FC, Fragment, useContext, useRef, useState } from "react";
-import {
-  Dimensions,
-  GestureResponderEvent,
-  LayoutAnimation,
-  View,
-} from "react-native";
+import React, { FC, Fragment, useRef } from "react";
+import { Dimensions, GestureResponderEvent, View } from "react-native";
 import * as S from "./styles";
-import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -14,7 +8,6 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
-const More = require("../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -24,7 +17,6 @@ interface Icon {
 }
 
 const VideoAnswerContent: FC = () => {
-  const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<RBSheet>(null);
 
