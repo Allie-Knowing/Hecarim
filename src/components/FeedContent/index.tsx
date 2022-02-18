@@ -24,7 +24,7 @@ interface Icon {
   component: FC;
 }
 
-const Content: FC = () => {
+const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
@@ -112,4 +112,4 @@ const Content: FC = () => {
   );
 };
 
-export default Content;
+export default FeedContent;
