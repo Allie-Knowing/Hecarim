@@ -1,6 +1,6 @@
 import { Dimensions } from "react-native";
 import * as S from "./styles";
-import FeedVideos from "../../components/Feed";
+import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
 import React, { FC } from "react";
 

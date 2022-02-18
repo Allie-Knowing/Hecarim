@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Feed from "components/Feed";
+import Feed from "components/FeedVideos";
 import React, { useContext } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
