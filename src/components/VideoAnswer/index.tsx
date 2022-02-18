@@ -1,4 +1,4 @@
-import FeedContent from "../FeedContent";
+import VideoAnswerContent from "../VideoAnswerContent";
 import * as S from "./styles";
 import {
   Dimensions,
@@ -33,7 +33,7 @@ const Feed = () => {
       onScroll={onScroll}
       keyExtractor={(_, index) => index.toString()}
       data={[1, 2, 3, 4]}
-      renderItem={() => <FeedContent />}
+      renderItem={() => <VideoAnswerContent />}
     />
   );
 };
