@@ -5,11 +5,11 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 const { height } = Dimensions.get("screen");
 
-const Feed = () => {
+const VideoAnswer: FC = () => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -38,4 +38,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default VideoAnswer;
