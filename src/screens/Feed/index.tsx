@@ -1,23 +1,28 @@
 import {
   Dimensions,
-  ListViewComponent,
   NativeScrollEvent,
   NativeSyntheticEvent,
+  ViewStyle,
 } from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC } from "react";
 import { useState } from "react";
 import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  Extrapolate,
+  AnimateStyle,
+  useAnimatedScrollHandler,
 } from "react-native-reanimated";
 import { LayoutChangeEvent } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useCallback } from "react";
 
 const { height, width } = Dimensions.get("screen");
-const navGap = 16;
+const navGap = 24;
 
 interface WidthsType {
   question: number;
@@ -25,36 +30,53 @@ interface WidthsType {
 }
 
 const Feed = () => {
-  const [page, setPage] = useState<number>(0);
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
-
-  const questionOpacity = interpolate(pageOffset.value, [0, 1], [1, 0.5]);
-  const answerOpacity = interpolate(pageOffset.value, [0, 1], [0.5, 1]);
+  const { top: topPad } = useSafeAreaInsets();
 
   const questionNavStyle = useAnimatedStyle(() => ({
-    opacity: questionOpacity,
-    left: width / 2 - widths.question / 2,
+    opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
+    transform: [
+      {
+        translateX: interpolate(
+          pageOffset.value,
+          [0, 1],
+          [0, -(widths.answer / 2) - navGap - widths.question / 2]
+        ),
+      },
+    ],
   }));
 
   const answerNavStyle = useAnimatedStyle(() => ({
-    opacity: answerOpacity,
-    left: width / 2 - widths.answer / 2,
+    opacity: interpolate(pageOffset.value, [0, 1], [0.4, 1]),
+    transform: [
+      {
+        translateX: interpolate(
+          pageOffset.value,
+          [0, 1],
+          [widths.question / 2 + widths.question + navGap, 0]
+        ),
+      },
+    ],
   }));
 
-  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const newPage = Math.round(e.nativeEvent.contentOffset.x / width);
-    pageOffset.value = e.nativeEvent.contentOffset.x / width;
-
-    setPage(newPage);
-  };
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (evnet) => {
+      pageOffset.value = evnet.contentOffset.x / width;
+    },
+  });
 
   const onLayout = (name: keyof WidthsType) => (e: LayoutChangeEvent) =>
     setWidths({ ...widths, [name]: e.nativeEvent.layout.width });
 
-  useEffect(() => {
-    console.log(page);
-  }, [page]);
+  const NavStyle = useCallback(
+    (name: keyof WidthsType): AnimateStyle<ViewStyle> => ({
+      left: width / 2 - widths[name] / 2,
+      top: topPad + 20,
+      position: "absolute",
+    }),
+    [widths, topPad]
+  );
 
   return (
     <S.Wrapper style={{ height }}>
@@ -64,20 +86,27 @@ const Feed = () => {
         pagingEnabled
         snapToInterval={width}
         horizontal
+        scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
         keyExtractor={(_, index) => index.toString()}
-        onScroll={onScroll}
+        onScroll={scrollHandler}
         data={[FeedVideos, VideoAnswer]}
         renderItem={(value) => React.createElement(value.item as FC)}
       />
-      <S.NavContaier style={questionNavStyle} onLayout={onLayout("question")}>
+      <Animated.View
+        style={[NavStyle("question"), questionNavStyle]}
+        onLayout={onLayout("question")}
+      >
         <S.NavText>질문</S.NavText>
-      </S.NavContaier>
-      <S.NavContaier style={answerNavStyle} onLayout={onLayout("answer")}>
+      </Animated.View>
+      <Animated.View
+        style={[NavStyle("answer"), answerNavStyle]}
+        onLayout={onLayout("answer")}
+      >
         <S.NavText>영상 답변</S.NavText>
-      </S.NavContaier>
+      </Animated.View>
     </S.Wrapper>
   );
 };
