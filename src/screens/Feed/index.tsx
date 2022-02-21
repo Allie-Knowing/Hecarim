@@ -99,9 +99,8 @@ const Feed = () => {
 
   useDerivedValue(() => {
     scrollTo(outerRef, pageValue.value * width, 0, true);
-    console.log("123");
-    console.log(pageId.value);
-  }, [pageId]);
+    pageId.value = pageId.value;
+  });
 
   const onNavPress = useCallback(
     (index: number) => () => {
