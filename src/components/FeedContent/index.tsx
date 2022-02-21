@@ -62,7 +62,6 @@ const FeedContent: FC = () => {
     //더보기 아이콘
     {
       component: () => <S.Icon resizeMode="contain" source={More} />,
-      onPress: onMorePress,
     },
   ];
 
@@ -75,7 +74,7 @@ const FeedContent: FC = () => {
           style={{ height: `${isMore ? 50 : 0}%` }}
         />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
-          <S.InfoOuter>
+          <S.InfoOuter onPress={onMorePress}>
             <S.InfoContainer>
               <S.TitleContainer>
                 <View>
