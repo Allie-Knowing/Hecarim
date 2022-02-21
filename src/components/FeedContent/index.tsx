@@ -1,10 +1,5 @@
 import React, { FC, Fragment, useContext, useRef, useState } from "react";
-import {
-  Dimensions,
-  GestureResponderEvent,
-  LayoutAnimation,
-  View,
-} from "react-native";
+import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -19,11 +14,6 @@ const More = require("../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
-interface Icon {
-  onPress?: (e: GestureResponderEvent) => void;
-  component: FC;
-}
-
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
@@ -34,36 +24,6 @@ const FeedContent: FC = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
-
-  const icons: Icon[] = [
-    //프로필 사진
-    {
-      component: () => <S.ProfileImage source={Test} />,
-    },
-    //좋아요 아이콘
-    {
-      component: () => (
-        <>
-          <S.Icon resizeMode="contain" source={Heart} />
-          <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
-        </>
-      ),
-    },
-    //댓글 아이콘
-    {
-      component: () => (
-        <>
-          <S.Icon resizeMode="contain" source={Comment} />
-          <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
-        </>
-      ),
-      onPress: () => commentBottomSheetRef.current?.open(),
-    },
-    //더보기 아이콘
-    {
-      component: () => <S.Icon resizeMode="contain" source={More} />,
-    },
-  ];
 
   return (
     <Fragment>
@@ -97,11 +57,22 @@ const FeedContent: FC = () => {
           </S.InfoOuter>
           <View>
             <S.Icons>
-              {icons.map((value, index) => (
-                <S.IconContainer key={index} onPress={value.onPress}>
-                  {React.createElement(value.component)}
-                </S.IconContainer>
-              ))}
+              <S.IconContainer>
+                <S.ProfileImage source={Test} />
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Heart} />
+                <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer
+                onPress={() => commentBottomSheetRef.current?.open()}
+              >
+                <S.Icon resizeMode="contain" source={Comment} />
+                <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={More} />
+              </S.IconContainer>
             </S.Icons>
           </View>
         </S.Content>

@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useRef } from "react";
-import { Dimensions, GestureResponderEvent, View } from "react-native";
+import { Dimensions, View } from "react-native";
 import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -12,34 +12,9 @@ const More = require("../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
-interface Icon {
-  onPress?: (e: GestureResponderEvent) => void;
-  component: FC;
-}
-
 const VideoAnswerContent: FC = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<RBSheet>(null);
-
-  const icons: Icon[] = [
-    //프로필 사진
-    {
-      component: () => <S.ProfileImage source={Test} />,
-    },
-    //좋아요 아이콘
-    {
-      component: () => (
-        <>
-          <S.Icon resizeMode="contain" source={Heart} />
-          <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
-        </>
-      ),
-    },
-    //더보기 아이콘
-    {
-      component: () => <S.Icon resizeMode="contain" source={More} />,
-    },
-  ];
 
   return (
     <Fragment>
@@ -59,11 +34,16 @@ const VideoAnswerContent: FC = () => {
           </S.InfoOuter>
           <View>
             <S.Icons>
-              {icons.map((value, index) => (
-                <S.IconContainer key={index} onPress={value.onPress}>
-                  {React.createElement(value.component)}
-                </S.IconContainer>
-              ))}
+              <S.IconContainer>
+                <S.ProfileImage source={Test} />
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Heart} />
+                <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={More} />
+              </S.IconContainer>
             </S.Icons>
           </View>
         </S.Content>
