@@ -6,6 +6,7 @@ import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import RBSheet from "react-native-raw-bottom-sheet";
 import CommentBottomSheet from "components/BottomSheets/Comments";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -18,7 +19,7 @@ const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
-  const commentBottomSheetRef = useRef<RBSheet>(null);
+  const commentBottomSheetRef = useRef<BottomSheet>(null);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -65,7 +66,7 @@ const FeedContent: FC = () => {
                 <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer
-                onPress={() => commentBottomSheetRef.current?.open()}
+                onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
               >
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
