@@ -8,6 +8,7 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
+const More = require("../../assets/icons/more.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -33,6 +34,10 @@ const VideoAnswerContent: FC = () => {
           <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
         </>
       ),
+    },
+    //더보기 아이콘
+    {
+      component: () => <S.Icon resizeMode="contain" source={More} />,
     },
   ];
 
