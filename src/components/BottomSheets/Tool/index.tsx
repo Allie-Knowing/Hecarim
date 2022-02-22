@@ -2,11 +2,13 @@ import BottomSheet, {
   BottomSheetView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
+import useThemeContext from "hooks/useThemeContext";
 import { forwardRef, useContext, useState } from "react";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
+import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import * as S from "./styles";
 
 interface PropsType {
@@ -22,7 +24,7 @@ export interface ToolItem {
 const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useThemeContext();
   const {
     animatedSnapPoints,
     animatedContentHeight,
@@ -48,6 +50,12 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
       }}
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
+      }}
+      backgroundComponent={StyledBackgroundComponent}
+      backgroundStyle={{
+        backgroundColor: themeContext.colors.grayscale.scale20,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
       }}
     >
       <BottomSheetView onLayout={handleContentLayout}>
