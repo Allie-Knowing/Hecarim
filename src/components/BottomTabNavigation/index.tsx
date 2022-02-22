@@ -1,12 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Feed from "components/Feed";
-import React, { useContext } from "react";
+import FeedVideos from "components/FeedVideos";
+import React, { Fragment, useContext } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Feed from "screens/Feed";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
+import { Host } from "react-native-portalize";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -61,44 +63,48 @@ const BottomTabNavigation = () => {
   const [pressName, setPressName] = useState<string>("feed");
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarStyle: {
-          position: "absolute",
-          height: 50 + bottomPad,
-          width: width,
-          bottom: 0,
-          left: 0,
-          backgroundColor:
-            pressName === "feed"
-              ? "transparent"
-              : themeContext.colors.grayscale.scale10,
-          borderTopWidth: 0,
-          shadowOpacity: 0,
-          paddingTop: 6,
-          paddingBottom: bottomPad,
-          zIndex: 2,
-          elevation: 2,
-        },
-        headerShown: false,
-      }}
-      initialRouteName="feed"
-    >
-      {screens.map((value) => (
-        <Tab.Screen
-          key={`${value}_screen`}
-          name={value.name}
-          listeners={{
-            tabPress: () => setPressName(value.name),
+    <Fragment>
+      <Host>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarStyle: {
+              position: "absolute",
+              height: 50 + bottomPad,
+              width: width,
+              bottom: 0,
+              left: 0,
+              backgroundColor:
+                pressName === "feed"
+                  ? "transparent"
+                  : themeContext.colors.grayscale.scale10,
+              borderTopWidth: 0,
+              shadowOpacity: 0,
+              paddingTop: 6,
+              paddingBottom: bottomPad,
+              zIndex: 2,
+              elevation: 2,
+            },
+            headerShown: false,
           }}
-          options={{
-            tabBarIcon: Icon(value.icon, value.label, pressName),
-            tabBarShowLabel: false,
-          }}
-          component={value.component}
-        />
-      ))}
-    </Tab.Navigator>
+          initialRouteName="feed"
+        >
+          {screens.map((value) => (
+            <Tab.Screen
+              key={`${value}_screen`}
+              name={value.name}
+              listeners={{
+                tabPress: () => setPressName(value.name),
+              }}
+              options={{
+                tabBarIcon: Icon(value.icon, value.label, pressName),
+                tabBarShowLabel: false,
+              }}
+              component={value.component}
+            />
+          ))}
+        </Tab.Navigator>
+      </Host>
+    </Fragment>
   );
 };
 

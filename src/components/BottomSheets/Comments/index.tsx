@@ -1,10 +1,14 @@
 import Comment from "components/Comment";
-import { forwardRef, useContext } from "react";
-import { Dimensions, TouchableOpacity, View } from "react-native";
+import { forwardRef, useContext, useState } from "react";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import { Portal } from "react-native-portalize";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
+import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import * as S from "./styles";
+import DefaultBackDropComponent from "../DefaultBackdropComponent";
+import useFocus from "hooks/useFocus";
 
 const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
@@ -13,60 +17,55 @@ export interface CommentBottomSheetRefProps {
 
 const TestImage = require("../../../assets/feed_test.jpg");
 
-const CommentBottomSheet = forwardRef<RBSheet>((_, ref) => {
+const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   const themeContext = useContext(ThemeContext);
   const { bottom: bottomPad } = useSafeAreaInsets();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [inputProps, isFocus] = useFocus();
 
   return (
-    <RBSheet
-      ref={ref}
-      height={height * 0.6}
-      openDuration={400}
-      closeOnDragDown
-      customStyles={{
-        container: {
+    <Portal>
+      <BottomSheet
+        ref={ref}
+        snapPoints={["70%"]}
+        enablePanDownToClose
+        enableOverDrag
+        index={-1}
+        backdropComponent={DefaultBackDropComponent(isOpen)}
+        handleStyle={{
           backgroundColor: themeContext.colors.grayscale.scale100,
-        },
-        draggableIcon: {
-          backgroundColor: themeContext.colors.grayscale.scale70,
-        },
-      }}
-    >
-      <View>
+          borderTopRightRadius: 10,
+          borderTopLeftRadius: 10,
+        }}
+        handleIndicatorStyle={{
+          backgroundColor: themeContext.colors.grayscale.scale50,
+        }}
+        onChange={(index) => setIsOpen(index !== -1)}
+        keyboardBehavior="extend"
+      >
         <S.Container>
           <S.Title>댓글</S.Title>
-          <S.Scroll>
-            <S.ScrollInner>
-              <View>
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-                <Comment />
-              </View>
-            </S.ScrollInner>
-          </S.Scroll>
+          <S.List
+            data={[1, 2, 3, 4, 5, 6, 7]}
+            keyExtractor={(i) => `comment_${i}`}
+            renderItem={() => <Comment />}
+            showsVerticalScrollIndicator={false}
+          />
         </S.Container>
-        <S.InputContainer style={{ paddingBottom: bottomPad }}>
-          <S.InputWrapper>
-            <S.InputInner>
-              <S.ProfileImage source={TestImage} />
-              <S.Input
-                placeholder="KJG04로 답변 추가"
-                placeholderTextColor={themeContext.colors.grayscale.scale30}
-              />
-            </S.InputInner>
-            <TouchableOpacity onPress={() => {}}>
-              <S.Submit>추가</S.Submit>
-            </TouchableOpacity>
-          </S.InputWrapper>
+        <S.InputContainer>
+          <S.InputProfile source={TestImage} />
+          <S.Input
+            placeholder="KJG04로 답변 추가"
+            placeholderTextColor={themeContext.colors.grayscale.scale30}
+            {...inputProps}
+          />
+          <TouchableOpacity>
+            <S.Submit>추가</S.Submit>
+          </TouchableOpacity>
         </S.InputContainer>
-      </View>
-    </RBSheet>
+        <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
+      </BottomSheet>
+    </Portal>
   );
 });
 

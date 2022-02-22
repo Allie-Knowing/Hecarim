@@ -1,15 +1,15 @@
-import Content from "../FeedContent";
+import VideoAnswerContent from "../VideoAnswerContent";
 import * as S from "./styles";
 import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
-const { height } = Dimensions.get("screen");
+const { height, width } = Dimensions.get("screen");
 
-const Feed = () => {
+const VideoAnswer: FC = () => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -23,7 +23,7 @@ const Feed = () => {
 
   return (
     <S.Container
-      style={{ height }}
+      style={{ height, width }}
       decelerationRate="fast"
       snapToAlignment="start"
       pagingEnabled
@@ -33,9 +33,9 @@ const Feed = () => {
       onScroll={onScroll}
       keyExtractor={(_, index) => index.toString()}
       data={[1, 2, 3, 4]}
-      renderItem={() => <Content />}
+      renderItem={() => <VideoAnswerContent />}
     />
   );
 };
 
-export default Feed;
+export default VideoAnswer;
