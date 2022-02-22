@@ -54,8 +54,6 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
       backgroundComponent={StyledBackgroundComponent}
       backgroundStyle={{
         backgroundColor: themeContext.colors.grayscale.scale20,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
       }}
     >
       <BottomSheetView onLayout={handleContentLayout}>
