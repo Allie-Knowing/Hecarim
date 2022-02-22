@@ -8,6 +8,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
+import { Portal } from "react-native-portalize";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -86,17 +87,17 @@ const FeedContent: FC = () => {
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
               </S.IconContainer>
-              <S.IconContainer
-                onPress={() => toolSheetRef.current?.snapToIndex(0)}
-              >
+              <S.IconContainer onPress={() => toolSheetRef.current?.expand()}>
                 <S.Icon resizeMode="contain" source={More} />
               </S.IconContainer>
             </S.Icons>
           </View>
         </S.Content>
       </S.Container>
-      <CommentBottomSheet ref={commentBottomSheetRef} />
-      <Tool ref={toolSheetRef} items={items} />
+      <Portal>
+        <CommentBottomSheet ref={commentBottomSheetRef} />
+        <Tool ref={toolSheetRef} items={items} />
+      </Portal>
     </Fragment>
   );
 };
