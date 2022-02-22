@@ -45,6 +45,8 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
             <S.Button
               style={{ borderTopWidth: index === 0 ? 0 : 1 }}
               onPress={value.onPress}
+              underlayColor={themeContext.colors.grayscale.scale30}
+              activeOpacity={1}
             >
               <S.Label color={value.color}>{value.text}</S.Label>
             </S.Button>
