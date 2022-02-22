@@ -7,6 +7,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import RBSheet from "react-native-raw-bottom-sheet";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet from "@gorhom/bottom-sheet";
+import Tool, { ToolItem } from "components/BottomSheets/Tool";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -20,11 +21,25 @@ const FeedContent: FC = () => {
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<BottomSheet>(null);
+  const toolSheetRef = useRef<BottomSheet>(null);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
+
+  const items: ToolItem[] = [
+    {
+      color: themeContext.colors.primary.default,
+      onPress: () => {},
+      text: "채택하기",
+    },
+    {
+      color: themeContext.colors.red.default,
+      onPress: () => {},
+      text: "삭제하기",
+    },
+  ];
 
   return (
     <Fragment>
@@ -71,7 +86,9 @@ const FeedContent: FC = () => {
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
               </S.IconContainer>
-              <S.IconContainer>
+              <S.IconContainer
+                onPress={() => toolSheetRef.current?.snapToIndex(0)}
+              >
                 <S.Icon resizeMode="contain" source={More} />
               </S.IconContainer>
             </S.Icons>
@@ -79,6 +96,7 @@ const FeedContent: FC = () => {
         </S.Content>
       </S.Container>
       <CommentBottomSheet ref={commentBottomSheetRef} />
+      <Tool ref={toolSheetRef} items={items} />
     </Fragment>
   );
 };
