@@ -31,12 +31,10 @@ const DefaultBackDropComponent =
     }));
 
     return (
-      <Fragment>
-        <Animated.View
-          style={containerAnimatedStyle}
-          pointerEvents={isOpen ? "auto" : "none"}
-        />
-      </Fragment>
+      <Animated.View
+        style={containerAnimatedStyle}
+        pointerEvents={isOpen ? "auto" : "none"}
+      />
     );
   };
 
