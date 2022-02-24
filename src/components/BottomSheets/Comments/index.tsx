@@ -8,6 +8,7 @@ import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import * as S from "./styles";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import useFocus from "hooks/useFocus";
+import StyledBackgroundComponent from "../StyledBackgroundComponent";
 
 const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
@@ -30,13 +31,12 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
       enableOverDrag
       index={-1}
       backdropComponent={DefaultBackDropComponent(isOpen)}
-      handleStyle={{
-        backgroundColor: themeContext.colors.grayscale.scale100,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-      }}
+      backgroundComponent={StyledBackgroundComponent}
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
+      }}
+      backgroundStyle={{
+        backgroundColor: themeContext.colors.grayscale.scale100,
       }}
       onChange={(index) => setIsOpen(index !== -1)}
       keyboardBehavior="extend"
