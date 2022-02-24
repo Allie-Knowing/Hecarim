@@ -43,11 +43,6 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
       backdropComponent={DefaultBackDropComponent(isOpen)}
       enablePanDownToClose
       animateOnMount
-      handleStyle={{
-        backgroundColor: themeContext.colors.grayscale.scale20,
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-      }}
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
       }}
