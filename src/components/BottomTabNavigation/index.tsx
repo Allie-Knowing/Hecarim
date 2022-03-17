@@ -9,6 +9,7 @@ import Feed from "screens/Feed";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
+import MyPage from "screens/MyPage";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -51,7 +52,7 @@ const screens: Screen[] = [
     name: "mypage",
     label: "MY",
     icon: MyPageIcon,
-    component: testRender("search"),
+    component: MyPage,
   },
 ];
 
