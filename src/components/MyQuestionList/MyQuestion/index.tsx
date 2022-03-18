@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Dimensions } from "react-native";
 import * as S from "./style";
 
@@ -6,7 +6,7 @@ const questionImage = require("../../../assets/feed_test.jpg");
 
 const { height, width } = Dimensions.get("screen");
 
-const MyQuestion = () => {
+const MyQuestion: FC = () => {
   return (
     <S.Question
       source={questionImage}

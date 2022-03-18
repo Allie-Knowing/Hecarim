@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as S from "./style";
 
-const MyPageHeader = () => {
+const MyPageHeader: FC = () => {
   const { top: topPad } = useSafeAreaInsets();
 
   return (

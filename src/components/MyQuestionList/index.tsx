@@ -1,11 +1,11 @@
-import React from "react";
+import React, { FC } from "react";
 import { Dimensions } from "react-native";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
 
 const { height } = Dimensions.get("window");
 
-const MyQuestionList = () => {
+const MyQuestionList: FC = () => {
   return (
     <S.Container height={height - 290}>
       <S.Title>나의 질문</S.Title>
