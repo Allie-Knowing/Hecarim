@@ -74,7 +74,7 @@ const BottomTabNavigation = () => {
               bottom: 0,
               left: 0,
               backgroundColor:
-                pressName === "feed"
+                pressName === "feed" || pressName === "question"
                   ? "transparent"
                   : themeContext.colors.grayscale.scale10,
               borderTopWidth: 0,
