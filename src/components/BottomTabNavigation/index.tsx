@@ -6,6 +6,7 @@ import { Dimensions } from "react-native";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feed from "screens/Feed";
+import Question from "components/Question";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
@@ -46,7 +47,7 @@ const screens: Screen[] = [
     name: "question",
     label: "질문",
     icon: QuestionIcon,
-    component: testRender("search"),
+    component: Question,
   },
   {
     name: "mypage",
@@ -75,7 +76,7 @@ const BottomTabNavigation = () => {
               bottom: 0,
               left: 0,
               backgroundColor:
-                pressName === "feed"
+                pressName === "feed" || pressName === "question"
                   ? "transparent"
                   : themeContext.colors.grayscale.scale10,
               borderTopWidth: 0,
