@@ -11,14 +11,19 @@ import {
 import { Camera } from "expo-camera";
 import { Video } from "expo-av";
 import * as S from "./styles";
+import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
+import { Camera } from "expo-camera";
+import { Video } from "expo-av";
+import * as S from "./styles";
+import QuestionDetail from "./QuestionDetail";
+
+//Import images
 const rotateImg = require("../../assets/icons/rotate.png");
 const recordingImg = require("../../assets/icons/recording.png");
 const recordImg = require("../../assets/icons/record.png");
 const videoImg = require("../../assets/icons/video.png");
 const backImg = require("../../assets/icons/back.png");
-const WINDOW_HEIGHT = Dimensions.get("window").height;
-const closeButtonSize = Math.floor(WINDOW_HEIGHT * 0.032);
-const captureSize = Math.floor(WINDOW_HEIGHT * 0.09);
+
 
 const Question: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -31,6 +36,9 @@ const Question: FC = (): JSX.Element => {
 
   useEffect(() => {
     startCamera();
+    return () => {
+      setIsVideoRecording(false);
+    };
   }, []);
 
   const onCameraReady = () => {
@@ -62,12 +70,15 @@ const Question: FC = (): JSX.Element => {
     }
   };
 
+  const openQuestionDetail = () => {};
+
   const stopVideoRecording = () => {
     if (cameraRef) {
       setIsPreview(false);
       setIsVideoRecording(false);
       cameraRef.stopRecording();
     }
+    openQuestionDetail();
   };
 
   const switchCamera = () => {
@@ -103,7 +114,6 @@ const Question: FC = (): JSX.Element => {
 
   const renderVideoPlayer = () => (
     <Video
-      useNativeControls={true}
       source={{ uri: videoSource ?? "" }}
       style={{ ...StyleSheet.absoluteFillObject }}
       resizeMode={"cover"}
@@ -121,9 +131,6 @@ const Question: FC = (): JSX.Element => {
 
   const renderCaptureControl = () => (
     <S.Control>
-      <S.GetVideoContainer>
-        <Image source={videoImg} style={{ width: 40, height: 40 }} />
-      </S.GetVideoContainer>
       {isVideoRecording ? (
         <S.RecordVideoContainer
           activeOpacity={0.7}
@@ -133,13 +140,21 @@ const Question: FC = (): JSX.Element => {
           <Image source={recordingImg} style={{ width: 60, height: 60 }} />
         </S.RecordVideoContainer>
       ) : (
-        <S.RecordVideoContainer onPress={recordVideo}>
-          <S.RecordImageStyle source={recordImg} />
-        </S.RecordVideoContainer>
+        <>
+          <S.GetVideoContainer>
+            <Image source={videoImg} style={{ width: 40, height: 40 }} />
+          </S.GetVideoContainer>
+          <S.RecordVideoContainer onPress={recordVideo}>
+            <S.RecordImageStyle source={recordImg} />
+          </S.RecordVideoContainer>
+          <S.FlipCameraContainer
+            disabled={!isCameraReady}
+            onPress={switchCamera}
+          >
+            <Image source={rotateImg} style={{ width: 48, height: 48 }} />
+          </S.FlipCameraContainer>
+        </>
       )}
-      <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
-        <Image source={rotateImg} style={{ width: 48, height: 48 }} />
-      </S.FlipCameraContainer>
     </S.Control>
   );
 
@@ -152,24 +167,26 @@ const Question: FC = (): JSX.Element => {
   }
 
   return (
-    <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-      <Camera
-        ref={(el) => setCameraRef(el)}
-        style={{ ...StyleSheet.absoluteFillObject }}
-        type={cameraType}
-        onCameraReady={onCameraReady}
-        onMountError={(error) => {
-          console.log("cammera error", error);
-        }}
-        // flashMode={Camera.Constants.FlashMode.on}
-      />
-      <View style={{ ...StyleSheet.absoluteFillObject }}>
-        {isVideoRecording && renderVideoRecordIndicator()}
-        {videoSource && renderVideoPlayer()}
-        {isPreview && renderPreviewHeader()}
-        {!videoSource && !isPreview && renderCaptureControl()}
-      </View>
-    </SafeAreaView>
+    <>
+      <QuestionDetail isRecording={isVideoRecording} videoSrc={videoSource} />
+      <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+        <Camera
+          ref={(el) => setCameraRef(el)}
+          style={{ ...StyleSheet.absoluteFillObject }}
+          type={cameraType}
+          onCameraReady={onCameraReady}
+          onMountError={(error) => {
+            console.log("cammera error", error);
+          }}
+        />
+        <View style={{ ...StyleSheet.absoluteFillObject }}>
+          {isVideoRecording && renderVideoRecordIndicator()}
+          {videoSource && renderVideoPlayer()}
+          {isPreview && renderPreviewHeader()}
+          {!videoSource && !isPreview && renderCaptureControl()}
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
