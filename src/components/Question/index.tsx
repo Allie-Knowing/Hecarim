@@ -10,22 +10,18 @@ const rotateImg = require("../../assets/icons/rotate.png");
 const recordingImg = require("../../assets/icons/recording.png");
 const recordImg = require("../../assets/icons/record.png");
 const videoImg = require("../../assets/icons/video.png");
-const backImg = require("../../assets/icons/back.png");
 
 const Question: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-  const [isPreview, setIsPreview] = useState(false);
-  const [isCameraReady, setIsCameraReady] = useState(false);
+  const [isPreview, setIsPreview] = useState<boolean>(false);
+  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
   const [videoSource, setVideoSource] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
 
   useEffect(() => {
     startCamera();
-    return () => {
-      setIsVideoRecording(false);
-    };
   }, []);
 
   const onCameraReady = () => {
@@ -57,15 +53,12 @@ const Question: FC = (): JSX.Element => {
     }
   };
 
-  const openQuestionDetail = () => {};
-
   const stopVideoRecording = () => {
     if (cameraRef) {
       setIsPreview(false);
       setIsVideoRecording(false);
       cameraRef.stopRecording();
     }
-    openQuestionDetail();
   };
 
   const switchCamera = () => {
@@ -80,34 +73,9 @@ const Question: FC = (): JSX.Element => {
   };
 
   const cancelPreview = async () => {
-    if (cameraRef) {
-      await cameraRef.resumePreview();
-      setIsPreview(false);
-      setVideoSource(null);
-    }
+    setIsPreview(false);
+    setVideoSource(null);
   };
-
-  const renderPreviewHeader = () => (
-    <S.PreviewHeaderContainer>
-      <S.BackImageContainer onPress={cancelPreview}>
-        <S.BackImage source={backImg} />
-      </S.BackImageContainer>
-      <S.QuestionVideoText>질문 영상 촬영</S.QuestionVideoText>
-      <S.PreviewNextContainer>
-        <Text style={{ color: "#fff" }}>다음</Text>
-      </S.PreviewNextContainer>
-    </S.PreviewHeaderContainer>
-  );
-
-  const renderVideoPlayer = () => (
-    <Video
-      source={{ uri: videoSource ?? "" }}
-      style={{ ...StyleSheet.absoluteFillObject }}
-      resizeMode={"cover"}
-      isLooping
-      shouldPlay
-    />
-  );
 
   const renderVideoRecordIndicator = () => (
     <S.RecordIndicatorContainer>
@@ -116,7 +84,7 @@ const Question: FC = (): JSX.Element => {
     </S.RecordIndicatorContainer>
   );
 
-  const renderCaptureControl = () => (
+  const renderVideoControl = () => (
     <S.Control>
       {isVideoRecording ? (
         <S.RecordVideoContainer
@@ -154,26 +122,30 @@ const Question: FC = (): JSX.Element => {
   }
 
   return (
-    <>
-      <QuestionDetail isRecording={isVideoRecording} videoSrc={videoSource} />
-      <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        <Camera
-          ref={(el) => setCameraRef(el)}
-          style={{ ...StyleSheet.absoluteFillObject }}
-          type={cameraType}
-          onCameraReady={onCameraReady}
-          onMountError={(error) => {
-            console.log("cammera error", error);
-          }}
+    <S.QuestionWrapper>
+      {isPreview ? (
+        <QuestionDetail
+          videoSrc={videoSource}
+          closeDetailPage={cancelPreview}
         />
-        <View style={{ ...StyleSheet.absoluteFillObject }}>
-          {isVideoRecording && renderVideoRecordIndicator()}
-          {videoSource && renderVideoPlayer()}
-          {isPreview && renderPreviewHeader()}
-          {!videoSource && !isPreview && renderCaptureControl()}
-        </View>
-      </SafeAreaView>
-    </>
+      ) : (
+        <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+          <Camera
+            ref={(el) => setCameraRef(el)}
+            style={{ ...StyleSheet.absoluteFillObject }}
+            type={cameraType}
+            onCameraReady={onCameraReady}
+            onMountError={(error) => {
+              console.log("cammera error", error);
+            }}
+          />
+          <View style={{ ...StyleSheet.absoluteFillObject }}>
+            {isVideoRecording && renderVideoRecordIndicator()}
+            {!videoSource && !isPreview && renderVideoControl()}
+          </View>
+        </SafeAreaView>
+      )}
+    </S.QuestionWrapper>
   );
 };
 

@@ -1,5 +1,11 @@
 import styled from "styled-components/native";
 
+export const QuestionWrapper = styled.View`
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+`;
+
 export const Control = styled.View`
   position: absolute;
   flex-direction: row;
@@ -64,39 +70,4 @@ export const RecordTitle = styled.Text`
 export const RecordImageStyle = styled.Image`
   width: 60;
   height: 60;
-`;
-
-export const BackImage = styled.Image`
-  width: 10;
-  height: 18;
-`;
-
-export const PreviewHeaderContainer = styled.View`
-  position: absolute;
-  top: 60px;
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 20px;
-  padding-right: 20px;
-`;
-
-export const BackImageContainer = styled.TouchableOpacity`
-  flex: 1;
-  justify-content: center;
-  align-items: flex-start;
-`;
-
-export const QuestionVideoText = styled.Text`
-  color: #fff;
-  font-size: 16;
-  flex: 1;
-  text-align: center;
-`;
-
-export const PreviewNextContainer = styled.TouchableOpacity`
-  flex: 1;
-  justify-content: center;
-  align-items: flex-end;
 `;
