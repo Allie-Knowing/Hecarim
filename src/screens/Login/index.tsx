@@ -45,7 +45,7 @@ const Login: FC = () => {
             }}
             scrollEnabled={false}
             sections={LOGIN_CONSTANT}
-            renderItem={({ item }: { item: SectionListData<ButtonType> }) => {
+            renderItem={({ item }: any) => {
               return (
                 <LoginButton logoSource={item.source}>{item.text}</LoginButton>
               );
