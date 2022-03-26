@@ -26,6 +26,16 @@ export const GetVideoContainer = styled.TouchableOpacity`
   flex: 1;
 `;
 
+export const VideoImage = styled.Image`
+  width: 40;
+  height: 40;
+`;
+
+export const FlipCameraImage = styled.Image`
+  width: 48;
+  height: 48;
+`;
+
 export const RecordVideoContainer = styled.TouchableOpacity`
   display: flex;
   flex: 1;
