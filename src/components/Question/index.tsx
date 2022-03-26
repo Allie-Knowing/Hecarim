@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FC } from "react";
 import { Camera } from "expo-camera";
-import { Video } from "expo-av";
 import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
 import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
+import { VideoDataType } from "interface/Question";
 
 //Import images
 const rotateImg = require("../../assets/icons/rotate.png");
@@ -17,7 +17,7 @@ const Question: FC = (): JSX.Element => {
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
-  const [videoSource, setVideoSource] = useState<string | null>(null);
+  const [videoSource, setVideoSource] = useState<VideoDataType | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
 
   useEffect(() => {
@@ -36,15 +36,16 @@ const Question: FC = (): JSX.Element => {
   const recordVideo = async () => {
     if (cameraRef) {
       try {
-        const videoRecordPromise = cameraRef.recordAsync();
+        const videoRecordPromise = cameraRef.recordAsync({
+          maxDuration: 60,
+        });
         if (videoRecordPromise) {
           setIsVideoRecording(true);
           const data = await videoRecordPromise;
-          const source = data.uri;
-          if (source) {
+
+          if (data) {
+            setVideoSource(data);
             setIsPreview(true);
-            console.log("video source", source);
-            setVideoSource(source);
           }
         }
       } catch (error) {
@@ -62,9 +63,6 @@ const Question: FC = (): JSX.Element => {
   };
 
   const switchCamera = () => {
-    if (isPreview) {
-      return;
-    }
     setCameraType((prevCameraType) =>
       prevCameraType === Camera.Constants.Type.back
         ? Camera.Constants.Type.front
@@ -77,16 +75,17 @@ const Question: FC = (): JSX.Element => {
     setVideoSource(null);
   };
 
-  const renderVideoRecordIndicator = () => (
+  const renderVideoRecordIndicator = (): JSX.Element => (
     <S.RecordIndicatorContainer>
       <S.RecordDot />
       <S.RecordTitle>{"질문 촬영중..."}</S.RecordTitle>
     </S.RecordIndicatorContainer>
   );
 
-  const renderVideoControl = () => (
+  const renderVideoControl = (): JSX.Element => (
     <S.Control>
       {isVideoRecording ? (
+        // 촬영중인 상태
         <S.RecordVideoContainer
           activeOpacity={0.7}
           disabled={!isCameraReady}
@@ -95,9 +94,10 @@ const Question: FC = (): JSX.Element => {
           <Image source={recordingImg} style={{ width: 60, height: 60 }} />
         </S.RecordVideoContainer>
       ) : (
+        // 촬영중이 아닌 상태
         <>
           <S.GetVideoContainer>
-            <Image source={videoImg} style={{ width: 40, height: 40 }} />
+            <S.VideoImage source={videoImg} />
           </S.GetVideoContainer>
           <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
@@ -106,7 +106,7 @@ const Question: FC = (): JSX.Element => {
             disabled={!isCameraReady}
             onPress={switchCamera}
           >
-            <Image source={rotateImg} style={{ width: 48, height: 48 }} />
+            <S.FlipCameraImage source={rotateImg} />
           </S.FlipCameraContainer>
         </>
       )}
@@ -125,7 +125,7 @@ const Question: FC = (): JSX.Element => {
     <S.QuestionWrapper>
       {isPreview ? (
         <QuestionDetail
-          videoSrc={videoSource}
+          videoData={videoSource}
           closeDetailPage={cancelPreview}
         />
       ) : (
@@ -138,6 +138,7 @@ const Question: FC = (): JSX.Element => {
             onMountError={(error) => {
               console.log("cammera error", error);
             }}
+            autoFocus={"on"}
           />
           <View style={{ ...StyleSheet.absoluteFillObject }}>
             {isVideoRecording && renderVideoRecordIndicator()}
