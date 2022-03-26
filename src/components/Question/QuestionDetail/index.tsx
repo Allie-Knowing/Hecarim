@@ -4,6 +4,7 @@ import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { VideoDataType } from "interface/Question";
+import { FooterHeight, HeaderHeight } from "constant/defaultStyle";
 import * as S from "./styles";
 const backImage = require("../../../assets/icons/back-black.png");
 import theme from "theme/theme";
@@ -21,11 +22,10 @@ const QuestionDetail: FC<Props> = ({
     theme.colors.grayscale.scale30
   );
   const { top: topPad, bottom: bottomPad } = useSafeAreaInsets();
-  const FooterHeight = 50;
-  const HeaderHeight = 50;
   const ScreenHeight = Dimensions.get("window").height;
 
   return (
+    //입력으로 인한 키보드가 올라올시에 자동으로 인풋 위치를 패딩으로 조정해주는 컴포넌트
     <KeyboardAwareScrollView
       extraHeight={20}
       enableOnAndroid={true}
