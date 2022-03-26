@@ -6,7 +6,7 @@ export const QuestionDetailWrapper = styled.View<{
 }>`
   height: ${(props) => props.height};
   width: 100%;
-  background-color: #e5e5e5;
+  background-color: ${({ theme }) => theme.colors.background};
   padding-top: ${(props) => props.topPad};
 `;
 
@@ -23,10 +23,32 @@ export const QuestionDetailHeader = styled.View<{ topPad: number }>`
   top: ${(props) => props.topPad};
 `;
 
+export const GoBackContainer = styled.TouchableOpacity`
+  flex: 1;
+  text-align: center;
+  font: ${({ theme }) => theme.fonts.body2};
+`;
+
+export const GoBackImage = styled.Image`
+  width: 10;
+  height: 18;
+`;
+
+export const InputQuestionInfoText = styled.Text`
+  flex: 1;
+  text-align: center;
+  font-size: 16;
+`;
+
 export const UploadContainer = styled.TouchableOpacity`
   flex: 1;
   justify-content: center;
   align-items: flex-end;
+`;
+
+export const UploadText = styled.Text`
+  font-size: 16;
+  color: ${({ theme }) => theme.colors.primary.default};
 `;
 
 export const QuestionDetailBody = styled.View<{ height: number }>`
@@ -42,16 +64,22 @@ export const VideoContainer = styled.View`
 `;
 
 export const InputContainer = styled.View`
+  display: flex;
   width: 100%;
   padding-left: 20;
   padding-right: 20;
-  margin-top: 28;
+  margin-top: 12;
   margin-bottom: 28;
   flex: 1;
 `;
 
+export const InputBox = styled.View`
+  margin-top: 16;
+`;
+
 export const TitleText = styled.Text`
   font: ${({ theme }) => theme.fonts.body3};
+  color: ${({ theme }) => theme.colors.grayscale.scale100};
   margin-bottom: 10;
 `;
 
@@ -64,7 +92,6 @@ export const TitleInput = styled.TextInput`
 export const TitleInputContainer = styled.View<{
   borderColor: string;
 }>`
-  width: 100%;
   border-bottom-width: 1;
   border-bottom-color: ${(props) => props.borderColor};
   position: relative;
