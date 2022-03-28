@@ -13,7 +13,7 @@ const videoImg = require("../../assets/icons/video.png");
 
 const Question: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
@@ -64,9 +64,9 @@ const Question: FC = (): JSX.Element => {
 
   const switchCamera = () => {
     setCameraType((prevCameraType) =>
-      prevCameraType === Camera.Constants.Type.back
-        ? Camera.Constants.Type.front
-        : Camera.Constants.Type.back
+      prevCameraType === Camera.Constants.Type.front
+        ? Camera.Constants.Type.back
+        : Camera.Constants.Type.front
     );
   };
 
