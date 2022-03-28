@@ -16,13 +16,33 @@ const Question: FC = (): JSX.Element => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
-  const [isVideoRecording, setIsVideoRecording] = useState(false);
+  const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
   const [videoSource, setVideoSource] = useState<VideoDataType | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
+  const [galleryVideoSources, setGalleryVideoSources] =
+    useState<MediaLibrary.Asset[]>();
+  const [isImportingVideo, setIsImportingVideo] = useState<boolean>(false);
 
   useEffect(() => {
     startCamera();
   }, []);
+
+  const getVideoSources = () => {
+    MediaLibrary.getAssetsAsync({ mediaType: "video" }).then((res) => {
+      setGalleryVideoSources(res.assets);
+      setIsImportingVideo(true);
+    });
+  };
+
+  const importMediaFromLibrary = () => {
+    MediaLibrary.getPermissionsAsync().then((res) => {
+      if (res.granted) {
+        getVideoSources();
+      } else {
+        alert("갤러리에 접근할 수 없습니다.");
+      }
+    });
+  };
 
   const onCameraReady = () => {
     setIsCameraReady(true);
@@ -34,22 +54,19 @@ const Question: FC = (): JSX.Element => {
   };
 
   const recordVideo = async () => {
+    setIsVideoRecording(true);
+
     if (cameraRef) {
       try {
         const videoRecordPromise = cameraRef.recordAsync({
           maxDuration: 60,
         });
-        if (videoRecordPromise) {
-          setIsVideoRecording(true);
-          const data = await videoRecordPromise;
-
-          if (data) {
-            setVideoSource(data);
-            setIsPreview(true);
-          }
-        }
+        videoRecordPromise.then((res) => {
+          setVideoSource(res);
+          setIsPreview(true);
+        });
       } catch (error) {
-        console.warn(error);
+        alert(error);
       }
     }
   };
@@ -96,7 +113,7 @@ const Question: FC = (): JSX.Element => {
       ) : (
         // 촬영중이 아닌 상태
         <>
-          <S.GetVideoContainer>
+          <S.GetVideoContainer onPress={importMediaFromLibrary}>
             <S.VideoImage source={videoImg} />
           </S.GetVideoContainer>
           <S.RecordVideoContainer onPress={recordVideo}>
