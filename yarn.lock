@@ -1336,7 +1336,7 @@
 
 "@koale/useworker@^4.0.2":
   version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@koale/useworker/-/useworker-4.0.2.tgz#cb540a2581cd6025307c3ca6685bc60748773e58"
+  resolved "https://registry.npmjs.org/@koale/useworker/-/useworker-4.0.2.tgz"
   integrity sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg==
   dependencies:
     dequal "^1.0.0"
@@ -2589,7 +2589,7 @@ depd@~1.1.2:
 
 dequal@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.1.tgz#dbbf9795ec626e9da8bd68782f4add1d23700d8b"
+  resolved "https://registry.npmjs.org/dequal/-/dequal-1.0.1.tgz"
   integrity sha512-Fx8jxibzkJX2aJgyfSdLhr9tlRoTnHKrRJuu2XHlAgKioN2j19/Bcbe0d4mFXYZ3+wpE2KVobUVTfDutcD17xQ==
 
 destroy@~1.0.4:
@@ -2764,14 +2764,14 @@ expo-asset@~8.4.5:
 
 expo-av@^10.2.1:
   version "10.2.1"
-  resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-10.2.1.tgz#c08bce464d673d0e90c68cac082bfb75a9437f25"
+  resolved "https://registry.npmjs.org/expo-av/-/expo-av-10.2.1.tgz"
   integrity sha512-thrkHVg4HVn8L+jHKVnXYd4TLkJQblFE8QXd3d1hwrYG63gehQT2nK4DM0Frl50EcdV8YN9XjhwHobtK5oMc9A==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
 
 expo-camera@~12.1.2:
   version "12.1.2"
-  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-12.1.2.tgz#b549a8054ce5778fbf37a45b5d41003f36f5bb3c"
+  resolved "https://registry.npmjs.org/expo-camera/-/expo-camera-12.1.2.tgz"
   integrity sha512-Rr0Evj1V3LGiZE5/YBuuVimuU9uSTwVoqtSBsZ8QoK11+g9vnu2NgBjFMb938yjWD5tqJiXRH8lVTM2mvzSmIQ==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
