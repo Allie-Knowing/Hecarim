@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
 import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
 import { VideoDataType } from "interface/Question";
+import * as MediaLibrary from "expo-media-library";
 
 //Import images
 const rotateImg = require("../../assets/icons/rotate.png");
