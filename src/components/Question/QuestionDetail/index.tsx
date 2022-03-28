@@ -11,12 +11,14 @@ import theme from "theme/theme";
 
 interface Props {
   videoData: VideoDataType | null;
+  previewVideoSrc: string;
   closeDetailPage: () => void;
 }
 
 const QuestionDetail: FC<Props> = ({
   videoData,
   closeDetailPage,
+  previewVideoSrc,
 }): JSX.Element => {
   const [borderBottomColor, setBorderBottomColor] = useState<string>(
     theme.colors.grayscale.scale30
@@ -53,14 +55,15 @@ const QuestionDetail: FC<Props> = ({
           <ScrollView scrollEnabled={true}>
             <S.VideoContainer>
               <Video
-                source={{ uri: videoData?.uri ?? "" }}
+                source={{ uri: previewVideoSrc }}
                 style={{
                   aspectRatio: 3 / 4,
-                  width: 250,
+                  width: "60%",
                   borderRadius: 10,
                 }}
                 shouldPlay
                 isLooping
+                resizeMode="contain"
               />
             </S.VideoContainer>
             <S.InputContainer>

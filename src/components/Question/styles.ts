@@ -43,6 +43,11 @@ export const RecordVideoContainer = styled.TouchableOpacity`
   align-items: center;
 `;
 
+export const RecordingVideoImage = styled.Image`
+  width: 60;
+  height: 60;
+`;
+
 export const FlipCameraContainer = styled.TouchableOpacity`
   display: flex;
   flex: 1;

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, FC } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
 import { VideoDataType } from "interface/Question";
-import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
+import * as Permission from "expo-permissions";
 
-//Import images
+//import images
 const rotateImg = require("../../assets/icons/rotate.png");
 const recordingImg = require("../../assets/icons/recording.png");
 const recordImg = require("../../assets/icons/record.png");
@@ -18,31 +19,36 @@ const Question: FC = (): JSX.Element => {
   const [isPreview, setIsPreview] = useState<boolean>(false);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
-  const [videoSource, setVideoSource] = useState<VideoDataType | null>(null);
+  const [videoData, setVideoData] = useState<VideoDataType | null>(null);
+  const [previewVideoSrc, setPreviewVideoSrc] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
-  const [galleryVideoSources, setGalleryVideoSources] =
-    useState<MediaLibrary.Asset[]>();
-  const [isImportingVideo, setIsImportingVideo] = useState<boolean>(false);
 
   useEffect(() => {
     startCamera();
   }, []);
 
-  const getVideoSources = () => {
-    MediaLibrary.getAssetsAsync({ mediaType: "video" }).then((res) => {
-      setGalleryVideoSources(res.assets);
-      setIsImportingVideo(true);
+  const importMediaFromLibrary = async () => {
+    const permission = await Permission.askAsync(Permission.MEDIA_LIBRARY);
+    const videoData = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      base64: true,
+      quality: ImagePicker.UIImagePickerControllerQualityType.High,
+      videoMaxDuration: 60,
+      aspect: [4, 3],
+      allowsEditing: true,
+      allowsMultipleSelection: false,
     });
-  };
 
-  const importMediaFromLibrary = () => {
-    MediaLibrary.getPermissionsAsync().then((res) => {
-      if (res.granted) {
-        getVideoSources();
+    if (permission.granted) {
+      if (!videoData.cancelled) {
+        setPreviewVideoSrc(videoData.uri);
+        setIsPreview(true);
       } else {
-        alert("갤러리에 접근할 수 없습니다.");
+        console.warn("동영상을 불러오고 싶지 않으신가봐요");
       }
-    });
+    } else {
+      alert("갤러리 권한이 없습니다.");
+    }
   };
 
   const onCameraReady = () => {
@@ -56,16 +62,15 @@ const Question: FC = (): JSX.Element => {
 
   const recordVideo = async () => {
     setIsVideoRecording(true);
-
     if (cameraRef) {
       try {
-        const videoRecordPromise = cameraRef.recordAsync({
+        const videoRecordPromise = await cameraRef.recordAsync({
           maxDuration: 60,
         });
-        videoRecordPromise.then((res) => {
-          setVideoSource(res);
-          setIsPreview(true);
-        });
+
+        setVideoData(videoRecordPromise);
+        setPreviewVideoSrc(videoRecordPromise.uri);
+        setIsPreview(true);
       } catch (error) {
         alert(error);
       }
@@ -88,9 +93,10 @@ const Question: FC = (): JSX.Element => {
     );
   };
 
-  const cancelPreview = async () => {
+  const closeDetailPage = () => {
     setIsPreview(false);
-    setVideoSource(null);
+    setPreviewVideoSrc(null);
+    setVideoData(null);
   };
 
   const renderVideoRecordIndicator = (): JSX.Element => (
@@ -109,7 +115,7 @@ const Question: FC = (): JSX.Element => {
           disabled={!isCameraReady}
           onPress={stopVideoRecording}
         >
-          <Image source={recordingImg} style={{ width: 60, height: 60 }} />
+          <S.RecordingVideoImage source={recordingImg} />
         </S.RecordVideoContainer>
       ) : (
         // 촬영중이 아닌 상태
@@ -143,8 +149,9 @@ const Question: FC = (): JSX.Element => {
     <S.QuestionWrapper>
       {isPreview ? (
         <QuestionDetail
-          videoData={videoSource}
-          closeDetailPage={cancelPreview}
+          videoData={videoData}
+          closeDetailPage={closeDetailPage}
+          previewVideoSrc={previewVideoSrc ?? ""}
         />
       ) : (
         <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
@@ -160,7 +167,7 @@ const Question: FC = (): JSX.Element => {
           />
           <View style={{ ...StyleSheet.absoluteFillObject }}>
             {isVideoRecording && renderVideoRecordIndicator()}
-            {!videoSource && !isPreview && renderVideoControl()}
+            {!videoData && !isPreview && renderVideoControl()}
           </View>
         </SafeAreaView>
       )}

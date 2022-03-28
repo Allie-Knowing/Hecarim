@@ -56,7 +56,6 @@ export const QuestionDetailBody = styled.View<{ height: number }>`
 `;
 
 export const VideoContainer = styled.View`
-  width: 100%;
   justify-content: center;
   align-items: center;
   padding-top: 10;
