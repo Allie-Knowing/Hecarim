@@ -5,12 +5,13 @@ import { useState } from "react";
 import { Dimensions } from "react-native";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Feed from "screens/Feed";
 import Question from "components/Question";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
+import Feed from "screens/Feed";
 import MyPage from "screens/MyPage";
+import Search from "screens/Search";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -26,10 +27,6 @@ interface Screen {
   component: React.ComponentType<any>;
 }
 
-const testRender = (text: string) => () => {
-  return <Text>{text}</Text>;
-};
-
 const screens: Screen[] = [
   {
     name: "feed",
@@ -41,7 +38,7 @@ const screens: Screen[] = [
     name: "search",
     label: "검색",
     icon: SearchIcon,
-    component: testRender("search"),
+    component: Search,
   },
   {
     name: "question",
