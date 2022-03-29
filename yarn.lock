@@ -1496,9 +1496,17 @@
     "chalk" "^4.0.0"
 
 "@koale/useworker@^4.0.2":
-  "integrity" "sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg=="
-  "resolved" "https://registry.npmjs.org/@koale/useworker/-/useworker-4.0.2.tgz"
-  "version" "4.0.2"
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/@koale/useworker/-/useworker-4.0.2.tgz"
+  integrity sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg==
+  dependencies:
+    "@jridgewell/resolve-uri" "^3.0.3"
+    "@jridgewell/sourcemap-codec" "^1.4.10"
+
+"@koale/useworker@^3.2.1":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@koale/useworker/-/useworker-3.4.0.tgz#773ac623212bfaed377ff5e6cd44240ed52e40ff"
+  integrity sha512-cDGItsqyNd6SlaO+9XmDupANNNl4omjisdLcLbITdcKktlK+wpW1HwbnVjHiXBtHXQsKxxE832qVMlE/q9lmXg==
   dependencies:
     "dequal" "^1.0.0"
 
@@ -2988,18 +2996,18 @@
     "path-browserify" "^1.0.0"
     "url-parse" "^1.4.4"
 
-"expo-av@^10.2.1":
-  "integrity" "sha512-thrkHVg4HVn8L+jHKVnXYd4TLkJQblFE8QXd3d1hwrYG63gehQT2nK4DM0Frl50EcdV8YN9XjhwHobtK5oMc9A=="
-  "resolved" "https://registry.npmjs.org/expo-av/-/expo-av-10.2.1.tgz"
-  "version" "10.2.1"
+expo-av@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.npmjs.org/expo-av/-/expo-av-10.2.1.tgz"
+  integrity sha512-thrkHVg4HVn8L+jHKVnXYd4TLkJQblFE8QXd3d1hwrYG63gehQT2nK4DM0Frl50EcdV8YN9XjhwHobtK5oMc9A==
   dependencies:
     "@expo/config-plugins" "^3.0.0"
     expo-modules-core "~0.2.0"
 
-"expo-camera@~12.1.2":
-  "integrity" "sha512-Rr0Evj1V3LGiZE5/YBuuVimuU9uSTwVoqtSBsZ8QoK11+g9vnu2NgBjFMb938yjWD5tqJiXRH8lVTM2mvzSmIQ=="
-  "resolved" "https://registry.npmjs.org/expo-camera/-/expo-camera-12.1.2.tgz"
-  "version" "12.1.2"
+expo-camera@~12.1.2:
+  version "12.1.2"
+  resolved "https://registry.npmjs.org/expo-camera/-/expo-camera-12.1.2.tgz"
+  integrity sha512-Rr0Evj1V3LGiZE5/YBuuVimuU9uSTwVoqtSBsZ8QoK11+g9vnu2NgBjFMb938yjWD5tqJiXRH8lVTM2mvzSmIQ==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
     "@koale/useworker" "^4.0.2"
