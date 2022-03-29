@@ -1,13 +1,14 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
     "target": "es6",
     "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noImplicitAny": true,
     "baseUrl": "./src",
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "skipLibCheck": true,
   }
 }

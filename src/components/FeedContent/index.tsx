@@ -4,7 +4,6 @@ import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import RBSheet from "react-native-raw-bottom-sheet";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";

@@ -11,7 +11,9 @@ import Question from "components/Question";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
+import Feed from "screens/Feed";
 import MyPage from "screens/MyPage";
+import Search from "screens/Search";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -26,10 +28,6 @@ interface Screen {
   icon: any;
   component: React.ComponentType<any>;
 }
-
-const testRender = (text: string) => () => {
-  return <Text>{text}</Text>;
-};
 
 const screens: Screen[] = [
   {

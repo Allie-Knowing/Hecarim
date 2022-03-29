@@ -3,7 +3,7 @@ import { Dimensions, View } from "react-native";
 import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import RBSheet from "react-native-raw-bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 
 const Test = require("../../assets/feed_test.jpg");
@@ -14,7 +14,7 @@ const { height } = Dimensions.get("screen");
 
 const VideoAnswerContent: FC = () => {
   const tabBarHeight = useBottomTabBarHeight();
-  const commentBottomSheetRef = useRef<RBSheet>(null);
+  const commentBottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <Fragment>

@@ -1,7 +1,6 @@
 import Comment from "components/Comment";
 import { forwardRef, useContext, useState } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
-import RBSheet from "react-native-raw-bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
