@@ -1,11 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
-import React from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import theme from "theme/theme";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import React from "react";
 
 export default function App() {
   let [fontsLoaded] = useFonts({

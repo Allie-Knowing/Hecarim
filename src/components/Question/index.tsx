@@ -11,10 +11,6 @@ import {
 import { Camera } from "expo-camera";
 import { Video } from "expo-av";
 import * as S from "./styles";
-import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
-import { Camera } from "expo-camera";
-import { Video } from "expo-av";
-import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
 
 //Import images
@@ -23,7 +19,6 @@ const recordingImg = require("../../assets/icons/recording.png");
 const recordImg = require("../../assets/icons/record.png");
 const videoImg = require("../../assets/icons/video.png");
 const backImg = require("../../assets/icons/back.png");
-
 
 const Question: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
