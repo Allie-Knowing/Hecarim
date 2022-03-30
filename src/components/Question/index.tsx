@@ -1,13 +1,5 @@
 import React, { useState, useEffect, FC } from "react";
-import {
-  StyleSheet,
-  Dimensions,
-  View,
-  Text,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-} from "react-native";
+import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
 import { Camera } from "expo-camera";
 import { Video } from "expo-av";
 import * as S from "./styles";
