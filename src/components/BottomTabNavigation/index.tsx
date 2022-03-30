@@ -24,7 +24,7 @@ interface Screen {
   name: string;
   label: string;
   icon: any;
-  component: React.ComponentType<any>;
+  component: React.FC;
 }
 
 const screens: Screen[] = [
