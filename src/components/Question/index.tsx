@@ -5,7 +5,6 @@ import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
 import { VideoDataType } from "interface/Question";
 import * as ImagePicker from "expo-image-picker";
-import * as Permission from "expo-permissions";
 
 //import images
 const rotateImg = require("../../assets/icons/rotate.png");
@@ -28,11 +27,11 @@ const Question: FC = (): JSX.Element => {
   }, []);
 
   const importMediaFromLibrary = async () => {
-    const permission = await Permission.askAsync(Permission.MEDIA_LIBRARY);
-    const videoData = await ImagePicker.launchImageLibraryAsync({
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const videoData = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      base64: true,
       quality: ImagePicker.UIImagePickerControllerQualityType.High,
+      base64: true,
       videoMaxDuration: 60,
       aspect: [4, 3],
       allowsEditing: true,
@@ -40,14 +39,16 @@ const Question: FC = (): JSX.Element => {
     });
 
     if (permission.granted) {
-      if (!videoData.cancelled) {
-        setPreviewVideoSrc(videoData.uri);
-        setIsPreview(true);
-      } else {
-        console.warn("동영상을 불러오고 싶지 않으신가봐요");
-      }
-    } else {
-      alert("갤러리 권한이 없습니다.");
+      await videoData.then((res) => {
+        if (!res.cancelled) {
+          if ((res.duration ?? 0) / 1000 > 60) {
+            alert("동영상의 길이가 60초를 넘어 영상의 앞 60초만 사용됩니다.");
+            return;
+          }
+          setPreviewVideoSrc(res.uri);
+          setIsPreview(true);
+        }
+      });
     }
   };
 
@@ -61,19 +62,15 @@ const Question: FC = (): JSX.Element => {
   };
 
   const recordVideo = async () => {
-    setIsVideoRecording(true);
     if (cameraRef) {
-      try {
-        const videoRecordPromise = await cameraRef.recordAsync({
-          maxDuration: 60,
-        });
+      setIsVideoRecording(true);
 
-        setVideoData(videoRecordPromise);
-        setPreviewVideoSrc(videoRecordPromise.uri);
-        setIsPreview(true);
-      } catch (error) {
-        alert(error);
-      }
+      const videoRecordPromise = await cameraRef.recordAsync({
+        maxDuration: 60,
+      });
+      setVideoData(videoRecordPromise);
+      setPreviewVideoSrc(videoRecordPromise.uri);
+      setIsPreview(true);
     }
   };
 
@@ -102,7 +99,7 @@ const Question: FC = (): JSX.Element => {
   const renderVideoRecordIndicator = (): JSX.Element => (
     <S.RecordIndicatorContainer>
       <S.RecordDot />
-      <S.RecordTitle>{"질문 촬영중..."}</S.RecordTitle>
+      <S.RecordTitle>{"촬영중..."}</S.RecordTitle>
     </S.RecordIndicatorContainer>
   );
 
@@ -149,7 +146,6 @@ const Question: FC = (): JSX.Element => {
     <S.QuestionWrapper>
       {isPreview ? (
         <QuestionDetail
-          videoData={videoData}
           closeDetailPage={closeDetailPage}
           previewVideoSrc={previewVideoSrc ?? ""}
         />
