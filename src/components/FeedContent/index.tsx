@@ -1,6 +1,7 @@
 import React, {
   FC,
   Fragment,
+  useCallback,
   useContext,
   useMemo,
   useRef,
@@ -12,10 +13,7 @@ import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet, {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 
@@ -39,6 +37,13 @@ const FeedContent: FC = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
+
+  const onReportPress = useCallback(
+    () => () => {
+      confirmSheetRef.current.present();
+    },
+    []
+  );
 
   const items: ToolItem[] = useMemo(
     () => [
@@ -67,36 +72,36 @@ const FeedContent: FC = () => {
     () => [
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "스팸",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "음란물 또는 불법촬영물",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "괴롭힘 또는 따돌림",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "욕설 및 비방",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "명예회손 또는 저작권 침해",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => {},
+        onPress: onReportPress(),
         text: "기타 사유",
       },
     ],
-    []
+    [onReportPress]
   );
 
   const comfirmItems: ToolItem[] = useMemo(
@@ -107,7 +112,7 @@ const FeedContent: FC = () => {
         text: "신고 제출하기",
       },
       {
-        color: themeContext.colors.primary.default,
+        color: themeContext.colors.grayscale.scale100,
         onPress: () => confirmSheetRef.current.dismiss(),
         text: "취소하기",
       },
