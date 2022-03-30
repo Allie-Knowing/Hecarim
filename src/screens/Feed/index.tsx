@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
-const Feed = () => {
+const Feed: FC = () => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();

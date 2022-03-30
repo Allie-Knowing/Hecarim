@@ -24,12 +24,8 @@ interface Screen {
   name: string;
   label: string;
   icon: any;
-  component: React.ComponentType<any>;
+  component: React.FC;
 }
-
-const testRender = (text: string) => () => {
-  return <Text>{text}</Text>;
-};
 
 const screens: Screen[] = [
   {
@@ -42,7 +38,7 @@ const screens: Screen[] = [
     name: "search",
     label: "검색",
     icon: SearchIcon,
-    component: testRender("search"),
+    component: Search,
   },
   {
     name: "question",

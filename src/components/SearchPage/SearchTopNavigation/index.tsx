@@ -4,9 +4,9 @@ import * as S from "./style";
 import InputNavigation from "./InputNavigation";
 import TitleNavigation from "./TitleNavigation";
 
-const { top: topPad } = useSafeAreaInsets();
-
 const SearchTopNavigation: FC = () => {
+  const { top: topPad } = useSafeAreaInsets();
+
   return (
     <S.Wrapper topPad={topPad}>
       <TitleNavigation />
