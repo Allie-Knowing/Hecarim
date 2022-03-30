@@ -49,7 +49,9 @@ const FeedContent: FC = () => {
       },
       {
         color: themeContext.colors.red.default,
-        onPress: () => reportSheetRef.current.present(),
+        onPress: () => {
+          reportSheetRef.current.present();
+        },
         text: "신고하기",
       },
       {
@@ -106,7 +108,7 @@ const FeedContent: FC = () => {
       },
       {
         color: themeContext.colors.primary.default,
-        onPress: () => confirmSheetRef.current.close(),
+        onPress: () => confirmSheetRef.current.dismiss(),
         text: "취소하기",
       },
     ],
@@ -158,7 +160,11 @@ const FeedContent: FC = () => {
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
               </S.IconContainer>
-              <S.IconContainer onPress={() => toolSheetRef.current?.expand()}>
+              <S.IconContainer
+                onPress={() => {
+                  toolSheetRef.current?.present();
+                }}
+              >
                 <S.Icon resizeMode="contain" source={More} />
               </S.IconContainer>
             </S.Icons>
@@ -167,11 +173,9 @@ const FeedContent: FC = () => {
       </S.Container>
       <Portal>
         <CommentBottomSheet ref={commentBottomSheetRef} />
-        <BottomSheetModalProvider>
-          <Tool ref={toolSheetRef} items={items} />
-          <Tool ref={reportSheetRef} items={reportItems} />
-          <Tool ref={confirmSheetRef} items={comfirmItems} />
-        </BottomSheetModalProvider>
+        <Tool ref={toolSheetRef} items={items} />
+        <Tool ref={reportSheetRef} items={reportItems} />
+        <Tool ref={confirmSheetRef} items={comfirmItems} />
       </Portal>
     </Fragment>
   );

@@ -4,7 +4,7 @@ import BottomSheet, {
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
 import useThemeContext from "hooks/useThemeContext";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
@@ -37,10 +37,11 @@ const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
-      index={-1}
+      index={0}
       onChange={(index) => setIsOpen(index !== -1)}
       backdropComponent={DefaultBackDropComponent(isOpen)}
       enablePanDownToClose
+      enableDismissOnClose
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
       }}
