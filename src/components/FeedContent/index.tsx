@@ -1,11 +1,21 @@
-import React, { FC, Fragment, useContext, useRef, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+} from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 
@@ -21,25 +31,87 @@ const FeedContent: FC = () => {
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<BottomSheet>(null);
-  const toolSheetRef = useRef<BottomSheet>(null);
+  const toolSheetRef = useRef<BottomSheetModal>(null);
+  const reportSheetRef = useRef<BottomSheetModal>(null);
+  const confirmSheetRef = useRef<BottomSheetModal>(null);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
 
-  const items: ToolItem[] = [
-    {
-      color: themeContext.colors.primary.default,
-      onPress: () => {},
-      text: "채택하기",
-    },
-    {
-      color: themeContext.colors.red.default,
-      onPress: () => {},
-      text: "삭제하기",
-    },
-  ];
+  const items: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.primary.default,
+        onPress: () => {},
+        text: "채택하기",
+      },
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => reportSheetRef.current.present(),
+        text: "신고하기",
+      },
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => {},
+        text: "삭제하기",
+      },
+    ],
+    []
+  );
+
+  const reportItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "스팸",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "음란물 또는 불법촬영물",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "괴롭힘 또는 따돌림",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "욕설 및 비방",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "명예회손 또는 저작권 침해",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => {},
+        text: "기타 사유",
+      },
+    ],
+    []
+  );
+
+  const comfirmItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => {},
+        text: "신고 제출하기",
+      },
+      {
+        color: themeContext.colors.primary.default,
+        onPress: () => confirmSheetRef.current.close(),
+        text: "취소하기",
+      },
+    ],
+    []
+  );
 
   return (
     <Fragment>
@@ -95,7 +167,11 @@ const FeedContent: FC = () => {
       </S.Container>
       <Portal>
         <CommentBottomSheet ref={commentBottomSheetRef} />
-        <Tool ref={toolSheetRef} items={items} />
+        <BottomSheetModalProvider>
+          <Tool ref={toolSheetRef} items={items} />
+          <Tool ref={reportSheetRef} items={reportItems} />
+          <Tool ref={confirmSheetRef} items={comfirmItems} />
+        </BottomSheetModalProvider>
       </Portal>
     </Fragment>
   );
