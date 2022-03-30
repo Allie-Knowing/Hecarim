@@ -2,9 +2,7 @@ import styled from "styled-components/native";
 
 export const QuestionDetailWrapper = styled.View<{
   topPad: number;
-  height: number;
 }>`
-  height: ${(props) => props.height};
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background};
   padding-top: ${(props) => props.topPad};
@@ -104,5 +102,4 @@ export const TextArea = styled.TextInput`
   padding-left: 16;
   padding-right: 16;
   border-radius: 10;
-  font-size: 16;
 `;
