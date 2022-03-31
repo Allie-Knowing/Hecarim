@@ -20,6 +20,8 @@ const Question: FC = (): JSX.Element => {
   const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
 
+  const MAX_DURATION = 60;
+
   useEffect(() => {
     startCamera();
   }, []);
@@ -38,9 +40,9 @@ const Question: FC = (): JSX.Element => {
 
     if (permission.granted) {
       await videoData.then((res) => {
-        
         if (!res.cancelled) {
-          if ((res.duration ?? 0) / 1000 > 60) {
+          const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
+          if (isLongerThan60s) {
             alert("동영상의 길이가 60초를 넘어 영상의 앞 60초만 사용됩니다.");
             return;
           }
