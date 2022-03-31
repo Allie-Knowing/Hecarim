@@ -39,7 +39,7 @@ const VideoAnswerContent: FC = () => {
               </S.IconContainer>
               <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Camera} />
-                <S.IconLabel>영상 답변</S.IconLabel>
+                <S.IconLabel>답변하기</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Heart} />
