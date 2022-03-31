@@ -1,10 +1,14 @@
 import React, { FC } from "react";
 import * as S from "./style";
 
-const TitleNavigation: FC = () => {
+interface Props {
+  topPad: number;
+}
+
+const TitleNavigation: FC<Props> = ({ topPad }) => {
   return (
-    <S.Wrapper>
-      <></>
+    <S.Wrapper topPad={topPad}>
+      <S.Title topPad={topPad}>검색</S.Title>
     </S.Wrapper>
   );
 };
