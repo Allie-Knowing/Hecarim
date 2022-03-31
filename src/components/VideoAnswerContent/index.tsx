@@ -14,7 +14,6 @@ const { height } = Dimensions.get("screen");
 
 const VideoAnswerContent: FC = () => {
   const tabBarHeight = useBottomTabBarHeight();
-  const commentBottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <Fragment>
@@ -48,7 +47,6 @@ const VideoAnswerContent: FC = () => {
           </View>
         </S.Content>
       </S.Container>
-      <CommentBottomSheet ref={commentBottomSheetRef} />
     </Fragment>
   );
 };
