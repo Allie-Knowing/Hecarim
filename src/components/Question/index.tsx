@@ -1,32 +1,55 @@
 import React, { useState, useEffect, FC } from "react";
-import { StyleSheet, View, Text, SafeAreaView, Image } from "react-native";
 import { Camera } from "expo-camera";
-import { Video } from "expo-av";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import * as S from "./styles";
 import QuestionDetail from "./QuestionDetail";
+import * as ImagePicker from "expo-image-picker";
 
-//Import images
+//import images
 const rotateImg = require("../../assets/icons/rotate.png");
 const recordingImg = require("../../assets/icons/recording.png");
 const recordImg = require("../../assets/icons/record.png");
 const videoImg = require("../../assets/icons/video.png");
-const backImg = require("../../assets/icons/back.png");
 
 const Question: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
-  const [isPreview, setIsPreview] = useState(false);
-  const [isCameraReady, setIsCameraReady] = useState(false);
-  const [isVideoRecording, setIsVideoRecording] = useState(false);
-  const [videoSource, setVideoSource] = useState<string | null>(null);
+  const [cameraType, setCameraType] = useState(Camera.Constants.Type.front);
+  const [isPreview, setIsPreview] = useState<boolean>(false);
+  const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
+  const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
+  const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
 
   useEffect(() => {
     startCamera();
-    return () => {
-      setIsVideoRecording(false);
-    };
   }, []);
+
+  const importMediaFromLibrary = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const videoData = ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      quality: ImagePicker.UIImagePickerControllerQualityType.High,
+      base64: true,
+      videoMaxDuration: 60,
+      aspect: [4, 3],
+      allowsEditing: true,
+      allowsMultipleSelection: false,
+    });
+
+    if (permission.granted) {
+      await videoData.then((res) => {
+        
+        if (!res.cancelled) {
+          if ((res.duration ?? 0) / 1000 > 60) {
+            alert("동영상의 길이가 60초를 넘어 영상의 앞 60초만 사용됩니다.");
+            return;
+          }
+          setVideoURI(res.uri);
+          setIsPreview(true);
+        }
+      });
+    }
+  };
 
   const onCameraReady = () => {
     setIsCameraReady(true);
@@ -39,25 +62,15 @@ const Question: FC = (): JSX.Element => {
 
   const recordVideo = async () => {
     if (cameraRef) {
-      try {
-        const videoRecordPromise = cameraRef.recordAsync();
-        if (videoRecordPromise) {
-          setIsVideoRecording(true);
-          const data = await videoRecordPromise;
-          const source = data.uri;
-          if (source) {
-            setIsPreview(true);
-            console.log("video source", source);
-            setVideoSource(source);
-          }
-        }
-      } catch (error) {
-        console.warn(error);
-      }
+      setIsVideoRecording(true);
+
+      const videoRecordPromise = await cameraRef.recordAsync({
+        maxDuration: 60,
+      });
+      setVideoURI(videoRecordPromise.uri);
+      setIsPreview(true);
     }
   };
-
-  const openQuestionDetail = () => {};
 
   const stopVideoRecording = () => {
     if (cameraRef) {
@@ -65,71 +78,44 @@ const Question: FC = (): JSX.Element => {
       setIsVideoRecording(false);
       cameraRef.stopRecording();
     }
-    openQuestionDetail();
   };
 
   const switchCamera = () => {
-    if (isPreview) {
-      return;
-    }
     setCameraType((prevCameraType) =>
-      prevCameraType === Camera.Constants.Type.back
-        ? Camera.Constants.Type.front
-        : Camera.Constants.Type.back
+      prevCameraType === Camera.Constants.Type.front
+        ? Camera.Constants.Type.back
+        : Camera.Constants.Type.front
     );
   };
 
-  const cancelPreview = async () => {
-    if (cameraRef) {
-      await cameraRef.resumePreview();
-      setIsPreview(false);
-      setVideoSource(null);
-    }
+  const closeDetailPage = () => {
+    setIsPreview(false);
+    setVideoURI(null);
   };
 
-  const renderPreviewHeader = () => (
-    <S.PreviewHeaderContainer>
-      <S.BackImageContainer onPress={cancelPreview}>
-        <S.BackImage source={backImg} />
-      </S.BackImageContainer>
-      <S.QuestionVideoText>질문 영상 촬영</S.QuestionVideoText>
-      <S.PreviewNextContainer>
-        <Text style={{ color: "#fff" }}>다음</Text>
-      </S.PreviewNextContainer>
-    </S.PreviewHeaderContainer>
-  );
-
-  const renderVideoPlayer = () => (
-    <Video
-      source={{ uri: videoSource ?? "" }}
-      style={{ ...StyleSheet.absoluteFillObject }}
-      resizeMode={"cover"}
-      isLooping
-      shouldPlay
-    />
-  );
-
-  const renderVideoRecordIndicator = () => (
+  const renderVideoRecordIndicator = (): JSX.Element => (
     <S.RecordIndicatorContainer>
       <S.RecordDot />
-      <S.RecordTitle>{"질문 촬영중..."}</S.RecordTitle>
+      <S.RecordTitle>{"촬영중..."}</S.RecordTitle>
     </S.RecordIndicatorContainer>
   );
 
-  const renderCaptureControl = () => (
+  const renderVideoControl = (): JSX.Element => (
     <S.Control>
       {isVideoRecording ? (
+        // 촬영중인 상태
         <S.RecordVideoContainer
           activeOpacity={0.7}
           disabled={!isCameraReady}
           onPress={stopVideoRecording}
         >
-          <Image source={recordingImg} style={{ width: 60, height: 60 }} />
+          <S.RecordingVideoImage source={recordingImg} />
         </S.RecordVideoContainer>
       ) : (
+        // 촬영중이 아닌 상태
         <>
-          <S.GetVideoContainer>
-            <Image source={videoImg} style={{ width: 40, height: 40 }} />
+          <S.GetVideoContainer onPress={importMediaFromLibrary}>
+            <S.VideoImage source={videoImg} />
           </S.GetVideoContainer>
           <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
@@ -138,7 +124,7 @@ const Question: FC = (): JSX.Element => {
             disabled={!isCameraReady}
             onPress={switchCamera}
           >
-            <Image source={rotateImg} style={{ width: 48, height: 48 }} />
+            <S.FlipCameraImage source={rotateImg} />
           </S.FlipCameraContainer>
         </>
       )}
@@ -154,26 +140,31 @@ const Question: FC = (): JSX.Element => {
   }
 
   return (
-    <>
-      <QuestionDetail isRecording={isVideoRecording} videoSrc={videoSource} />
-      <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        <Camera
-          ref={(el) => setCameraRef(el)}
-          style={{ ...StyleSheet.absoluteFillObject }}
-          type={cameraType}
-          onCameraReady={onCameraReady}
-          onMountError={(error) => {
-            console.log("cammera error", error);
-          }}
+    <S.QuestionWrapper>
+      {isPreview ? (
+        <QuestionDetail
+          closeDetailPage={closeDetailPage}
+          videoURI={videoURI ?? ""}
         />
-        <View style={{ ...StyleSheet.absoluteFillObject }}>
-          {isVideoRecording && renderVideoRecordIndicator()}
-          {videoSource && renderVideoPlayer()}
-          {isPreview && renderPreviewHeader()}
-          {!videoSource && !isPreview && renderCaptureControl()}
-        </View>
-      </SafeAreaView>
-    </>
+      ) : (
+        <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+          <Camera
+            ref={(el) => setCameraRef(el)}
+            style={{ ...StyleSheet.absoluteFillObject }}
+            type={cameraType}
+            onCameraReady={onCameraReady}
+            onMountError={(error) => {
+              console.log("cammera error", error);
+            }}
+            autoFocus={"on"}
+          />
+          <View style={{ ...StyleSheet.absoluteFillObject }}>
+            {isVideoRecording && renderVideoRecordIndicator()}
+            {!videoURI && !isPreview && renderVideoControl()}
+          </View>
+        </SafeAreaView>
+      )}
+    </S.QuestionWrapper>
   );
 };
 
