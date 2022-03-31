@@ -9,7 +9,7 @@ const SearchTopNavigation: FC = () => {
 
   return (
     <S.Wrapper topPad={topPad}>
-      <TitleNavigation topPad={topPad} />
+      {/* <TitleNavigation topPad={topPad} /> */}
       <InputNavigation topPad={topPad} />
     </S.Wrapper>
   );

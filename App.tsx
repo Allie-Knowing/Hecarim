@@ -6,6 +6,7 @@ import theme from "theme/theme";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Search from "screens/Search";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
