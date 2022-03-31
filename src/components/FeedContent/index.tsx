@@ -157,12 +157,12 @@ const FeedContent: FC = () => {
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
               <S.IconContainer>
-                <S.Icon resizeMode="contain" source={Heart} />
-                <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
-              </S.IconContainer>
-              <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Camera} />
                 <S.IconLabel>답변하기</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Heart} />
+                <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
