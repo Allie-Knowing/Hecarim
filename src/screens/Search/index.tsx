@@ -1,45 +1,18 @@
-import React from "react";
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import React, { FC } from "react";
+import { Dimensions } from "react-native";
 import * as S from "./style";
-import { useState } from "react";
-import Animated, {
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  AnimateStyle,
-  useAnimatedScrollHandler,
-  useAnimatedRef,
-  scrollTo,
-  useDerivedValue,
-} from "react-native-reanimated";
-import { LayoutChangeEvent } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useCallback } from "react";
+// import SearchResults from "components/SearchPage/SearchResults";
+import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 
-const { height, width } = Dimensions.get("screen");
-const navGap = 24;
+const Search: FC = () => {
+  const { height, width } = Dimensions.get("screen");
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
-const Search = () => {
-  return <S.Wrapper></S.Wrapper>;
+  return (
+    <S.Container style={{ height, width }}>
+      <SearchTopNavigation />
+      {/* <SearchResults /> */}
+    </S.Container>
+  );
 };
-
-const styles = StyleSheet.create({
-  outer: {
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    top: 0,
-    left: 0,
-    flex: 1,
-  },
-});
 
 export default Search;
