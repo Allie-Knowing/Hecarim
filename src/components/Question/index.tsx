@@ -39,7 +39,7 @@ const Question: FC = (): JSX.Element => {
     });
 
     if (permission.granted) {
-      await videoData.then((res) => {
+      await videoData.then((res: ImagePicker.ImageInfo) => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
