@@ -1,17 +1,31 @@
-import React, { FC } from "react";
+import React from "react";
 import { Dimensions } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Animated, { useAnimatedRef } from "react-native-reanimated";
 import * as S from "./style";
-// import SearchResults from "components/SearchPage/SearchResults";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
+import SearchResults from "components/SearchPage/SearchResults";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const Search: FC = () => {
-  const { height, width } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
+
+const Stack = createStackNavigator();
+
+const Search = () => {
+  const { top: topPad } = useSafeAreaInsets();
+  const outerRef = useAnimatedRef<Animated.ScrollView>();
 
   return (
-    <S.Container style={{ height, width }}>
+    <S.Wrapper style={{ width }} topPad={topPad}>
       <SearchTopNavigation />
-      {/* <SearchResults /> */}
-    </S.Container>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="DefaultScreen"
+          component={SearchResults}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </S.Wrapper>
   );
 };
 
