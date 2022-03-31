@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,windows,macos,reactnative
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,windows,macos,reactnative
 
+### 환경변수 ###
+environment.ts
+
 ### macOS ###
 # General
 .DS_Store
