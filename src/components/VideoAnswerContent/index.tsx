@@ -9,6 +9,7 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
+const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -35,6 +36,10 @@ const VideoAnswerContent: FC = () => {
             <S.Icons>
               <S.IconContainer>
                 <S.ProfileImage source={Test} />
+              </S.IconContainer>
+              <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Camera} />
+                <S.IconLabel>답변하기</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Heart} />
