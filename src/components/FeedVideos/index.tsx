@@ -9,31 +9,34 @@ import { FC, useEffect, useState } from "react";
 
 const { height, width } = Dimensions.get("screen");
 
-const FeedVideos =
-  (dataList: string[], index: number): FC =>
-  () => {
-    const [page, setPage] = useState(0);
+interface PropsType {
+  dataList: string[];
+  index: number;
+}
 
-    const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
-      setPage(newPage);
-    };
+const FeedVideos: FC<PropsType> = ({ dataList, index }) => {
+  const [page, setPage] = useState(0);
 
-    return (
-      <S.Container
-        style={{ width, height }}
-        decelerationRate="fast"
-        snapToAlignment="start"
-        pagingEnabled
-        contentContainerStyle={{ flexGrow: 1 }}
-        snapToInterval={height}
-        showsVerticalScrollIndicator={false}
-        onScroll={onScroll}
-        keyExtractor={(_, index) => index.toString()}
-        data={dataList}
-        renderItem={() => <FeedContent />}
-      />
-    );
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
+    setPage(newPage);
   };
+
+  return (
+    <S.Container
+      style={{ width, height }}
+      decelerationRate="fast"
+      snapToAlignment="start"
+      pagingEnabled
+      contentContainerStyle={{ flexGrow: 1 }}
+      snapToInterval={height}
+      showsVerticalScrollIndicator={false}
+      onScroll={onScroll}
+      keyExtractor={(_, index) => index.toString()}
+      data={dataList}
+      renderItem={() => <FeedContent />}
+    />
+  );
+};
 
 export default FeedVideos;
