@@ -9,12 +9,12 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
+const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
 const VideoAnswerContent: FC = () => {
   const tabBarHeight = useBottomTabBarHeight();
-  const commentBottomSheetRef = useRef<BottomSheet>(null);
 
   return (
     <Fragment>
@@ -38,6 +38,10 @@ const VideoAnswerContent: FC = () => {
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
               <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Camera} />
+                <S.IconLabel>답변하기</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Heart} />
                 <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
               </S.IconContainer>
@@ -48,7 +52,6 @@ const VideoAnswerContent: FC = () => {
           </View>
         </S.Content>
       </S.Container>
-      <CommentBottomSheet ref={commentBottomSheetRef} />
     </Fragment>
   );
 };
