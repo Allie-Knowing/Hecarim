@@ -6,7 +6,7 @@ import theme from "theme/theme";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import Search from "screens/Search";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -23,9 +23,11 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
         <ThemeProvider theme={theme}>
-          <NavigationContainer>
-            <BottomTabNavigation />
-          </NavigationContainer>
+          <BottomSheetModalProvider>
+            <NavigationContainer>
+              <BottomTabNavigation />
+            </NavigationContainer>
+          </BottomSheetModalProvider>
         </ThemeProvider>
       </SafeAreaView>
     </SafeAreaProvider>
