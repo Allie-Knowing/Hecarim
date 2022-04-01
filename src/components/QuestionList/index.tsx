@@ -55,10 +55,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
-  const outerRef =
-    useAnimatedRef<
-      React.Component<Animated.AnimateProps<FlatListProps<unknown>>, any, any>
-    >();
+  const outerRef = useAnimatedRef<Animated.ScrollView>();
   const pageValue = useSharedValue<number>(0);
   const pageId = useSharedValue<string>(uniqueId());
 
@@ -121,7 +118,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
 
   return (
     <S.Wrapper style={{ height }}>
-      <AnimatedFlatList
+      <Animated.ScrollView
         ref={outerRef}
         style={styles.outer}
         decelerationRate="fast"
@@ -133,11 +130,11 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
-        keyExtractor={(_, index) => index.toString()}
         onScroll={scrollHandler}
-        data={[FeedVideos(questionList, index), VideoAnswer]}
-        renderItem={(value) => React.createElement(value.item as FC)}
-      />
+      >
+        <FeedVideos dataList={questionList} index={index} />
+        <VideoAnswer />
+      </Animated.ScrollView>
       <Animated.View
         style={[NavStyle("question"), questionNavStyle]}
         onLayout={onLayout("question")}
