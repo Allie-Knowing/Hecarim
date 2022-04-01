@@ -1,53 +1,80 @@
 import React, { Fragment } from "react";
-import { Dimensions } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
-import * as S from "./style";
-import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
+import { useTheme } from "styled-components";
 import DefaultSearchPage from "components/SearchPage/SearchResults/DefaultSearchPage";
 import SearchedQuestionsPage from "components/SearchPage/SearchResults/SearchedQuestionsPage";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "styled-components";
+import BackBtn from "components/SearchPage/SearchResults/SearchedQuestionsPage/BackBtn";
 
-const { width } = Dimensions.get("screen");
+export type RootStackParamList = {
+  DefaultSearchPage: undefined;
+  SearchedQuestions: undefined;
+};
 
-const Stack = createStackNavigator();
+const Root = createStackNavigator<RootStackParamList>();
 
 const Search = () => {
-  const { top: topPad } = useSafeAreaInsets();
   const outerRef = useAnimatedRef<Animated.ScrollView>();
   const theme = useTheme();
 
   return (
-    // <S.Wrapper style={{ width }} topPad={topPad}>
     <Fragment>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="검색"
+      <Root.Navigator
+        initialRouteName="DefaultSearchPage"
+        screenOptions={{
+          headerStyle: {
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+      >
+        <Root.Screen
+          name="DefaultSearchPage"
           component={DefaultSearchPage}
           options={{
+            headerTitle: "검색",
+            headerTitleStyle: {
+              fontFamily: "SpoqaHanSansNeo-Medium",
+              color: theme.colors.grayscale.scale100,
+              fontSize: 16,
+            },
+            headerTitleAlign: "center",
+            headerTitleContainerStyle: {
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          }}
+        />
+        <Root.Screen
+          name="SearchedQuestions"
+          component={SearchedQuestionsPage}
+          options={{
+            headerTitle: "검색된 질문",
             headerTitleStyle: {
               fontFamily: "SpoqaHanSansNeo-Medium",
               color: theme.colors.grayscale.scale100,
               fontSize: 16,
             },
             headerTitleContainerStyle: {
-              flex: 100,
+              flex: 1,
               justifyContent: "center",
               alignItems: "center",
+              paddingRight: 25,
             },
+            headerTitleAlign: "center",
+            headerLeftContainerStyle: {
+              paddingLeft: 25,
+            },
+            headerLeft: () => <BackBtn />,
           }}
-          // options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="검색된 질문"
-          component={SearchedQuestionsPage}
-          // options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
+      </Root.Navigator>
     </Fragment>
-    // </S.Wrapper>
   );
 };
 
