@@ -29,8 +29,6 @@ const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
-type screenProp = StackNavigationProp<MainStackParamList>;
-
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
