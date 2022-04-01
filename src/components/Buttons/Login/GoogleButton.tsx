@@ -12,7 +12,6 @@ const GoogleButton = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [request, _, prompAsync] = Google.useAuthRequest({
     clientId: env.googleClientId.webId,
-    // redirectUri: env.redirectUrl,
     responseType: "code",
     clientSecret: "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",
     scopes: ["openid", "email", "profile"],
