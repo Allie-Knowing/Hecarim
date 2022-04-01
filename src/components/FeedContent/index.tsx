@@ -15,10 +15,11 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
-import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import isStackContext from "context/IsStackContext";
-import { MainStackParamList } from "hooks/useMainStackNavigation";
+import useMainStackNavigation, {
+  MainStackParamList,
+} from "hooks/useMainStackNavigation";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -37,7 +38,7 @@ const FeedContent: FC = () => {
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
-  const navigation = useNavigation<screenProp>();
+  const navigation = useMainStackNavigation();
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
 
