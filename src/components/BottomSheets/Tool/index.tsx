@@ -1,12 +1,11 @@
 import BottomSheet, {
+  BottomSheetModal,
   BottomSheetView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
 import useThemeContext from "hooks/useThemeContext";
-import { forwardRef, useContext, useState } from "react";
-import { View } from "react-native";
+import { forwardRef, useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ThemeContext } from "styled-components/native";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import * as S from "./styles";
@@ -21,7 +20,7 @@ export interface ToolItem {
   color: string;
 }
 
-const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
+const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const themeContext = useThemeContext();
@@ -33,16 +32,16 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
   } = useBottomSheetDynamicSnapPoints(["CONTENT_HEIGHT"]);
 
   return (
-    <BottomSheet
+    <BottomSheetModal
       ref={ref}
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
-      index={-1}
+      index={0}
       onChange={(index) => setIsOpen(index !== -1)}
       backdropComponent={DefaultBackDropComponent(isOpen)}
       enablePanDownToClose
-      animateOnMount
+      enableDismissOnClose
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
       }}
@@ -66,7 +65,7 @@ const Tool = forwardRef<BottomSheet, PropsType>(({ items }, ref) => {
           <S.Pad style={{ height: bottomPad }} />
         </S.Container>
       </BottomSheetView>
-    </BottomSheet>
+    </BottomSheetModal>
   );
 });
 

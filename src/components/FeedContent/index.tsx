@@ -1,11 +1,19 @@
-import React, { FC, Fragment, useContext, useRef, useState } from "react";
+import React, {
+  FC,
+  Fragment,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 
@@ -13,6 +21,7 @@ const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
 const More = require("../../assets/icons/more.png");
+const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -21,25 +30,96 @@ const FeedContent: FC = () => {
   const themeContext = useContext(ThemeContext);
   const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<BottomSheet>(null);
-  const toolSheetRef = useRef<BottomSheet>(null);
+  const toolSheetRef = useRef<BottomSheetModal>(null);
+  const reportSheetRef = useRef<BottomSheetModal>(null);
+  const confirmSheetRef = useRef<BottomSheetModal>(null);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
     setIsMore(!isMore);
   };
 
-  const items: ToolItem[] = [
-    {
-      color: themeContext.colors.primary.default,
-      onPress: () => {},
-      text: "채택하기",
+  const onReportPress = useCallback(
+    () => () => {
+      confirmSheetRef.current.present();
     },
-    {
-      color: themeContext.colors.red.default,
-      onPress: () => {},
-      text: "삭제하기",
-    },
-  ];
+    []
+  );
+
+  const items: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.primary.default,
+        onPress: () => {},
+        text: "채택하기",
+      },
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => {
+          reportSheetRef.current.present();
+        },
+        text: "신고하기",
+      },
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => {},
+        text: "삭제하기",
+      },
+    ],
+    []
+  );
+
+  const reportItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "스팸",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "음란물 또는 불법촬영물",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "괴롭힘 또는 따돌림",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "욕설 및 비방",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "명예회손 또는 저작권 침해",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: onReportPress(),
+        text: "기타 사유",
+      },
+    ],
+    [onReportPress]
+  );
+
+  const comfirmItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: themeContext.colors.red.default,
+        onPress: () => {},
+        text: "신고 제출하기",
+      },
+      {
+        color: themeContext.colors.grayscale.scale100,
+        onPress: () => confirmSheetRef.current.dismiss(),
+        text: "취소하기",
+      },
+    ],
+    []
+  );
 
   return (
     <Fragment>
@@ -77,6 +157,10 @@ const FeedContent: FC = () => {
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
               <S.IconContainer>
+                <S.Icon resizeMode="contain" source={Camera} />
+                <S.IconLabel>답변하기</S.IconLabel>
+              </S.IconContainer>
+              <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Heart} />
                 <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
               </S.IconContainer>
@@ -86,7 +170,11 @@ const FeedContent: FC = () => {
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
               </S.IconContainer>
-              <S.IconContainer onPress={() => toolSheetRef.current?.expand()}>
+              <S.IconContainer
+                onPress={() => {
+                  toolSheetRef.current?.present();
+                }}
+              >
                 <S.Icon resizeMode="contain" source={More} />
               </S.IconContainer>
             </S.Icons>
@@ -96,6 +184,8 @@ const FeedContent: FC = () => {
       <Portal>
         <CommentBottomSheet ref={commentBottomSheetRef} />
         <Tool ref={toolSheetRef} items={items} />
+        <Tool ref={reportSheetRef} items={reportItems} />
+        <Tool ref={confirmSheetRef} items={comfirmItems} />
       </Portal>
     </Fragment>
   );
