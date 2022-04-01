@@ -1,10 +1,6 @@
 import styled from "styled-components/native";
 import Animated from "react-native-reanimated";
 
-export const Wrapper = styled.View`
-   
-`;
-
 export const View = styled(Animated.View)<{ height: number }>`
     justify-content: center;
     align-items: center;
