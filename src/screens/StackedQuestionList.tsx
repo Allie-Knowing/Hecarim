@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import QuestionList from "components/QuestionList";
 
-const Feed: FC = () => {
+const StackedQuestionList: FC = () => {
   return (
     <QuestionList
       questionList={["a", "b", "c", "d", "e", "f", "g"]}
@@ -10,4 +10,4 @@ const Feed: FC = () => {
   );
 };
 
-export default Feed;
+export default StackedQuestionList;

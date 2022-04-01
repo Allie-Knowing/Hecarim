@@ -16,6 +16,9 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { QuestionStackParamList } from "../../../App";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -24,15 +27,21 @@ const More = require("../../assets/icons/more.png");
 const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
+type screenProp = StackNavigationProp<
+  QuestionStackParamList,
+  "StackedQuestionList"
+>;
 
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
-  const tabBarHeight = useBottomTabBarHeight();
+  // const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = 0;
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
+  const navigation = useNavigation<screenProp>();
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -156,7 +165,9 @@ const FeedContent: FC = () => {
               <S.IconContainer>
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
-              <S.IconContainer>
+              <S.IconContainer
+                onPress={() => navigation.navigate("StackedQuestionList")}
+              >
                 <S.Icon resizeMode="contain" source={Camera} />
                 <S.IconLabel>답변하기</S.IconLabel>
               </S.IconContainer>
