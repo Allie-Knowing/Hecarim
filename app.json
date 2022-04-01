@@ -31,6 +31,6 @@
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
     },
-    "scheme": "mycoolredirect"
+    "scheme": "myapp"
   }
 }
