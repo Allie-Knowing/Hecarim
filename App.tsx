@@ -13,13 +13,9 @@ import {
 } from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
 
-export type QuestionStackParamList = {
-  Main: undefined;
-  StackedQuestionList: undefined;
-};
-
-const Root = createStackNavigator<QuestionStackParamList>();
+const Root = createStackNavigator<MainStackParamList>();
 
 export default function App() {
   let [fontsLoaded] = useFonts({

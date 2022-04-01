@@ -17,8 +17,8 @@ import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { QuestionStackParamList } from "../../../App";
 import isStackContext from "context/IsStackContext";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -27,10 +27,8 @@ const More = require("../../assets/icons/more.png");
 const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
-type screenProp = StackNavigationProp<
-  QuestionStackParamList,
-  "StackedQuestionList"
->;
+
+type screenProp = StackNavigationProp<MainStackParamList>;
 
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
