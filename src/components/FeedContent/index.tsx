@@ -11,7 +11,6 @@ import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
@@ -19,6 +18,7 @@ import { Portal } from "react-native-portalize";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { QuestionStackParamList } from "../../../App";
+import isStackContext from "context/IsStackContext";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -40,7 +40,8 @@ const FeedContent: FC = () => {
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
   const navigation = useNavigation<screenProp>();
-  const tabBarHeight = 80;
+  const isStack = useContext(isStackContext);
+  const tabBarHeight = isStack ? 30 : 80;
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
