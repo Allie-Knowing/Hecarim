@@ -14,8 +14,7 @@ const Camera = require("../../assets/icons/camera.png");
 const { height } = Dimensions.get("screen");
 
 const VideoAnswerContent: FC = () => {
-  // const tabBarHeight = useBottomTabBarHeight();
-  const tabBarHeight = 0;
+  const tabBarHeight = 80;
 
   return (
     <Fragment>

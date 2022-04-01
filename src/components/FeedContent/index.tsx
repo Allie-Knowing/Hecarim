@@ -35,13 +35,12 @@ type screenProp = StackNavigationProp<
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
-  // const tabBarHeight = useBottomTabBarHeight();
-  const tabBarHeight = 0;
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
   const navigation = useNavigation<screenProp>();
+  const tabBarHeight = 80;
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();

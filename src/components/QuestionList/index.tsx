@@ -44,8 +44,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
-
 interface PropsType {
   questionList: string[];
   index: number;
