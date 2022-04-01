@@ -1,10 +1,21 @@
 import getEnvVars from "../../environment";
 
-const { baseUrl, clientId } = getEnvVars();
+const {
+  baseUrl,
+  googleClientId,
+  naverClientId,
+  facebookClientId,
+  kakaoClientId,
+  redirectUrl,
+} = getEnvVars();
 
 const env = {
-  baseUrl: baseUrl,
-  clientId: clientId,
+  baseUrl,
+  googleClientId,
+  naverClientId,
+  facebookClientId,
+  kakaoClientId,
+  redirectUrl,
 } as const;
 
 export default env;
