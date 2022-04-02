@@ -9,8 +9,8 @@ export const signin = async (body: signinRequest) => {
   try {
     console.log(body);
     const response = await noTokenInstance.post<signinResponse>(
-      `${uri.signin}?provider=${body.provider}`,
-      { code: body.code }
+      `${uri.googleSignin}`,
+      { id_token: body.id_token }
     );
     console.log(response);
     localStorage.setItem<string>(
