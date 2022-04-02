@@ -6,6 +6,8 @@ import env from "constant/env";
 import * as Google from "expo-auth-session/providers/google";
 import useSignin from "utils/hooks/signin/useSignin";
 import { signin } from "utils/api/signin";
+import localStorage from "utils/localStorage";
+import storageKeys from "constant/storageKeys";
 
 const google = require("../../../assets/icons/login/google.png");
 
@@ -14,18 +16,20 @@ const GoogleButton = () => {
   const { state, setState } = useSignin();
   const [request, _, prompAsync] = Google.useAuthRequest({
     clientId: env.googleClientId.webId,
-    responseType: "code",
-    clientSecret: "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",
+    responseType: "id_token",
+    redirectUri: env.redirectUrl,
     scopes: ["openid", "email", "profile"],
   });
-
   const login = async () => {
+    console.log(await localStorage.getItem(storageKeys.accessToken));
     try {
       setLoading(true);
       const response = await prompAsync();
       if (response.type === "success") {
-        signin({ code: response.params.code, provider: "GOOGLE" });
-        // setState.signin({ code: response.params.code, provider: "GOOGLE" });
+        setState.signin({
+          id_token: response.params.id_token,
+          provider: "GOOGLE",
+        });
       }
     } catch (error) {
       console.log(error);
