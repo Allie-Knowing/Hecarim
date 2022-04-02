@@ -4,14 +4,14 @@ import * as S from "./styles";
 import { Text, TouchableOpacity } from "react-native";
 import env from "constant/env";
 
-const facebook = require("../../../assets/icons/login/facebook.png");
+const apple = require("../../../assets/icons/login/apple.png");
 
 const FacebookButton = () => {
   return (
     <TouchableOpacity>
       <LoginButtonLayout>
-        <S.Logo source={facebook} />
-        <Text>페이스북 계정으로 로그인</Text>
+        <S.Logo source={apple} resizeMode="contain" />
+        <Text>Apple 계정으로 로그인</Text>
       </LoginButtonLayout>
     </TouchableOpacity>
   );
