@@ -40,7 +40,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   return (
     //키보드가 올라올시에 자동으로 인풋 위치를 패딩으로 조정해주는 컴포넌트
     <KeyboardAwareScrollView
-      extraHeight={Platform.OS === "ios" ? 20 : 60}
+      extraHeight={Platform.OS === "ios" ? 20 : 440}
       enableOnAndroid={true}
       enableAutomaticScroll={Platform.OS === "ios"}
       scrollEnabled={false}

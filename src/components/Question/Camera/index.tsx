@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FC } from "react";
 import { Camera } from "expo-camera";
 import { StyleSheet, View, Text, SafeAreaView, Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as S from "./styles";
 import * as ImagePicker from "expo-image-picker";
@@ -13,6 +13,8 @@ const recordingImg = require("../../../assets/icons/recording.png");
 const recordImg = require("../../../assets/icons/record.png");
 const videoImg = require("../../../assets/icons/video.png");
 
+type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
@@ -21,9 +23,8 @@ const CameraComponent: FC = (): JSX.Element => {
   const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
 
-  type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
-
   const navigation = useNavigation<screenProp>();
+  const isFocused = useIsFocused();
 
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -69,10 +70,12 @@ const CameraComponent: FC = (): JSX.Element => {
 
   const startCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
+
     setHasPermission(status === "granted");
   };
 
   const recordVideo = async () => {
+    console.warn(cameraRef);
     if (cameraRef) {
       setIsVideoRecording(true);
       const videoRecordPromise = await cameraRef.recordAsync({
@@ -85,8 +88,8 @@ const CameraComponent: FC = (): JSX.Element => {
 
   const stopVideoRecording = async () => {
     if (cameraRef) {
-      setIsVideoRecording(false);
       await cameraRef.stopRecording();
+      setIsVideoRecording(false);
     }
   };
 
@@ -147,17 +150,20 @@ const CameraComponent: FC = (): JSX.Element => {
   return (
     <S.QuestionWrapper>
       <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        <Camera
-          ref={(el) => setCameraRef(el)}
-          style={{ ...StyleSheet.absoluteFillObject }}
-          type={cameraType}
-          onCameraReady={onCameraReady}
-          onMountError={(error) => {
-            console.warn("cammera error", error);
-          }}
-          autoFocus={"on"}
-          useCamera2Api
-        />
+        {isFocused && (
+          <Camera
+            ref={(el) => setCameraRef(el)}
+            style={{ ...StyleSheet.absoluteFillObject }}
+            type={cameraType}
+            onCameraReady={onCameraReady}
+            onMountError={(error) => {
+              console.warn("cammera error", error);
+            }}
+            autoFocus={"on"}
+            useCamera2Api
+          />
+        )}
+
         <View style={{ ...StyleSheet.absoluteFillObject }}>
           {isVideoRecording && renderVideoRecordIndicator()}
           {renderVideoControl()}

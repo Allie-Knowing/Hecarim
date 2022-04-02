@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FeedVideos from "components/FeedVideos";
 import React, { Fragment, useContext } from "react";
 import { useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
@@ -83,6 +83,7 @@ const BottomTabNavigation = () => {
             elevation: 2,
           },
           headerShown: false,
+          unmountOnBlur: Platform.OS === "ios" ? false : true,
         }}
         initialRouteName="feed"
       >
