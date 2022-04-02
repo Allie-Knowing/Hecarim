@@ -1,8 +1,10 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import axios, { AxiosError } from "axios";
 import env from "constant/env";
 import { refresh } from "./refresh";
 
-export const instance = axios.create({ baseURL: env.baseUrl });
+export const instance = axios.create({
+  baseURL: env.baseUrl,
+});
 
 export const noTokenInstance = axios.create({ baseURL: env.baseUrl });
 
