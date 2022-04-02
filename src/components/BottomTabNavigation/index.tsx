@@ -5,12 +5,12 @@ import { useState } from "react";
 import { Dimensions } from "react-native";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Question from "components/Question";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
 import Feed from "screens/Feed";
 import MyPage from "screens/MyPage";
+import Question from "components/Question";
 import Search from "screens/Search";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
