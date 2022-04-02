@@ -1,4 +1,4 @@
-export interface signinRequest {
+export type signinRequest {
   provider: string;
   code: string;
 }
