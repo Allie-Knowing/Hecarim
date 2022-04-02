@@ -7,6 +7,15 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
+import StackedQuestionList from "screens/StackedQuestionList";
+import { Host } from "react-native-portalize";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
+
+const Root = createStackNavigator<MainStackParamList>();
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -25,7 +34,26 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <BottomSheetModalProvider>
             <NavigationContainer>
-              <BottomTabNavigation />
+              <Host>
+                <Root.Navigator
+                  initialRouteName="Main"
+                  screenOptions={{
+                    cardStyleInterpolator:
+                      CardStyleInterpolators.forHorizontalIOS,
+                  }}
+                >
+                  <Root.Screen
+                    name="Main"
+                    component={BottomTabNavigation}
+                    options={{ headerShown: false }}
+                  />
+                  <Root.Screen
+                    name="StackedQuestionList"
+                    component={StackedQuestionList}
+                    options={{ headerShown: false }}
+                  />
+                </Root.Navigator>
+              </Host>
             </NavigationContainer>
           </BottomSheetModalProvider>
         </ThemeProvider>
