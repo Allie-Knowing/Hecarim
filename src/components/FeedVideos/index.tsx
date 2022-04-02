@@ -9,17 +9,18 @@ import { FC, useEffect, useState } from "react";
 
 const { height, width } = Dimensions.get("screen");
 
-const FeedVideos: FC = () => {
+interface PropsType {
+  dataList: string[];
+  index: number;
+}
+
+const FeedVideos: FC<PropsType> = ({ dataList, index }) => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
     setPage(newPage);
   };
-
-  useEffect(() => {
-    console.log(page);
-  }, [page]);
 
   return (
     <S.Container
@@ -32,7 +33,7 @@ const FeedVideos: FC = () => {
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
       keyExtractor={(_, index) => index.toString()}
-      data={[1, 2, 3, 4]}
+      data={dataList}
       renderItem={() => <FeedContent />}
     />
   );
