@@ -1,4 +1,4 @@
 export interface signinRequest {
   provider: string;
-  code: string;
+  id_token: string;
 }
