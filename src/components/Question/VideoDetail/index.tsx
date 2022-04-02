@@ -6,24 +6,27 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { FooterHeight, HeaderHeight } from "constant/defaultStyle";
 import * as S from "./styles";
 import theme from "theme/theme";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "..";
+import { useNavigation } from "@react-navigation/native";
 
 //import image
 const backImage = require("../../../assets/icons/back-black.png");
 
 interface Props {
   videoURI: string;
-  closeDetailPage: () => void;
 }
 
-const QuestionDetail: FC<Props> = ({
-  closeDetailPage,
-  videoURI,
-}): JSX.Element => {
+type screenPop = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+
+const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   const [borderBottomColor, setBorderBottomColor] = useState<string>(
     theme.colors.grayscale.scale30
   );
   const { top: topPad, bottom: bottomPad } = useSafeAreaInsets();
   const ScreenHeight = Dimensions.get("window").height;
+
+  const navigation = useNavigation<screenPop>();
 
   const uploadVideo = async () => {
     const formData = new FormData();
@@ -37,14 +40,18 @@ const QuestionDetail: FC<Props> = ({
   return (
     //키보드가 올라올시에 자동으로 인풋 위치를 패딩으로 조정해주는 컴포넌트
     <KeyboardAwareScrollView
-      extraHeight={20}
+      extraHeight={Platform.OS === "ios" ? 20 : 60}
       enableOnAndroid={true}
       enableAutomaticScroll={Platform.OS === "ios"}
       scrollEnabled={false}
     >
       <S.QuestionDetailWrapper topPad={topPad + HeaderHeight}>
         <S.QuestionDetailHeader topPad={topPad}>
-          <S.GoBackContainer onPress={closeDetailPage}>
+          <S.GoBackContainer
+            onPress={() => {
+              navigation.pop(1);
+            }}
+          >
             <S.GoBackImage source={backImage} />
           </S.GoBackContainer>
           <S.InputQuestionInfoText>질문 정보 입력</S.InputQuestionInfoText>
@@ -112,4 +119,4 @@ const QuestionDetail: FC<Props> = ({
   );
 };
 
-export default QuestionDetail;
+export default VideoDetail;
