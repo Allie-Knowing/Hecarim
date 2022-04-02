@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import * as S from "./style";
 import { useTheme } from "styled-components";
-import { Value } from "react-native-reanimated";
 
 interface Props {
   topPad: number;
