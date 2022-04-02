@@ -1,5 +1,11 @@
 import React, { FC } from "react";
-import { Dimensions, Button, View } from "react-native";
+import {
+  Dimensions,
+  Button,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "screens/Search";
@@ -14,16 +20,18 @@ const DefaultSearchPage: FC = () => {
   const navigation = useNavigation<screenProp>();
 
   return (
-    <View>
-      <SearchTopNavigation />
-      <S.View height={height / 1.44}>
-        <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
-        <Button
-          title="Go"
-          onPress={() => navigation.navigate("SearchedQuestions")}
-        />
-      </S.View>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View>
+        <SearchTopNavigation />
+        <S.View height={height / 1.44}>
+          <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
+          <Button
+            title="Go"
+            onPress={() => navigation.navigate("SearchedQuestions")}
+          />
+        </S.View>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
