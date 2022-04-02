@@ -2,13 +2,13 @@ import storageKeys from "constant/storageKeys";
 import uri from "constant/uri";
 import { signinRequest } from "modules/dto/request/signinRequest";
 import { signinResponse } from "modules/dto/response/signinResponse";
-import { instance } from "utils/axios";
+import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
 
 export const signin = async (body: signinRequest) => {
   try {
     console.log(body);
-    const response = await instance.post<signinResponse>(
+    const response = await noTokenInstance.post<signinResponse>(
       `${uri.signin}?provider=${body.provider}`,
       { code: body.code }
     );
