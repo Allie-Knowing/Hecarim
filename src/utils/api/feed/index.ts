@@ -1,10 +1,9 @@
 import uri from "constance/uri";
-import { getRequestWithAccessToken } from "../default";
+import { instance } from "utils/axios";
 
-export const getVideoAnswerList = async (access_token: string) => {
+export const getVideoAnswerList = async () => {
     try {
-        const request = getRequestWithAccessToken(access_token, 'text');
-        return await request.get(uri.video_answer);
+        return await instance.get(uri.video_answer);
     } catch (error) {
         throw error;
     }
