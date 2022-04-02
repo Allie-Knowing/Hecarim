@@ -4,7 +4,6 @@ import { refresh } from "./refresh";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 
-console.log(env.baseUrl);
 export const instance = axios.create({ baseURL: env.baseUrl });
 
 export const noTokenInstance = axios.create({ baseURL: env.baseUrl });
