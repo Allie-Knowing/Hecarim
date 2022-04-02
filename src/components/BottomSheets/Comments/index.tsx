@@ -28,6 +28,8 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
       snapPoints={["70%"]}
       enablePanDownToClose
       enableOverDrag
+      enableContentPanningGesture
+      enableHandlePanningGesture
       index={-1}
       backdropComponent={DefaultBackDropComponent(isOpen)}
       backgroundComponent={StyledBackgroundComponent}
