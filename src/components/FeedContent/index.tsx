@@ -11,11 +11,15 @@ import { Dimensions, LayoutAnimation, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
+import { StackNavigationProp } from "@react-navigation/stack";
+import isStackContext from "context/IsStackContext";
+import useMainStackNavigation, {
+  MainStackParamList,
+} from "hooks/useMainStackNavigation";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -28,11 +32,13 @@ const { height } = Dimensions.get("screen");
 const FeedContent: FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
-  const tabBarHeight = useBottomTabBarHeight();
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
+  const navigation = useMainStackNavigation();
+  const isStack = useContext(isStackContext);
+  const tabBarHeight = isStack ? 30 : 80;
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -156,7 +162,9 @@ const FeedContent: FC = () => {
               <S.IconContainer>
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
-              <S.IconContainer>
+              <S.IconContainer
+                onPress={() => navigation.navigate("StackedQuestionList")}
+              >
                 <S.Icon resizeMode="contain" source={Camera} />
                 <S.IconLabel>답변하기</S.IconLabel>
               </S.IconContainer>

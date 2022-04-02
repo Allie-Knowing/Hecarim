@@ -1,6 +1,8 @@
 import {
   Dimensions,
   FlatList,
+  FlatListProps,
+  Image,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
@@ -8,7 +10,7 @@ import {
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
-import React, { FC, useRef } from "react";
+import React, { FC, useContext } from "react";
 import { useState } from "react";
 import Animated, {
   interpolate,
@@ -24,6 +26,8 @@ import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import uniqueId from "constant/uniqueId";
+import isStackContext from "context/IsStackContext";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 
 const { height, width } = Dimensions.get("screen");
 const navGap = 24;
@@ -31,6 +35,8 @@ interface WidthsType {
   question: number;
   answer: number;
 }
+
+const BackIcon = require("../../assets/icons/back.png");
 
 const styles = StyleSheet.create({
   outer: {
@@ -43,15 +49,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+interface PropsType {
+  questionList: string[];
+  index: number;
+}
 
-const Feed: FC = () => {
+const QuestionList: FC<PropsType> = ({ questionList, index }) => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
-  const outerRef = useAnimatedRef<Animated.FlatList<unknown>>();
+  const outerRef = useAnimatedRef<Animated.ScrollView>();
   const pageValue = useSharedValue<number>(0);
   const pageId = useSharedValue<string>(uniqueId());
+  const isStack = useContext(isStackContext);
+  const navigation = useMainStackNavigation();
 
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
@@ -112,7 +123,7 @@ const Feed: FC = () => {
 
   return (
     <S.Wrapper style={{ height }}>
-      <AnimatedFlatList
+      <Animated.ScrollView
         ref={outerRef}
         style={styles.outer}
         decelerationRate="fast"
@@ -124,11 +135,20 @@ const Feed: FC = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1 }}
-        keyExtractor={(_, index) => index.toString()}
         onScroll={scrollHandler}
-        data={[FeedVideos, VideoAnswer]}
-        renderItem={(value) => React.createElement(value.item as FC)}
-      />
+      >
+        <FeedVideos dataList={questionList} index={index} />
+        <VideoAnswer />
+      </Animated.ScrollView>
+      {isStack && (
+        <S.BackButton onPress={() => navigation.pop()}>
+          <Image
+            source={BackIcon}
+            style={{ height: 24, top: topPad + 20 }}
+            resizeMode="contain"
+          />
+        </S.BackButton>
+      )}
       <Animated.View
         style={[NavStyle("question"), questionNavStyle]}
         onLayout={onLayout("question")}
@@ -149,4 +169,4 @@ const Feed: FC = () => {
   );
 };
 
-export default Feed;
+export default QuestionList;

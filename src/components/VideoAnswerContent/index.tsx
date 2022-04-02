@@ -1,10 +1,8 @@
-import React, { FC, Fragment, useRef } from "react";
+import React, { FC, Fragment, useContext, useRef } from "react";
 import { Dimensions, View } from "react-native";
 import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import BottomSheet from "@gorhom/bottom-sheet";
-import CommentBottomSheet from "components/BottomSheets/Comments";
+import isStackContext from "context/IsStackContext";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -14,7 +12,8 @@ const Camera = require("../../assets/icons/camera.png");
 const { height } = Dimensions.get("screen");
 
 const VideoAnswerContent: FC = () => {
-  const tabBarHeight = useBottomTabBarHeight();
+  const isStack = useContext(isStackContext);
+  const tabBarHeight = isStack ? 30 : 80;
 
   return (
     <Fragment>
