@@ -1,15 +1,9 @@
-import FacebookButton from "components/Buttons/Login/FacebookButton";
+import AppleButton from "components/Buttons/Login/AppleButton";
 import GoogleButton from "components/Buttons/Login/GoogleButton";
-import KakaoButton from "components/Buttons/Login/KakaoButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
 import LoginHeader from "components/Header/Login";
 import React, { FC } from "react";
-import {
-  Dimensions,
-  ListRenderItem,
-  SectionListData,
-  View,
-} from "react-native";
+import { Dimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as S from "./style";
 
@@ -33,8 +27,7 @@ const Login: FC = () => {
           <View>
             <GoogleButton />
             <NaverButton />
-            <KakaoButton />
-            <FacebookButton />
+            <AppleButton />
           </View>
         </S.LoginBtnContainer>
       </S.Content>
