@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Platform, Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -33,12 +33,9 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
     const blobData = (await fetch(videoURI)).blob();
 
     formData.append("file", await blobData);
-
-    console.warn(formData);
   };
 
   return (
-    //키보드가 올라올시에 자동으로 인풋 위치를 패딩으로 조정해주는 컴포넌트
     <KeyboardAwareScrollView
       extraHeight={20}
       enableOnAndroid={true}
