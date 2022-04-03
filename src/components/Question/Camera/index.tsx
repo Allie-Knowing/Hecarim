@@ -23,6 +23,7 @@ const CameraComponent: FC = (): JSX.Element => {
   const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
   const [bestRatio, setBestRatio] = useState<string>();
+  const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
@@ -37,6 +38,7 @@ const CameraComponent: FC = (): JSX.Element => {
   }, []);
 
   const importMediaFromLibrary = async () => {
+    setIsPickingVideo(true);
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     const videoData = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -53,22 +55,32 @@ const CameraComponent: FC = (): JSX.Element => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
-            alert("동영상의 길이가 60초를 넘어 영상의 앞 60초만 사용됩니다.");
-            return;
+            alert(
+              "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
+            );
           }
           setVideoURI(res.uri);
           navigation.navigate("VideoDetailPage");
         }
       });
     }
+    setIsPickingVideo(false);
   };
 
   const onCameraReady = () => {
+    getDeviceCameraRatio();
     setIsCameraReady(true);
   };
 
   const startCamera = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
+    const { status: CameraStatus } =
+      await Camera.requestCameraPermissionsAsync();
+    const { status: VoiceStatus } =
+      await Camera.requestMicrophonePermissionsAsync();
+
+    setHasPermission(CameraStatus === "granted" && VoiceStatus === "granted");
+  };
+
   const getDeviceCameraRatio = async () => {
     const ratio = await cameraRef.getSupportedRatiosAsync();
     setBestRatio(extractBestRatio(ratio));
@@ -172,7 +184,7 @@ const CameraComponent: FC = (): JSX.Element => {
   return (
     <S.QuestionWrapper>
       <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        {isFocused && (
+        {isFocused && !isPickingVideo && (
           <Camera
             ref={(el) => setCameraRef(el)}
             style={{ ...StyleSheet.absoluteFillObject }}
