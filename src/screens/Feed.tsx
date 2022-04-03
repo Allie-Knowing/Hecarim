@@ -6,9 +6,9 @@ import useFeed from "utils/hooks/feed/useFeed";
 const Feed: FC = () => {
   const { state, setState } = useFeed();
 
-  React.useEffect(() => {
-    setState.getVideoAnswerList();
-  }, []);
+  // React.useEffect(() => {
+  //   setState.getVideoAnswerList();
+  // }, []);
 
   return (
     <isStackContext.Provider value={false}>
