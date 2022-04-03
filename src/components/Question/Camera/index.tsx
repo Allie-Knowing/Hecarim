@@ -22,15 +22,14 @@ const CameraComponent: FC = (): JSX.Element => {
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
   const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
+  const [bestRatio, setBestRatio] = useState<string>();
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
 
   const SCREEN_HEIGHT = Dimensions.get("window").height;
   const SCREEN_WIDTH = Dimensions.get("window").width;
-
   const SCREEN_RATIO = SCREEN_HEIGHT / SCREEN_WIDTH;
-
   const MAX_DURATION = 60;
 
   useEffect(() => {
@@ -70,12 +69,35 @@ const CameraComponent: FC = (): JSX.Element => {
 
   const startCamera = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
+  const getDeviceCameraRatio = async () => {
+    const ratio = await cameraRef.getSupportedRatiosAsync();
+    setBestRatio(extractBestRatio(ratio));
+  };
 
-    setHasPermission(status === "granted");
+  const extractBestRatio = (availableRatioArra: string[]) => {
+    const ratioObjectArray: { ratio: string; realRatio: number }[] = [];
+    const arrayOfAbs: number[] = [];
+
+    for (let i = 0; i < availableRatioArra.length; i++) {
+      ratioObjectArray[i] = {
+        ratio: availableRatioArra[i],
+        realRatio:
+          Number(availableRatioArra[i].split(":")[0]) /
+          Number(availableRatioArra[i].split(":")[1]),
+      };
+    }
+
+    for (let i = 0; i < ratioObjectArray.length; i++) {
+      arrayOfAbs.push(Math.abs(SCREEN_RATIO - ratioObjectArray[i].realRatio));
+    }
+
+    const minRatio = Math.min.apply(Math, arrayOfAbs);
+    const minRatioIndex = arrayOfAbs.findIndex((value) => value === minRatio);
+
+    return availableRatioArra[minRatioIndex];
   };
 
   const recordVideo = async () => {
-    console.warn(cameraRef);
     if (cameraRef) {
       setIsVideoRecording(true);
       const videoRecordPromise = await cameraRef.recordAsync({
@@ -161,6 +183,7 @@ const CameraComponent: FC = (): JSX.Element => {
             }}
             autoFocus={"on"}
             useCamera2Api
+            ratio={bestRatio}
           />
         )}
 
