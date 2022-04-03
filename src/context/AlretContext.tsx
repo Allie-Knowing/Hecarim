@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export interface AlretContext {
-  showAlret: (alret: Alret) => void;
+  showAlret: (alret: Alret) => Promise<void>;
 }
 
 export type ButtonColor = "black" | "red" | "primary";
@@ -20,5 +20,5 @@ export interface Alret {
 }
 
 export const alretContext = createContext<AlretContext>({
-  showAlret: () => {},
+  showAlret: async () => {},
 });
