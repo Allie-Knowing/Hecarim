@@ -11,7 +11,6 @@ export interface Button {
   color: ButtonColor;
   text: string;
   onPress: () => void;
-  type: "default" | "close";
 }
 
 export interface Alret {

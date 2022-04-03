@@ -15,11 +15,8 @@ import CommentBottomSheet from "components/BottomSheets/Comments";
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
-import { StackNavigationProp } from "@react-navigation/stack";
 import isStackContext from "context/IsStackContext";
-import useMainStackNavigation, {
-  MainStackParamList,
-} from "hooks/useMainStackNavigation";
+import useAlret from "hooks/useAlret";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -36,9 +33,9 @@ const FeedContent: FC = () => {
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
   const confirmSheetRef = useRef<BottomSheetModal>(null);
-  const navigation = useMainStackNavigation();
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
+  const { showAlret, closeCurrentAlret } = useAlret();
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -72,7 +69,7 @@ const FeedContent: FC = () => {
         text: "삭제하기",
       },
     ],
-    []
+    [themeContext]
   );
 
   const reportItems: ToolItem[] = useMemo(
@@ -108,7 +105,7 @@ const FeedContent: FC = () => {
         text: "기타 사유",
       },
     ],
-    [onReportPress]
+    [onReportPress, themeContext]
   );
 
   const comfirmItems: ToolItem[] = useMemo(
@@ -124,7 +121,7 @@ const FeedContent: FC = () => {
         text: "취소하기",
       },
     ],
-    []
+    [themeContext]
   );
 
   return (
@@ -163,7 +160,26 @@ const FeedContent: FC = () => {
                 <S.ProfileImage source={Test} />
               </S.IconContainer>
               <S.IconContainer
-                onPress={() => navigation.navigate("StackedQuestionList")}
+                onPress={() => {
+                  showAlret({
+                    title: "테스트",
+                    content: "이것을 테스트 알림입니다.",
+                    buttons: [
+                      {
+                        color: "black",
+                        onPress: () => {
+                          closeCurrentAlret();
+                        },
+                        text: "취소",
+                      },
+                      {
+                        color: "primary",
+                        onPress: () => {},
+                        text: "확인",
+                      },
+                    ],
+                  });
+                }}
               >
                 <S.Icon resizeMode="contain" source={Camera} />
                 <S.IconLabel>답변하기</S.IconLabel>

@@ -1,24 +1,19 @@
-import useAlret from "hooks/useAlret";
 import {
   forwardRef,
   useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
-  useState,
 } from "react";
 import {
   Easing,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "styled-components/native";
-import {
-  Alret as AlretProps,
-  Button,
-  ButtonColor,
-} from "../../context/AlretContext";
+import { Alret as AlretProps, ButtonColor } from "../../context/AlretContext";
 import * as S from "./styles";
 
 export interface AlretRef {
@@ -29,8 +24,6 @@ const Alert = forwardRef<AlretRef, AlretProps>(
   ({ title, content, buttons }, ref) => {
     const theme = useTheme();
     const offset = useSharedValue(0);
-    const [canEvent, setCanEvent] = useState(false);
-    const { closeCurrentAlret } = useAlret();
 
     const colorMap = useMemo(
       () =>
@@ -41,37 +34,35 @@ const Alert = forwardRef<AlretRef, AlretProps>(
       [theme]
     );
 
-    const closeAnimation = useCallback(
+    const closeAnimationLogic = useCallback(
       (callback?: () => void) => {
-        setCanEvent(false);
-
-        offset.value = withTiming(
-          0,
-          {
-            duration: 300,
-            easing: Easing.out(Easing.quad),
-          },
-          () => {
-            callback();
-          }
-        );
+        const fn = () => {
+          offset.value = withTiming(
+            0,
+            {
+              duration: 300,
+              easing: Easing.out(Easing.quad),
+            },
+            () => {
+              runOnJS(callback)();
+            }
+          );
+        };
+        runOnJS(fn)();
       },
       [offset]
     );
 
-    const onPress = useCallback(
-      (value: Button) => () => {
-        value.onPress();
-
-        if (value.type === "close") {
-          //닫기
-          closeAnimation(closeCurrentAlret);
-        }
+    const closeAnimation = useCallback(
+      (callback?: () => void) => {
+        runOnJS(closeAnimationLogic)(callback);
       },
-      [closeAnimation, closeCurrentAlret]
+      [closeAnimationLogic]
     );
 
-    useImperativeHandle(ref, () => ({ closeAnimation }));
+    useImperativeHandle(ref, () => ({
+      closeAnimation: closeAnimation,
+    }));
 
     const animatedStyles = useAnimatedStyle(() => {
       return {
@@ -81,30 +72,23 @@ const Alert = forwardRef<AlretRef, AlretProps>(
     });
 
     useEffect(() => {
-      offset.value = withTiming(
-        1,
-        {
-          duration: 300,
-          easing: Easing.out(Easing.quad),
-        },
-        () => {
-          setCanEvent(true);
-        }
-      );
-    }, []);
+      offset.value = withTiming(1, {
+        duration: 300,
+        easing: Easing.out(Easing.quad),
+      });
+    }, [offset]);
 
     return (
-      <S.Container
-        style={[animatedStyles]}
-        pointerEvents={canEvent ? "auto" : "none"}
-      >
+      <S.Container style={[animatedStyles]}>
         <S.Title>{title}</S.Title>
         <S.Content>{content}</S.Content>
         <S.ButtonContainer>
           {buttons.map((value, index) => (
             <S.Button
               key={`${value.text}_button_${index}`}
-              onPress={onPress(value)}
+              onPress={value.onPress}
+              underlayColor={theme.colors.grayscale.scale30}
+              activeOpacity={1}
             >
               <S.ButtonLabel
                 style={{

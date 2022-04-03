@@ -1,8 +1,9 @@
 import { Alret, alretContext } from "context/AlretContext";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import * as S from "./styles";
 import AlretComponent, { AlretRef } from "../../Alert";
 import { Dimensions } from "react-native";
+import { runOnJS } from "react-native-reanimated";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -21,22 +22,29 @@ const AlretProvider: FC = ({ children }) => {
       } else {
         callback();
       }
-
-      return;
     },
     [alrets]
   );
 
   const closeCurrentAlret = useCallback(() => {
-    const copyAlrets = [...alrets];
+    const callback = () => {
+      const copyAlrets = [...alrets];
 
-    copyAlrets.pop();
+      copyAlrets.pop();
 
-    setAlrets(copyAlrets);
+      setAlrets(copyAlrets);
+    };
+
+    currentAlretRef.current.closeAnimation(callback);
   }, [alrets]);
 
   return (
-    <alretContext.Provider value={{ showAlret, closeCurrentAlret }}>
+    <alretContext.Provider
+      value={{
+        showAlret: runOnJS(showAlret),
+        closeCurrentAlret: runOnJS(closeCurrentAlret),
+      }}
+    >
       {children}
       <S.Container
         style={{ height, width }}

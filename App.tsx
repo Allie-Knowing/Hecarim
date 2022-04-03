@@ -16,6 +16,7 @@ import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import theme from "theme/theme";
 import store from "modules/redux/store";
+import AlretProvider from "components/Providers/AlretProvider";
 
 const Root = createStackNavigator<MainStackParamList>();
 
@@ -36,28 +37,30 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <BottomSheetModalProvider>
-              <NavigationContainer>
-                <Host>
-                  <Root.Navigator
-                    initialRouteName="Main"
-                    screenOptions={{
-                      cardStyleInterpolator:
-                        CardStyleInterpolators.forHorizontalIOS,
-                    }}
-                  >
-                    <Root.Screen
-                      name="Main"
-                      component={BottomTabNavigation}
-                      options={{ headerShown: false }}
-                    />
-                    <Root.Screen
-                      name="StackedQuestionList"
-                      component={StackedQuestionList}
-                      options={{ headerShown: false }}
-                    />
-                  </Root.Navigator>
-                </Host>
-              </NavigationContainer>
+              <AlretProvider>
+                <NavigationContainer>
+                  <Host>
+                    <Root.Navigator
+                      initialRouteName="Main"
+                      screenOptions={{
+                        cardStyleInterpolator:
+                          CardStyleInterpolators.forHorizontalIOS,
+                      }}
+                    >
+                      <Root.Screen
+                        name="Main"
+                        component={BottomTabNavigation}
+                        options={{ headerShown: false }}
+                      />
+                      <Root.Screen
+                        name="StackedQuestionList"
+                        component={StackedQuestionList}
+                        options={{ headerShown: false }}
+                      />
+                    </Root.Navigator>
+                  </Host>
+                </NavigationContainer>
+              </AlretProvider>
             </BottomSheetModalProvider>
           </Provider>
         </ThemeProvider>
