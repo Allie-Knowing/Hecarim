@@ -10,5 +10,5 @@ export type getTextAnswerRequest = {
 };
 
 export type deleteTextAnswerRequest = {
-  commentId: string;
+  commentId?: string;
 };
