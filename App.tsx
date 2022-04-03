@@ -1,8 +1,8 @@
+import React from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
-import React from "react-native";
 import { ThemeProvider } from "styled-components/native";
-import theme from "theme/theme";
+import { Provider } from "react-redux";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -35,8 +35,8 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
         <ThemeProvider theme={theme}>
-          <BottomSheetModalProvider>
-            <Provider store={store}>
+          <Provider store={store}>
+            <BottomSheetModalProvider>
               <NavigationContainer>
                 <Host>
                   <Root.Navigator
@@ -56,16 +56,11 @@ export default function App() {
                       component={StackedQuestionList}
                       options={{ headerShown: false }}
                     />
-                    <Root.Screen
-                      name="Login"
-                      component={Login}
-                      options={{ headerShown: false }}
-                    />
                   </Root.Navigator>
                 </Host>
               </NavigationContainer>
-            </Provider>
-          </BottomSheetModalProvider>
+            </BottomSheetModalProvider>
+          </Provider>
         </ThemeProvider>
       </SafeAreaView>
     </SafeAreaProvider>
