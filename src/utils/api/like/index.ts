@@ -1,4 +1,4 @@
-import uri from "constant/uri";
+import uri from "constance/uri";
 import { getRequestWithAccessToken } from "../default";
 
 export const postLikeApi = async (videoId: number, access_token: string) => {
