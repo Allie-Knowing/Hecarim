@@ -3,7 +3,7 @@ export type postTextAnswerRequest = {
   content?: string;
 };
 
-export type getTextAnswerRequest = {
+export type getTextAnswerListRequest = {
   questionId?: number;
   page?: number;
   size?: number;

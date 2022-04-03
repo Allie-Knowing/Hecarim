@@ -5,6 +5,6 @@ export type getTextAnswer = {
   userId?: number;
 };
 
-export type getTextAnswerResponse = {
+export type getTextAnswerListResponse = {
   data?: getTextAnswer[];
 };

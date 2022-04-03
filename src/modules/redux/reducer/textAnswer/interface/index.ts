@@ -1,15 +1,15 @@
 import { error } from "modules/dto/error";
 import {
   deleteTextAnswerRequest,
-  getTextAnswerRequest,
+  getTextAnswerListRequest,
   postTextAnswerRequest,
 } from "modules/dto/request/textAnswerRequest";
-import { getTextAnswerResponse } from "modules/dto/response/textAnswerResponse";
+import { getTextAnswerListResponse } from "modules/dto/response/textAnswerResponse";
 
 export interface TextAnswerState {
   postTextAnswerRequest: postTextAnswerRequest;
-  getTextAnswerRequest: getTextAnswerRequest;
+  getTextAnswerListRequest: getTextAnswerListRequest;
   deleteTextAnswerRequest: deleteTextAnswerRequest;
-  getTextAnswerResponse: getTextAnswerResponse;
+  getTextAnswerListResponse: getTextAnswerListResponse;
   error: error;
 }
