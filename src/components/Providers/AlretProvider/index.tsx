@@ -2,6 +2,9 @@ import { Alret, alretContext } from "context/AlretContext";
 import { FC, useCallback, useRef, useState } from "react";
 import * as S from "./styles";
 import AlretComponent, { AlretRef } from "../../Alert";
+import { Dimensions } from "react-native";
+
+const { height, width } = Dimensions.get("screen");
 
 const AlretProvider: FC = ({ children }) => {
   const [alrets, setAlrets] = useState<Alret[]>([]);
@@ -23,7 +26,7 @@ const AlretProvider: FC = ({ children }) => {
   return (
     <alretContext.Provider value={{ showAlret }}>
       {children}
-      <S.Container>
+      <S.Container style={{ height, width }}>
         {alrets.length !== 0 && (
           <AlretComponent ref={currentAlretRef} {...alrets.reverse()[0]} />
         )}

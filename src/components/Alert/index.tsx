@@ -1,6 +1,10 @@
 import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
 import { useTheme } from "styled-components/native";
-import { Alret as AlretProps, ButtonColor } from "../../context/AlretContext";
+import {
+  Alret as AlretProps,
+  Button,
+  ButtonColor,
+} from "../../context/AlretContext";
 import * as S from "./styles";
 
 export interface AlretRef {
@@ -22,6 +26,18 @@ const Alert = forwardRef<AlretRef, AlretProps>(
 
     const closeAnimation = useCallback(async () => {}, []);
 
+    const onPress = useCallback(
+      (value: Button) => async () => {
+        value.onPress();
+
+        if (value.type === "close") {
+          //닫기
+          await closeAnimation();
+        }
+      },
+      [closeAnimation]
+    );
+
     useImperativeHandle(ref, () => ({ closeAnimation }));
 
     return (
@@ -32,13 +48,7 @@ const Alert = forwardRef<AlretRef, AlretProps>(
           {buttons.map((value, index) => (
             <S.Button
               key={`${value.text}_button_${index}`}
-              onPress={() => {
-                value.onPress();
-
-                if (value.type === "close") {
-                  //닫기
-                }
-              }}
+              onPress={onPress(value)}
             >
               <S.ButtonLabel
                 style={{

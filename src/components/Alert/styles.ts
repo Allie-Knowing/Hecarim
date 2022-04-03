@@ -1,6 +1,7 @@
+import Animated from "react-native-reanimated";
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled(Animated.View)`
   border-radius: 10;
   padding-top: 20;
   background-color: ${({ theme }) => theme.colors.grayscale.scale20};
