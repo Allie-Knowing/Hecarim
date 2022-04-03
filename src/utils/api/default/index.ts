@@ -4,33 +4,33 @@ import { useNavigation } from '@react-navigation/native';
 import getEnvVars from '../../../../environment';
 
 export const getRequest = () => {
-    const request = axios.create({
-      timeout: 10000,
-      baseURL: getEnvVars().baseUrl,
+  const request = axios.create({
+    timeout: 10000,
+    baseURL: getEnvVars().baseUrl,
+    withCredentials: true,
+    headers: {
       withCredentials: true,
-      headers: {
-        withCredentials: true,
-      },
-    });
-    return request;
-  };
+    },
+  });
+  return request;
+};
   
-  export const getRequestWithAccessToken = (
-    token: string,
-    type: 'json' | 'blob' | 'text' = 'json',
-  ) => {
-    const request = axios.create({
-      timeout: 10000,
-      baseURL: getEnvVars().baseUrl,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        withCredentials: true,
-      },
-      responseType: type,
+export const getRequestWithAccessToken = (
+  token: string,
+  type: 'json' | 'blob' | 'text' = 'json',
+) => {
+  const request = axios.create({
+    timeout: 10000,
+    baseURL: getEnvVars().baseUrl,
+    headers: {
+      Authorization: `Bearer ${token}`,
       withCredentials: true,
-    });
-    return request;
-  };
+    },
+    responseType: type,
+    withCredentials: true,
+  });
+  return request;
+};
   
 //   export const useIsLogin = () => {
 //     const history = useHistory();
