@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import feedReducer from "./feed";
-import likeReducer from "./like/interface";
+import likeReducer from "./like";
 import signinReducer from "./signin";
 
 const rootReducer = combineReducers({
