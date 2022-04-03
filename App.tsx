@@ -14,6 +14,8 @@ import {
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
+import theme from "theme/theme";
+import store from "modules/redux/store";
 
 const Root = createStackNavigator<MainStackParamList>();
 
