@@ -20,7 +20,7 @@ import store from "modules/redux/store";
 const Root = createStackNavigator<MainStackParamList>();
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     "SpoqaHanSansNeo-Bold": require("./src/assets/fonts/SpoqaHanSansNeo-Bold.ttf"),
     "SpoqaHanSansNeo-Medium": require("./src/assets/fonts/SpoqaHanSansNeo-Medium.ttf"),
     "SpoqaHanSansNeo-Regular": require("./src/assets/fonts/SpoqaHanSansNeo-Regular.ttf"),

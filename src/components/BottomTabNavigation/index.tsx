@@ -1,13 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FeedVideos from "components/FeedVideos";
 import React, { Fragment, useContext } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
-import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
-import { Host } from "react-native-portalize";
 import Feed from "screens/Feed";
 import MyPage from "screens/MyPage";
 import Question from "components/Question";
@@ -88,7 +85,7 @@ const BottomTabNavigation = () => {
       >
         {screens.map((value) => (
           <Tab.Screen
-            key={`${value}_screen`}
+            key={`${value.name}_screen`}
             name={value.name}
             listeners={{
               tabPress: () => setPressName(value.name),
