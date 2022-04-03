@@ -1,3 +1,4 @@
+import useAlret from "hooks/useAlret";
 import {
   forwardRef,
   useCallback,
@@ -24,6 +25,7 @@ const Alert = forwardRef<AlretRef, AlretWithId>(
   ({ title, content, buttons, id }, ref) => {
     const theme = useTheme();
     const offset = useSharedValue(0);
+    const { currentAlretId } = useAlret();
 
     const colorMap = useMemo(
       () =>
@@ -44,8 +46,6 @@ const Alert = forwardRef<AlretRef, AlretWithId>(
               easing: Easing.out(Easing.quad),
             },
             () => {
-              console.log("callback!");
-
               runOnJS(callback)();
             }
           );
@@ -74,13 +74,13 @@ const Alert = forwardRef<AlretRef, AlretWithId>(
     });
 
     useEffect(() => {
-      console.log("open!");
-
-      offset.value = withTiming(1, {
-        duration: 150,
-        easing: Easing.out(Easing.quad),
-      });
-    }, [offset]);
+      if (currentAlretId === id) {
+        offset.value = withTiming(1, {
+          duration: 150,
+          easing: Easing.out(Easing.quad),
+        });
+      }
+    }, [currentAlretId, id, offset]);
 
     return (
       <S.Container style={[animatedStyles]}>

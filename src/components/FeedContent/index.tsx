@@ -162,37 +162,13 @@ const FeedContent: FC = () => {
               <S.IconContainer
                 onPress={() => {
                   showAlret({
-                    title: "테스트",
-                    content: "이것을 테스트 알림입니다.",
+                    title: "xㅔ스트",
+                    content: "ㅂ마ㅣㄴㅇ러ㅣㅁㄴ어",
                     buttons: [
                       {
                         color: "black",
                         onPress: (id) => {
                           closeAlret(id);
-                        },
-                        text: "취소",
-                      },
-                      {
-                        color: "primary",
-                        onPress: () => {
-                          showAlret({
-                            title: "테스트",
-                            content: "이것을 테스트 알림입니다.",
-                            buttons: [
-                              {
-                                color: "black",
-                                onPress: (id) => {
-                                  closeAlret(id);
-                                },
-                                text: "취소",
-                              },
-                              {
-                                color: "primary",
-                                onPress: () => {},
-                                text: "확인",
-                              },
-                            ],
-                          });
                         },
                         text: "확인",
                       },
