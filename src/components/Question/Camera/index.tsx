@@ -1,18 +1,13 @@
 import React, { useState, useEffect, FC } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, Text, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import * as S from "./styles";
+import { RootStackParamList } from "..";
+import { Asset } from "expo-asset";
 import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
-import { RootStackParamList } from "..";
-
-//import images
-const rotateImg = require("../../../assets/icons/rotate.png");
-const recordingImg = require("../../../assets/icons/recording.png");
-const recordImg = require("../../../assets/icons/record.png");
-const videoImg = require("../../../assets/icons/video.png");
+import * as S from "./styles";
 
 type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
@@ -29,14 +24,24 @@ const CameraComponent: FC = (): JSX.Element => {
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
 
-  const SCREEN_HEIGHT = Dimensions.get("window").height;
-  const SCREEN_WIDTH = Dimensions.get("window").width;
-  const SCREEN_RATIO = SCREEN_HEIGHT / SCREEN_WIDTH;
-  const MAX_DURATION = 60;
+  const rotateImg = require("../../../assets/icons/rotate.png");
+  const recordingImg = require("../../../assets/icons/recording.png");
+  const recordImg = require("../../../assets/icons/record.png");
+  const videoImg = require("../../../assets/icons/video.png");
 
   useEffect(() => {
+    cacheImage();
     startCamera();
   }, []);
+
+  const cacheImage = () => {
+    Promise.all([
+      Asset.fromModule("../../../assets/icons/rotate.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/recording.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/record.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/video.png").downloadAsync(),
+    ]);
+  };
 
   const importMediaFromLibrary = async () => {
     setIsPickingVideo(true);
@@ -84,7 +89,8 @@ const CameraComponent: FC = (): JSX.Element => {
 
   const getDeviceCameraRatio = async () => {
     const ratio = await cameraRef.getSupportedRatiosAsync();
-    setBestRatio(extractBestRatio(ratio));
+    const bestRatio = extractBestRatio(ratio);
+    setBestRatio(bestRatio);
   };
 
   const extractBestRatio = (availableRatioArra: string[]) => {
@@ -129,10 +135,10 @@ const CameraComponent: FC = (): JSX.Element => {
   };
 
   const switchCamera = () => {
-    setCameraType((prevCameraType) =>
-      prevCameraType === Camera.Constants.Type.front
-        ? Camera.Constants.Type.back
-        : Camera.Constants.Type.front
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
     );
   };
 

@@ -1,14 +1,15 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Dimensions, ScrollView } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FooterHeight, HeaderHeight } from "constant/defaultStyle";
-import * as S from "./styles";
-import theme from "theme/theme";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
 import { useNavigation } from "@react-navigation/native";
+import { Asset } from "expo-asset";
+import theme from "theme/theme";
+import * as S from "./styles";
 
 //import image
 const backImage = require("../../../assets/icons/back-black.png");
@@ -34,6 +35,16 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
 
     formData.append("file", await blobData);
   };
+
+  const cacheImage = () => {
+    Promise.all([
+      Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync(),
+    ]);
+  };
+
+  useEffect(() => {
+    cacheImage();
+  }, []);
 
   return (
     <KeyboardAwareScrollView
