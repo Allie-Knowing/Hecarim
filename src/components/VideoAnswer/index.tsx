@@ -18,7 +18,7 @@ const VideoAnswer: FC = () => {
   };
 
   useEffect(() => {
-    console.log(page);
+    // console.log(page);
   }, [page]);
 
   return (

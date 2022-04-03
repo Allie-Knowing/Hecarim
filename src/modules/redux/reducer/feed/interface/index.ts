@@ -1,8 +1,8 @@
 import { error } from 'modules/dto/error';
 import { getVideoAnswerList } from 'constance/feed';
 
-export default interface FeedState {
-    getVideoAnswerListResponse: getVideoAnswerListResponse;
+export interface FeedState {
+    videoAnswerList: getVideoAnswerListResponse;
     error: error;
 }
 
