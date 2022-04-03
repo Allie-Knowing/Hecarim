@@ -4,6 +4,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 export type MainStackParamList = {
   Main: undefined;
   StackedQuestionList: undefined;
+  Login: undefined;
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;

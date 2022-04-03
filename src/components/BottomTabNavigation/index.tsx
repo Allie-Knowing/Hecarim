@@ -8,10 +8,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import { Host } from "react-native-portalize";
-import Feed from "screens/Feed";
 import MyPage from "screens/MyPage";
 import Question from "components/Question";
 import Search from "screens/Search";
+import Feed from "screens/Feed";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");

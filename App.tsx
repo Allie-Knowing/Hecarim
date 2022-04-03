@@ -14,6 +14,9 @@ import {
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
+import Login from "screens/Login";
+import store from "modules/redux/store";
+import theme from "theme/theme";
 
 const Root = createStackNavigator<MainStackParamList>();
 
@@ -51,6 +54,11 @@ export default function App() {
                     <Root.Screen
                       name="StackedQuestionList"
                       component={StackedQuestionList}
+                      options={{ headerShown: false }}
+                    />
+                    <Root.Screen
+                      name="Login"
+                      component={Login}
                       options={{ headerShown: false }}
                     />
                   </Root.Navigator>
