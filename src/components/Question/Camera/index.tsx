@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, SafeAreaView, Dimensions } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as S from "./styles";
+import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import { RootStackParamList } from "..";
 
