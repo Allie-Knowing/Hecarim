@@ -14,9 +14,14 @@ import {
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
+<<<<<<< HEAD
 import Login from "screens/Login";
 import store from "modules/redux/store";
 import theme from "theme/theme";
+=======
+import theme from "theme/theme";
+import store from "modules/redux/store";
+>>>>>>> #4-search
 
 const Root = createStackNavigator<MainStackParamList>();
 
