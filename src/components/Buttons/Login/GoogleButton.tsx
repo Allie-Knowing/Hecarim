@@ -1,38 +1,51 @@
 import LoginButtonLayout from "layout/loginButton";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import * as S from "./styles";
 import env from "constant/env";
 import * as Google from "expo-auth-session/providers/google";
 import useSignin from "utils/hooks/signin/useSignin";
-import { signin } from "utils/api/signin";
-import localStorage from "utils/localStorage";
-import storageKeys from "constant/storageKeys";
+import { SIGNIN } from "modules/redux/action/signin/interface";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
 
 const google = require("../../../assets/icons/login/google.png");
 
-const GoogleButton = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+type Props = StackNavigationProp<MainStackParamList, "Login">;
+
+const GoogleButton: FC<Props> = (props) => {
   const { state, setState } = useSignin();
-  const [request, _, prompAsync] = Google.useAuthRequest({
+  const [request, response, prompAsync] = Google.useAuthRequest({
     clientId: env.googleClientId.webId,
     responseType: "id_token",
     redirectUri: env.redirectUrl,
     scopes: ["openid", "email", "profile"],
   });
+
+  useEffect(() => {
+    setState.reset();
+  }, []);
+
+  useEffect(() => {
+    if (state.isSignin) {
+      props.pop();
+    }
+  }, [state.isSignin]);
+
+  useEffect(() => {
+    if (state.error.type === SIGNIN) {
+      alert("로그인 정보가 잘못되었습니다.");
+      setState.reset();
+    }
+  }, [state.error]);
+
   const login = async () => {
-    console.log(await localStorage.getItem(storageKeys.accessToken));
-    try {
-      setLoading(true);
-      const response = await prompAsync();
-      if (response.type === "success") {
-        setState.signin({
-          id_token: response.params.id_token,
-          provider: "GOOGLE",
-        });
-      }
-    } catch (error) {
-      console.log(error);
+    const response = await prompAsync();
+    if (response.type === "success") {
+      setState.signin({
+        id_token: response.params.id_token,
+        provider: "GOOGLE",
+      });
     }
   };
 
