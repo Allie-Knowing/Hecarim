@@ -11,9 +11,6 @@ import { Asset } from "expo-asset";
 import theme from "theme/theme";
 import * as S from "./styles";
 
-//import image
-const backImage = require("../../../assets/icons/back-black.png");
-
 interface Props {
   videoURI: string;
 }
@@ -28,6 +25,8 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   const ScreenHeight = Dimensions.get("window").height;
 
   const navigation = useNavigation<screenPop>();
+  
+  const backImage = require("../../../assets/icons/back-black.png");
 
   const uploadVideo = async () => {
     const formData = new FormData();

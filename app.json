@@ -15,9 +15,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.allie.knowing",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.allie.knowing",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -29,6 +31,7 @@
     },
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
-    }
+    },
+    "scheme": "myapp"
   }
 }

@@ -5,7 +5,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -14,8 +14,8 @@ interface PropsType {
   index: number;
 }
 
-const FeedVideos: FC<PropsType> = ({ dataList, index }) => {
-  const [page, setPage] = useState(0);
+const FeedVideos: FC<PropsType> = ({ dataList }) => {
+  const [, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
