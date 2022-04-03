@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { Dimensions, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { FooterHeight, HeaderHeight } from "constant/defaultStyle";
+import { FOOTER_HEIGHT, HEADER_HEIGHT } from "constant/defaultStyle";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
+import { SCREEN_HEIGHT } from "constant/camera";
 import theme from "theme/theme";
 import * as S from "./styles";
 
@@ -21,11 +22,10 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   const [borderBottomColor, setBorderBottomColor] = useState<string>(
     theme.colors.grayscale.scale30
   );
-  const { top: topPad, bottom: bottomPad } = useSafeAreaInsets();
-  const ScreenHeight = Dimensions.get("window").height;
+  const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
 
   const navigation = useNavigation<screenPop>();
-  
+
   const backImage = require("../../../assets/icons/back-black.png");
 
   const uploadVideo = async () => {
@@ -52,8 +52,8 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
       enableAutomaticScroll={true}
       scrollEnabled={true}
     >
-      <S.QuestionDetailWrapper topPad={topPad + HeaderHeight}>
-        <S.QuestionDetailHeader topPad={topPad}>
+      <S.QuestionDetailWrapper topPad={TOP_PAD + HEADER_HEIGHT}>
+        <S.QuestionDetailHeader topPad={TOP_PAD}>
           <S.GoBackContainer
             onPress={() => {
               navigation.pop(1);
@@ -68,7 +68,8 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
         </S.QuestionDetailHeader>
         <S.QuestionDetailBody
           height={
-            ScreenHeight - (topPad + bottomPad + HeaderHeight + FooterHeight)
+            SCREEN_HEIGHT -
+            (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)
           }
         >
           <ScrollView scrollEnabled={true}>
