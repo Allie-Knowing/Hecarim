@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import getEnvVars from '../../../../environment';
 
 export const getRequest = () => {
     const request = axios.create({
       timeout: 10000,
-      baseURL: 'https://munchkin.entrydsm.hs.kr',
+      baseURL: getEnvVars().baseUrl,
       withCredentials: true,
       headers: {
         withCredentials: true,
@@ -20,7 +21,7 @@ export const getRequest = () => {
   ) => {
     const request = axios.create({
       timeout: 10000,
-      baseURL: 'https://munchkin.entrydsm.hs.kr',
+      baseURL: getEnvVars().baseUrl,
       headers: {
         Authorization: `Bearer ${token}`,
         withCredentials: true,
