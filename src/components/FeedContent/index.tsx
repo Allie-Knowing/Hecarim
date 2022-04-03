@@ -35,7 +35,7 @@ const FeedContent: FC = () => {
   const confirmSheetRef = useRef<BottomSheetModal>(null);
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
-  const { showAlret, closeCurrentAlret } = useAlret();
+  const { showAlret, closeAlret } = useAlret();
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -167,14 +167,33 @@ const FeedContent: FC = () => {
                     buttons: [
                       {
                         color: "black",
-                        onPress: () => {
-                          closeCurrentAlret();
+                        onPress: (id) => {
+                          closeAlret(id);
                         },
                         text: "취소",
                       },
                       {
                         color: "primary",
-                        onPress: () => {},
+                        onPress: () => {
+                          showAlret({
+                            title: "테스트",
+                            content: "이것을 테스트 알림입니다.",
+                            buttons: [
+                              {
+                                color: "black",
+                                onPress: (id) => {
+                                  closeAlret(id);
+                                },
+                                text: "취소",
+                              },
+                              {
+                                color: "primary",
+                                onPress: () => {},
+                                text: "확인",
+                              },
+                            ],
+                          });
+                        },
                         text: "확인",
                       },
                     ],

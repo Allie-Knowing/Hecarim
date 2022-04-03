@@ -1,20 +1,21 @@
-import { Alret, alretContext } from "context/AlretContext";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { Alret, alretContext, AlretWithId } from "context/AlretContext";
+import { FC, useCallback, useRef, useState } from "react";
 import * as S from "./styles";
 import AlretComponent, { AlretRef } from "../../Alert";
 import { Dimensions } from "react-native";
 import { runOnJS } from "react-native-reanimated";
+import uniqueId from "constant/uniqueId";
 
 const { height, width } = Dimensions.get("screen");
 
 const AlretProvider: FC = ({ children }) => {
-  const [alrets, setAlrets] = useState<Alret[]>([]);
+  const [alrets, setAlrets] = useState<AlretWithId[]>([]);
   const currentAlretRef = useRef<AlretRef>();
 
   const showAlret = useCallback(
     (alret: Alret) => {
       const callback = () => {
-        setAlrets([...alrets, alret]);
+        setAlrets([...alrets, { ...alret, id: uniqueId() }]);
       };
 
       if (currentAlretRef.current) {
@@ -26,23 +27,26 @@ const AlretProvider: FC = ({ children }) => {
     [alrets]
   );
 
-  const closeCurrentAlret = useCallback(() => {
-    const callback = () => {
-      const copyAlrets = [...alrets];
+  const closeAlret = useCallback(
+    (id: string) => {
+      const callback = () => {
+        const copyAlrets = [...alrets];
 
-      copyAlrets.pop();
+        copyAlrets.pop();
 
-      setAlrets(copyAlrets);
-    };
+        setAlrets(alrets.filter((value) => value.id !== id));
+      };
 
-    currentAlretRef.current.closeAnimation(callback);
-  }, [alrets]);
+      currentAlretRef.current.closeAnimation(callback);
+    },
+    [alrets]
+  );
 
   return (
     <alretContext.Provider
       value={{
         showAlret: runOnJS(showAlret),
-        closeCurrentAlret: runOnJS(closeCurrentAlret),
+        closeAlret: runOnJS(closeAlret),
       }}
     >
       {children}
@@ -51,7 +55,11 @@ const AlretProvider: FC = ({ children }) => {
         pointerEvents={alrets.length > 0 ? "auto" : "none"}
       >
         {alrets.length !== 0 && (
-          <AlretComponent ref={currentAlretRef} {...alrets.reverse()[0]} />
+          <AlretComponent
+            ref={currentAlretRef}
+            key={alrets.reverse()[0].id}
+            {...alrets.reverse()[0]}
+          />
         )}
       </S.Container>
     </alretContext.Provider>

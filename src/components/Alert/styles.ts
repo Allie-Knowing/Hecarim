@@ -25,11 +25,13 @@ export const Content = styled.Text`
 export const ButtonContainer = styled.View`
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 `;
 
 export const Button = styled.TouchableHighlight`
   flex: 1;
   padding: 15px 0px;
+  overflow: hidden;
 `;
 
 export const ButtonLabel = styled.Text`

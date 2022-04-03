@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 export interface AlretContext {
   showAlret: (alret: Alret) => void;
-  closeCurrentAlret: () => void;
+  closeAlret: (id: string) => void;
 }
 
 export type ButtonColor = "black" | "red" | "primary";
@@ -10,7 +10,7 @@ export type ButtonColor = "black" | "red" | "primary";
 export interface Button {
   color: ButtonColor;
   text: string;
-  onPress: () => void;
+  onPress: (id: string) => void;
 }
 
 export interface Alret {
@@ -19,7 +19,11 @@ export interface Alret {
   buttons: Button[];
 }
 
+export interface AlretWithId extends Alret {
+  id: string;
+}
+
 export const alretContext = createContext<AlretContext>({
   showAlret: () => {},
-  closeCurrentAlret: () => {},
+  closeAlret: () => {},
 });

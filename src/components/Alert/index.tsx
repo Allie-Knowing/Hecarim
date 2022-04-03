@@ -13,15 +13,15 @@ import {
   withTiming,
 } from "react-native-reanimated";
 import { useTheme } from "styled-components/native";
-import { Alret as AlretProps, ButtonColor } from "../../context/AlretContext";
+import { AlretWithId, ButtonColor } from "../../context/AlretContext";
 import * as S from "./styles";
 
 export interface AlretRef {
   closeAnimation: (callback?: () => void) => void;
 }
 
-const Alert = forwardRef<AlretRef, AlretProps>(
-  ({ title, content, buttons }, ref) => {
+const Alert = forwardRef<AlretRef, AlretWithId>(
+  ({ title, content, buttons, id }, ref) => {
     const theme = useTheme();
     const offset = useSharedValue(0);
 
@@ -40,10 +40,12 @@ const Alert = forwardRef<AlretRef, AlretProps>(
           offset.value = withTiming(
             0,
             {
-              duration: 300,
+              duration: 150,
               easing: Easing.out(Easing.quad),
             },
             () => {
+              console.log("callback!");
+
               runOnJS(callback)();
             }
           );
@@ -61,7 +63,7 @@ const Alert = forwardRef<AlretRef, AlretProps>(
     );
 
     useImperativeHandle(ref, () => ({
-      closeAnimation: closeAnimation,
+      closeAnimation,
     }));
 
     const animatedStyles = useAnimatedStyle(() => {
@@ -72,8 +74,10 @@ const Alert = forwardRef<AlretRef, AlretProps>(
     });
 
     useEffect(() => {
+      console.log("open!");
+
       offset.value = withTiming(1, {
-        duration: 300,
+        duration: 150,
         easing: Easing.out(Easing.quad),
       });
     }, [offset]);
@@ -86,9 +90,14 @@ const Alert = forwardRef<AlretRef, AlretProps>(
           {buttons.map((value, index) => (
             <S.Button
               key={`${value.text}_button_${index}`}
-              onPress={value.onPress}
+              onPress={() => value.onPress(id)}
               underlayColor={theme.colors.grayscale.scale30}
               activeOpacity={1}
+              style={[
+                index === 0 && { borderBottomLeftRadius: 10 },
+                index === buttons.length - 1 && { borderBottomRightRadius: 10 },
+                { overflow: "hidden" },
+              ]}
             >
               <S.ButtonLabel
                 style={{
