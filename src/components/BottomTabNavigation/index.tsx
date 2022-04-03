@@ -83,7 +83,7 @@ const BottomTabNavigation = () => {
             elevation: 2,
           },
           headerShown: false,
-          unmountOnBlur: Platform.OS === "ios" ? false : true,
+          unmountOnBlur: true,
         }}
         initialRouteName="feed"
       >
