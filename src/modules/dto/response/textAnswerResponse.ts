@@ -1,4 +1,4 @@
-export type getTextAnswer = {
+export type getTextAnswerList = {
   id?: number;
   content?: string;
   isAdoption?: boolean;
@@ -6,5 +6,5 @@ export type getTextAnswer = {
 };
 
 export type getTextAnswerListResponse = {
-  data?: getTextAnswer[];
+  data?: getTextAnswerList[];
 };
