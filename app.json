@@ -13,13 +13,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.allie.knowing",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.allie.knowing",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -29,14 +29,8 @@
       "favicon": "./assets/favicon.png"
     },
     "packagerOpts": {
-      "sourceExts": [
-        "js",
-        "json",
-        "ts",
-        "tsx",
-        "jsx",
-        "vue"
-      ]
-    }
+      "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
+    },
+    "scheme": "myapp"
   }
 }

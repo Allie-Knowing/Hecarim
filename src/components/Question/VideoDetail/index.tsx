@@ -34,7 +34,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
 
     formData.append("file", await blobData);
 
-    console.warn(formData);
+    // console.warn(formData);
   };
 
   return (
