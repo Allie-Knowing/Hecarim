@@ -82,6 +82,7 @@ const BottomTabNavigation = () => {
             elevation: 2,
           },
           headerShown: false,
+          unmountOnBlur: true,
         }}
         initialRouteName="feed"
       >
