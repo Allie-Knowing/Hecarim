@@ -1,14 +1,15 @@
 import { signinActionType } from "modules/redux/action/signin";
 import {
-  ERROR,
   REFRESH_TOKEN_FAILURE,
   REFRESH_TOKEN_SUCCESS,
+  RESET,
   SIGNIN_FAILURE,
   SIGNIN_SUCCESS,
 } from "modules/redux/action/signin/interface";
 import SigninState from "./interface";
 
 const initState: SigninState = {
+  isSignin: false,
   error: {
     type: "",
     statusCode: 0,
@@ -21,19 +22,16 @@ const signinReducer = (
   action: signinActionType
 ) => {
   switch (action.type) {
-    case ERROR:
-      return {
-        ...state,
-        error: action.payload,
-      };
     case SIGNIN_SUCCESS:
       return {
         ...state,
+        isSignin: true,
       };
     case SIGNIN_FAILURE:
       return {
         ...state,
         error: action.payload,
+        isSignin: false,
       };
     case REFRESH_TOKEN_SUCCESS:
       return {
@@ -43,6 +41,11 @@ const signinReducer = (
       return {
         ...state,
         error: action.payload,
+      };
+    case RESET:
+      return {
+        ...state,
+        ...initState,
       };
     default:
       return state;

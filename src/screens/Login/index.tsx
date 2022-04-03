@@ -2,19 +2,19 @@ import AppleButton from "components/Buttons/Login/AppleButton";
 import GoogleButton from "components/Buttons/Login/GoogleButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
 import LoginHeader from "components/Header/Login";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
 import React, { FC } from "react";
 import { Dimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as S from "./style";
 
-interface ButtonType {
-  source: string;
-  text: string;
-}
-
 const { height } = Dimensions.get("screen");
 
-const Login: FC = () => {
+type Props = {
+  navigation: StackNavigationProp<MainStackParamList, "Login">;
+};
+
+const Login: FC<Props> = ({ navigation }) => {
   const { top: topPad } = useSafeAreaInsets();
 
   return (
@@ -25,7 +25,7 @@ const Login: FC = () => {
         <S.LoginBtnContainer>
           <S.LoginDescription>로그인 후 질문해보세요.</S.LoginDescription>
           <View>
-            <GoogleButton />
+            <GoogleButton {...navigation} />
             <NaverButton />
             <AppleButton />
           </View>

@@ -7,12 +7,14 @@ import localStorage from "utils/localStorage";
 
 export const signin = async (body: signinRequest) => {
   try {
-    console.log(body);
-    const response = await noTokenInstance.post<signinResponse>(
-      `${uri.signin}?provider=${body.provider}`,
-      { code: body.code }
-    );
-    console.log(response);
+    let response = null;
+    if (body.provider === "GOOGLE") {
+      response = await noTokenInstance.post<signinResponse>(
+        `${uri.googleSignin}`,
+        { id_token: body.id_token }
+      );
+    }
+    console.log("asdasdasdadnsdfnj");
     localStorage.setItem<string>(
       storageKeys.accessToken,
       response.data.access_token
@@ -21,9 +23,8 @@ export const signin = async (body: signinRequest) => {
       storageKeys.refreshToken,
       response.data.refresh_token
     );
-    console.log(localStorage.getItem(storageKeys.accessToken));
   } catch (error) {
     console.log(error);
-    // throw error;
+    throw error;
   }
 };

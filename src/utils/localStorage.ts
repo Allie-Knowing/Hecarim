@@ -12,8 +12,16 @@ const localStorage = {
       return false;
     }
   },
-  getItem: async <T = unknown>(key: string) => {
-    return JSON.parse(await AsyncStorageLib.getItem(key)) as T;
+  getItem: async <T = unknown>(key: string): Promise<T | null> => {
+    try {
+      const value = await AsyncStorageLib.getItem(key);
+      if (value) {
+        return JSON.parse(value) as T;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   },
   removeItem: async (key: string) => {
     return await AsyncStorageLib.removeItem(key);

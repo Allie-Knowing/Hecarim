@@ -1,5 +1,5 @@
 enum uri {
-  signin = "/auth",
+  googleSignin = "/google",
 }
 
 export default uri;
