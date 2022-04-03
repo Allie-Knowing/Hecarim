@@ -24,7 +24,7 @@ export const Video = styled.Image`
 
 export const Content = styled.View`
   position: absolute;
-  top: ${Platform.OS === "ios"? 0 : -50};  left: 0px;
+  top: ${Platform.OS === "ios"? 0 : -20};  left: 0px;
   width: 100%;
   height: 100%;
   padding: 20px;

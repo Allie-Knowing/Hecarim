@@ -10,7 +10,6 @@ import { Host } from "react-native-portalize";
 import MyPage from "screens/MyPage";
 import Question from "components/Question";
 import Search from "screens/Search";
-import Feed from "screens/Feed";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
