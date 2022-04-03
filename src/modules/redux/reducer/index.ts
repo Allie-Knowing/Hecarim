@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import feedReducer from './feed';
+import signinReducer from './signin';
 
 const rootReducer = combineReducers({
     feed: feedReducer,
+    signin: signinReducer
 });
-  
-const rootReducer = combineReducers({ signin: signinReducer });
 export type reducerType = ReturnType<typeof rootReducer>;
 export default rootReducer;
