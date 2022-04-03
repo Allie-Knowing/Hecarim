@@ -1,4 +1,18 @@
-import { forwardRef, useCallback, useImperativeHandle, useMemo } from "react";
+import useAlret from "hooks/useAlret";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { useTheme } from "styled-components/native";
 import {
   Alret as AlretProps,
@@ -8,12 +22,15 @@ import {
 import * as S from "./styles";
 
 export interface AlretRef {
-  closeAnimation: () => Promise<void>;
+  closeAnimation: (callback?: () => void) => void;
 }
 
 const Alert = forwardRef<AlretRef, AlretProps>(
   ({ title, content, buttons }, ref) => {
     const theme = useTheme();
+    const offset = useSharedValue(0);
+    const [canEvent, setCanEvent] = useState(false);
+    const { closeCurrentAlret } = useAlret();
 
     const colorMap = useMemo(
       () =>
@@ -24,24 +41,63 @@ const Alert = forwardRef<AlretRef, AlretProps>(
       [theme]
     );
 
-    const closeAnimation = useCallback(async () => {}, []);
+    const closeAnimation = useCallback(
+      (callback?: () => void) => {
+        setCanEvent(false);
+
+        offset.value = withTiming(
+          0,
+          {
+            duration: 300,
+            easing: Easing.out(Easing.quad),
+          },
+          () => {
+            callback();
+          }
+        );
+      },
+      [offset]
+    );
 
     const onPress = useCallback(
-      (value: Button) => async () => {
+      (value: Button) => () => {
         value.onPress();
 
         if (value.type === "close") {
           //닫기
-          await closeAnimation();
+          closeAnimation(closeCurrentAlret);
         }
       },
-      [closeAnimation]
+      [closeAnimation, closeCurrentAlret]
     );
 
     useImperativeHandle(ref, () => ({ closeAnimation }));
 
+    const animatedStyles = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: 0.9 + 0.1 * offset.value }],
+        opacity: offset.value,
+      };
+    });
+
+    useEffect(() => {
+      offset.value = withTiming(
+        1,
+        {
+          duration: 300,
+          easing: Easing.out(Easing.quad),
+        },
+        () => {
+          setCanEvent(true);
+        }
+      );
+    }, []);
+
     return (
-      <S.Container>
+      <S.Container
+        style={[animatedStyles]}
+        pointerEvents={canEvent ? "auto" : "none"}
+      >
         <S.Title>{title}</S.Title>
         <S.Content>{content}</S.Content>
         <S.ButtonContainer>

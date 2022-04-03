@@ -32,7 +32,6 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/no-misused-promises": "off",
   },
   settings: {
     react: {

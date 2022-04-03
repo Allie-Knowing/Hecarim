@@ -11,22 +11,37 @@ const AlretProvider: FC = ({ children }) => {
   const currentAlretRef = useRef<AlretRef>();
 
   const showAlret = useCallback(
-    async (alret: Alret) => {
-      if (currentAlretRef.current) {
-        await currentAlretRef.current.closeAnimation();
-      }
+    (alret: Alret) => {
+      const callback = () => {
+        setAlrets([...alrets, alret]);
+      };
 
-      setAlrets([...alrets, alret]);
+      if (currentAlretRef.current) {
+        currentAlretRef.current.closeAnimation(callback);
+      } else {
+        callback();
+      }
 
       return;
     },
     [alrets]
   );
 
+  const closeCurrentAlret = useCallback(() => {
+    const copyAlrets = [...alrets];
+
+    copyAlrets.pop();
+
+    setAlrets(copyAlrets);
+  }, [alrets]);
+
   return (
-    <alretContext.Provider value={{ showAlret }}>
+    <alretContext.Provider value={{ showAlret, closeCurrentAlret }}>
       {children}
-      <S.Container style={{ height, width }}>
+      <S.Container
+        style={{ height, width }}
+        pointerEvents={alrets.length > 0 ? "auto" : "none"}
+      >
         {alrets.length !== 0 && (
           <AlretComponent ref={currentAlretRef} {...alrets.reverse()[0]} />
         )}
