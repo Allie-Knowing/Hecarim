@@ -1,12 +1,12 @@
 export type getVideoAnswerList = {
-    videoId?: number,
+    id?: number,
     title?: string,
-    userId?: number,
+    user_id?: number,
     profile?: string,
-    videoUrl?: string,
-    createdAt?: string,
-    likeCnt?: string,
-    isAdoption?: number,
+    video_url?: string,
+    created_at?: string,
+    like_cnt?: string,
+    is_adoption?: number,
 } 
 
 export type getVideoAnswerListResponse = {
