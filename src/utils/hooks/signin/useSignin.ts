@@ -1,5 +1,5 @@
 import { signinRequest } from "modules/dto/request/signinRequest";
-import { signin } from "modules/redux/action/signin";
+import { reset, signin } from "modules/redux/action/signin";
 import { ReducerType } from "modules/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,6 +9,9 @@ const useSignin = () => {
   const setState = {
     signin: (payload: signinRequest) => {
       dispatch(signin(payload));
+    },
+    reset: () => {
+      dispatch(reset());
     },
   };
 
