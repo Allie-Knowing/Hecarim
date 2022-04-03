@@ -19,13 +19,13 @@ import Animated, {
   AnimateStyle,
   useAnimatedScrollHandler,
   useAnimatedRef,
-  scrollTo,
   useDerivedValue,
 } from "react-native-reanimated";
 import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import uniqueId from "constant/uniqueId";
+import { getVideoAnswerListResponse } from "constance/feed";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 
@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
 interface PropsType {
   questionList: string[];
   index: number;
+  videoAnswerList: getVideoAnswerListResponse;
+  getVideoAnswerList: () => void;
 }
 
 const QuestionList: FC<PropsType> = ({ questionList, index }) => {
@@ -109,7 +111,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
   );
 
   useDerivedValue(() => {
-    scrollTo(outerRef, pageValue.value * width, 0, true);
+    // eslint-disable-next-line no-self-assign
     pageId.value = pageId.value;
   });
 
