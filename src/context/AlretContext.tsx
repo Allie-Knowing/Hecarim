@@ -4,10 +4,12 @@ export interface AlretContext {
   showAlret: (alret: Alret) => void;
 }
 
+export type ButtonColor = "black" | "red" | "primary";
+
 export interface Button {
-  color: "black" | "red" | "primary";
+  color: ButtonColor;
   text: string;
-  onClick: () => void;
+  onPress: () => void;
   type: "default" | "close";
 }
 
