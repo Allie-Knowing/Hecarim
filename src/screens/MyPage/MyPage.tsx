@@ -31,6 +31,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     profileHooks.setState.profile({ id: myIdHooks.state.id });
+    profileHooks.setState.questionList({ id: myIdHooks.state.id });
   }, [myIdHooks.state.id]);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
     <isStackContext.Provider value={false}>
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
-        <Profile profileInfo={profileHooks.state} />
+        <Profile />
         <MakeKnowingBanner />
         <MyQuestionList />
       </S.Container>

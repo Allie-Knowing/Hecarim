@@ -19,3 +19,9 @@ export const QuestionContainer = styled.FlatList`
   width: 100%;
   margin-top: 12px;
 `;
+
+export const Notice = styled.Text`
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+`;
