@@ -6,7 +6,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import Icon from "./Icon";
 import Feed from "screens/Feed";
-import { Host } from "react-native-portalize";
 import MyPage from "screens/MyPage";
 import Question from "components/Question";
 import Search from "screens/Search";

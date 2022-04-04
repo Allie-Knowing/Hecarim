@@ -4,6 +4,7 @@ enum uri {
   googleSignin = "/google",
   like = "/like",
   file = "/file",
+    auto_complete = "/search/autocomplete"
 }
 
 export default uri;
