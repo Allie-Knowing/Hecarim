@@ -5,6 +5,8 @@ export type MainStackParamList = {
   Main: undefined;
   StackedQuestionList: undefined;
   Login: undefined;
+  UserPage: undefined;
+  Setting: undefined;
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;

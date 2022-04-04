@@ -18,6 +18,9 @@ import Login from "screens/Login";
 import store from "modules/redux/store";
 import AlretProvider from "components/Providers/AlretProvider";
 import theme from "theme/theme";
+import MyPage from "screens/MyPage/MyPage";
+import Setting from "screens/Setting";
+import UserPage from "screens/MyPage/UserPage";
 
 const Root = createStackNavigator<MainStackParamList>();
 
@@ -61,6 +64,16 @@ export default function App() {
                       <Root.Screen
                         name="Login"
                         component={Login}
+                        options={{ headerShown: false }}
+                      />
+                      <Root.Screen
+                        name="Setting"
+                        component={Setting}
+                        options={{ title: "설정" }}
+                      />
+                      <Root.Screen
+                        name="UserPage"
+                        component={UserPage}
                         options={{ headerShown: false }}
                       />
                     </Root.Navigator>

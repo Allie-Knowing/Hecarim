@@ -4,6 +4,8 @@ enum uri {
   googleSignin = "/google",
   like = "/like",
   file = "/file",
+  getProfile = "/user/info/",
+  myId = "/user/my",
     auto_complete = "/search/autocomplete"
 }
 
