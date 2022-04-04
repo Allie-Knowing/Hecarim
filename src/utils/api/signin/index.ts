@@ -1,6 +1,5 @@
 import uri from "constance/uri";
 import storageKeys from "constant/storageKeys";
-import uri from "constance/uri";
 import { signinRequest } from "modules/dto/request/signinRequest";
 import { signinResponse } from "modules/dto/response/signinResponse";
 import localStorage from "utils/localStorage";
@@ -16,14 +15,8 @@ export const signin = async (body: signinRequest) => {
     });
   }
   await Promise.all([
-    localStorage.setItem<string>(
-      storageKeys.accessToken,
-      response.data.access_token
-    ),
-    localStorage.setItem<string>(
-      storageKeys.refreshToken,
-      response.data.refresh_token
-    ),
+    localStorage.setItem<string>(storageKeys.accessToken, response.data.access_token),
+    localStorage.setItem<string>(storageKeys.refreshToken, response.data.refresh_token),
   ]);
   return;
 };

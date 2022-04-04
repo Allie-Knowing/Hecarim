@@ -5,8 +5,8 @@ import { getVideoAnswerListApi } from "utils/api/answer";
 
 export const getVideoAnswerListRequestSaga = createRequestSaga(GET_VIDEO_ANSWER_LIST, getVideoAnswerListApi);
 
-function* feedSaga() {
+function* answerSaga() {
   yield takeLatest(GET_VIDEO_ANSWER_LIST, getVideoAnswerListRequestSaga);
 }
 
-export default feedSaga; 
+export default answerSaga;
