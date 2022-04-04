@@ -17,7 +17,7 @@ import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import uniqueId from "constant/uniqueId";
-import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
+// import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
 interface PropsType {
   questionList: string[];
   index: number;
-  videoAnswerList: getVideoAnswerListResponse;
-  getVideoAnswerList: () => void;
+  // videoAnswerList: getVideoAnswerListResponse;
+  // getVideoAnswerList: () => void;
 }
 
 const QuestionList: FC<PropsType> = ({ questionList, index }) => {
