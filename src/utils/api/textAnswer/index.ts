@@ -8,12 +8,12 @@ import { getRequest, getRequestWithAccessToken } from "../default";
 
 export const getTextAnswerApi = async (
   access_token: string,
-  { questionId }: getTextAnswerListRequest
+  { questionId, page, size }: getTextAnswerListRequest
 ) => {
   const request = getRequest();
   const url = `${uri.comment_answer}/${questionId}`;
 
-  const data = await request.get(url);
+  const data = await request.get(url, { params: { page, size } });
 
   return data;
 };
