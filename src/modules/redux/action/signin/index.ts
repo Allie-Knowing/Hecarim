@@ -26,5 +26,4 @@ export type signinActionType =
   | ReturnType<typeof refreshToken>
   | ReturnType<typeof refreshTokenFailure>
   | ReturnType<typeof refreshTokenSuccess>
-  | ReturnType<typeof setError>
   | ReturnType<typeof reset>;

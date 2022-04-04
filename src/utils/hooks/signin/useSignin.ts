@@ -1,11 +1,11 @@
 import { signinRequest } from "modules/dto/request/signinRequest";
 import { reset, signin } from "modules/redux/action/signin";
-import { ReducerType } from "modules/redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import useSelectState from "../default/useSelectState";
 
 const useSignin = () => {
   const dispatch = useDispatch();
-  const signinState = useSelector((state: ReducerType) => state).signin;
+  const signinState = useSelectState().signin;
   const setState = {
     signin: (payload: signinRequest) => {
       dispatch(signin(payload));
