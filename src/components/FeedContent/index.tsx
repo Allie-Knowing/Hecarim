@@ -16,8 +16,8 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
-import useAlret from "hooks/useAlret";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
+import useLikeEvent from "../../hooks/useLikeEvent";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -36,8 +36,8 @@ const FeedContent: FC = () => {
   const confirmSheetRef = useRef<BottomSheetModal>(null);
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
-  const { showAlret, closeAlret } = useAlret();
   const navigation = useMainStackNavigation();
+  const { like, unlike } = useLikeEvent(-1);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();

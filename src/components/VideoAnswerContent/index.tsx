@@ -3,6 +3,7 @@ import { Dimensions, View } from "react-native";
 import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
 import isStackContext from "context/IsStackContext";
+import useLikeEvent from "hooks/useLikeEvent";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -14,6 +15,7 @@ const { height } = Dimensions.get("screen");
 const VideoAnswerContent: FC = () => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
+  const { like, unlike } = useLikeEvent(-1);
 
   return (
     <Fragment>
