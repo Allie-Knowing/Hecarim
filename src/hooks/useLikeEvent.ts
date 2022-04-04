@@ -4,7 +4,7 @@ import { useLike } from "../utils/hooks/like";
 const useLikeEvent = (videoId: number) => {
   const { setState } = useLike();
 
-  const dislike = useCallback(() => {
+  const unlike = useCallback(() => {
     setState.deleteLike({ videoId });
   }, [setState, videoId]);
 
@@ -12,7 +12,7 @@ const useLikeEvent = (videoId: number) => {
     setState.postLike({ videoId });
   }, [setState, videoId]);
 
-  return { dislike, like };
+  return { unlike, like };
 };
 
 export default useLikeEvent;
