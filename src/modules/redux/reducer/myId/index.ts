@@ -24,7 +24,7 @@ const myIdReducer = (
     case GET_MY_ID_SUCCESS:
       return {
         ...state,
-        id: action.payload.userId,
+        id: action.payload,
       };
     case GET_MY_ID_FAILURE:
       return {
