@@ -1,5 +1,5 @@
-import { postStackedQuestionListRequest } from "modules/dto/request/postStackedQuestionListRequest";
 import { postStackedQuestionList } from "modules/redux/action/stackedQuestionList";
+import { StackedQuestionListState } from "modules/redux/reducer/stackedQuestionList/interface";
 import { useDispatch } from "react-redux";
 import { useSelectState } from "../default";
 
@@ -8,7 +8,7 @@ const useStackedQuestionList = () => {
   const state = useSelectState().stackedQuestionList;
 
   const setState = {
-    postStackedQuestionList: (payload: postStackedQuestionListRequest) => {
+    postStackedQuestionList: (payload: StackedQuestionListState) => {
       dispatch(postStackedQuestionList(payload));
     },
   };

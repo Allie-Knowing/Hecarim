@@ -1,18 +1,11 @@
+import { StackedQuestionListState } from "modules/redux/reducer/stackedQuestionList/interface";
 import { createAction } from "typesafe-actions";
-import {
-  GET_STACKED_QUESTION_LIST,
-  POST_STACKED_QUESTION_LIST,
-} from "./interface";
-import { getStackedQuestionListResponse } from "../../../dto/response/getStackedQuestionListResponse";
-import { postStackedQuestionListRequest } from "../../../dto/request/postStackedQuestionListRequest";
+import { POST_STACKED_QUESTION_LIST } from "./interface";
 
-export const getStackedQuestionList = createAction(
-  GET_STACKED_QUESTION_LIST
-)<getStackedQuestionListResponse>();
 export const postStackedQuestionList = createAction(
   POST_STACKED_QUESTION_LIST
-)<postStackedQuestionListRequest>();
+)<StackedQuestionListState>();
 
-export type stackedQuestionListActionType =
-  | ReturnType<typeof getStackedQuestionList>
-  | ReturnType<typeof postStackedQuestionList>;
+export type stackedQuestionListActionType = ReturnType<
+  typeof postStackedQuestionList
+>;
