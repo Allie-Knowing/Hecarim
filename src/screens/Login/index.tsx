@@ -1,7 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import FacebookButton from "components/Buttons/Login/FacebookButton";
+import AppleButton from "components/Buttons/Login/AppleButton";
 import GoogleButton from "components/Buttons/Login/GoogleButton";
-import KakaoButton from "components/Buttons/Login/KakaoButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
 import LoginHeader from "components/Header/Login";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
@@ -29,8 +28,7 @@ const Login: FC<Props> = ({ navigation }) => {
           <View>
             <GoogleButton {...navigation} />
             <NaverButton />
-            <KakaoButton />
-            <FacebookButton />
+            <AppleButton />
           </View>
         </S.LoginBtnContainer>
       </S.Content>
