@@ -9,6 +9,7 @@ import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
+import useMyId from "utils/hooks/myId/useMyId";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
@@ -16,12 +17,21 @@ type Props = {
 };
 
 const MyPage: FC<Props> = ({ navigation }) => {
+  const myIdHooks = useMyId();
+
+  const getProfile = async () => {
+    if (!(await localStorage.getItem(storageKeys.accessToken))) {
+      navigation.push("Login");
+    } else {
+      myIdHooks.setState.myId();
+    }
+  };
+
   useEffect(() => {
-    const getProfile = async () => {
-      if (!(await localStorage.getItem(storageKeys.accessToken))) {
-        navigation.push("Login");
-      }
-    };
+    console.log(myIdHooks.state.id);
+  }, [myIdHooks.state.id]);
+
+  useEffect(() => {
     getProfile();
   }, []);
 
