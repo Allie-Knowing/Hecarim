@@ -1,3 +1,3 @@
 export type searchPayload = {
-    q: string
+    q?: string
 }

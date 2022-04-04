@@ -6,7 +6,7 @@ enum uri {
   file = "/file",
   getProfile = "/user/info/",
   myId = "/user/my",
-  auto_complete = "/search/autocomplete",
+  title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
 }
 

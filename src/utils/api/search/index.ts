@@ -2,8 +2,8 @@ import { getRequest } from "../default";
 import uri from "constance/uri";
 import { searchPayload } from "constance/search";
 
-export const getSearchAutoCompleteApi = async (payload: searchPayload) => {
+export const getSearchTitleResponseApi = async (access_token: string, payload: searchPayload) => {
   const request = getRequest();
-  const data = await request.get(uri.auto_complete+`/${payload.q}`);
+  const data = await request.get(uri.title+`/${payload.q}`);
   return data;
 }

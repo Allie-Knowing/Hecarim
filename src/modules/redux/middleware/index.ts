@@ -4,6 +4,7 @@ import myIdSaga from "./myId";
 import profileSaga from "./profile";
 import signinSaga from "./signin";
 import textAnswerSaga from "./textAnswer";
+import searchSaga from "./search";
 import cameraSaga from "./camera";
 import answer from "./answer";
 
@@ -15,6 +16,7 @@ export default function* rootSaga() {
     profileSaga(), 
     myIdSaga(), 
     textAnswerSaga(), 
+    searchSaga(),
     cameraSaga()
   ]);
 }

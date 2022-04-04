@@ -1,16 +1,16 @@
 import { 
-  GET_AUTO_COMPLETE,
-  GET_AUTO_COMPLETE_SUCCESS,
-  GET_AUTO_COMPLETE_FAILURE
+  GET_TITLE_SEARCH,
+  GET_TITLE_SEARCH_SUCCESS,
+  GET_TITLE_SEARCH_FAILURE
 } from "./interface";
 import { createAction } from "typesafe-actions";
 import { searchPayload } from "constance/search";
-import { searchAutoCompleteResponse } from "modules/dto/response/searchResponse";
+import { searchTitleResponse } from "modules/dto/response/searchResponse";
 import { error } from "modules/dto/error";
 
-export const getAutoComplete = createAction(GET_AUTO_COMPLETE)<searchPayload>();
-export const getAutoCompleteSuccess = createAction(GET_AUTO_COMPLETE_SUCCESS)<searchAutoCompleteResponse>();
-export const getAutoCompleteFailure = createAction(GET_AUTO_COMPLETE_FAILURE)<error>();
+export const getAutoComplete = createAction(GET_TITLE_SEARCH)<searchPayload>();
+export const getAutoCompleteSuccess = createAction(GET_TITLE_SEARCH_SUCCESS)<searchTitleResponse>();
+export const getAutoCompleteFailure = createAction(GET_TITLE_SEARCH_FAILURE)<error>();
 
 export type searchActionType = 
     | ReturnType<typeof getAutoComplete>
