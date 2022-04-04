@@ -7,4 +7,4 @@ export const GET_PROFILE_QUESTION_LIST_FAILURE =
   `${GET_PROFILE_QUESTION_LIST}_FAILURE` as const;
 export const GET_PROFILE_QUESTION_LIST_SUCCESS =
   `${GET_PROFILE_QUESTION_LIST}_SUCCESS` as const;
-export const SET_ID = "PROFILE/SET_ID" as const;
+export const SET_ID = "PROFILE/USER_SET_ID" as const;
