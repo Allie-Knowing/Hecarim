@@ -33,25 +33,23 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputProps, isFocus] = useFocus();
-  const { state } = useTextAnswer();
+  const { state, setState } = useTextAnswer();
   const [page, setPage] = useState<number>(1);
   const requestedPage = useRef<number>(-1);
 
   useEffect(() => {
     if (isOpen) {
-      setPage(1);
-      requestedPage.current = 1;
+      if (requestedPage.current === 1) {
+        setState.getTextAnswerList({ page: 1, size: 30, questionId: 1 });
+      } else {
+        setPage(1);
+      }
     }
   }, [isOpen]);
 
   const onEndReached = useCallback(() => {
     if (state.error.status !== 404 && isOpen) {
-      setPage((prev) => {
-        const p = prev + 1;
-        requestedPage.current = p;
-
-        return p;
-      });
+      setPage((prev) => prev + 1);
     }
   }, [isOpen, state.error.status]);
 
@@ -127,9 +125,11 @@ const TextAnswerList: FC<ListProps> = ({
         <S.List
           data={data}
           keyExtractor={(value: getTextAnswerList) =>
-            `comment_${value.id}_${value.userId}`
+            `comment_${value.id}_${value.user.id}`
           }
-          renderItem={() => <Comment />}
+          renderItem={({ item }: { item: getTextAnswerList }) => (
+            <Comment {...item} />
+          )}
           onEndReached={onEndReached}
           showsVerticalScrollIndicator={false}
         />
