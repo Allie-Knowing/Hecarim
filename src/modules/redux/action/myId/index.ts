@@ -9,7 +9,7 @@ import {
 } from "./interface";
 
 export const getMyId = createAction(GET_MY_ID)();
-export const getMyIdSuccess = createAction(GET_MY_ID_SUCCESS)<myIdResponse>();
+export const getMyIdSuccess = createAction(GET_MY_ID_SUCCESS)<number>();
 export const getMyIdFailure = createAction(GET_MY_ID_FAILURE)<error>();
 export const setId = createAction(SET_ID)<number>();
 
