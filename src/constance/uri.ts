@@ -3,7 +3,7 @@ enum uri {
   comment_answer = "/answer/comment",
   googleSignin = "/google",
   like = "/like",
-  getProfile = "/info/",
+  getProfile = "/user/info/",
   myId = "/user/my",
 }
 
