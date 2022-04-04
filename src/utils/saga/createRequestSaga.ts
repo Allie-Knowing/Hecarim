@@ -8,15 +8,8 @@ export default function createRequestSaga(type: any, request: any) {
   const FAILURE = `${type}_FAILURE`;
   return function* (action: any) {
     try {
-      const accessToken: string = yield call(
-        localStorage.getItem,
-        storageKeys.accessToken
-      );
-      const response: AxiosResponse<unknown> = yield call(
-        request,
-        accessToken,
-        action.payload
-      );
+      const accessToken: string = yield call(localStorage.getItem, storageKeys.accessToken);
+      const response: AxiosResponse<unknown> = yield call(request, accessToken, action.payload);
       yield put({
         type: SUCCESS,
         payload: response ? response.data : null,

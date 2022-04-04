@@ -4,7 +4,10 @@ import likeSaga from "./like";
 import myIdSaga from "./myId";
 import profileSaga from "./profile";
 import signinSaga from "./signin";
+import textAnswerSaga from "./textAnswer";
+import cameraSaga from "./camera";
 
 export default function* rootSaga() {
   yield all([feedSaga(), signinSaga(), likeSaga(), profileSaga(), myIdSaga()]);
+  yield all([feedSaga(), signinSaga(), likeSaga(), textAnswerSaga(), cameraSaga()]);
 }
