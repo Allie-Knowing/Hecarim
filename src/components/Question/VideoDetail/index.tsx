@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -12,6 +12,8 @@ import { SCREEN_HEIGHT } from "constant/camera";
 import theme from "theme/theme";
 import * as S from "./styles";
 
+import { cameraContext } from "context/CameraContext";
+
 interface Props {
   videoURI: string;
 }
@@ -19,7 +21,7 @@ interface Props {
 type screenPop = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
 const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
-  const [borderBottomColor, setBorderBottomColor] = useState<string>(
+  const { uri } = useContext(cameraContext);
     theme.colors.grayscale.scale30
   );
   const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
@@ -75,7 +77,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
           <ScrollView scrollEnabled={true}>
             <S.VideoContainer>
               <Video
-                source={{ uri: videoURI }}
+                source={{ uri: uri }}
                 style={{
                   aspectRatio: 3 / 4,
                   width: 250,

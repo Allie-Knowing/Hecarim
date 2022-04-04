@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
@@ -8,6 +8,7 @@ import { Asset } from "expo-asset";
 import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
+import { cameraContext } from "context/CameraContext";
 
 type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
@@ -16,10 +17,10 @@ const CameraComponent: FC = (): JSX.Element => {
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
-  const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
   const [bestRatio, setBestRatio] = useState<string>();
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
+  const { setUri } = useContext(cameraContext);
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
@@ -65,7 +66,7 @@ const CameraComponent: FC = (): JSX.Element => {
               "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
             );
           }
-          setVideoURI(res.uri);
+          setUri(res.uri);
           navigation.navigate("VideoDetailPage");
         }
       });
@@ -122,7 +123,7 @@ const CameraComponent: FC = (): JSX.Element => {
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
-      setVideoURI(videoRecordPromise.uri);
+      setUri(videoRecordPromise.uri);
       navigation.navigate("VideoDetailPage");
     }
   };

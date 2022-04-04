@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/stack";
 import CameraComponent from "./Camera";
 import VideoDetail from "./VideoDetail";
+import CameraProvider from "../../context/CameraContext";
 
 export type RootStackParamList = {
   CameraPage: undefined;
@@ -14,16 +15,18 @@ export type RootStackParamList = {
 const Question: FC = (): JSX.Element => {
   const Root = createStackNavigator<RootStackParamList>();
   return (
-    <Root.Navigator
-      initialRouteName="CameraPage"
-      screenOptions={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        headerShown: false,
-      }}
-    >
-      <Root.Screen name="CameraPage" component={CameraComponent} />
-      <Root.Screen name="VideoDetailPage" component={VideoDetail} />
-    </Root.Navigator>
+    <CameraProvider>
+      <Root.Navigator
+        initialRouteName="CameraPage"
+        screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          headerShown: false,
+        }}
+      >
+        <Root.Screen name="CameraPage" component={CameraComponent} />
+        <Root.Screen name="VideoDetailPage" component={VideoDetail} />
+      </Root.Navigator>
+    </CameraProvider>
   );
 };
 
