@@ -4,6 +4,7 @@ enum uri {
   googleSignin = "/google",
   like = "/like",
   getProfile = "/info/",
+  myId = "/user/my",
 }
 
 export default uri;
