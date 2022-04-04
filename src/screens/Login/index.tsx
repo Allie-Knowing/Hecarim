@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import AppleButton from "components/Buttons/Login/AppleButton";
 import GoogleButton from "components/Buttons/Login/GoogleButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
