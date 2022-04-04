@@ -8,6 +8,5 @@ import textAnswerSaga from "./textAnswer";
 import cameraSaga from "./camera";
 
 export default function* rootSaga() {
-  yield all([feedSaga(), signinSaga(), likeSaga(), profileSaga(), myIdSaga()]);
-  yield all([feedSaga(), signinSaga(), likeSaga(), textAnswerSaga(), cameraSaga()]);
+  yield all([feedSaga(), signinSaga(), likeSaga(), profileSaga(), myIdSaga(), textAnswerSaga(), cameraSaga()]);
 }
