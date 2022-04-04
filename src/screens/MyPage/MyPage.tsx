@@ -10,6 +10,7 @@ import storageKeys from "constant/storageKeys";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
 import useMyId from "utils/hooks/myId/useMyId";
+import useProfile from "utils/hooks/profile/useProfile";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
@@ -18,6 +19,7 @@ type Props = {
 
 const MyPage: FC<Props> = ({ navigation }) => {
   const myIdHooks = useMyId();
+  const profileHooks = useProfile();
 
   const getProfile = async () => {
     if (!(await localStorage.getItem(storageKeys.accessToken))) {
@@ -28,7 +30,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log(myIdHooks.state.id);
+    profileHooks.setState.profile({ id: myIdHooks.state.id });
   }, [myIdHooks.state.id]);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
     <isStackContext.Provider value={false}>
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
-        <Profile />
+        <Profile profileInfo={profileHooks.state} />
         <MakeKnowingBanner />
         <MyQuestionList />
       </S.Container>

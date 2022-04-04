@@ -6,6 +6,5 @@ export const getProfile = async (_, body: profileRequest) => {
   const request = getRequest();
 
   const data = await request.get(`${uri.getProfile}${body.id}`);
-  console.log(data);
   return data.data;
 };
