@@ -16,12 +16,13 @@ import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import store from "modules/redux/store";
+import AlretProvider from "components/Providers/AlretProvider";
 import theme from "theme/theme";
 
 const Root = createStackNavigator<MainStackParamList>();
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     "SpoqaHanSansNeo-Bold": require("./src/assets/fonts/SpoqaHanSansNeo-Bold.ttf"),
     "SpoqaHanSansNeo-Medium": require("./src/assets/fonts/SpoqaHanSansNeo-Medium.ttf"),
     "SpoqaHanSansNeo-Regular": require("./src/assets/fonts/SpoqaHanSansNeo-Regular.ttf"),
@@ -37,33 +38,35 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <Provider store={store}>
             <BottomSheetModalProvider>
-              <NavigationContainer>
-                <Host>
-                  <Root.Navigator
-                    initialRouteName="Main"
-                    screenOptions={{
-                      cardStyleInterpolator:
-                        CardStyleInterpolators.forHorizontalIOS,
-                    }}
-                  >
-                    <Root.Screen
-                      name="Main"
-                      component={BottomTabNavigation}
-                      options={{ headerShown: false }}
-                    />
-                    <Root.Screen
-                      name="StackedQuestionList"
-                      component={StackedQuestionList}
-                      options={{ headerShown: false }}
-                    />
-                    <Root.Screen
-                      name="Login"
-                      component={Login}
-                      options={{ headerShown: false }}
-                    />
-                  </Root.Navigator>
-                </Host>
-              </NavigationContainer>
+              <AlretProvider>
+                <NavigationContainer>
+                  <Host>
+                    <Root.Navigator
+                      initialRouteName="Main"
+                      screenOptions={{
+                        cardStyleInterpolator:
+                          CardStyleInterpolators.forHorizontalIOS,
+                      }}
+                    >
+                      <Root.Screen
+                        name="Main"
+                        component={BottomTabNavigation}
+                        options={{ headerShown: false }}
+                      />
+                      <Root.Screen
+                        name="StackedQuestionList"
+                        component={StackedQuestionList}
+                        options={{ headerShown: false }}
+                      />
+                      <Root.Screen
+                        name="Login"
+                        component={Login}
+                        options={{ headerShown: false }}
+                      />
+                    </Root.Navigator>
+                  </Host>
+                </NavigationContainer>
+              </AlretProvider>
             </BottomSheetModalProvider>
           </Provider>
         </ThemeProvider>

@@ -1,42 +1,51 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, Text, SafeAreaView, Dimensions } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import * as S from "./styles";
-import * as ImagePicker from "expo-image-picker";
 import { RootStackParamList } from "..";
+import { Asset } from "expo-asset";
+import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
+import * as ImagePicker from "expo-image-picker";
+import * as S from "./styles";
+import { cameraContext } from "context/CameraContext";
 
-//import images
-const rotateImg = require("../../../assets/icons/rotate.png");
-const recordingImg = require("../../../assets/icons/recording.png");
-const recordImg = require("../../../assets/icons/record.png");
-const videoImg = require("../../../assets/icons/video.png");
+type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
-  const [videoURI, setVideoURI] = useState<string | null>(null);
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
-
-  type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+  const [bestRatio, setBestRatio] = useState<string>();
+  const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
+  const { setUri } = useContext(cameraContext);
 
   const navigation = useNavigation<screenProp>();
+  const isFocused = useIsFocused();
 
-  const SCREEN_HEIGHT = Dimensions.get("window").height;
-  const SCREEN_WIDTH = Dimensions.get("window").width;
-
-  const SCREEN_RATIO = SCREEN_HEIGHT / SCREEN_WIDTH;
-
-  const MAX_DURATION = 60;
+  const rotateImg = require("../../../assets/icons/rotate.png");
+  const recordingImg = require("../../../assets/icons/recording.png");
+  const recordImg = require("../../../assets/icons/record.png");
+  const videoImg = require("../../../assets/icons/video.png");
 
   useEffect(() => {
+    cacheImage();
     startCamera();
   }, []);
 
+  const cacheImage = () => {
+    Promise.all([
+      Asset.fromModule("../../../assets/icons/rotate.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/recording.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/record.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/video.png").downloadAsync(),
+    ]);
+  };
+
   const importMediaFromLibrary = async () => {
+    setIsPickingVideo(true);
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     const videoData = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
@@ -53,23 +62,59 @@ const CameraComponent: FC = (): JSX.Element => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
-            alert("동영상의 길이가 60초를 넘어 영상의 앞 60초만 사용됩니다.");
-            return;
+            alert(
+              "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
+            );
           }
-          setVideoURI(res.uri);
+          setUri(res.uri);
           navigation.navigate("VideoDetailPage");
         }
       });
     }
+    setIsPickingVideo(false);
   };
 
   const onCameraReady = () => {
+    getDeviceCameraRatio();
     setIsCameraReady(true);
   };
 
   const startCamera = async () => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    setHasPermission(status === "granted");
+    const { status: CameraStatus } =
+      await Camera.requestCameraPermissionsAsync();
+    const { status: VoiceStatus } =
+      await Camera.requestMicrophonePermissionsAsync();
+
+    setHasPermission(CameraStatus === "granted" && VoiceStatus === "granted");
+  };
+
+  const getDeviceCameraRatio = async () => {
+    const ratio = await cameraRef.getSupportedRatiosAsync();
+    const bestRatio = extractBestRatio(ratio);
+    setBestRatio(bestRatio);
+  };
+
+  const extractBestRatio = (availableRatioArra: string[]) => {
+    const ratioObjectArray: { ratio: string; realRatio: number }[] = [];
+    const arrayOfAbs: number[] = [];
+
+    for (let i = 0; i < availableRatioArra.length; i++) {
+      ratioObjectArray[i] = {
+        ratio: availableRatioArra[i],
+        realRatio:
+          Number(availableRatioArra[i].split(":")[0]) /
+          Number(availableRatioArra[i].split(":")[1]),
+      };
+    }
+
+    for (let i = 0; i < ratioObjectArray.length; i++) {
+      arrayOfAbs.push(Math.abs(SCREEN_RATIO - ratioObjectArray[i].realRatio));
+    }
+
+    const minRatio = Math.min.apply(Math, arrayOfAbs);
+    const minRatioIndex = arrayOfAbs.findIndex((value) => value === minRatio);
+
+    return availableRatioArra[minRatioIndex];
   };
 
   const recordVideo = async () => {
@@ -78,23 +123,23 @@ const CameraComponent: FC = (): JSX.Element => {
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
-      setVideoURI(videoRecordPromise.uri);
+      setUri(videoRecordPromise.uri);
       navigation.navigate("VideoDetailPage");
     }
   };
 
   const stopVideoRecording = async () => {
     if (cameraRef) {
-      setIsVideoRecording(false);
       await cameraRef.stopRecording();
+      setIsVideoRecording(false);
     }
   };
 
   const switchCamera = () => {
-    setCameraType((prevCameraType) =>
-      prevCameraType === Camera.Constants.Type.front
-        ? Camera.Constants.Type.back
-        : Camera.Constants.Type.front
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
     );
   };
 
@@ -147,17 +192,21 @@ const CameraComponent: FC = (): JSX.Element => {
   return (
     <S.QuestionWrapper>
       <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        <Camera
-          ref={(el) => setCameraRef(el)}
-          style={{ ...StyleSheet.absoluteFillObject }}
-          type={cameraType}
-          onCameraReady={onCameraReady}
-          onMountError={(error) => {
-            console.warn("cammera error", error);
-          }}
-          autoFocus={"on"}
-          useCamera2Api
-        />
+        {isFocused && !isPickingVideo && (
+          <Camera
+            ref={(el) => setCameraRef(el)}
+            style={{ ...StyleSheet.absoluteFillObject }}
+            type={cameraType}
+            onCameraReady={onCameraReady}
+            onMountError={(error) => {
+              console.warn("cammera error", error);
+            }}
+            autoFocus={"on"}
+            useCamera2Api
+            ratio={bestRatio}
+          />
+        )}
+
         <View style={{ ...StyleSheet.absoluteFillObject }}>
           {isVideoRecording && renderVideoRecordIndicator()}
           {renderVideoControl()}
