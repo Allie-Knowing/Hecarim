@@ -9,7 +9,7 @@ import {
   postTextAnswer,
 } from "modules/redux/action/textAnswer";
 import { useDispatch } from "react-redux";
-import useSelectState from "../default/useSelectState";
+import { useSelectState } from "../default";
 
 const useTextAnswer = () => {
   const dispatch = useDispatch();
