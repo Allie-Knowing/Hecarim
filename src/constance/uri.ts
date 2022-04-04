@@ -3,7 +3,7 @@ enum uri {
   comment_answer = "/answer/comment",
   googleSignin = "/google",
   like = "/like",
-  file = "/file",
+  file = "/video/file",
   getProfile = "/user/info/",
   myId = "/user/my",
   auto_complete = "/search/autocomplete",
