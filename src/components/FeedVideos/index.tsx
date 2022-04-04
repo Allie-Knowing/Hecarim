@@ -28,6 +28,9 @@ const FeedVideos: FC<PropsType> = ({ dataList }) => {
       decelerationRate="fast"
       snapToAlignment="start"
       pagingEnabled
+      disableIntervalMomentum
+      bounces={false}
+      bouncesZoom={false}
       contentContainerStyle={{ flexGrow: 1 }}
       snapToInterval={height}
       showsVerticalScrollIndicator={false}

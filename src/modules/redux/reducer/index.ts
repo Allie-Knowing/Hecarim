@@ -15,6 +15,7 @@ const rootReducer = combineReducers({
   myId: myIdReducer,
   textAnswer: textAnswerReducer,
   // camera: cameraReducer,
+  answer: answerReducer,
   search: searchReducer,
 });
 

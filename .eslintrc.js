@@ -40,6 +40,7 @@ module.exports = {
     "@typescript-eslint/no-unsafe-return": "off",
     "react/jsx-key": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
+    "no-irregular-whitespace": "off",
   },
   settings: {
     react: {

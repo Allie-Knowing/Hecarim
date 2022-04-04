@@ -133,6 +133,8 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         pagingEnabled
         snapToInterval={width}
         horizontal
+        bounces={false}
+        bouncesZoom={false}
         scrollEventThrottle={1}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
