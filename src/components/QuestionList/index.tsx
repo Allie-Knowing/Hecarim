@@ -1,12 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  FlatListProps,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, ViewStyle } from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
@@ -61,7 +53,6 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
   const outerRef = useAnimatedRef<Animated.ScrollView>();
-  const pageValue = useSharedValue<number>(0);
   const pageId = useSharedValue<string>(uniqueId());
   const isStack = useContext(isStackContext);
   const navigation = useMainStackNavigation();
@@ -115,14 +106,6 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
     pageId.value = pageId.value;
   });
 
-  const onNavPress = useCallback(
-    (index: number) => () => {
-      pageValue.value = index;
-      pageId.value = uniqueId();
-    },
-    [outerRef]
-  );
-
   return (
     <S.Wrapper style={{ height }}>
       <Animated.ScrollView
@@ -157,17 +140,13 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         style={[NavStyle("question"), questionNavStyle]}
         onLayout={onLayout("question")}
       >
-        <TouchableOpacity onPress={onNavPress(0)}>
-          <S.NavText>질문</S.NavText>
-        </TouchableOpacity>
+        <S.NavText>질문</S.NavText>
       </Animated.View>
       <Animated.View
         style={[NavStyle("answer"), answerNavStyle]}
         onLayout={onLayout("answer")}
       >
-        <TouchableOpacity onPress={onNavPress(1)}>
-          <S.NavText>영상 답변</S.NavText>
-        </TouchableOpacity>
+        <S.NavText>영상 답변</S.NavText>
       </Animated.View>
     </S.Wrapper>
   );
