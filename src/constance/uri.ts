@@ -3,6 +3,7 @@ enum uri {
   comment_answer = "/answer/comment",
   googleSignin = "/google",
   like = "/like",
+  file = "/file",
 }
 
 export default uri;
