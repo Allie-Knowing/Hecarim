@@ -13,10 +13,23 @@ export const signin = async (body: signinRequest) => {
     response = await request.post<signinResponse>(`${uri.googleSignin}`, {
       id_token: body.id_token,
     });
+  } else {
+    response = await request.post<signinResponse>(
+      `${uri.signin}${body.provider}`,
+      {
+        code: body.id_token,
+      }
+    );
   }
   await Promise.all([
-    localStorage.setItem<string>(storageKeys.accessToken, response.data.access_token),
-    localStorage.setItem<string>(storageKeys.refreshToken, response.data.refresh_token),
+    localStorage.setItem<string>(
+      storageKeys.accessToken,
+      response.data.access_token
+    ),
+    localStorage.setItem<string>(
+      storageKeys.refreshToken,
+      response.data.refresh_token
+    ),
   ]);
   return;
 };

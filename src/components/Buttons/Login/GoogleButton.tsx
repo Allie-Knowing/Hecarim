@@ -13,7 +13,7 @@ const google = require("../../../assets/icons/login/google.png");
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
-const GoogleButton: FC<Props> = (props) => {
+const GoogleButton: FC<Props> = (navigation) => {
   const { state, setState } = useSignin();
   const [request, response, prompAsync] = Google.useAuthRequest({
     clientId: env.googleClientId.webId,
@@ -28,7 +28,7 @@ const GoogleButton: FC<Props> = (props) => {
 
   useEffect(() => {
     if (state.isSignin) {
-      props.pop();
+      navigation.reset({ routes: [{ name: "Main" }] });
     }
   }, [state.isSignin]);
 

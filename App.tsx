@@ -18,7 +18,6 @@ import Login from "screens/Login";
 import store from "modules/redux/store";
 import AlretProvider from "components/Providers/AlretProvider";
 import theme from "theme/theme";
-import MyPage from "screens/MyPage/MyPage";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 

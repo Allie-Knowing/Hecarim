@@ -8,6 +8,7 @@ enum uri {
   myId = "/user/my",
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
+  signin = "/auth?provider=",
 }
 
 export default uri;
