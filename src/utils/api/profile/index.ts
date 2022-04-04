@@ -1,10 +1,9 @@
 import uri from "constance/uri";
-import { instance } from "utils/axios";
+import { getRequest } from "../default";
 
 export const getProfile = async (id: number) => {
-  try {
-    return await instance.get(uri.getProfile + id);
-  } catch (error) {
-    throw error;
-  }
+  const request = getRequest();
+
+  const data = await request.post(`${uri.getProfile}${id}`);
+  return data;
 };
