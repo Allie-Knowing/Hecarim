@@ -1,12 +1,20 @@
 import { profileActionType } from "modules/redux/action/profile";
 import {
   GET_PROFILE_FAILURE,
+  GET_PROFILE_QUESTION_LIST_FAILURE,
+  GET_PROFILE_QUESTION_LIST_SUCCESS,
   GET_PROFILE_SUCCESS,
+  SET_ID,
 } from "modules/redux/action/profile/interface";
 import ProfileState from "./interface";
 
 const initState: ProfileState = {
-  error: {
+  profileError: {
+    status: 0,
+    message: "",
+    type: "",
+  },
+  questionError: {
     status: 0,
     message: "",
     type: "",
@@ -14,6 +22,8 @@ const initState: ProfileState = {
   profile: "",
   name: "",
   videoCnt: -1,
+  userId: 0,
+  questionList: [],
 };
 
 const profileReducer = (
@@ -31,7 +41,22 @@ const profileReducer = (
     case GET_PROFILE_FAILURE:
       return {
         ...state,
-        error: action.payload,
+        profileError: action.payload,
+      };
+    case GET_PROFILE_QUESTION_LIST_SUCCESS:
+      return {
+        ...state,
+        questionList: action.payload,
+      };
+    case GET_PROFILE_QUESTION_LIST_FAILURE:
+      return {
+        ...state,
+        questionError: action.payload,
+      };
+    case SET_ID:
+      return {
+        ...state,
+        uesrId: action.payload,
       };
     default:
       return state;
