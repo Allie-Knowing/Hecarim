@@ -13,7 +13,7 @@ import {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { useTheme } from "styled-components/native";
+import useThemeContext from "hooks/useThemeContext";
 import { AlretWithId, ButtonColor } from "../../context/AlretContext";
 import * as S from "./styles";
 
@@ -23,17 +23,17 @@ export interface AlretRef {
 
 const Alert = forwardRef<AlretRef, AlretWithId>(
   ({ title, content, buttons, id }, ref) => {
-    const theme = useTheme();
+    const themeContext = useThemeContext();
     const offset = useSharedValue(0);
     const { currentAlretId } = useAlret();
 
     const colorMap = useMemo(
       () =>
         new Map<ButtonColor, string>()
-          .set("black", theme.colors.grayscale.scale100)
-          .set("red", theme.colors.red.default)
-          .set("primary", theme.colors.primary.default),
-      [theme]
+          .set("black", themeContext.colors.grayscale.scale100)
+          .set("red", themeContext.colors.red.default)
+          .set("primary", themeContext.colors.primary.default),
+      [themeContext]
     );
 
     const closeAnimationLogic = useCallback(
@@ -91,7 +91,7 @@ const Alert = forwardRef<AlretRef, AlretWithId>(
             <S.Button
               key={`${value.text}_button_${index}`}
               onPress={() => value.onPress(id)}
-              underlayColor={theme.colors.grayscale.scale30}
+              underlayColor={themeContext.colors.grayscale.scale30}
               activeOpacity={1}
               style={[
                 index === 0 && { borderBottomLeftRadius: 10 },

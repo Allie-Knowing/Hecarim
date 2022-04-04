@@ -3,8 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from "@react-navigation/stack";
-import Animated, { useAnimatedRef } from "react-native-reanimated";
-import { useTheme } from "styled-components";
+import useThemeContext from "hooks/useThemeContext";
 import DefaultSearchPage from "components/SearchPage/SearchResults/DefaultSearchPage";
 import SearchedQuestionsPage from "components/SearchPage/SearchResults/SearchedQuestionsPage";
 import BackBtn from "components/SearchPage/SearchResults/SearchedQuestionsPage/BackBtn";
@@ -17,8 +16,7 @@ export type RootStackParamList = {
 const Root = createStackNavigator<RootStackParamList>();
 
 const Search = () => {
-  const outerRef = useAnimatedRef<Animated.ScrollView>();
-  const theme = useTheme();
+  const themeContext = useThemeContext();
 
   return (
     <Fragment>
@@ -39,7 +37,7 @@ const Search = () => {
             headerTitle: "검색",
             headerTitleStyle: {
               fontFamily: "SpoqaHanSansNeo-Medium",
-              color: theme.colors.grayscale.scale100,
+              color: themeContext.colors.grayscale.scale100,
               fontSize: 16,
             },
             headerTitleAlign: "center",
@@ -57,7 +55,7 @@ const Search = () => {
             headerTitle: "검색된 질문",
             headerTitleStyle: {
               fontFamily: "SpoqaHanSansNeo-Medium",
-              color: theme.colors.grayscale.scale100,
+              color: themeContext.colors.grayscale.scale100,
               fontSize: 16,
             },
             headerTitleContainerStyle: {

@@ -6,6 +6,8 @@ import profileReducer from "./profile";
 import signinReducer from "./signin";
 import textAnswerReducer from "./textAnswer";
 import cameraReducer from "./camera";
+import answerReducer from './answer';
+import searchReducer from './search';
 
 const rootReducer = combineReducers({
   feed: feedReducer,
@@ -15,6 +17,8 @@ const rootReducer = combineReducers({
   myId: myIdReducer,
   textAnswer: textAnswerReducer,
   camera: cameraReducer,
+  signin: signinReducer,
+  search: searchReducer,
 });
 
 export type reducerType = ReturnType<typeof rootReducer>;

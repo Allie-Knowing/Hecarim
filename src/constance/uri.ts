@@ -6,6 +6,7 @@ enum uri {
   file = "/file",
   getProfile = "/user/info/",
   myId = "/user/my",
+    auto_complete = "/search/autocomplete"
 }
 
 export default uri;

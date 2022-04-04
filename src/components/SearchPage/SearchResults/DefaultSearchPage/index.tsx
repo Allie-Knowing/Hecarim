@@ -25,7 +25,6 @@ const DefaultSearchPage: FC = () => {
         <SearchTopNavigation />
         <S.View height={height / 1.44}>
           <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
-          <Button title="Go" onPress={() => navigation.navigate("Login")} />
         </S.View>
       </View>
     </TouchableWithoutFeedback>

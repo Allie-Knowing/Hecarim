@@ -1,5 +1,6 @@
 import uri from "constance/uri";
 import storageKeys from "constant/storageKeys";
+import uri from "constance/uri";
 import { signinRequest } from "modules/dto/request/signinRequest";
 import { signinResponse } from "modules/dto/response/signinResponse";
 import localStorage from "utils/localStorage";
