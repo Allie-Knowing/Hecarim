@@ -3,16 +3,18 @@ import {
   REFRESH_TOKEN_FAILURE,
   REFRESH_TOKEN_SUCCESS,
   RESET,
+  SIGNIN,
   SIGNIN_FAILURE,
   SIGNIN_SUCCESS,
 } from "modules/redux/action/signin/interface";
 import SigninState from "./interface";
 
 const initState: SigninState = {
+  signinRequest: {},
   isSignin: false,
   error: {
     type: "",
-    statusCode: 0,
+    status: 0,
     message: "",
   },
 };
@@ -20,8 +22,13 @@ const initState: SigninState = {
 const signinReducer = (
   state: SigninState = initState,
   action: signinActionType
-) => {
+): SigninState => {
   switch (action.type) {
+    case SIGNIN:
+      return {
+        ...state,
+        signinRequest: action.payload,
+      };
     case SIGNIN_SUCCESS:
       return {
         ...state,
