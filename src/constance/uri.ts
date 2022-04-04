@@ -8,6 +8,7 @@ enum uri {
   myId = "/user/my",
   auto_complete = "/search/autocomplete",
   getProfileQuestionList = "/user/question/video/",
+  signin = "/auth?provider=",
 }
 
 export default uri;
