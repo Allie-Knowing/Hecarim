@@ -1,20 +1,58 @@
+import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
+import { FC, useMemo } from "react";
+import { useTheme } from "styled-components/native";
 import * as S from "./styles";
 
-const TestImage = require("../../assets/feed_test.jpg");
+function timeForToday(value: string) {
+  const today = new Date();
+  const timeValue = new Date(value);
 
-const Comment = () => {
+  const betweenTime = Math.floor(
+    (today.getTime() - timeValue.getTime()) / 1000 / 60
+  );
+  if (betweenTime < 1) return "방금전";
+  if (betweenTime < 60) {
+    return `${betweenTime}분전`;
+  }
+
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  if (betweenTimeHour < 24) {
+    return `${betweenTimeHour}시간전`;
+  }
+
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+  if (betweenTimeDay < 365) {
+    return `${betweenTimeDay}일전`;
+  }
+
+  return `${Math.floor(betweenTimeDay / 365)}년전`;
+}
+
+const Comment: FC<getTextAnswerList> = ({
+  user,
+  content,
+  id,
+  is_adoption,
+  created_at,
+}) => {
+  const profile = useMemo(() => user?.profile || "", [user?.profile]);
+  const theme = useTheme();
+
   return (
-    <S.Container>
-      <S.ProfileImage source={TestImage} />
+    <S.Container
+      style={{
+        backgroundColor: !is_adoption
+          ? theme.colors.primary.default
+          : undefined,
+      }}
+    >
+      <S.ProfileImage source={{ uri: profile }} />
       <S.ContentContainer>
         <S.HeaderContainer>
-          <S.Name>안병헌</S.Name>
-          <S.Date>1일전</S.Date>
+          <S.Name>{`${user.name || ""}`}</S.Name>
+          <S.Date>{timeForToday(created_at)}</S.Date>
         </S.HeaderContainer>
-        <S.Content>
-          이런 코드가 대량으로 있을 때 앞자리 열린 태그만 동시선택해서 바꾸면,
-          뒷 자리 닫힌 태그도 자동으로 타이핑한 태그로 변경됩니다.
-        </S.Content>
+        <S.Content>{`${content || ""}`}</S.Content>
       </S.ContentContainer>
     </S.Container>
   );
