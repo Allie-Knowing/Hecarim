@@ -1,3 +1,10 @@
+import { error } from "modules/dto/error";
+
+export interface SearchState {
+    searchAutoComplete: searchAutoCompleteResponse;
+    error: error;
+}
+
 export type searchString = {
     search_string: string
 }

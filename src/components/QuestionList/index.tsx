@@ -25,7 +25,7 @@ import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
 import uniqueId from "constant/uniqueId";
-import { getVideoAnswerListResponse } from "constance/feed";
+import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 
