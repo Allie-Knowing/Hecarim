@@ -4,9 +4,10 @@ import myIdReducer from "./myId";
 import profileReducer from "./profile";
 import signinReducer from "./signin";
 import textAnswerReducer from "./textAnswer";
-import cameraReducer from "./camera";
+// import cameraReducer from "./camera";
 import answerReducer from "./answer";
 import searchReducer from "./search";
+import stackedQuestionReducer from "./stackedQuestionList";
 
 const rootReducer = combineReducers({
   signin: signinReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   // camera: cameraReducer,
   answer: answerReducer,
   search: searchReducer,
+  stackedQuestionList: stackedQuestionReducer,
 });
 
 export type reducerType = ReturnType<typeof rootReducer>;
