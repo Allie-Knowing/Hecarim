@@ -1,5 +1,4 @@
 import { error } from "modules/dto/error";
-import { profileResponse } from "modules/dto/response/getProfileResponse";
 
 interface ProfileState {
   error: error;

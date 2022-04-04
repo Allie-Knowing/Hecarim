@@ -13,7 +13,7 @@ const initState: ProfileState = {
   },
   profile: "",
   name: "",
-  videoCnt: 0,
+  videoCnt: -1,
 };
 
 const profileReducer = (
