@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect, useRef, useState } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, TextInput } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -22,13 +22,15 @@ type screenPop = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
 const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   const { uri } = useContext(cameraContext);
-    theme.colors.grayscale.scale30
-  );
+  const [borderBottomColor, setBorderBottomColor] = useState<string>(theme.colors.grayscale.scale30);
   const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
 
   const navigation = useNavigation<screenPop>();
-
   const backImage = require("../../../assets/icons/back-black.png");
+
+  const titleRef = useRef<TextInput>(null);
+  const descriptionRef = useRef<TextInput>(null);
+  const hashtagRef = useRef<TextInput>(null);
 
   const uploadVideo = async () => {
     const formData = new FormData();
@@ -38,9 +40,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   };
 
   const cacheImage = () => {
-    Promise.all([
-      Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync(),
-    ]);
+    Promise.all([Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync()]);
   };
 
   useEffect(() => {
@@ -48,12 +48,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
   }, []);
 
   return (
-    <KeyboardAwareScrollView
-      extraHeight={20}
-      enableOnAndroid={true}
-      enableAutomaticScroll={true}
-      scrollEnabled={true}
-    >
+    <KeyboardAwareScrollView extraHeight={40} enableOnAndroid={true} enableAutomaticScroll={true}>
       <S.QuestionDetailWrapper topPad={TOP_PAD + HEADER_HEIGHT}>
         <S.QuestionDetailHeader topPad={TOP_PAD}>
           <S.GoBackContainer
@@ -68,25 +63,21 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
             <S.UploadText>업로드</S.UploadText>
           </S.UploadContainer>
         </S.QuestionDetailHeader>
-        <S.QuestionDetailBody
-          height={
-            SCREEN_HEIGHT -
-            (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)
-          }
-        >
-          <ScrollView scrollEnabled={true}>
+        <S.QuestionDetailBody height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}>
+          <ScrollView>
             <S.VideoContainer>
               <Video
                 source={{ uri: uri }}
                 style={{
-                  aspectRatio: 3 / 4,
-                  width: 250,
+                  width: 230,
+                  height: 415,
                   borderRadius: 10,
                   backgroundColor: "#c6c6c6",
                 }}
                 shouldPlay
                 isLooping
                 resizeMode="cover"
+                isMuted
               />
             </S.VideoContainer>
             <S.InputContainer>
@@ -96,12 +87,9 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
                   <S.TitleInput
                     placeholder="입력해주세요..."
                     placeholderTextColor={theme.colors.grayscale.scale30}
-                    onFocus={() =>
-                      setBorderBottomColor(theme.colors.primary.default)
-                    }
-                    onBlur={() =>
-                      setBorderBottomColor(theme.colors.grayscale.scale30)
-                    }
+                    onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
+                    onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
+                    ref={titleRef}
                   />
                 </S.TitleInputContainer>
               </S.InputBox>
@@ -111,6 +99,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
                   placeholder="입력해주세요..."
                   multiline={true}
                   textAlignVertical={"center"}
+                  ref={descriptionRef}
                 />
               </S.InputBox>
               <S.InputBox>
@@ -119,6 +108,7 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
                   placeholder="입력해주세요..."
                   multiline={true}
                   textAlignVertical={"center"}
+                  ref={hashtagRef}
                 />
               </S.InputBox>
             </S.InputContainer>
