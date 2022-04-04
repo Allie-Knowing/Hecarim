@@ -14,29 +14,39 @@ import * as S from "./styles";
 
 import { cameraContext } from "context/CameraContext";
 
-interface Props {
-  videoURI: string;
-}
+import useGetVideoUrl from "../../../utils/hooks/camera/useGetVideoUrl";
 
-type screenPop = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
 
-const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
+const VideoDetail: FC = (): JSX.Element => {
+  const { state, setState } = useGetVideoUrl();
   const { uri } = useContext(cameraContext);
   const [borderBottomColor, setBorderBottomColor] = useState<string>(theme.colors.grayscale.scale30);
   const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
 
-  const navigation = useNavigation<screenPop>();
+  const navigation = useNavigation<screenProp>();
   const backImage = require("../../../assets/icons/back-black.png");
-
   const titleRef = useRef<TextInput>(null);
   const descriptionRef = useRef<TextInput>(null);
   const hashtagRef = useRef<TextInput>(null);
 
   const uploadVideo = async () => {
     const formData = new FormData();
-    const blobData = (await fetch(videoURI)).blob();
+    // const blobData = await fetch(uri)
+    //   .then((res) => res.blob())
+    //   .then((blob) => {
+    //     return new File([blob], "video_file", { type: "video/quicktime" || "video/mp4" });
+    //   });
+    const blobData = await fetch(uri).then((res) => res.blob());
 
-    formData.append("file", await blobData);
+    formData.append("file", blobData);
+
+    setState.postVideo({
+      type: "question",
+      file: formData,
+    });
+
+    navigation.pop();
   };
 
   const cacheImage = () => {

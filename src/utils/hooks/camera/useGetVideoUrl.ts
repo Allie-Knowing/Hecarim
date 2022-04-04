@@ -1,13 +1,13 @@
 import { useDispatch } from "react-redux";
-import { postCameraRequest } from "modules/dto/request/postCameraRequest";
-import { postVideoUpload } from "modules/redux/action/camera";
+import { getVideoUrlRequest } from "modules/dto/request/getVideoUrlRequest";
+import { postVideoUpload } from "modules/redux/action/videoUrl";
 import useSelectState from "../default/useSelectState";
 
-const useCamera = () => {
+const useGetVideoUrl = () => {
   const dispatch = useDispatch();
   const state = useSelectState().camera;
   const setState = {
-    postVideo: (payload: postCameraRequest) => {
+    postVideo: (payload: getVideoUrlRequest) => {
       dispatch(postVideoUpload(payload));
     },
   };
@@ -15,4 +15,4 @@ const useCamera = () => {
   return { state, setState };
 };
 
-export default useCamera;
+export default useGetVideoUrl;

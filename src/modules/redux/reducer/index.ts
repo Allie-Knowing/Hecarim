@@ -4,7 +4,7 @@ import myIdReducer from "./myId";
 import profileReducer from "./profile";
 import signinReducer from "./signin";
 import textAnswerReducer from "./textAnswer";
-import cameraReducer from "./camera";
+import videoUrlReducer from "./videoUrl";
 import answerReducer from "./answer";
 import searchReducer from "./search";
 
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   profile: profileReducer,
   myId: myIdReducer,
   textAnswer: textAnswerReducer,
-  // camera: cameraReducer,
+  videoUrl: videoUrlReducer,
   search: searchReducer,
 });
 

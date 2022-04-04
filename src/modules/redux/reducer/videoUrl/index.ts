@@ -1,13 +1,10 @@
-import {
-  POST_VIDEO_UPLOAD,
-  POST_VIDEO_UPLOAD_SUCCESS,
-  POST_VIDEO_UPLOAD_FAILURE,
-} from "modules/redux/action/camera/interface";
-import { cameraActionType } from "modules/redux/action/camera";
+import { GET_VIDEO_URL, GET_VIDEO_URL_SUCCESS, GET_VIDEO_URL_FAILURE } from "modules/redux/action/videoUrl/interface";
+import { getVideoUrlActionType } from "modules/redux/action/videoUrl";
 import { VideoState } from "./interface";
 
 const initState: VideoState = {
   postVideoRequest: {
+    type: "question",
     file: "",
   },
   postVideoResponse: {
@@ -20,28 +17,31 @@ const initState: VideoState = {
   },
 };
 
-const cameraReducer = (state: VideoState = initState, action: cameraActionType): VideoState => {
+const videoUrlReducer = (state: VideoState = initState, action: getVideoUrlActionType): VideoState => {
   switch (action.type) {
-    case POST_VIDEO_UPLOAD:
+    case GET_VIDEO_URL:
       return {
         ...state,
         postVideoRequest: {
+          type: action.payload.type,
           file: action.payload.file,
         },
       };
-    case POST_VIDEO_UPLOAD_SUCCESS:
+    case GET_VIDEO_URL_SUCCESS:
       return {
         ...state,
         postVideoResponse: {
           uri: action.payload.uri,
         },
       };
-    case POST_VIDEO_UPLOAD_FAILURE:
+    case GET_VIDEO_URL_FAILURE:
       return {
         ...state,
         error: action.payload,
       };
+    default:
+      return state;
   }
 };
 
-export default cameraReducer;
+export default videoUrlReducer;
