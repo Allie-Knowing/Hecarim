@@ -21,7 +21,7 @@ const initState: ProfileState = {
   },
   profile: "",
   name: "",
-  videoCnt: -1,
+  videoCnt: 0,
   userId: 0,
   questionList: [],
 };
@@ -56,7 +56,7 @@ const profileReducer = (
     case SET_ID:
       return {
         ...state,
-        uesrId: action.payload,
+        userId: action.payload,
       };
     default:
       return state;
