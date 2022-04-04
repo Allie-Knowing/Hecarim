@@ -1,10 +1,10 @@
+import { AxiosResponse } from "axios";
 import uri from "constance/uri";
+import { myIdResponse } from "modules/dto/response/getMyIdResponse";
 import { getRequestWithAccessToken } from "../default";
 
 export const getMyId = async (accessToken: string) => {
-  console.log("ada");
   const request = getRequestWithAccessToken(accessToken);
   const data = await request.get(uri.myId);
-  console.log("adaasdasdasasd");
-  return data;
+  return data.data;
 };
