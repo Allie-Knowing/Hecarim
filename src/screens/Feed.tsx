@@ -1,14 +1,14 @@
 import React, { FC } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
-import useFeed from "utils/hooks/feed/useFeed";
+import useAnswer from "utils/hooks/answer/useAnswer";
 
 const Feed: FC = () => {
-  const { state, setState } = useFeed();
+  const { state, setState } = useAnswer();
 
-  // React.useEffect(() => {
-  //   setState.getVideoAnswerList();
-  // }, []);
+  React.useEffect(() => {
+    setState.getVideoAnswerList();
+  }, []);
 
   return (
     <isStackContext.Provider value={false}>

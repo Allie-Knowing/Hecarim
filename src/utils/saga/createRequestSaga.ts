@@ -6,10 +6,12 @@ import localStorage from 'utils/localStorage';
 export default function createRequestSaga(type: any, request: any) {
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
-  return async function* (action: any) {
-    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
+  // asyncStorage를 위해 async 추가 예정
+  return function* (action: any) {
+    // const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
+    const accessToken = "eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss"; 
     try {
-      const response: AxiosResponse<unknown> = yield call(request, accessToken, action.payload);
+      const response: AxiosResponse = yield call(request, accessToken, action.payload);
       yield put({
         type: SUCCESS,
         payload: response ? response.data : null,

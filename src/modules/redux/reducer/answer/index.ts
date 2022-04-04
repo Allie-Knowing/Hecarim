@@ -1,11 +1,11 @@
 import { 
   GET_VIDEO_ANSWER_LIST_SUCCESS, 
   GET_VIDEO_ANSWER_LIST_FAILURE
-} from "modules/redux/action/feed/interface";
-import { FeedState } from "./interface";
-import { feedActionType } from "modules/redux/action/feed";
+} from "modules/redux/action/answer/interface";
+import { answerState } from "./interface";
+import { answerActionType } from "modules/redux/action/answer";
 
-const initState: FeedState = {
+const initState: answerState = {
   videoAnswerList: {
     data: []
   },
@@ -16,10 +16,10 @@ const initState: FeedState = {
   }
 }
 
-const feedReducer = (
-  state: FeedState = initState,
-  action: feedActionType
-): FeedState => {
+const answerReducer = (
+  state: answerState = initState,
+  action: answerActionType
+): answerState => {
   switch (action.type) {
     case GET_VIDEO_ANSWER_LIST_SUCCESS: 
       return {
@@ -38,4 +38,4 @@ const feedReducer = (
   }
 }
 
-export default feedReducer;
+export default answerReducer;

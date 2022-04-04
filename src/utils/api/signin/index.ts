@@ -1,5 +1,5 @@
 import storageKeys from "constant/storageKeys";
-import uri from "constant/uri";
+import uri from "constance/uri";
 import { signinRequest } from "modules/dto/request/signinRequest";
 import { signinResponse } from "modules/dto/response/signinResponse";
 import { noTokenInstance } from "utils/axios";

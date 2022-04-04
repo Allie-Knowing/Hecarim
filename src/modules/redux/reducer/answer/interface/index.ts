@@ -1,7 +1,7 @@
 import { error } from 'modules/dto/error';
-import { getVideoAnswerList } from 'constance/feed';
+import { getVideoAnswerList } from 'modules/dto/response/answerResponse';
 
-export interface FeedState {
+export interface answerState {
     videoAnswerList: getVideoAnswerListResponse;
     error: error;
 }

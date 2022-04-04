@@ -1,5 +1,5 @@
 import { all } from "redux-saga/effects";
-import feedSaga from "./feed";
+import feedSaga from "./answer";
 import signinSaga from "./signin";
 
 export default function* rootSaga() {

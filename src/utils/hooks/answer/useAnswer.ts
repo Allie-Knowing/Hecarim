@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux";
-import { getVideoAnswerList } from "modules/redux/action/feed";
+import { getVideoAnswerList } from "modules/redux/action/answer";
 import useSelectState from "../default/useSelectState";
 
-const useFeed = () => {
+const useAnswer = () => {
   const dispatch = useDispatch();
-  const state = useSelectState().feed;
+  const state = useSelectState().answer;
   const setState = {
     getVideoAnswerList: () => {
       dispatch(getVideoAnswerList());
@@ -13,4 +13,4 @@ const useFeed = () => {
   return { state, setState }
 }
 
-export default useFeed;
+export default useAnswer;

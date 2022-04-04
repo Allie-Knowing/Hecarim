@@ -17,6 +17,7 @@ import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
 import useAlret from "hooks/useAlret";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -36,6 +37,7 @@ const FeedContent: FC = () => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
   const { showAlret, closeAlret } = useAlret();
+  const navigation = useMainStackNavigation();
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -161,19 +163,7 @@ const FeedContent: FC = () => {
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
-                  showAlret({
-                    title: "xㅔ스트",
-                    content: "ㅂ마ㅣㄴㅇ러ㅣㅁㄴ어",
-                    buttons: [
-                      {
-                        color: "black",
-                        onPress: (id) => {
-                          closeAlret(id);
-                        },
-                        text: "확인",
-                      },
-                    ],
-                  });
+                  navigation.navigate("StackedQuestionList");
                 }}
               >
                 <S.Icon resizeMode="contain" source={Camera} />
