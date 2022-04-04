@@ -1,15 +1,27 @@
 import Comment from "components/Comment";
-import { forwardRef, useContext, useEffect, useState } from "react";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import {
+  forwardRef,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  FC,
+  Fragment,
+  Suspense,
+  useRef,
+} from "react";
+import { TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import * as S from "./styles";
 import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
+import { useTextAnswer } from "../../../utils/hooks/textAnswer";
+import { getTextAnswerList } from "../../../modules/dto/response/textAnswerResponse";
 
-const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
   open: () => void;
 }
@@ -21,6 +33,27 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputProps, isFocus] = useFocus();
+  const { state } = useTextAnswer();
+  const [page, setPage] = useState<number>(1);
+  const requestedPage = useRef<number>(-1);
+
+  useEffect(() => {
+    if (isOpen) {
+      setPage(1);
+      requestedPage.current = 1;
+    }
+  }, [isOpen]);
+
+  const onEndReached = useCallback(() => {
+    if (state.error.status !== 404 && isOpen) {
+      setPage((prev) => {
+        const p = prev + 1;
+        requestedPage.current = p;
+
+        return p;
+      });
+    }
+  }, [isOpen, state.error.status]);
 
   return (
     <BottomSheet
@@ -41,12 +74,9 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
     >
       <S.Container>
         <S.Title>댓글</S.Title>
-        <S.List
-          data={[1, 2, 3, 4, 5, 6, 7]}
-          keyExtractor={(i) => `comment_${i}`}
-          renderItem={() => <Comment />}
-          showsVerticalScrollIndicator={false}
-        />
+        <Suspense fallback={<S.Message>글 답변 로딩 중</S.Message>}>
+          <TextAnswerList {...{ isOpen, onEndReached, page, requestedPage }} />
+        </Suspense>
       </S.Container>
       <S.InputContainer>
         <S.InputProfile source={TestImage} />
@@ -63,5 +93,51 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
     </BottomSheet>
   );
 });
+
+interface ListProps {
+  page: number;
+  isOpen: boolean;
+  onEndReached: () => void;
+  requestedPage: React.MutableRefObject<number>;
+}
+
+const TextAnswerList: FC<ListProps> = ({
+  isOpen,
+  onEndReached,
+  page,
+  requestedPage,
+}) => {
+  const { state, setState } = useTextAnswer();
+
+  const data = useMemo(
+    () => state.getTextAnswerListResponse.data,
+    [state.getTextAnswerListResponse.data]
+  );
+
+  useEffect(() => {
+    if (isOpen && page !== requestedPage.current) {
+      setState.getTextAnswerList({ page, size: 30, questionId: 1 });
+      requestedPage.current = page;
+    }
+  }, [isOpen, page, requestedPage, setState]);
+
+  return (
+    <Fragment>
+      {data && data.length > 0 ? (
+        <S.List
+          data={data}
+          keyExtractor={(value: getTextAnswerList) =>
+            `comment_${value.id}_${value.userId}`
+          }
+          renderItem={() => <Comment />}
+          onEndReached={onEndReached}
+          showsVerticalScrollIndicator={false}
+        />
+      ) : (
+        <S.Message>글 답변이 없습니다</S.Message>
+      )}
+    </Fragment>
+  );
+};
 
 export default CommentBottomSheet;
