@@ -1,3 +1,5 @@
 export interface getVideoUrlResponse {
-  uri: string;
+  data: {
+    url: string;
+  };
 }
