@@ -9,6 +9,7 @@ export type getTextAnswerList = {
     profile?: string;
     name?: string;
   };
+  is_mine?: boolean;
 };
 
 export type getTextAnswerListResponse = {

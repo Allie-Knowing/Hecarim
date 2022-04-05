@@ -10,7 +10,7 @@ import ProfileState from "./interface";
 
 const initState: ProfileState = {
   profileError: {
-    status: 0,
+    statuscode: 0,
     message: "",
     type: "",
   },
