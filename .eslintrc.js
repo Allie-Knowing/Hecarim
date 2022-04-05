@@ -46,6 +46,7 @@ module.exports = {
     "@typescript-eslint/restrict-plus-operands": "off",
     "react-hooks/exhaustive-deps": "off",
     "react-hooks/rules-of-hooks": "off",
+    "indent": "off",
   },
   settings: {
     react: {

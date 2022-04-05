@@ -2,16 +2,17 @@ import Comment from "components/Comment";
 import {
   forwardRef,
   useContext,
-  useEffect,
   useState,
   useCallback,
   useMemo,
   FC,
   Fragment,
-  Suspense,
-  useRef,
 } from "react";
-import { ListRenderItem, TouchableOpacity, View } from "react-native";
+import {
+  ListRenderItem,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -69,17 +70,19 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
         <S.Title>댓글</S.Title>
         <TextAnswerList isOpen={isOpen} />
       </S.Container>
-      <S.InputContainer>
-        <S.InputProfile source={TestImage} />
-        <S.Input
-          placeholder="KJG04로 답변 추가"
-          placeholderTextColor={themeContext.colors.grayscale.scale30}
-          {...inputProps}
-        />
-        <TouchableOpacity>
-          <S.Submit>추가</S.Submit>
-        </TouchableOpacity>
-      </S.InputContainer>
+      <TouchableWithoutFeedback>
+        <S.InputContainer>
+          <S.InputProfile source={TestImage} />
+          <S.Input
+            placeholder="KJG04로 답변 추가"
+            placeholderTextColor={themeContext.colors.grayscale.scale30}
+            {...inputProps}
+          />
+          <TouchableOpacity>
+            <S.Submit>추가</S.Submit>
+          </TouchableOpacity>
+        </S.InputContainer>
+      </TouchableWithoutFeedback>
       <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
     </BottomSheet>
   );
@@ -113,10 +116,10 @@ const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
     () =>
       data
         ? (data.pages || [])
-          .map((value) => value.data)
-          .reduce(function (acc, cur) {
-            return acc.concat(cur);
-          })
+            .map((value) => value.data)
+            .reduce(function (acc, cur) {
+              return acc.concat(cur);
+            })
         : [],
     [data]
   );
