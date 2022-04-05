@@ -18,7 +18,7 @@ const initState: TextAnswerState = {
   deleteTextAnswerRequest: {},
   getTextAnswerListResponse: {},
   postTextAnswerRequest: {},
-  error: { status: 0, message: "", type: "" },
+  error: { statuscode: 0, message: "", type: "" },
 };
 
 const textAnswerReducer = (
@@ -43,6 +43,11 @@ const textAnswerReducer = (
         ...state,
         getTextAnswerListResponse: {
           data: [],
+        },
+        error: {
+          statuscode: 0,
+          message: "",
+          type: "",
         },
       };
     case POST_TEXT_ANSWER:

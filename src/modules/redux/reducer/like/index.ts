@@ -12,7 +12,7 @@ import { LikeState } from "./interface";
 const initState: LikeState = {
   likeRequest: { videoId: -1 },
   error: {
-    status: 0,
+    statuscode: 0,
     message: "",
     type: "",
   },
