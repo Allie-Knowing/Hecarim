@@ -8,27 +8,30 @@ import {
   useMemo,
   FC,
   Fragment,
-  useRef,
   RefObject,
 } from "react";
 import {
   ListRenderItem,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet";
 import * as S from "./styles";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import { getTextAnswerList } from "../../../modules/dto/response/textAnswerResponse";
-import { useTextAnswerList } from "queries/TextAnswer";
+import { useTextAnswerList, useTextAnswerMutation } from "queries/TextAnswer";
 import axios from "axios";
 import useIsLogin from "hooks/useIsLogin";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { useQueryClient } from "react-query";
+import queryKeys from "constant/queryKeys";
+import useAlret from "hooks/useAlret";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -48,6 +51,9 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const [inputProps, isFocus] = useFocus();
     const isLogin = useIsLogin();
     const [text, setText] = useState<string>("");
+    const { post } = useTextAnswerMutation();
+    const queryClient = useQueryClient();
+    const { showAlret, closeAlret } = useAlret();
 
     const renderBackdrop = useCallback(
       (props) => (
@@ -67,6 +73,31 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       navigation.push("Login");
     }, [navigation, ref]);
 
+    const onAddPress = useCallback(async () => {
+      const t = text.trim();
+      if (t === "") {
+        return;
+      }
+      setText("");
+      try {
+        await post.mutateAsync({ questionId: 1, content: t });
+
+        queryClient.invalidateQueries([
+          queryKeys.question,
+          queryKeys.questionId(1),
+          queryKeys.textAnswerList,
+        ]);
+      } catch (error) {
+        showAlret({
+          title: "글 답변 작성 실패",
+          content: "다시 시도해주세요.",
+          buttons: [
+            { text: "확인", color: "black", onPress: (id) => closeAlret(id) },
+          ],
+        });
+      }
+    }, [post, text, queryClient]);
+
     const input = useMemo(() => {
       if (!isLogin) {
         return (
@@ -79,7 +110,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
               value={text}
               onChangeText={(e) => setText(e)}
             />
-            <TouchableOpacity>
+            <TouchableOpacity onPress={onAddPress}>
               <S.Submit>추가</S.Submit>
             </TouchableOpacity>
           </S.InputContainer>
@@ -93,7 +124,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
           </TouchableWithoutFeedback>
         );
       }
-    }, [isLogin, onLoginPress, text, inputProps, themeContext]);
+    }, [isLogin, onLoginPress, text, inputProps, themeContext, onAddPress]);
 
     return (
       <BottomSheet
