@@ -16,7 +16,7 @@ const MyQuestionList: FC<Props> = ({ userId }) => {
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
   useEffect(() => {
-    if (error && axios.isAxiosError(error) && error.response.status === 404) {
+    if (error && axios.isAxiosError(error) && error.response?.status === 404) {
       setIsEmpty(true);
     }
   }, [error]);
