@@ -74,6 +74,8 @@
     "@typescript-eslint/parser": "^5.17.0",
     "eslint": "^8.12.0",
     "eslint-plugin-react": "^7.29.4",
+    "react-native-flipper": "^0.140.0",
+    "react-query-native-devtools": "^4.0.0",
     "typescript": "~4.3.5"
   },
   "private": true
