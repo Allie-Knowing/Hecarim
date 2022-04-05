@@ -1,7 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlret";
+import useAlret from "hooks/useAlert";
 import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
 import { useTextAnswerMutation } from "queries/TextAnswer";
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
@@ -50,7 +50,7 @@ const Comment: FC<getTextAnswerList> = ({
   const ref = useRef<BottomSheetModal>(null);
   const { remove } = useTextAnswerMutation();
   const queryClient = useQueryClient();
-  const { closeAlret, showAlret } = useAlret();
+  const { closeAlret, showAlert: showAlret } = useAlret();
 
   const onDeletePress = useCallback(async () => {
     ref.current.close();

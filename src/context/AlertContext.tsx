@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
-export interface AlretContext {
-  showAlret: (alret: Alret) => void;
+export interface AlertContext {
+  showAlert: (alret: Alert) => void;
   closeAlret: (id: string) => void;
   currentAlretId: string | null;
 }
@@ -14,18 +14,18 @@ export interface Button {
   onPress: (id: string) => void;
 }
 
-export interface Alret {
+export interface Alert {
   title: string;
   content: string;
   buttons: Button[];
 }
 
-export interface AlretWithId extends Alret {
+export interface AlertWithId extends Alert {
   id: string;
 }
 
-export const alretContext = createContext<AlretContext>({
-  showAlret: () => {},
+export const alretContext = createContext<AlertContext>({
+  showAlert: () => {},
   closeAlret: () => {},
   currentAlretId: null,
 });

@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import storageKeys from "constant/storageKeys";
-import useAlret from "hooks/useAlret";
+import useAlret from "hooks/useAlert";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import React, { FC } from "react";
 import localStorage from "utils/localStorage";
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const LogoutButton: FC<Props> = ({ navigation }) => {
-  const { closeAlret, showAlret } = useAlret();
+  const { closeAlret, showAlert: showAlret } = useAlret();
 
   const logout = () => {
     showAlret({

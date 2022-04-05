@@ -1,4 +1,4 @@
-import { Alret, alretContext, AlretWithId } from "context/AlretContext";
+import { Alert, alretContext, AlertWithId } from "context/AlertContext";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AlretComponent, { AlretRef } from "../Alert";
 import { Dimensions } from "react-native";
@@ -11,18 +11,18 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import uniqueId from "constant/uniqueId";
-import { useTheme } from "styled-components";
+import { useTheme } from "styled-components/native";
 
 const { height, width } = Dimensions.get("screen");
 
 const AlretProvider: FC = ({ children }) => {
-  const [alrets, setAlrets] = useState<AlretWithId[]>([]);
+  const [alrets, setAlrets] = useState<AlertWithId[]>([]);
   const currentAlretRef = useRef<AlretRef>();
   const offset = useSharedValue(0);
   const theme = useTheme();
 
   const showAlret = useCallback(
-    (alret: Alret) => {
+    (alret: Alert) => {
       const callback = () => {
         const alretWithId = { ...alret, id: uniqueId() };
 
@@ -92,7 +92,7 @@ const AlretProvider: FC = ({ children }) => {
   return (
     <alretContext.Provider
       value={{
-        showAlret: runOnJS(showAlret),
+        showAlert: runOnJS(showAlret),
         closeAlret: runOnJS(closeAlret),
         currentAlretId,
       }}

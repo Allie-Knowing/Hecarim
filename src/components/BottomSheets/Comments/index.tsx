@@ -31,7 +31,7 @@ import useIsLogin from "hooks/useIsLogin";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlret";
+import useAlret from "hooks/useAlert";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -53,7 +53,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const [text, setText] = useState<string>("");
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
-    const { showAlret, closeAlret } = useAlret();
+    const { showAlert: showAlret, closeAlret } = useAlret();
 
     const renderBackdrop = useCallback(
       (props) => (

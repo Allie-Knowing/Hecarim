@@ -1,4 +1,4 @@
-import { alretContext } from "context/AlretContext";
+import { alretContext } from "context/AlertContext";
 import { useContext } from "react";
 
 const useAlret = () => useContext(alretContext);
