@@ -9,45 +9,31 @@ import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
-import useMyId from "utils/hooks/myId/useMyId";
-import useProfile from "utils/hooks/profile/useProfile";
+import { useMyId } from "queries/MyId";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
 };
 
 const MyPage: FC<Props> = ({ navigation }) => {
-  const myIdHooks = useMyId();
-  const profileHooks = useProfile();
+  const { data } = useMyId();
 
   useEffect(() => {
-    profileHooks.setState.reset();
-  }, []);
-
-  const getProfile = async () => {
-    if (!(await localStorage.getItem(storageKeys.accessToken))) {
-      navigation.push("Login");
-    } else {
-      myIdHooks.setState.myId();
-    }
-  };
-
-  useEffect(() => {
-    profileHooks.setState.profile({ id: myIdHooks.state.id });
-    profileHooks.setState.questionList({ id: myIdHooks.state.id });
-  }, [myIdHooks.state.id]);
-
-  useEffect(() => {
-    getProfile();
+    const isLogin = async () => {
+      if (!(await localStorage.getItem<string>(storageKeys.accessToken))) {
+        navigation.push("Login");
+      }
+    };
+    isLogin();
   }, []);
 
   return (
     <isStackContext.Provider value={false}>
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
-        <Profile />
+        <Profile userId={data?.data?.data} />
         <MakeKnowingBanner />
-        <MyQuestionList />
+        <MyQuestionList userId={data?.data?.data} />
       </S.Container>
     </isStackContext.Provider>
   );
