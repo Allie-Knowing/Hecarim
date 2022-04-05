@@ -8,7 +8,6 @@ export default function createRequestSaga(type: any, request: any) {
   const FAILURE = `${type}_FAILURE`;
   // asyncStorage를 위해 async 추가 예정
   return function* (action: any) {
-    // const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
     try {
       const accessToken: string = yield call(
         localStorage.getItem,
