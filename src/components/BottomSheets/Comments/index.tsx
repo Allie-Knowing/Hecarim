@@ -11,7 +11,7 @@ import {
   Suspense,
   useRef,
 } from "react";
-import { TouchableOpacity } from "react-native";
+import { ListRenderItem, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -67,9 +67,7 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
     >
       <S.Container>
         <S.Title>댓글</S.Title>
-        <Suspense fallback={<S.Message>글 답변 로딩 중</S.Message>}>
-          <TextAnswerList isOpen={isOpen} />
-        </Suspense>
+        <TextAnswerList isOpen={isOpen} />
       </S.Container>
       <S.InputContainer>
         <S.InputProfile source={TestImage} />
@@ -92,17 +90,36 @@ interface ListProps {
 }
 
 const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
-  const [page, setPage] = useState(1);
-  const { data, isLoading, isError, error } = useTextAnswerList({
-    questionId: 1,
-    page: page,
-    size: 20,
-    enabled: isOpen,
-  });
+  const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
+    1,
+    20,
+    isOpen
+  );
+
+  const renderItem: ListRenderItem<getTextAnswerList> = useCallback(
+    ({ item }) => {
+      return <Comment {...item} />;
+    },
+    []
+  );
 
   const onEndReached = useCallback(() => {
-    setPage((p) => p + 1);
-  }, []);
+    if (!isError) {
+      fetchNextPage();
+    }
+  }, [isError]);
+
+  const list = useMemo(
+    () =>
+      data
+        ? (data.pages || [])
+          .map((value) => value.data)
+          .reduce(function (acc, cur) {
+            return acc.concat(cur);
+          })
+        : [],
+    [data]
+  );
 
   if (isLoading) {
     return <S.Message>글 답변 목록 로딩중...</S.Message>;
@@ -114,13 +131,10 @@ const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
 
   return (
     <Fragment>
-      {data && data.length > 0 ? (
+      {data && list.length > 0 ? (
         <S.List
-          data={data}
-          keyExtractor={(value: getTextAnswerList) => `${value.id}`}
-          renderItem={({ item }) => (
-            <Comment {...(item as getTextAnswerList)} />
-          )}
+          data={list}
+          renderItem={renderItem}
           showsVerticalScrollIndicator={false}
           onEndReached={onEndReached}
         />
