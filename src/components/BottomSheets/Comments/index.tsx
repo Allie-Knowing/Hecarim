@@ -13,6 +13,8 @@ import {
 } from "react";
 import {
   ListRenderItem,
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -45,6 +47,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [inputProps, isFocus] = useFocus();
     const isLogin = useIsLogin();
+    const [text, setText] = useState<string>("");
 
     const renderBackdrop = useCallback(
       (props) => (
@@ -65,14 +68,16 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     }, [navigation, ref]);
 
     const input = useMemo(() => {
-      if (isLogin) {
+      if (!isLogin) {
         return (
           <S.InputContainer>
             <S.InputProfile source={TestImage} />
             <S.Input
-              placeholder="KJG04로 답변 추가"
+              placeholder="글 답변 작성하기..."
               placeholderTextColor={themeContext.colors.grayscale.scale30}
               {...inputProps}
+              value={text}
+              onChangeText={(e) => setText(e)}
             />
             <TouchableOpacity>
               <S.Submit>추가</S.Submit>
@@ -88,7 +93,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
           </TouchableWithoutFeedback>
         );
       }
-    }, [isLogin, onLoginPress]);
+    }, [isLogin, onLoginPress, text, inputProps, themeContext]);
 
     return (
       <BottomSheet
