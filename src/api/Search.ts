@@ -1,13 +1,10 @@
 import { instance, noTokenInstance } from "utils/axios";
 import uri from "constance/uri";
-import { searchPayload } from "constance/search";
+import { searchTitleResponse } from "modules/dto/response/searchResponse";
 
-export const getSearchTitleResponseApi = async (payload: searchPayload) => {
-  const data = await instance.get(
-    uri.title,
-    {
-      params: payload,
-    }
-  );
-  return data;
+export const getSearchTitle = async (q: string) => {
+  return await instance.get<searchTitleResponse>(uri.title, {
+    params: { q },
+  });
+
 }
