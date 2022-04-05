@@ -11,7 +11,7 @@ export const getTextAnswerApi = async (
   { questionId, page, size }: getTextAnswerListRequest
 ) => {
   const request = getRequest();
-  const url = `${uri.comment_answer}/${questionId}`;
+  const url = `${uri.commentAnswer}/${questionId}`;
 
   const data = await request.get(url, { params: { page, size } });
 
@@ -23,7 +23,7 @@ export const postTextAnswerApi = async (
   { questionId, content }: postTextAnswerRequest
 ) => {
   const request = getRequestWithAccessToken(access_token);
-  const url = `${uri.comment_answer}/${questionId}`;
+  const url = `${uri.commentAnswer}/${questionId}`;
 
   const data = await request.post(url, { content });
 
@@ -35,7 +35,7 @@ export const deleteTextAnswerApi = async (
   { commentId }: deleteTextAnswerRequest
 ) => {
   const request = getRequestWithAccessToken(access_token);
-  const url = `${uri.comment_answer}/${commentId}`;
+  const url = `${uri.commentAnswer}/${commentId}`;
 
   const data = await request.delete(url);
 
