@@ -2,11 +2,10 @@ import { deleteLike, postLike } from "api/Like";
 import { useMutation } from "react-query";
 
 const useLikeMutation = () => {
-  return useMutation((videoId: number) => postLike(videoId));
+  const like = useMutation((videoId: number) => postLike(videoId));
+  const unLike = useMutation((videoId: number) => deleteLike(videoId));
+
+  return { like, unLike };
 };
 
-const useUnlikeMutation = () => {
-  return useMutation((videoId: number) => deleteLike(videoId));
-};
-
-export default { useLikeMutation, useUnlikeMutation };
+export default { useLikeMutation };
