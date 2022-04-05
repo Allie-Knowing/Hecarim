@@ -56,7 +56,7 @@ const Comment: FC<getTextAnswerList> = ({
     ref.current.close();
     showAlret({
       title: "삭제하시겠습니까?",
-      content: "삭제된 댓글은 복구가\n불가능 합니다.",
+      content: "삭제된 답변은 복구가\n불가능 합니다.",
       buttons: [
         { text: "취소", color: "black", onPress: (id) => closeAlret(id) },
         {
