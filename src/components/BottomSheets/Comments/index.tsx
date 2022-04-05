@@ -45,10 +45,10 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   }, [isOpen]);
 
   const onEndReached = useCallback(() => {
-    if (state.error.status !== 404 && isOpen) {
+    if (state.error.statuscode !== 404 && isOpen) {
       setPage((prev) => prev + 1);
     }
-  }, [isOpen, state.error.status]);
+  }, [isOpen, state.error.statuscode]);
 
   return (
     <BottomSheet
@@ -111,7 +111,7 @@ const TextAnswerList: FC<ListProps> = ({
 
   useEffect(() => {
     if (isOpen && page !== requestedPage.current) {
-      setState.getTextAnswerList({ page, size: 10, questionId: 1 });
+      setState.getTextAnswerList({ page, size: 20, questionId: 1 });
       requestedPage.current = page;
     }
   }, [isOpen, page, requestedPage]);
