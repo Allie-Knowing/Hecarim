@@ -1,6 +1,11 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
-import { FC, useMemo } from "react";
+import { FC, Fragment, useCallback, useMemo, useRef } from "react";
+import { TouchableHighlight } from "react-native";
+import { Portal } from "react-native-portalize";
 import { useTheme } from "styled-components/native";
+import { useTextAnswer } from "utils/hooks/textAnswer";
 import * as S from "./styles";
 
 function timeForToday(value: string) {
@@ -32,35 +37,68 @@ const Comment: FC<getTextAnswerList> = ({
   user,
   content,
   id,
+  is_mine,
   is_adoption,
   created_at,
 }) => {
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
+  const ref = useRef<BottomSheetModal>(null);
+  const { setState } = useTextAnswer();
+
+  const onDeletePress = useCallback(() => {
+    setState.deleteTextAnswer({ commentId: id });
+  }, [id, setState]);
+
+  const toolItem = useMemo<ToolItem[]>(
+    () => [
+      {
+        color: theme.colors.red.default,
+        text: "삭제하기",
+        onPress: onDeletePress,
+      },
+    ],
+    [onDeletePress, theme.colors.red.default]
+  );
+
+  const onCommentPress = useCallback(() => {
+    ref.current.present();
+  }, []);
 
   return (
-    <S.Container
-      style={{
-        backgroundColor: is_adoption ? theme.colors.primary.default : undefined,
-      }}
-    >
-      <S.ProfileImage source={{ uri: profile }} />
-      <S.ContentContainer>
-        <S.HeaderContainer>
-          <S.Name>{`${user.name || ""}`}</S.Name>
-          <S.Date
-            style={{
-              color: is_adoption
-                ? theme.colors.grayscale.scale10
-                : theme.colors.grayscale.scale50,
-            }}
-          >
-            {timeForToday(created_at)}
-          </S.Date>
-        </S.HeaderContainer>
-        <S.Content>{`${content || ""}`}</S.Content>
-      </S.ContentContainer>
-    </S.Container>
+    <Fragment>
+      <TouchableHighlight onPress={is_mine ? onCommentPress : undefined}>
+        <S.Container
+          style={{
+            backgroundColor: is_adoption
+              ? theme.colors.primary.default
+              : undefined,
+          }}
+        >
+          <S.ProfileImage source={{ uri: profile }} />
+          <S.ContentContainer>
+            <S.HeaderContainer>
+              <S.Name>{`${user.name || ""}`}</S.Name>
+              <S.Date
+                style={{
+                  color: is_adoption
+                    ? theme.colors.grayscale.scale10
+                    : theme.colors.grayscale.scale50,
+                }}
+              >
+                {timeForToday(created_at)}
+              </S.Date>
+            </S.HeaderContainer>
+            <S.Content>{`${content || ""}`}</S.Content>
+          </S.ContentContainer>
+        </S.Container>
+      </TouchableHighlight>
+      {is_mine && (
+        <Portal>
+          <Tool ref={ref} items={toolItem} />
+        </Portal>
+      )}
+    </Fragment>
   );
 };
 
