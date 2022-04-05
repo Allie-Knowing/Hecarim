@@ -53,7 +53,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const [text, setText] = useState<string>("");
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
-    const { showAlert: showAlret, closeAlret } = useAlret();
+    const { showAlert: showAlret, closeAlert: closeAlret } = useAlret();
 
     const renderBackdrop = useCallback(
       (props) => (

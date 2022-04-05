@@ -1,6 +1,6 @@
-import { alretContext } from "context/AlertContext";
+import { alertContext } from "context/AlertContext";
 import { useContext } from "react";
 
-const useAlret = () => useContext(alretContext);
+const useAlret = () => useContext(alertContext);
 
 export default useAlret;

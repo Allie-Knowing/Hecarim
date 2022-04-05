@@ -50,7 +50,7 @@ const Comment: FC<getTextAnswerList> = ({
   const ref = useRef<BottomSheetModal>(null);
   const { remove } = useTextAnswerMutation();
   const queryClient = useQueryClient();
-  const { closeAlret, showAlert: showAlret } = useAlret();
+  const { closeAlert: closeAlret, showAlert: showAlret } = useAlret();
 
   const onDeletePress = useCallback(async () => {
     ref.current.close();

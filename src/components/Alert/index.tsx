@@ -25,7 +25,7 @@ const Alert = forwardRef<AlretRef, AlertWithId>(
   ({ title, content, buttons, id }, ref) => {
     const themeContext = useThemeContext();
     const offset = useSharedValue(0);
-    const { currentAlretId } = useAlret();
+    const { currentAlertId: currentAlretId } = useAlret();
 
     const colorMap = useMemo(
       () =>

@@ -11,7 +11,7 @@ type Props = {
 };
 
 const LogoutButton: FC<Props> = ({ navigation }) => {
-  const { closeAlret, showAlert: showAlret } = useAlret();
+  const { closeAlert: closeAlret, showAlert: showAlret } = useAlret();
 
   const logout = () => {
     showAlret({

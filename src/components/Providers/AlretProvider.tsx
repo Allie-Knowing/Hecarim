@@ -1,4 +1,4 @@
-import { Alert, alretContext, AlertWithId } from "context/AlertContext";
+import { Alert, alertContext, AlertWithId } from "context/AlertContext";
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AlretComponent, { AlretRef } from "../Alert";
 import { Dimensions } from "react-native";
@@ -90,11 +90,11 @@ const AlretProvider: FC = ({ children }) => {
   });
 
   return (
-    <alretContext.Provider
+    <alertContext.Provider
       value={{
         showAlert: runOnJS(showAlret),
-        closeAlret: runOnJS(closeAlret),
-        currentAlretId,
+        closeAlert: runOnJS(closeAlret),
+        currentAlertId: currentAlretId,
       }}
     >
       {children}
@@ -120,7 +120,7 @@ const AlretProvider: FC = ({ children }) => {
           />
         )}
       </Animated.View>
-    </alretContext.Provider>
+    </alertContext.Provider>
   );
 };
 
