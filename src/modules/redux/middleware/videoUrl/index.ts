@@ -1,5 +1,5 @@
 import { GET_VIDEO_URL } from "modules/redux/action/videoUrl/interface";
-import { getVideoUrl } from "utils/api/camera";
+import { getVideoUrl } from "utils/api/videoUrl";
 import createRequestSaga from "utils/saga/createRequestSaga";
 import { takeLatest } from "redux-saga/effects";
 
