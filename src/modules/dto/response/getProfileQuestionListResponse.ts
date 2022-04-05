@@ -1,4 +1,4 @@
-export type getProfileQuestionListResponse = ProfileQuestionType[];
+export type getProfileQuestionListResponse = { data: ProfileQuestionType[] };
 
 export type ProfileQuestionType = {
   id: number;
