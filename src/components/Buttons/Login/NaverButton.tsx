@@ -9,6 +9,7 @@ import env from "constant/env";
 import useSignin from "queries/Signin";
 
 const naver = require("../../../assets/icons/login/naver.png");
+const URI = `${env.naverUrl}${env.redirectUrl}`;
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
@@ -17,7 +18,7 @@ const NaverButton: FC<Props> = (navigation) => {
 
   const naverLogin = async () => {
     const result = await AuthSession.startAsync({
-      authUrl: env.naverUrl + env.redirectUrl,
+      authUrl: URI,
     });
 
     if (result.type === "success") {
