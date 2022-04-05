@@ -14,12 +14,15 @@ import useProfile from "utils/hooks/profile/useProfile";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
-  route: any;
 };
 
 const MyPage: FC<Props> = ({ navigation }) => {
   const myIdHooks = useMyId();
   const profileHooks = useProfile();
+
+  useEffect(() => {
+    profileHooks.setState.reset();
+  }, []);
 
   const getProfile = async () => {
     if (!(await localStorage.getItem(storageKeys.accessToken))) {

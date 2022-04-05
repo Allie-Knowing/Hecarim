@@ -5,7 +5,7 @@ export type MainStackParamList = {
   Main: undefined;
   StackedQuestionList: undefined;
   Login: undefined;
-  UserPage: undefined;
+  UserPage: { userId: number };
   Setting: undefined;
 };
 

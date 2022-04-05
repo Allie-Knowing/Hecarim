@@ -7,7 +7,7 @@ import {
   GET_PROFILE_QUESTION_LIST_FAILURE,
   GET_PROFILE_QUESTION_LIST_SUCCESS,
   GET_PROFILE_SUCCESS,
-  SET_ID,
+  RESET,
 } from "./interface";
 import { profileResponse } from "modules/dto/response/getProfileResponse";
 import { profileRequest } from "modules/dto/request/profileRequest";
@@ -26,7 +26,7 @@ export const getProfileQuestionListSuccess = createAction(
 export const getProfileQuestionListFailure = createAction(
   GET_PROFILE_QUESTION_LIST_FAILURE
 )<error>();
-export const setId = createAction(SET_ID)<number>();
+export const reset = createAction(RESET)();
 
 export type profileActionType =
   | ReturnType<typeof getProfile>
@@ -35,4 +35,4 @@ export type profileActionType =
   | ReturnType<typeof getProfileQuestionList>
   | ReturnType<typeof getProfileQuestionListFailure>
   | ReturnType<typeof getProfileQuestionListSuccess>
-  | ReturnType<typeof setId>;
+  | ReturnType<typeof reset>;

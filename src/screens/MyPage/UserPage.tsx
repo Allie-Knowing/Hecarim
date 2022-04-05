@@ -8,19 +8,21 @@ import MakeKnowingBanner from "components/MakeKnowingBanner";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
 import useProfile from "utils/hooks/profile/useProfile";
-import useMyId from "utils/hooks/myId/useMyId";
+import { RouteProp } from "@react-navigation/native";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
+  route: RouteProp<MainStackParamList, "UserPage">;
 };
 
-const UserPage: FC<Props> = ({ navigation }) => {
+const UserPage: FC<Props> = ({ route, navigation }) => {
   const { state, setState } = useProfile();
 
   useEffect(() => {
-    setState.profile({ id: state.userId });
-    setState.questionList({ id: state.userId });
-  }, [state.userId]);
+    setState.reset();
+    setState.profile({ id: route.params.userId });
+    setState.questionList({ id: route.params.userId });
+  }, []);
 
   return (
     <isStackContext.Provider value={true}>

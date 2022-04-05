@@ -14,9 +14,9 @@ type Props = {
 const MyQuestion: FC<Props> = ({ question }) => {
   return (
     <S.Question
-      source={questionImage}
+      source={question?.thumbnail ? { uri: question.thumbnail } : questionImage}
       imageWidth={width / 2 - 30}
-      resizeMode="contain"
+      resizeMode="cover"
     />
   );
 };
