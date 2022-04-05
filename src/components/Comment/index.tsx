@@ -41,16 +41,22 @@ const Comment: FC<getTextAnswerList> = ({
   return (
     <S.Container
       style={{
-        backgroundColor: !is_adoption
-          ? theme.colors.primary.default
-          : undefined,
+        backgroundColor: is_adoption ? theme.colors.primary.default : undefined,
       }}
     >
       <S.ProfileImage source={{ uri: profile }} />
       <S.ContentContainer>
         <S.HeaderContainer>
           <S.Name>{`${user.name || ""}`}</S.Name>
-          <S.Date>{timeForToday(created_at)}</S.Date>
+          <S.Date
+            style={{
+              color: is_adoption
+                ? theme.colors.grayscale.scale10
+                : theme.colors.grayscale.scale50,
+            }}
+          >
+            {timeForToday(created_at)}
+          </S.Date>
         </S.HeaderContainer>
         <S.Content>{`${content || ""}`}</S.Content>
       </S.ContentContainer>
