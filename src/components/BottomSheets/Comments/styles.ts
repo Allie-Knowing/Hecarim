@@ -56,3 +56,9 @@ export const Input = styled(BottomSheetTextInput)`
   font: ${({ theme }) => theme.fonts.body3};
   color: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
+
+export const InputMessage = styled.Text`
+  font: ${({ theme }) => theme.fonts.body3};
+  color: ${({ theme }) => theme.colors.grayscale.scale50};
+  padding: 8px;
+`;

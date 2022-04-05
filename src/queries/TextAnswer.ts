@@ -4,27 +4,33 @@ import {
   postTextAnswer,
 } from "api/TextAnswer";
 import queryKeys from "constant/queryKeys";
-import { useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 
-export const useTextAnswerList = ({
-  page,
-  questionId,
-  enabled,
-  size,
-}: {
-  questionId: number;
-  page: number;
-  size: number;
-  enabled: boolean;
-}) =>
-  useQuery(
-    [queryKeys.questionList, questionId, queryKeys.textAnswerList, page],
-    async () => (await getTextAnswerList(questionId, page, size)).data.data,
+export const useTextAnswerList = (
+  questionId: number,
+  size: number,
+  enabled: boolean
+) => {
+  const key = [
+    queryKeys.question,
+    queryKeys.questionId(questionId),
+    queryKeys.textAnswerList,
+  ];
+
+  return useInfiniteQuery(
+    key,
+    async ({ pageParam = 1 }) => {
+      const response = await getTextAnswerList(questionId, pageParam, size);
+
+      return { page: pageParam, data: response.data.data };
+    },
     {
-      enabled,
+      enabled: enabled,
       keepPreviousData: true,
+      getNextPageParam: (lastPage) => lastPage.page + 1,
     }
   );
+};
 
 export const useTextAnswerMutation = () => {
   const post = useMutation(
