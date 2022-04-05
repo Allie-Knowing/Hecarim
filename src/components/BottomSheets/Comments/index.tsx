@@ -20,6 +20,8 @@ import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import { useTextAnswer } from "../../../utils/hooks/textAnswer";
 import { getTextAnswerList } from "../../../modules/dto/response/textAnswerResponse";
+import { useTextAnswerList } from "queries/TextAnswer";
+import axios from "axios";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -32,27 +34,6 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputProps, isFocus] = useFocus();
-  const { state, setState } = useTextAnswer();
-  const [page, setPage] = useState<number>(1);
-  const requestedPage = useRef<number>(-1);
-
-  useEffect(() => {
-    if (isOpen) {
-      setState.getTextAnswerList({ page: 1, size: 20, questionId: 1 });
-    } else {
-      setState.resetTextAnswerList();
-    }
-  }, [isOpen]);
-
-  const onEndReached = useCallback(() => {
-    if (state.error.statuscode !== 404 && isOpen) {
-      setPage((prev) => {
-        const p = prev + 1;
-        setState.getTextAnswerList({ page: p, size: 20, questionId: 1 });
-        return p;
-      });
-    }
-  }, [isOpen, setState, state.error.statuscode]);
 
   const renderBackdrop = useCallback(
     (props) => (
@@ -87,7 +68,7 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
       <S.Container>
         <S.Title>댓글</S.Title>
         <Suspense fallback={<S.Message>글 답변 로딩 중</S.Message>}>
-          <TextAnswerList {...{ isOpen, onEndReached, page, requestedPage }} />
+          <TextAnswerList isOpen={isOpen} />
         </Suspense>
       </S.Container>
       <S.InputContainer>
@@ -107,38 +88,41 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
 });
 
 interface ListProps {
-  onEndReached: () => void;
+  isOpen: boolean;
 }
 
-const TextAnswerList: FC<ListProps> = ({ onEndReached }) => {
-  const { state } = useTextAnswer();
+const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
+  const [page, setPage] = useState(1);
+  const { data, isLoading, isError, error } = useTextAnswerList({
+    questionId: 1,
+    page: page,
+    size: 20,
+    enabled: isOpen,
+  });
 
-  const data = useMemo(
-    () => state.getTextAnswerListResponse.data,
-    [state.getTextAnswerListResponse.data]
-  );
+  const onEndReached = useCallback(() => {
+    setPage((p) => p + 1);
+  }, []);
 
-  if (!data) {
-    if (state.error.statuscode === 500) {
-      return <S.Message>글 답변 목록 오류</S.Message>;
-    } else {
-      return <S.Message>글 답변 목록 로딩중...</S.Message>;
-    }
+  if (isLoading) {
+    return <S.Message>글 답변 목록 로딩중...</S.Message>;
+  }
+
+  if (isError && axios.isAxiosError(error) && error.response.status !== 404) {
+    return <S.Message>글 답변 목록 오류</S.Message>;
   }
 
   return (
     <Fragment>
-      {data.length > 0 ? (
+      {data && data.length > 0 ? (
         <S.List
           data={data}
-          keyExtractor={(value: getTextAnswerList) =>
-            `comment_${value.id}_${value.user.id}`
-          }
-          renderItem={({ item }: { item: getTextAnswerList }) => (
-            <Comment {...item} />
+          keyExtractor={(value: getTextAnswerList) => `${value.id}`}
+          renderItem={({ item }) => (
+            <Comment {...(item as getTextAnswerList)} />
           )}
-          onEndReached={onEndReached}
           showsVerticalScrollIndicator={false}
+          onEndReached={onEndReached}
         />
       ) : (
         <S.Message>글 답변이 없습니다</S.Message>
