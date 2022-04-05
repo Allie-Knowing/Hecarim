@@ -10,7 +10,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 
-type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "CameraDetailPage">;
 
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -65,7 +65,7 @@ const CameraComponent: FC = (): JSX.Element => {
             alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
-          navigation.navigate("VideoDetailPage");
+          navigation.navigate("CameraDetailPage");
         }
       });
     }
@@ -118,7 +118,7 @@ const CameraComponent: FC = (): JSX.Element => {
         maxDuration: MAX_DURATION,
       });
       setUri(videoRecordPromise.uri);
-      navigation.navigate("VideoDetailPage");
+      navigation.navigate("CameraDetailPage");
     }
   };
 

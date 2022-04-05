@@ -1,18 +1,15 @@
 import { FC } from "react";
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import CameraComponent from "./Camera";
 import VideoDetail from "./VideoDetail";
 import CameraProvider from "../../context/CameraContext";
 
 export type RootStackParamList = {
   CameraPage: undefined;
-  VideoDetailPage: undefined;
+  CameraDetailPage: undefined;
 };
 
-const Question: FC = (): JSX.Element => {
+const Camera: FC = (): JSX.Element => {
   const Root = createStackNavigator<RootStackParamList>();
   return (
     <CameraProvider>
@@ -24,10 +21,10 @@ const Question: FC = (): JSX.Element => {
         }}
       >
         <Root.Screen name="CameraPage" component={CameraComponent} />
-        <Root.Screen name="VideoDetailPage" component={VideoDetail} />
+        <Root.Screen name="CameraDetailPage" component={VideoDetail} />
       </Root.Navigator>
     </CameraProvider>
   );
 };
 
-export default Question;
+export default Camera;
