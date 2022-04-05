@@ -1,14 +1,14 @@
 import { useDispatch } from "react-redux";
 import { getVideoUrlRequest } from "modules/dto/request/getVideoUrlRequest";
-import { postVideoUpload } from "modules/redux/action/videoUrl";
+import { getVideoUrl } from "modules/redux/action/videoUrl";
 import useSelectState from "../default/useSelectState";
 
 const useGetVideoUrl = () => {
   const dispatch = useDispatch();
-  const state = useSelectState().camera;
+  const state = useSelectState().videoUrl;
   const setState = {
-    postVideo: (payload: getVideoUrlRequest) => {
-      dispatch(postVideoUpload(payload));
+    getVideoUrl: (payload: getVideoUrlRequest) => {
+      dispatch(getVideoUrl(payload));
     },
   };
 
