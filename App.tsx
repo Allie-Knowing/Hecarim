@@ -27,7 +27,9 @@ import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
 
 const Root = createStackNavigator<MainStackParamList>();
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 if (__DEV__) {
   import("react-query-native-devtools").then(({ addPlugin }) => {
