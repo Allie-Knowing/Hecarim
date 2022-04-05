@@ -1,6 +1,7 @@
 import {
   deleteQuestion,
   getQuestionDetail,
+  getQuestionHashtag,
   getQuestionList,
 } from "api/Question";
 import queryKeys from "constant/queryKeys";
@@ -32,7 +33,7 @@ const useQuestionHashtag = (videoId: number) =>
       queryKeys.questionId(videoId),
       queryKeys.questionHashtag,
     ],
-    () => getQuestionDetail(videoId)
+    () => getQuestionHashtag(videoId)
   );
 
 const useQuestionMutation = () => {
