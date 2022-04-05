@@ -43,6 +43,9 @@ module.exports = {
     "no-irregular-whitespace": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off",
   },
   settings: {
     react: {

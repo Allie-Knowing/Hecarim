@@ -2,17 +2,14 @@ import React, { FC, Fragment } from "react";
 import {
   CardStyleInterpolators,
   createStackNavigator,
+  StackNavigationProp,
 } from "@react-navigation/stack";
 import { useSearch } from "utils/hooks/search";
+import { RootStackParamList } from "hooks/useSearchStackNavigation";
 import useThemeContext from "hooks/useThemeContext";
 import DefaultSearchPage from "components/SearchPage/SearchResults/DefaultSearchPage";
 import SearchedQuestionsPage from "components/SearchPage/SearchResults/SearchedQuestionsPage";
 import BackBtn from "components/SearchPage/SearchResults/SearchedQuestionsPage/BackBtn";
-
-export type RootStackParamList = {
-  DefaultSearchPage: undefined;
-  SearchedQuestions: undefined;
-};
 
 const Root = createStackNavigator<RootStackParamList>();
 
@@ -34,7 +31,6 @@ const Search: FC = () => {
       >
         <Root.Screen
           name="DefaultSearchPage"
-          component={() => <DefaultSearchPage {...state} {...setState} />}
           options={{
             headerTitle: "검색",
             headerTitleStyle: {
@@ -49,10 +45,11 @@ const Search: FC = () => {
               alignItems: "center",
             },
           }}
-        />
+        >
+          {(props) => <DefaultSearchPage {...props} {...state} {...setState} />}
+        </Root.Screen>
         <Root.Screen
           name="SearchedQuestions"
-          component={() => <SearchedQuestionsPage {...state} {...setState} />}
           options={{
             headerTitle: "검색된 질문",
             headerTitleStyle: {
@@ -72,7 +69,11 @@ const Search: FC = () => {
             },
             headerLeft: () => <BackBtn />,
           }}
-        />
+        >
+          {(props) => (
+            <SearchedQuestionsPage {...props} {...state} {...setState} />
+          )}
+        </Root.Screen>
       </Root.Navigator>
     </Fragment>
   );
