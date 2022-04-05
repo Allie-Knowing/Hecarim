@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 export const useProfile = (userId: number) =>
   useQuery([queryKeys.profile, userId], () => getProfileApi({ id: userId }), {
     enabled: true,
+    refetchOnMount: "always",
   });
 
 export const useProfileQuestionList = (userId: number) =>
@@ -13,5 +14,6 @@ export const useProfileQuestionList = (userId: number) =>
     () => getProfilQuestionListApi({ id: userId }),
     {
       enabled: true,
+      refetchOnMount: "always",
     }
   );
