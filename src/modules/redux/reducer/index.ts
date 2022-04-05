@@ -7,6 +7,7 @@ import textAnswerReducer from "./textAnswer";
 import videoUrlReducer from "./videoUrl";
 import answerReducer from "./answer";
 import searchReducer from "./search";
+import videoDataReducer from "./videoData";
 
 const rootReducer = combineReducers({
   signin: signinReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   textAnswer: textAnswerReducer,
   videoUrl: videoUrlReducer,
   search: searchReducer,
+  videoData: videoDataReducer,
 });
 
 export type reducerType = ReturnType<typeof rootReducer>;
