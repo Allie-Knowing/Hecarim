@@ -13,12 +13,16 @@ export interface VideoAnswer {
   is_mine: boolean;
 }
 
+export interface getVideoAnswerListResponse {
+  data: VideoAnswer[];
+}
+
 export const getVideoAnswerList = async (
   questionId: number,
   page: number,
   size: number
 ) => {
-  return await noTokenInstance.get<VideoAnswer[]>(
+  return await noTokenInstance.get<getVideoAnswerListResponse>(
     `${uri.videoAnswer}/${questionId}`,
     {
       params: { page, size },
