@@ -118,9 +118,17 @@ const TextAnswerList: FC<ListProps> = ({ onEndReached }) => {
     [state.getTextAnswerListResponse.data]
   );
 
+  if (!data) {
+    if (state.error.statuscode === 500) {
+      return <S.Message>글 답변 목록 오류</S.Message>;
+    } else {
+      return <S.Message>글 답변 목록 로딩중...</S.Message>;
+    }
+  }
+
   return (
     <Fragment>
-      {data && data.length > 0 ? (
+      {data.length > 0 ? (
         <S.List
           data={data}
           keyExtractor={(value: getTextAnswerList) =>

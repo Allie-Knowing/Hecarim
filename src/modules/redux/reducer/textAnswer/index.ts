@@ -33,7 +33,7 @@ const textAnswerReducer = (
         ...state,
         getTextAnswerListResponse: {
           data: [
-            ...state.getTextAnswerListResponse.data,
+            ...(state.getTextAnswerListResponse.data || []),
             ...action.payload.data,
           ],
         },
@@ -41,9 +41,7 @@ const textAnswerReducer = (
     case RESET_TEXT_ANSWER_LIST:
       return {
         ...state,
-        getTextAnswerListResponse: {
-          data: [],
-        },
+        getTextAnswerListResponse: {},
         error: {
           statuscode: 0,
           message: "",
