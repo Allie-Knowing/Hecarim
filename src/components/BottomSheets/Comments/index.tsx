@@ -100,7 +100,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     }, [post, text, queryClient]);
 
     const input = useMemo(() => {
-      if (!isLogin) {
+      if (isLogin) {
         return (
           <S.InputContainer>
             <S.InputProfile source={TestImage} />

@@ -18,15 +18,15 @@ interface PropsType {
 }
 
 const FeedVideos: FC<PropsType> = ({ dataList, onEndReached }) => {
-  const [, setPage] = useState(0);
+  const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
     setPage(newPage);
   };
 
-  const renderItem: ListRenderItem<Question> = ({ item }) => (
-    <FeedContent {...item} />
+  const renderItem: ListRenderItem<Question> = ({ item, index }) => (
+    <FeedContent isCurrentPage={index === page} {...item} />
   );
 
   return (

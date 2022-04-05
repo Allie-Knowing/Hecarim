@@ -2,9 +2,8 @@ import React, { FC, useCallback, useMemo } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
 import { useQuestionList } from "queries/Question";
-import axios from "axios";
 
-const size = 50;
+const size = 20;
 
 const Feed: FC = () => {
   const { data, fetchNextPage, isError } = useQuestionList(size);

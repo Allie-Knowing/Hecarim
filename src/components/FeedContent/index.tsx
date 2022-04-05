@@ -3,6 +3,7 @@ import React, {
   Fragment,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -19,6 +20,8 @@ import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
+import { Video } from "expo-av";
+import { useQuestionHashtag } from "queries/Question";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -28,7 +31,11 @@ const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
-const FeedContent: FC<Question> = ({
+interface PropsType {
+  isCurrentPage: boolean;
+}
+
+const FeedContent: FC<Question & PropsType> = ({
   id,
   video_url,
   title,
@@ -40,6 +47,7 @@ const FeedContent: FC<Question> = ({
   like_cnt,
   profile,
   user_id,
+  isCurrentPage,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
@@ -51,6 +59,8 @@ const FeedContent: FC<Question> = ({
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
   const { like, unLike } = useLikeMutation(id);
+  const { data } = useQuestionHashtag(id);
+  const videoRef = useRef<Video>(null);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -139,10 +149,23 @@ const FeedContent: FC<Question> = ({
     [themeContext]
   );
 
+  useEffect(() => {
+    if (isCurrentPage) {
+      videoRef.current.playAsync();
+    } else {
+      videoRef.current.pauseAsync();
+    }
+  }, [isCurrentPage]);
+
   return (
     <Fragment>
       <S.Container style={{ height }}>
-        <S.Video source={{ uri: video_url }} isLooping resizeMode="contain" />
+        <S.Video
+          source={{ uri: video_url }}
+          isLooping
+          resizeMode="cover"
+          ref={videoRef}
+        />
         <S.BackBlack
           colors={["transparent", themeContext.colors.grayscale.scale100]}
           style={{ height: `${isMore ? 50 : 0}%` }}
@@ -160,12 +183,7 @@ const FeedContent: FC<Question> = ({
               <S.Description numberOfLines={isMore ? undefined : 1}>
                 {description}
               </S.Description>
-              {isMore && (
-                <S.HashTag>
-                  #쇼미 #쇼미10 #국힙원탑 #이찬혁 #힙합 #노래 #디자인 #개하기
-                  #싫다 #임연상 #니가 #하라고
-                </S.HashTag>
-              )}
+              {isMore && <Hashtag id={id} />}
             </S.InfoContainer>
           </S.InfoOuter>
           <View>
@@ -183,13 +201,13 @@ const FeedContent: FC<Question> = ({
               </S.IconContainer>
               <S.IconContainer>
                 <S.Icon resizeMode="contain" source={Heart} />
-                <S.IconLabel>{formattedNumber(123456)}</S.IconLabel>
+                <S.IconLabel>{formattedNumber(like_cnt)}</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
               >
                 <S.Icon resizeMode="contain" source={Comment} />
-                <S.IconLabel>{formattedNumber(56)}</S.IconLabel>
+                <S.IconLabel>{formattedNumber(comment_cnt)}</S.IconLabel>
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
