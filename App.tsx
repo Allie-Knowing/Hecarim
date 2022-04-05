@@ -90,7 +90,7 @@ export default function App() {
                         <Root.Screen
                           name="UserPage"
                           component={UserPage}
-                          options={{ headerShown: false }}
+                          options={{ title: "" }}
                         />
                       </Root.Navigator>
                     </Host>
