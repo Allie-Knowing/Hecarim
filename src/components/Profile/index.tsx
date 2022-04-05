@@ -1,18 +1,32 @@
-import React, { FC } from "react";
-import useProfile from "utils/hooks/profile/useProfile";
+import { useProfile } from "queries/Profile";
+import React, { FC, useEffect } from "react";
 import * as S from "./style";
 
-const Profile: FC = () => {
-  const { state } = useProfile();
+type Props = {
+  userId: number;
+};
+
+const Profile: FC<Props> = ({ userId }) => {
+  const { data, isLoading, isError, error } = useProfile(userId);
 
   return (
-    <S.Container>
-      <S.ProfileImage source={{ uri: state.profile }} />
-      <S.ProfileContent>
-        <S.Nickname>{state.name ? state.name : ""}</S.Nickname>
-        <S.Description>내가 올린 질문 {state.videoCnt}개</S.Description>
-      </S.ProfileContent>
-    </S.Container>
+    <>
+      <S.Container>
+        {data && (
+          <>
+            <S.ProfileImage source={{ uri: data.data.data.profile }} />
+            <S.ProfileContent>
+              <S.Nickname>{data.data.data.name}</S.Nickname>
+              <S.Description>
+                내가 올린 질문 {data.data.data.video_cnt}개
+              </S.Description>
+            </S.ProfileContent>
+          </>
+        )}
+        {isLoading && <S.Message>잠시만 기다려주세요.</S.Message>}
+        {error && <S.Message>사용자 정보를 불러올 수 없습니다.</S.Message>}
+      </S.Container>
+    </>
   );
 };
 
