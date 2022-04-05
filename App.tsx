@@ -1,4 +1,4 @@
-import React from "react-native";
+import React, { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
 import { ThemeProvider } from "styled-components/native";

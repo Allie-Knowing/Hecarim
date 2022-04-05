@@ -191,7 +191,10 @@ const FeedContent: FC = () => {
         </S.Content>
       </S.Container>
       <Portal>
-        <CommentBottomSheet ref={commentBottomSheetRef} />
+        <CommentBottomSheet
+          navigation={navigation}
+          ref={commentBottomSheetRef}
+        />
         <Tool ref={toolSheetRef} items={items} />
         <Tool ref={reportSheetRef} items={reportItems} />
         <Tool ref={confirmSheetRef} items={comfirmItems} />
