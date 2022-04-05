@@ -4,7 +4,7 @@ import {
   GET_PROFILE_QUESTION_LIST_FAILURE,
   GET_PROFILE_QUESTION_LIST_SUCCESS,
   GET_PROFILE_SUCCESS,
-  SET_ID,
+  RESET,
 } from "modules/redux/action/profile/interface";
 import ProfileState from "./interface";
 
@@ -22,7 +22,6 @@ const initState: ProfileState = {
   profile: "",
   name: "",
   videoCnt: 0,
-  userId: 0,
   questionList: [],
 };
 
@@ -53,11 +52,8 @@ const profileReducer = (
         ...state,
         questionError: action.payload,
       };
-    case SET_ID:
-      return {
-        ...state,
-        userId: action.payload,
-      };
+    case RESET:
+      return initState;
     default:
       return state;
   }

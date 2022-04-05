@@ -7,7 +7,6 @@ interface ProfileState {
   profile: string;
   name: string;
   videoCnt: number;
-  userId: number;
   questionList: ProfileQuestionType[];
 }
 
