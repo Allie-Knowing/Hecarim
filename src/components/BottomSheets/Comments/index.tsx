@@ -39,11 +39,8 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
 
   useEffect(() => {
     if (isOpen) {
-      if (requestedPage.current === 1) {
-        setState.getTextAnswerList({ page: 1, size: 30, questionId: 1 });
-      } else {
-        setPage(1);
-      }
+      setState.resetTextAnswerList();
+      setPage(1);
     }
   }, [isOpen]);
 
@@ -114,10 +111,10 @@ const TextAnswerList: FC<ListProps> = ({
 
   useEffect(() => {
     if (isOpen && page !== requestedPage.current) {
-      setState.getTextAnswerList({ page, size: 30, questionId: 1 });
+      setState.getTextAnswerList({ page, size: 10, questionId: 1 });
       requestedPage.current = page;
     }
-  }, [isOpen, page, requestedPage, setState]);
+  }, [isOpen, page, requestedPage]);
 
   return (
     <Fragment>
