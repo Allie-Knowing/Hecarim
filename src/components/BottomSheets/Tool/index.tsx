@@ -1,12 +1,12 @@
-import BottomSheet, {
+import {
+  BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet";
 import useThemeContext from "hooks/useThemeContext";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useCallback } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import * as S from "./styles";
 
@@ -22,7 +22,6 @@ export interface ToolItem {
 
 const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const themeContext = useThemeContext();
   const {
     animatedSnapPoints,
@@ -31,6 +30,19 @@ const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
     handleContentLayout,
   } = useBottomSheetDynamicSnapPoints(["CONTENT_HEIGHT"]);
 
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        enableTouchThrough={false}
+        pressBehavior={"close"}
+      />
+    ),
+    []
+  );
+
   return (
     <BottomSheetModal
       ref={ref}
@@ -38,8 +50,7 @@ const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
       index={0}
-      onChange={(index) => setIsOpen(index !== -1)}
-      backdropComponent={DefaultBackDropComponent(isOpen)}
+      backdropComponent={renderBackdrop}
       enablePanDownToClose
       enableDismissOnClose
       handleIndicatorStyle={{

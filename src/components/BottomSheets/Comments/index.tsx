@@ -14,9 +14,8 @@ import {
 import { TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import * as S from "./styles";
-import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import { useTextAnswer } from "../../../utils/hooks/textAnswer";
@@ -39,16 +38,34 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
 
   useEffect(() => {
     if (isOpen) {
+      setState.getTextAnswerList({ page: 1, size: 20, questionId: 1 });
+    } else {
       setState.resetTextAnswerList();
-      setPage(1);
     }
   }, [isOpen]);
 
   const onEndReached = useCallback(() => {
     if (state.error.statuscode !== 404 && isOpen) {
-      setPage((prev) => prev + 1);
+      setPage((prev) => {
+        const p = prev + 1;
+        setState.getTextAnswerList({ page: p, size: 20, questionId: 1 });
+        return p;
+      });
     }
-  }, [isOpen, state.error.statuscode]);
+  }, [isOpen, setState, state.error.statuscode]);
+
+  const renderBackdrop = useCallback(
+    (props) => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        enableTouchThrough={false}
+        pressBehavior={"close"}
+      />
+    ),
+    []
+  );
 
   return (
     <BottomSheet
@@ -56,7 +73,7 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
       snapPoints={["70%"]}
       enablePanDownToClose
       index={-1}
-      backdropComponent={DefaultBackDropComponent(isOpen)}
+      backdropComponent={renderBackdrop}
       backgroundComponent={StyledBackgroundComponent}
       handleIndicatorStyle={{
         backgroundColor: themeContext.colors.grayscale.scale50,
@@ -90,31 +107,16 @@ const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
 });
 
 interface ListProps {
-  page: number;
-  isOpen: boolean;
   onEndReached: () => void;
-  requestedPage: React.MutableRefObject<number>;
 }
 
-const TextAnswerList: FC<ListProps> = ({
-  isOpen,
-  onEndReached,
-  page,
-  requestedPage,
-}) => {
-  const { state, setState } = useTextAnswer();
+const TextAnswerList: FC<ListProps> = ({ onEndReached }) => {
+  const { state } = useTextAnswer();
 
   const data = useMemo(
     () => state.getTextAnswerListResponse.data,
     [state.getTextAnswerListResponse.data]
   );
-
-  useEffect(() => {
-    if (isOpen && page !== requestedPage.current) {
-      setState.getTextAnswerList({ page, size: 20, questionId: 1 });
-      requestedPage.current = page;
-    }
-  }, [isOpen, page, requestedPage]);
 
   return (
     <Fragment>
