@@ -216,4 +216,28 @@ const FeedContent: FC<Question> = ({
   );
 };
 
+interface HashtagProps {
+  id: number;
+}
+
+const Hashtag: FC<HashtagProps> = ({ id }) => {
+  const { data, isLoading, isError } = useQuestionHashtag(id);
+
+  if (isLoading) {
+    return <S.Description>해쉬태그 로딩 중...</S.Description>;
+  }
+
+  if (isError) {
+    return <S.Description>해쉬태그를 가져오는 중 오류 발생</S.Description>;
+  }
+
+  return (
+    <Fragment>
+      <S.HashTag>
+        {data.data.data.map((value) => `#${value.title}`).join(" ")}
+      </S.HashTag>
+    </Fragment>
+  );
+};
+
 export default FeedContent;
