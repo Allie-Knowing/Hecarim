@@ -7,11 +7,11 @@ const initState: answerState = {
     data: [],
   },
   error: {
-    status: 0,
-    message: "",
-    type: "",
-  },
-};
+    statuscode: 0,
+    message: '',
+    type: '',
+  }
+}
 
 const answerReducer = (state: answerState = initState, action: answerActionType): answerState => {
   switch (action.type) {

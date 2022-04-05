@@ -17,7 +17,7 @@ const initState: VideoUrlState = {
     },
   },
   error: {
-    status: 0,
+    statuscode: 0,
     message: "",
     type: "",
   },

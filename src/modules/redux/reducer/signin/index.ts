@@ -14,7 +14,7 @@ const initState: SigninState = {
   isSignin: false,
   error: {
     type: "",
-    status: 0,
+    statuscode: 0,
     message: "",
   },
 };

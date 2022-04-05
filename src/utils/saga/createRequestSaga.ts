@@ -23,6 +23,8 @@ export default function createRequestSaga(type: any, request: any) {
         payload: response ? response.data : null,
       });
     } catch (e) {
+      console.log(e);
+
       if (e.response?.data) {
         yield put({
           type: FAILURE,
@@ -33,7 +35,7 @@ export default function createRequestSaga(type: any, request: any) {
           type: FAILURE,
           payload: {
             message: `Network Error`,
-            status: 500,
+            statuscode: 500,
           },
         });
       }

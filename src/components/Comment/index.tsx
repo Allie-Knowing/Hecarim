@@ -1,22 +1,104 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import Tool, { ToolItem } from "components/BottomSheets/Tool";
+import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
+import { FC, Fragment, useCallback, useMemo, useRef } from "react";
+import { TouchableHighlight } from "react-native";
+import { Portal } from "react-native-portalize";
+import { useTheme } from "styled-components/native";
+import { useTextAnswer } from "utils/hooks/textAnswer";
 import * as S from "./styles";
 
-const TestImage = require("../../assets/feed_test.jpg");
+function timeForToday(value: string) {
+  const today = new Date();
+  const timeValue = new Date(value);
 
-const Comment = () => {
+  const betweenTime = Math.floor(
+    (today.getTime() - timeValue.getTime()) / 1000 / 60
+  );
+  if (betweenTime < 1) return "방금전";
+  if (betweenTime < 60) {
+    return `${betweenTime}분전`;
+  }
+
+  const betweenTimeHour = Math.floor(betweenTime / 60);
+  if (betweenTimeHour < 24) {
+    return `${betweenTimeHour}시간전`;
+  }
+
+  const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+  if (betweenTimeDay < 365) {
+    return `${betweenTimeDay}일전`;
+  }
+
+  return `${Math.floor(betweenTimeDay / 365)}년전`;
+}
+
+const Comment: FC<getTextAnswerList> = ({
+  user,
+  content,
+  id,
+  is_mine,
+  is_adoption,
+  created_at,
+}) => {
+  const profile = useMemo(() => user?.profile || "", [user?.profile]);
+  const theme = useTheme();
+  const ref = useRef<BottomSheetModal>(null);
+  const { setState } = useTextAnswer();
+
+  const onDeletePress = useCallback(() => {
+    setState.deleteTextAnswer({ commentId: id });
+  }, [id, setState]);
+
+  const toolItem = useMemo<ToolItem[]>(
+    () => [
+      {
+        color: theme.colors.red.default,
+        text: "삭제하기",
+        onPress: onDeletePress,
+      },
+    ],
+    [onDeletePress, theme.colors.red.default]
+  );
+
+  const onCommentPress = useCallback(() => {
+    ref.current.present();
+  }, []);
+
   return (
-    <S.Container>
-      <S.ProfileImage source={TestImage} />
-      <S.ContentContainer>
-        <S.HeaderContainer>
-          <S.Name>안병헌</S.Name>
-          <S.Date>1일전</S.Date>
-        </S.HeaderContainer>
-        <S.Content>
-          이런 코드가 대량으로 있을 때 앞자리 열린 태그만 동시선택해서 바꾸면,
-          뒷 자리 닫힌 태그도 자동으로 타이핑한 태그로 변경됩니다.
-        </S.Content>
-      </S.ContentContainer>
-    </S.Container>
+    <Fragment>
+      <TouchableHighlight onPress={is_mine ? onCommentPress : undefined}>
+        <S.Container
+          style={{
+            backgroundColor: is_adoption
+              ? theme.colors.primary.default
+              : undefined,
+          }}
+        >
+          <S.ProfileImage source={{ uri: profile }} />
+          <S.ContentContainer>
+            <S.HeaderContainer>
+              <S.Name>{`${user.name || ""}`}</S.Name>
+              <S.Date
+                style={{
+                  color: is_adoption
+                    ? theme.colors.grayscale.scale10
+                    : theme.colors.grayscale.scale50,
+                }}
+              >
+                {timeForToday(created_at)}
+              </S.Date>
+            </S.HeaderContainer>
+            <S.Content>{`${content || ""}`}</S.Content>
+          </S.ContentContainer>
+        </S.Container>
+      </TouchableHighlight>
+      {is_mine && (
+        <Portal>
+          <Tool ref={ref} items={toolItem} />
+        </Portal>
+      )}
+    </Fragment>
   );
 };
 

@@ -10,7 +10,7 @@ const initState: SearchState = {
     data: []
   },
   error: {
-    status: 0,
+    statuscode: 0,
     message: '',
     type: '',
   }

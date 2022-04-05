@@ -23,6 +23,13 @@ import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const Root = createStackNavigator<MainStackParamList>();
+const queryClient = new QueryClient();
+
+if (__DEV__) {
+  import("react-query-native-devtools").then(({ addPlugin }) => {
+    addPlugin({ queryClient });
+  });
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
