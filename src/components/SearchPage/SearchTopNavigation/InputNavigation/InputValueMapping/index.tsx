@@ -6,12 +6,18 @@ interface Props {
   value: searchTitle;
 }
 
-export const InputValueMapping: FC<Props> = ({ value }) => {
+const InputValueMapping: FC<Props> = ({ value }) => {
   return (
     <>
       <S.ResultContainer>
-        <S.ResultElement></S.ResultElement>
+        <S.ResultInlineBox>
+          <S.TitleResult>
+            <S.ResultElement>{value.title}</S.ResultElement>
+          </S.TitleResult>
+        </S.ResultInlineBox>
       </S.ResultContainer>
     </>
   );
 };
+
+export default InputValueMapping;
