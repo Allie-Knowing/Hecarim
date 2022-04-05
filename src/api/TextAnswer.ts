@@ -9,11 +9,9 @@ export const getTextAnswerList = async (
 ) => {
   const url = `${uri.comment_answer}/${questionId}`;
 
-  const data = await instance.get<getTextAnswerListResponse>(url, {
+  return await instance.get<getTextAnswerListResponse>(url, {
     params: { page, size },
   });
-
-  return data;
 };
 
 export const postTextAnswer = async (questionId: number, content: string) => {

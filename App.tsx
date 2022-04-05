@@ -1,4 +1,4 @@
-import React from "react-native";
+import React, { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
 import { ThemeProvider } from "styled-components/native";
@@ -21,6 +21,10 @@ import theme from "theme/theme";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useCallback, useEffect, useState } from "react";
+import localStorage from "utils/localStorage";
+import storageKeys from "constant/storageKeys";
+import isLoginContext from "context/IsLoginContext";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient();
@@ -38,69 +42,77 @@ export default function App() {
     "SpoqaHanSansNeo-Regular": require("./src/assets/fonts/SpoqaHanSansNeo-Regular.ttf"),
   });
 
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+
+  const check = useCallback(async () => {
+    const accessToken = await localStorage.getItem<string>(
+      storageKeys.accessToken
+    );
+
+    setIsLogin(accessToken !== null);
+  }, []);
+
+  useEffect(() => {
+    check();
+  });
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
 
-  const queryClient = new QueryClient();
-
-  if (__DEV__) {
-    import("react-query-native-devtools").then(({ addPlugin }) => {
-      addPlugin({ queryClient });
-    });
-  }
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
-          <ThemeProvider theme={theme}>
-            <Provider store={store}>
-              <BottomSheetModalProvider>
-                <AlretProvider>
-                  <NavigationContainer>
-                    <Host>
-                      <Root.Navigator
-                        initialRouteName="Main"
-                        screenOptions={{
-                          cardStyleInterpolator:
-                            CardStyleInterpolators.forHorizontalIOS,
-                        }}
-                      >
-                        <Root.Screen
-                          name="Main"
-                          component={BottomTabNavigation}
-                          options={{ headerShown: false }}
-                        />
-                        <Root.Screen
-                          name="StackedQuestionList"
-                          component={StackedQuestionList}
-                          options={{ headerShown: false }}
-                        />
-                        <Root.Screen
-                          name="Login"
-                          component={Login}
-                          options={{ headerShown: false }}
-                        />
-                        <Root.Screen
-                          name="Setting"
-                          component={Setting}
-                          options={{ title: "설정" }}
-                        />
-                        <Root.Screen
-                          name="UserPage"
-                          component={UserPage}
-                          options={{ headerShown: false }}
-                        />
-                      </Root.Navigator>
-                    </Host>
-                  </NavigationContainer>
-                </AlretProvider>
-              </BottomSheetModalProvider>
-            </Provider>
-          </ThemeProvider>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </QueryClientProvider>
+    <isLoginContext.Provider value={isLogin}>
+      <QueryClientProvider client={queryClient}>
+        <SafeAreaProvider>
+          <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+            <ThemeProvider theme={theme}>
+              <Provider store={store}>
+                <BottomSheetModalProvider>
+                  <AlretProvider>
+                    <NavigationContainer>
+                      <Host>
+                        <Root.Navigator
+                          initialRouteName="Main"
+                          screenOptions={{
+                            cardStyleInterpolator:
+                              CardStyleInterpolators.forHorizontalIOS,
+                          }}
+                        >
+                          <Root.Screen
+                            name="Main"
+                            component={BottomTabNavigation}
+                            options={{ headerShown: false }}
+                          />
+                          <Root.Screen
+                            name="StackedQuestionList"
+                            component={StackedQuestionList}
+                            options={{ headerShown: false }}
+                          />
+                          <Root.Screen
+                            name="Login"
+                            component={Login}
+                            options={{ headerShown: false }}
+                          />
+                          <Root.Screen
+                            name="Setting"
+                            component={Setting}
+                            options={{ title: "설정" }}
+                          />
+                          <Root.Screen
+                            name="UserPage"
+                            component={UserPage}
+                            options={{ headerShown: false }}
+                          />
+                        </Root.Navigator>
+                      </Host>
+                    </NavigationContainer>
+                  </AlretProvider>
+                </BottomSheetModalProvider>
+              </Provider>
+            </ThemeProvider>
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </QueryClientProvider>
+    </isLoginContext.Provider>
   );
 }
