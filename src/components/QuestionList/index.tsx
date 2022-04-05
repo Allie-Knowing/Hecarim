@@ -20,6 +20,7 @@ import uniqueId from "constant/uniqueId";
 // import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
+import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
 const navGap = 24;
@@ -42,13 +43,16 @@ const styles = StyleSheet.create({
 });
 
 interface PropsType {
-  questionList: string[];
+  questionList: Question[];
   index: number;
-  // videoAnswerList: getVideoAnswerListResponse;
-  // getVideoAnswerList: () => void;
+  onQuestionEndReached: () => void;
 }
 
-const QuestionList: FC<PropsType> = ({ questionList, index }) => {
+const QuestionList: FC<PropsType> = ({
+  questionList,
+  index,
+  onQuestionEndReached,
+}) => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
@@ -124,8 +128,12 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         contentContainerStyle={{ flexGrow: 1 }}
         onScroll={scrollHandler}
       >
-        <FeedVideos dataList={questionList} index={index} />
-        <VideoAnswer />
+        <FeedVideos
+          dataList={questionList}
+          index={index}
+          onEndReached={onQuestionEndReached}
+        />
+        <VideoAnswer onEndReached={() => {}} />
       </Animated.ScrollView>
       {isStack && (
         <S.BackButton onPress={() => navigation.pop()}>

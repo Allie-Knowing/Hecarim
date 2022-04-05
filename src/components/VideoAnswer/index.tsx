@@ -9,7 +9,11 @@ import { FC, useEffect, useState } from "react";
 
 const { height, width } = Dimensions.get("screen");
 
-const VideoAnswer: FC = () => {
+interface PropsType {
+  onEndReached: () => void;
+}
+
+const VideoAnswer: FC<PropsType> = () => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {

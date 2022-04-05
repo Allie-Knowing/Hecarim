@@ -1,22 +1,38 @@
-import React, { FC } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
-import useAnswer from "utils/hooks/answer/useAnswer";
+import { useQuestionList } from "queries/Question";
+import axios from "axios";
+
+const size = 50;
 
 const Feed: FC = () => {
-  const { state, setState } = useAnswer();
+  const { data, fetchNextPage, isError } = useQuestionList(size);
 
-  React.useEffect(() => {
-    setState.getVideoAnswerList();
-  }, []);
+  const onQuestionEndReached = useCallback(() => {
+    if (!isError) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage]);
+
+  const list = useMemo(
+    () =>
+      data
+        ? (data.pages || [])
+            .map((value) => value.data)
+            .reduce(function (acc, cur) {
+              return acc.concat(cur);
+            })
+        : [],
+    [data]
+  );
 
   return (
     <isStackContext.Provider value={false}>
       <QuestionList
-        questionList={["a", "b", "c", "d", "e", "f", "g"]}
+        questionList={list}
         index={0}
-        {...state}
-        {...setState}
+        onQuestionEndReached={onQuestionEndReached}
       />
     </isStackContext.Provider>
   );

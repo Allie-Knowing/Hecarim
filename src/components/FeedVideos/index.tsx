@@ -6,12 +6,14 @@ import {
   NativeScrollEvent,
 } from "react-native";
 import { FC, useState } from "react";
+import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
 
 interface PropsType {
-  dataList: string[];
+  dataList: Question[];
   index: number;
+  onEndReached: () => void;
 }
 
 const FeedVideos: FC<PropsType> = ({ dataList }) => {

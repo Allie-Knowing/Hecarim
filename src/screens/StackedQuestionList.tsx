@@ -12,7 +12,11 @@ const StackedQuestionList: FC<
 
   return (
     <isStackContext.Provider value={true}>
-      <QuestionList questionList={data} index={index} />
+      <QuestionList
+        onQuestionEndReached={() => {}}
+        questionList={data}
+        index={index}
+      />
     </isStackContext.Provider>
   );
 };
