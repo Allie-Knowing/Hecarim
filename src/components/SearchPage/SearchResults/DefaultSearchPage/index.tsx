@@ -1,14 +1,13 @@
 import React, { FC } from "react";
 import {
   Dimensions,
-  Button,
   View,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "screens/Search";
+import { RootStackParamList } from "hooks/useSearchStackNavigation";
 import { searchPayload } from "constance/search";
 import * as S from "./style";
 import { searchTitleResponse } from "modules/dto/response/searchResponse";
@@ -16,16 +15,12 @@ import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 
 const { height } = Dimensions.get("screen");
 
-type screenProp = StackNavigationProp<RootStackParamList, "SearchedQuestions">;
-
 interface Props {
   searchTitle: searchTitleResponse;
   getAutoComplete: (payload: searchPayload) => void;
 }
 
 const DefaultSearchPage: FC<Props> = ({ searchTitle, getAutoComplete }) => {
-  const navigation = useNavigation<screenProp>();
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>

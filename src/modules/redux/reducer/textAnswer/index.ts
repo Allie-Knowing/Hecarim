@@ -9,6 +9,7 @@ import {
   POST_TEXT_ANSWER,
   POST_TEXT_ANSWER_FAILURE,
   POST_TEXT_ANSWER_SUCCESS,
+  RESET_TEXT_ANSWER_LIST,
 } from "modules/redux/action/textAnswer/interface";
 import { TextAnswerState } from "./interface";
 
@@ -17,7 +18,7 @@ const initState: TextAnswerState = {
   deleteTextAnswerRequest: {},
   getTextAnswerListResponse: {},
   postTextAnswerRequest: {},
-  error: { status: 0, message: "", type: "" },
+  error: { statuscode: 0, message: "", type: "" },
 };
 
 const textAnswerReducer = (
@@ -28,7 +29,25 @@ const textAnswerReducer = (
     case GET_TEXT_ANSWER_LIST:
       return { ...state, getTextAnswerListRequest: action.payload };
     case GET_TEXT_ANSWER_LIST_SUCCESS:
-      return { ...state, getTextAnswerListResponse: action.payload };
+      return {
+        ...state,
+        getTextAnswerListResponse: {
+          data: [
+            ...(state.getTextAnswerListResponse.data || []),
+            ...action.payload.data,
+          ],
+        },
+      };
+    case RESET_TEXT_ANSWER_LIST:
+      return {
+        ...state,
+        getTextAnswerListResponse: {},
+        error: {
+          statuscode: 0,
+          message: "",
+          type: "",
+        },
+      };
     case POST_TEXT_ANSWER:
       return { ...state, postTextAnswerRequest: action.payload };
     case DELETE_TEXT_ANSWER:

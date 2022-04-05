@@ -7,13 +7,20 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.grayscale.scale100};
-  padding: 10px 20px 0px 20px;
+  padding: 10px 0px 0px 0px;
+`;
+
+export const Message = styled.Text`
+  color: ${({ theme }) => theme.colors.grayscale.scale50};
+  text-align: center;
+  font: ${({ theme }) => theme.fonts.body3};
 `;
 
 export const Title = styled.Text`
   font: ${({ theme }) => theme.fonts.subtitle2};
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   padding-bottom: 4px;
+  padding: 0px 20px;
 `;
 
 export const List = styled(BottomSheetFlatList)`

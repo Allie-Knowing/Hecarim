@@ -6,7 +6,7 @@ import signinSaga from "./signin";
 import textAnswerSaga from "./textAnswer";
 import videoUrlSaga from "./videoUrl";
 import searchSaga from "./search";
-import cameraSaga from "./camera";
+// import cameraSaga from "./camera";
 import answer from "./answer";
 import { questionVideoDataSaga, answerVideoDataSaga } from "./videoData";
 
@@ -22,6 +22,6 @@ export default function* rootSaga() {
     questionVideoDataSaga(),
     answerVideoDataSaga(),
     searchSaga(),
-    cameraSaga(),
+    // cameraSaga(),
   ]);
 }

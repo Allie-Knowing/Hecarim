@@ -6,15 +6,24 @@ import {
 import queryKeys from "constant/queryKeys";
 import { useMutation, useQuery } from "react-query";
 
-export const useTextAnswerList = (
-  questionId: number,
-  page: number,
-  size: number
-) =>
+export const useTextAnswerList = ({
+  page,
+  questionId,
+  enabled,
+  size,
+}: {
+  questionId: number;
+  page: number;
+  size: number;
+  enabled: boolean;
+}) =>
   useQuery(
     [queryKeys.questionList, questionId, queryKeys.textAnswerList, page],
-    () => getTextAnswerList(questionId, page, size),
-    { keepPreviousData: true }
+    async () => (await getTextAnswerList(questionId, page, size)).data.data,
+    {
+      enabled,
+      keepPreviousData: true,
+    }
   );
 
 export const useTextAnswerMutation = () => {

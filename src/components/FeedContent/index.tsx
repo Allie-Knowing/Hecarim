@@ -17,7 +17,7 @@ import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
-import useLikeEvent from "../../hooks/useLikeEvent";
+// import useLikeEvent from "../../hooks/useLikeEvent";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -37,7 +37,7 @@ const FeedContent: FC = () => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
-  const { like, unlike } = useLikeEvent(-1);
+  // const { like, unlike } = useLikeEvent(-1);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();

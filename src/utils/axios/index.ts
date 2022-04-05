@@ -8,13 +8,18 @@ export const instance = axios.create({
   baseURL: env.baseUrl,
 });
 
-export const noTokenInstance = axios.create({ baseURL: env.baseUrl });
+export const noTokenInstance = axios.create({
+  baseURL: env.baseUrl,
+  headers: {
+    Authorization:
+      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
+  },
+});
 
 instance.interceptors.request.use(
-  async function (config) {
-    config.headers["Authorization"] = await localStorage.getItem<string>(
-      storageKeys.accessToken
-    );
+  function (config) {
+    config.headers["Authorization"] =
+      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
     return config;
   },
   function (error: AxiosError) {

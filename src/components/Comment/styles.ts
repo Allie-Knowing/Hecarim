@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  padding: 10px 0px;
+  padding: 10px 20px;
   width: 100%;
   flex-direction: row;
 `;
@@ -30,7 +30,6 @@ export const Name = styled.Text`
 
 export const Date = styled.Text`
   font: ${({ theme }) => theme.fonts.description1};
-  color: ${({ theme }) => theme.colors.grayscale.scale50};
 `;
 
 export const Content = styled.Text`

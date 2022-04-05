@@ -1,22 +1,26 @@
 import uri from "constance/uri";
-import { getRequestWithAccessToken } from "../default";
+import {
+  deleteTextAnswerRequest,
+  getTextAnswerListRequest,
+  postTextAnswerRequest,
+} from "modules/dto/request/textAnswerRequest";
+import { getRequest, getRequestWithAccessToken } from "../default";
 
 export const getTextAnswerApi = async (
-  questionId: string,
-  access_token: string
+  access_token: string,
+  { questionId, page, size }: getTextAnswerListRequest
 ) => {
-  const request = getRequestWithAccessToken(access_token);
+  const request = getRequest();
   const url = `${uri.comment_answer}/${questionId}`;
 
-  const data = await request.get(url);
+  const data = await request.get(url, { params: { page, size } });
 
   return data;
 };
 
 export const postTextAnswerApi = async (
-  questionId: string,
-  content: string,
-  access_token: string
+  access_token: string,
+  { questionId, content }: postTextAnswerRequest
 ) => {
   const request = getRequestWithAccessToken(access_token);
   const url = `${uri.comment_answer}/${questionId}`;
@@ -27,8 +31,8 @@ export const postTextAnswerApi = async (
 };
 
 export const deleteTextAnswerApi = async (
-  commentId: string,
-  access_token: string
+  access_token: string,
+  { commentId }: deleteTextAnswerRequest
 ) => {
   const request = getRequestWithAccessToken(access_token);
   const url = `${uri.comment_answer}/${commentId}`;

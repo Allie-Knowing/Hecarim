@@ -12,6 +12,7 @@ import {
   POST_TEXT_ANSWER,
   POST_TEXT_ANSWER_FAILURE,
   POST_TEXT_ANSWER_SUCCESS,
+  RESET_TEXT_ANSWER_LIST,
 } from "./interface";
 
 export const getTextAnswerList = createAction(GET_TEXT_ANSWER_LIST)<getTextAnswerListRequest>();
@@ -26,6 +27,8 @@ export const deleteTextAnswer = createAction(DELETE_TEXT_ANSWER)<deleteTextAnswe
 export const deleteTextAnswerSuccess = createAction(DELETE_TEXT_ANSWER_SUCCESS)();
 export const deleteTextAnswerFailure = createAction(DELETE_TEXT_ANSWER_FAILURE)<error>();
 
+export const resetTextAnswerList = createAction(RESET_TEXT_ANSWER_LIST)()
+
 export type textAnswerActionType =
   | ReturnType<typeof getTextAnswerList>
   | ReturnType<typeof getTextAnswerListSuccess>
@@ -35,4 +38,5 @@ export type textAnswerActionType =
   | ReturnType<typeof postTextAnswerFailure>
   | ReturnType<typeof deleteTextAnswer>
   | ReturnType<typeof deleteTextAnswerSuccess>
-  | ReturnType<typeof deleteTextAnswerFailure>;
+  | ReturnType<typeof deleteTextAnswerFailure>
+  | ReturnType<typeof resetTextAnswerList>;

@@ -1,5 +1,6 @@
 import uri from "constance/uri";
-import { instance, noTokenInstance } from "utils/axios";
+import { getTextAnswerListResponse } from "modules/dto/response/textAnswerResponse";
+import { instance } from "utils/axios";
 
 export const getTextAnswerList = async (
   questionId: number,
@@ -7,7 +8,10 @@ export const getTextAnswerList = async (
   size: number
 ) => {
   const url = `${uri.comment_answer}/${questionId}`;
-  const data = await noTokenInstance.get(url, { params: { page, size } });
+
+  const data = await instance.get<getTextAnswerListResponse>(url, {
+    params: { page, size },
+  });
 
   return data;
 };

@@ -1,4 +1,5 @@
 import styled from "styled-components/native";
+import { useTheme } from "styled-components";
 
 export const Wrapper = styled.View<{ topPad:number }>`
     justify-content: center;
@@ -6,8 +7,8 @@ export const Wrapper = styled.View<{ topPad:number }>`
     border: 1px ${({theme}) => theme.colors.grayscale.scale20};
     background-color: ${({theme}) => theme.colors.grayscale.scale20};
     border-radius: 10;
-    height: 50;
-    width: 365;
+    height: 50px;
+    width: 365px;
 `;
 
 export const MagnifyImage = styled.Image`
@@ -36,4 +37,15 @@ export const ResetTextImage = styled.Image`
     width: 18;
     height: 18;
     z-index: 2;
+`;
+
+export const TitleAutoCompleteBox = styled.View`
+    position : absolute;
+    z-index: 3;
+    width: 365px;
+    height: 200px;
+`;
+
+export const TitleElement = styled.Text`
+    
 `;
