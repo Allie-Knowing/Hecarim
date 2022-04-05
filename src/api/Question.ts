@@ -12,6 +12,7 @@ export interface Question {
   comment_cnt: number;
   like_cnt: number;
   is_mine: boolean;
+  is_like: true;
 }
 
 export interface QuestionListResponse {

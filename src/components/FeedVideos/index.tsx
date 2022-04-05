@@ -4,6 +4,7 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ListRenderItem,
 } from "react-native";
 import { FC, useState } from "react";
 import { Question } from "api/Question";
@@ -16,13 +17,17 @@ interface PropsType {
   onEndReached: () => void;
 }
 
-const FeedVideos: FC<PropsType> = ({ dataList }) => {
+const FeedVideos: FC<PropsType> = ({ dataList, onEndReached }) => {
   const [, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
     setPage(newPage);
   };
+
+  const renderItem: ListRenderItem<Question> = ({ item }) => (
+    <FeedContent {...item} />
+  );
 
   return (
     <S.Container
@@ -37,9 +42,10 @@ const FeedVideos: FC<PropsType> = ({ dataList }) => {
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
-      keyExtractor={(_, index) => index.toString()}
+      keyExtractor={(item: Question) => `question_${item.id}`}
       data={dataList}
-      renderItem={() => <FeedContent />}
+      renderItem={renderItem}
+      onEndReached={onEndReached}
     />
   );
 };

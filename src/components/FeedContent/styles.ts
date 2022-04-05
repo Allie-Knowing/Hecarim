@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
+import { Video as VideoAv } from "expo-av";
 
 interface MoreProps {
   isMore: boolean;
@@ -14,7 +15,7 @@ export const Container = styled.View`
   left: 0px;
 `;
 
-export const Video = styled.Image`
+export const Video = styled(VideoAv)`
   position: relative;
   top: 0px;
   left: 0px;
@@ -24,7 +25,8 @@ export const Video = styled.Image`
 
 export const Content = styled.View`
   position: absolute;
-  top: ${Platform.OS === "ios"? 0 : -20};  left: 0px;
+  top: ${Platform.OS === "ios" ? 0 : -20};
+  left: 0px;
   width: 100%;
   height: 100%;
   padding: 20px;

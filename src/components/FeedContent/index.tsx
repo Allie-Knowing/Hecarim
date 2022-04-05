@@ -17,7 +17,8 @@ import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
-// import useLikeEvent from "../../hooks/useLikeEvent";
+import { Question } from "api/Question";
+import { useLikeMutation } from "../../queries/Like";
 
 const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
@@ -27,7 +28,19 @@ const Camera = require("../../assets/icons/camera.png");
 
 const { height } = Dimensions.get("screen");
 
-const FeedContent: FC = () => {
+const FeedContent: FC<Question> = ({
+  id,
+  video_url,
+  title,
+  comment_cnt,
+  created_at,
+  description,
+  is_like,
+  is_mine,
+  like_cnt,
+  profile,
+  user_id,
+}) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
   const commentBottomSheetRef = useRef<BottomSheet>(null);
@@ -37,7 +50,7 @@ const FeedContent: FC = () => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
-  // const { like, unlike } = useLikeEvent(-1);
+  const { like, unLike } = useLikeMutation(id);
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -129,7 +142,7 @@ const FeedContent: FC = () => {
   return (
     <Fragment>
       <S.Container style={{ height }}>
-        <S.Video source={Test} />
+        <S.Video source={{ uri: video_url }} isLooping resizeMode="contain" />
         <S.BackBlack
           colors={["transparent", themeContext.colors.grayscale.scale100]}
           style={{ height: `${isMore ? 50 : 0}%` }}
@@ -141,12 +154,11 @@ const FeedContent: FC = () => {
                 <View>
                   <S.Q>Q.&nbsp;</S.Q>
                 </View>
-                <S.Title>제가 흥얼거리는 노래 제목 알려줭</S.Title>
+                <S.Title>{title}</S.Title>
               </S.TitleContainer>
               {isMore && <S.Description>2021년 12월 19일</S.Description>}
               <S.Description numberOfLines={isMore ? undefined : 1}>
-                제가 흥얼거리는 노래 제목 알려주세요 대충가사는 이래요
-                어느새부터 힙합은 안 멋져 이건 하나의 유행 혹은 TV쇼
+                {description}
               </S.Description>
               {isMore && (
                 <S.HashTag>
@@ -159,7 +171,7 @@ const FeedContent: FC = () => {
           <View>
             <S.Icons>
               <S.IconContainer>
-                <S.ProfileImage source={Test} />
+                <S.ProfileImage source={{ uri: profile }} />
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
@@ -194,6 +206,7 @@ const FeedContent: FC = () => {
         <CommentBottomSheet
           navigation={navigation}
           ref={commentBottomSheetRef}
+          questionId={id}
         />
         <Tool ref={toolSheetRef} items={items} />
         <Tool ref={reportSheetRef} items={reportItems} />

@@ -41,10 +41,11 @@ const TestImage = require("../../../assets/feed_test.jpg");
 
 interface PropsType {
   navigation: StackNavigationProp<any>;
+  questionId: number;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ navigation }, ref) => {
+  ({ navigation, questionId }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -80,11 +81,11 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       }
       setText("");
       try {
-        await post.mutateAsync({ questionId: 1, content: t });
+        await post.mutateAsync({ questionId: questionId, content: t });
 
         queryClient.invalidateQueries([
           queryKeys.question,
-          queryKeys.questionId(1),
+          queryKeys.questionId(questionId),
           queryKeys.textAnswerList,
         ]);
       } catch (error) {
@@ -145,7 +146,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       >
         <S.Container>
           <S.Title>댓글</S.Title>
-          <TextAnswerList isOpen={isOpen} />
+          <TextAnswerList questionId={questionId} isOpen={isOpen} />
         </S.Container>
         {input}
         <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
@@ -156,12 +157,15 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
 
 interface ListProps {
   isOpen: boolean;
+  questionId: number;
 }
 
-const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
+const size = 20;
+
+const TextAnswerList: FC<ListProps> = ({ isOpen, questionId }) => {
   const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
-    1,
-    20,
+    questionId,
+    size,
     isOpen
   );
 
