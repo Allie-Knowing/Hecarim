@@ -9,6 +9,9 @@ enum uri {
   auto_complete = "/search/autocomplete",
   question = "/question",
   answer = "/answer",
+  title = "/search/title",
+  getProfileQuestionList = "/user/question/video/",
+  signin = "/auth?provider=",
 }
 
 export default uri;

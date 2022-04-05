@@ -9,20 +9,30 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "screens/Search";
+import { searchPayload } from "constance/search";
 import * as S from "./style";
+import { searchTitleResponse } from "modules/dto/response/searchResponse";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 
 const { height } = Dimensions.get("screen");
 
 type screenProp = StackNavigationProp<RootStackParamList, "SearchedQuestions">;
 
-const DefaultSearchPage: FC = () => {
+interface Props {
+  searchTitle: searchTitleResponse;
+  getAutoComplete: (payload: searchPayload) => void;
+}
+
+const DefaultSearchPage: FC<Props> = ({ searchTitle, getAutoComplete }) => {
   const navigation = useNavigation<screenProp>();
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
-        <SearchTopNavigation />
+        <SearchTopNavigation
+          searchTitle={searchTitle}
+          getAutoComplete={getAutoComplete}
+        />
         <S.View height={height / 1.44}>
           <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
         </S.View>

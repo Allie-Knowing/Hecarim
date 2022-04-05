@@ -5,17 +5,23 @@ import Profile from "components/Profile";
 import MyQuestionList from "components/MyQuestionList";
 import * as S from "./styles";
 import MakeKnowingBanner from "components/MakeKnowingBanner";
-import localStorage from "utils/localStorage";
-import storageKeys from "constant/storageKeys";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
+import useProfile from "utils/hooks/profile/useProfile";
+import useMyId from "utils/hooks/myId/useMyId";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
-  route: any;
 };
 
-const UserPage: FC<Props> = ({ navigation, route }) => {
+const UserPage: FC<Props> = ({ navigation }) => {
+  const { state, setState } = useProfile();
+
+  useEffect(() => {
+    setState.profile({ id: state.userId });
+    setState.questionList({ id: state.userId });
+  }, [state.userId]);
+
   return (
     <isStackContext.Provider value={true}>
       <S.Container>

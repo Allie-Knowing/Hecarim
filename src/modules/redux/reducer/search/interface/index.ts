@@ -1,19 +1,15 @@
 import { error } from "modules/dto/error";
 
 export interface SearchState {
-    searchAutoComplete: searchAutoCompleteResponse;
+    searchTitle: searchTitleResponse;
     error: error;
 }
 
-export type searchString = {
-    search_string: string
-}
-
-export type searchAutoComplete = {
+export type searchTitle = {
     id: string,
-    source: searchString
+    title: string
 }
 
-export type searchAutoCompleteResponse = {
-    data: searchAutoComplete[];
+export type searchTitleResponse = {
+    data: searchTitle[];
 } 

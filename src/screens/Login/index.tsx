@@ -20,14 +20,14 @@ const Login: FC<Props> = ({ navigation }) => {
 
   return (
     <S.Container>
-      <LoginHeader />
+      <LoginHeader {...navigation} />
       <S.Content height={height - (50 + topPad)}>
         <S.Title>세상의 모든 질문을,{"\n"} Knowing.</S.Title>
         <S.LoginBtnContainer>
           <S.LoginDescription>로그인 후 질문해보세요.</S.LoginDescription>
           <View>
             <GoogleButton {...navigation} />
-            <NaverButton />
+            <NaverButton {...navigation} />
             <AppleButton />
           </View>
         </S.LoginBtnContainer>

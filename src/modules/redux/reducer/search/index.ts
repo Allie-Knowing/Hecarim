@@ -1,12 +1,12 @@
 import { SearchState } from "./interface";
 import { searchActionType } from "modules/redux/action/search";
 import { 
-  GET_AUTO_COMPLETE_SUCCESS,
-  GET_AUTO_COMPLETE_FAILURE
+  GET_TITLE_SEARCH_SUCCESS,
+  GET_TITLE_SEARCH_FAILURE
 } from "modules/redux/action/search/interface";
 
 const initState: SearchState = {
-  searchAutoComplete: {
+  searchTitle: {
     data: []
   },
   error: {
@@ -21,14 +21,14 @@ const searchReducer = (
   action: searchActionType
 ): SearchState => {
   switch (action.type) {
-    case GET_AUTO_COMPLETE_SUCCESS: 
+    case GET_TITLE_SEARCH_SUCCESS: 
       return {
         ...state,
-        searchAutoComplete: {
+        searchTitle: {
           data: action.payload.data
         }
       }
-    case GET_AUTO_COMPLETE_FAILURE:
+    case GET_TITLE_SEARCH_FAILURE:
       return {
         ...state,
         error: action.payload

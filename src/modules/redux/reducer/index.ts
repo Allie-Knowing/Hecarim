@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   myId: myIdReducer,
   textAnswer: textAnswerReducer,
   videoUrl: videoUrlReducer,
+  answer: answerReducer,
   search: searchReducer,
   videoData: videoDataReducer,
 });
