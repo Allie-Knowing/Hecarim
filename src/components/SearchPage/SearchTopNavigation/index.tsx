@@ -5,21 +5,14 @@ import { searchPayload } from "constance/search";
 import { searchTitleResponse } from "modules/dto/response/searchResponse";
 import InputNavigation from "./InputNavigation";
 
-interface Props {
-  searchTitle: searchTitleResponse;
-  getAutoComplete: (payload: searchPayload) => void;
-}
+interface Props {}
 
-const SearchTopNavigation: FC<Props> = ({ searchTitle, getAutoComplete }) => {
+const SearchTopNavigation: FC<Props> = () => {
   const { top: topPad } = useSafeAreaInsets();
 
   return (
     <S.Wrapper topPad={topPad}>
-      <InputNavigation
-        searchTitle={searchTitle}
-        getAutoComplete={getAutoComplete}
-        topPad={topPad}
-      />
+      <InputNavigation topPad={topPad} />
     </S.Wrapper>
   );
 };
