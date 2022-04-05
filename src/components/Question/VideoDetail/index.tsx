@@ -1,42 +1,58 @@
 import React, { FC, useContext, useEffect, useRef, useState } from "react";
-import { ScrollView, TextInput } from "react-native";
+import { Platform, ScrollView, TextInput } from "react-native";
 import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from "constant/defaultStyle";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { SCREEN_HEIGHT } from "constant/camera";
+import { v4 as uuid } from "uuid";
 import theme from "theme/theme";
 import * as S from "./styles";
 
 import { cameraContext } from "context/CameraContext";
 
-interface Props {
-  videoURI: string;
-}
+import useGetVideoUrl from "../../../utils/hooks/videoUrl/useGetVideoUrl";
+import useVideoData from "../../../utils/hooks/videoData/useVideoData";
 
-type screenPop = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "CameraDetailPage">;
 
-const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
+const VideoDetail: FC = (): JSX.Element => {
+  const { state: urlState, setState: setUrlState } = useGetVideoUrl();
+  const {  } = useVideoData();
   const { uri } = useContext(cameraContext);
-  const [borderBottomColor, setBorderBottomColor] = useState<string>(theme.colors.grayscale.scale30);
+  const [borderBottomColor, setBorderBottomColor] = useState<string>(
+    theme.colors.grayscale.scale30
+  );
   const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
 
-  const navigation = useNavigation<screenPop>();
-  const backImage = require("../../../assets/icons/back-black.png");
+  const navigation = useNavigation<screenProp>();
+  const route = useNavigationState((state) => state);
 
+  const backImage = require("../../../assets/icons/back-black.png");
   const titleRef = useRef<TextInput>(null);
   const descriptionRef = useRef<TextInput>(null);
   const hashtagRef = useRef<TextInput>(null);
 
   const uploadVideo = async () => {
     const formData = new FormData();
-    const blobData = (await fetch(videoURI)).blob();
+    const data = {
+      uri,
+      type: Platform.OS === "ios" ? "video/quicktime" : "video/mp4",
+      name: `${uuid()}${Platform.OS === "ios" ? ".mov" : ".mp4"}`,
+    } as unknown as string;
+    formData.append("file", data);
 
-    formData.append("file", await blobData);
+    setUrlState.getVideoUrl({
+      type: "question",
+      file: formData,
+    });
+
+    
+    navigation.pop();
   };
 
   const cacheImage = () => {
@@ -63,7 +79,9 @@ const VideoDetail: FC<Props> = ({ videoURI }): JSX.Element => {
             <S.UploadText>업로드</S.UploadText>
           </S.UploadContainer>
         </S.QuestionDetailHeader>
-        <S.QuestionDetailBody height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}>
+        <S.QuestionDetailBody
+          height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}
+        >
           <ScrollView>
             <S.VideoContainer>
               <Video
