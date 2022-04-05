@@ -1,6 +1,6 @@
 import { ProfileQuestionType } from "modules/dto/response/getProfileQuestionListResponse";
 import React, { FC } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import * as S from "./style";
 
 const questionImage = require("../../../assets/feed_test.jpg");
@@ -13,11 +13,15 @@ type Props = {
 
 const MyQuestion: FC<Props> = ({ question }) => {
   return (
-    <S.Question
-      source={questionImage}
-      imageWidth={width / 2 - 30}
-      resizeMode="contain"
-    />
+    <TouchableOpacity activeOpacity={0.8}>
+      <S.Question
+        source={
+          question?.thumbnail ? { uri: question.thumbnail } : questionImage
+        }
+        imageWidth={width / 2 - 30}
+        resizeMode="cover"
+      />
+    </TouchableOpacity>
   );
 };
 

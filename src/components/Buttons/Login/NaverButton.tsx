@@ -6,14 +6,14 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import * as AuthSession from "expo-auth-session";
 import env from "constant/env";
-import useSignin from "utils/hooks/signin/useSignin";
+import useSignin from "queries/Signin";
 
 const naver = require("../../../assets/icons/login/naver.png");
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
 const NaverButton: FC<Props> = (navigation) => {
-  const { state, setState } = useSignin();
+  const signin = useSignin();
 
   const naverLogin = async () => {
     const result = await AuthSession.startAsync({
@@ -22,7 +22,7 @@ const NaverButton: FC<Props> = (navigation) => {
 
     if (result.type === "success") {
       const code = result.params.code;
-      setState.signin({
+      signin.mutate({
         id_token: code,
         provider: "NAVER",
       });
