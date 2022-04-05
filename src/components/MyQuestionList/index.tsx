@@ -1,34 +1,44 @@
+import { useProfileQuestionList } from "queries/Profile";
 import React, { FC } from "react";
-import { Dimensions, Text } from "react-native";
-import useProfile from "utils/hooks/profile/useProfile";
+import { Dimensions, Text, View } from "react-native";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
 
 const { height } = Dimensions.get("window");
 
-const MyQuestionList: FC = () => {
-  const { state } = useProfile();
+type Props = {
+  userId: number;
+};
+
+const MyQuestionList: FC<Props> = ({ userId }) => {
+  const { data, isLoading, isError } = useProfileQuestionList(userId);
 
   return (
     <S.Container height={height - 290}>
-      <S.Title>나의 질문</S.Title>
-      {state.questionList.length === 0 ? (
-        <S.Notice>질문이 없습니다.</S.Notice>
-      ) : (
-        <S.QuestionContainer
-          key={"#"}
-          data={state.questionList}
-          renderItem={({ item }: any) => <MyQuestion question={item} />}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          columnWrapperStyle={{
-            width: "100%",
-            paddingRight: 10,
-            paddingLeft: 10,
-            overflow: "hidden",
-          }}
-        />
+      {data && (
+        <View>
+          <S.Title>질문</S.Title>
+          {data.data.data.length === 0 ? (
+            <S.Notice>질문이 없습니다.</S.Notice>
+          ) : (
+            <S.QuestionContainer
+              key={"#"}
+              data={data.data.data}
+              renderItem={({ item }: any) => <MyQuestion question={item} />}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{
+                width: "100%",
+                paddingRight: 10,
+                paddingLeft: 10,
+                overflow: "hidden",
+              }}
+            />
+          )}
+        </View>
       )}
+      {isLoading && <S.Notice>잠시만 기다려주세요.</S.Notice>}
+      {isError && <S.Notice>잠시 후 다시 시도하세요.</S.Notice>}
     </S.Container>
   );
 };
