@@ -10,7 +10,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 
-type screenProp = StackNavigationProp<RootStackParamList, "VideoDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "CameraDetailPage">;
 
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -62,12 +62,10 @@ const CameraComponent: FC = (): JSX.Element => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
-            alert(
-              "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
-            );
+            alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
-          navigation.navigate("VideoDetailPage");
+          navigation.navigate("CameraDetailPage");
         }
       });
     }
@@ -80,10 +78,8 @@ const CameraComponent: FC = (): JSX.Element => {
   };
 
   const startCamera = async () => {
-    const { status: CameraStatus } =
-      await Camera.requestCameraPermissionsAsync();
-    const { status: VoiceStatus } =
-      await Camera.requestMicrophonePermissionsAsync();
+    const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
+    const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
 
     setHasPermission(CameraStatus === "granted" && VoiceStatus === "granted");
   };
@@ -101,9 +97,7 @@ const CameraComponent: FC = (): JSX.Element => {
     for (let i = 0; i < availableRatioArra.length; i++) {
       ratioObjectArray[i] = {
         ratio: availableRatioArra[i],
-        realRatio:
-          Number(availableRatioArra[i].split(":")[0]) /
-          Number(availableRatioArra[i].split(":")[1]),
+        realRatio: Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
       };
     }
 
@@ -124,7 +118,7 @@ const CameraComponent: FC = (): JSX.Element => {
         maxDuration: MAX_DURATION,
       });
       setUri(videoRecordPromise.uri);
-      navigation.navigate("VideoDetailPage");
+      navigation.navigate("CameraDetailPage");
     }
   };
 
@@ -136,11 +130,7 @@ const CameraComponent: FC = (): JSX.Element => {
   };
 
   const switchCamera = () => {
-    setCameraType(
-      cameraType === Camera.Constants.Type.back
-        ? Camera.Constants.Type.front
-        : Camera.Constants.Type.back
-    );
+    setCameraType(cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
   };
 
   const renderVideoRecordIndicator = (): JSX.Element => (
@@ -154,11 +144,7 @@ const CameraComponent: FC = (): JSX.Element => {
     <S.Control>
       {isVideoRecording ? (
         // 촬영중인 상태
-        <S.RecordVideoContainer
-          activeOpacity={0.7}
-          disabled={!isCameraReady}
-          onPress={stopVideoRecording}
-        >
+        <S.RecordVideoContainer activeOpacity={0.7} disabled={!isCameraReady} onPress={stopVideoRecording}>
           <S.RecordingVideoImage source={recordingImg} />
         </S.RecordVideoContainer>
       ) : (
@@ -170,10 +156,7 @@ const CameraComponent: FC = (): JSX.Element => {
           <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
           </S.RecordVideoContainer>
-          <S.FlipCameraContainer
-            disabled={!isCameraReady}
-            onPress={switchCamera}
-          >
+          <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
             <S.FlipCameraImage source={rotateImg} />
           </S.FlipCameraContainer>
         </>
