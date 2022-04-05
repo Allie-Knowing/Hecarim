@@ -48,7 +48,6 @@ const InputNavigation: FC<Props> = ({
 
   const Search = useCallback(() => {
     //do search
-    console.log("a", inputValue);
     getAutoComplete({ q: inputValue });
   }, [inputValue]);
 
