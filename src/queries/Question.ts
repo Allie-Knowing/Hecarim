@@ -6,11 +6,11 @@ import {
 import queryKeys from "constant/queryKeys";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
-const useQuestionList = (page: number, size: number) =>
+const useQuestionList = (size: number) =>
   useInfiniteQuery(
     [queryKeys.question],
     async ({ pageParam = 1 }) => {
-      const response = await getQuestionList(page, size);
+      const response = await getQuestionList(pageParam, size);
 
       return { page: pageParam, data: response.data.data };
     },
