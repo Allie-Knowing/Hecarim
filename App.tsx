@@ -20,6 +20,7 @@ import AlretProvider from "components/Providers/AlretProvider";
 import theme from "theme/theme";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const Root = createStackNavigator<MainStackParamList>();
 
@@ -34,55 +35,59 @@ export default function App() {
     return <AppLoading />;
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
-        <ThemeProvider theme={theme}>
-          <Provider store={store}>
-            <BottomSheetModalProvider>
-              <AlretProvider>
-                <NavigationContainer>
-                  <Host>
-                    <Root.Navigator
-                      initialRouteName="Main"
-                      screenOptions={{
-                        cardStyleInterpolator:
-                          CardStyleInterpolators.forHorizontalIOS,
-                      }}
-                    >
-                      <Root.Screen
-                        name="Main"
-                        component={BottomTabNavigation}
-                        options={{ headerShown: false }}
-                      />
-                      <Root.Screen
-                        name="StackedQuestionList"
-                        component={StackedQuestionList}
-                        options={{ headerShown: false }}
-                      />
-                      <Root.Screen
-                        name="Login"
-                        component={Login}
-                        options={{ headerShown: false }}
-                      />
-                      <Root.Screen
-                        name="Setting"
-                        component={Setting}
-                        options={{ title: "설정" }}
-                      />
-                      <Root.Screen
-                        name="UserPage"
-                        component={UserPage}
-                        options={{ headerShown: false }}
-                      />
-                    </Root.Navigator>
-                  </Host>
-                </NavigationContainer>
-              </AlretProvider>
-            </BottomSheetModalProvider>
-          </Provider>
-        </ThemeProvider>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+          <ThemeProvider theme={theme}>
+            <Provider store={store}>
+              <BottomSheetModalProvider>
+                <AlretProvider>
+                  <NavigationContainer>
+                    <Host>
+                      <Root.Navigator
+                        initialRouteName="Main"
+                        screenOptions={{
+                          cardStyleInterpolator:
+                            CardStyleInterpolators.forHorizontalIOS,
+                        }}
+                      >
+                        <Root.Screen
+                          name="Main"
+                          component={BottomTabNavigation}
+                          options={{ headerShown: false }}
+                        />
+                        <Root.Screen
+                          name="StackedQuestionList"
+                          component={StackedQuestionList}
+                          options={{ headerShown: false }}
+                        />
+                        <Root.Screen
+                          name="Login"
+                          component={Login}
+                          options={{ headerShown: false }}
+                        />
+                        <Root.Screen
+                          name="Setting"
+                          component={Setting}
+                          options={{ title: "설정" }}
+                        />
+                        <Root.Screen
+                          name="UserPage"
+                          component={UserPage}
+                          options={{ headerShown: false }}
+                        />
+                      </Root.Navigator>
+                    </Host>
+                  </NavigationContainer>
+                </AlretProvider>
+              </BottomSheetModalProvider>
+            </Provider>
+          </ThemeProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
