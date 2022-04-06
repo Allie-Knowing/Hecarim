@@ -1,5 +1,5 @@
 import LoginButtonLayout from "layout/loginButton";
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import * as S from "./styles";
 import { Text, TouchableOpacity } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -7,6 +7,8 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import * as AuthSession from "expo-auth-session";
 import env from "constant/env";
 import useSignin from "queries/Signin";
+import axios from "axios";
+import useAlert from "hooks/useAlert";
 
 const naver = require("../../../assets/icons/login/naver.png");
 const URI = `${env.naverUrl}${env.redirectUrl}`;
@@ -14,7 +16,30 @@ const URI = `${env.naverUrl}${env.redirectUrl}`;
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
 const NaverButton: FC<Props> = (navigation) => {
-  const signin = useSignin();
+  const { mutate, isError, error, isSuccess } = useSignin();
+  const { closeAlert, showAlert } = useAlert();
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigation.reset({ routes: [{ name: "Main" }] });
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError && axios.isAxiosError(error) && error.response.status === 409) {
+      showAlert({
+        title: "사용중인 이메일입니다.",
+        content: "다른 계정으로 시도해주세요.",
+        buttons: [
+          {
+            text: "확인",
+            color: "black",
+            onPress: (id) => closeAlert(id),
+          },
+        ],
+      });
+    }
+  }, [isError]);
 
   const naverLogin = async () => {
     const result = await AuthSession.startAsync({
@@ -23,13 +48,16 @@ const NaverButton: FC<Props> = (navigation) => {
 
     if (result.type === "success") {
       const code = result.params.code;
-      signin.mutate({
+      mutate({
         id_token: code,
         provider: "NAVER",
       });
-      navigation.reset({ routes: [{ name: "Main" }] });
     }
   };
+
+  useEffect(() => {
+    console.log(error);
+  }, [isError]);
 
   return (
     <TouchableOpacity onPress={naverLogin}>
