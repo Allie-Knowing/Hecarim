@@ -230,8 +230,24 @@ const FeedContent: FC<Question & PropsType> = ({
               </S.IconContainer>
               <S.IconContainer onPress={onLikePress}>
                 <Fragment>
-                  <S.Icon resizeMode="contain" source={Heart} />
-                  <S.IconLabel>{formattedNumber(likeCnt)}</S.IconLabel>
+                  <S.Icon
+                    style={{
+                      tintColor: isLike
+                        ? themeContext.colors.primary.default
+                        : themeContext.colors.grayscale.scale10,
+                    }}
+                    resizeMode="contain"
+                    source={Heart}
+                  />
+                  <S.IconLabel
+                    style={{
+                      color: isLike
+                        ? themeContext.colors.primary.default
+                        : themeContext.colors.grayscale.scale10,
+                    }}
+                  >
+                    {formattedNumber(likeCnt)}
+                  </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
               <S.IconContainer
