@@ -104,9 +104,15 @@ const CameraDetail: FC = (): JSX.Element => {
             <S.GoBackImage source={backImage} />
           </S.GoBackContainer>
           <S.InputQuestionInfoText>질문 정보 입력</S.InputQuestionInfoText>
-          <S.UploadContainer onPress={uploadVideo}>
-            <S.UploadText>업로드</S.UploadText>
-          </S.UploadContainer>
+          {videoUrl.isLoading || postQuestion.isLoading || postAnswer.isLoading ? (
+            <S.UploadContainer>
+              <S.UploadText color="#97979C">업로드중...</S.UploadText>
+            </S.UploadContainer>
+          ) : (
+            <S.UploadContainer onPress={uploadVideo}>
+              <S.UploadText color="#7366EF">업로드</S.UploadText>
+            </S.UploadContainer>
+          )}
         </S.QuestionDetailHeader>
         <S.QuestionDetailBody
           height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}

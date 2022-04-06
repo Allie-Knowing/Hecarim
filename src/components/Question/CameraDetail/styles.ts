@@ -44,9 +44,10 @@ export const UploadContainer = styled.TouchableOpacity`
   align-items: flex-end;
 `;
 
-export const UploadText = styled.Text`
+export const UploadText = styled.Text<{ color: string }>`
   font-size: 16;
-  color: ${({ theme }) => theme.colors.primary.default};
+  /* color: ${({ theme }) => theme.colors.primary.default}; */
+  color: ${(props) => props.color};
 `;
 
 export const QuestionDetailBody = styled.View<{ height: number }>`
