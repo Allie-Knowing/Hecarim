@@ -8,20 +8,19 @@ import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 const useVideoAnswerList = (questionId: number, size: number) => {
   return useInfiniteQuery(
-    [queryKeys.answer],
+    [queryKeys.answer, queryKeys.questionId(questionId)],
     async ({ pageParam = 1 }) => {
       const response = await getVideoAnswerList(questionId, pageParam, size);
 
       return { page: pageParam, data: response.data.data };
     },
     {
-      keepPreviousData: true,
       getNextPageParam: (lastPage) => lastPage.page + 1,
     }
   );
 };
 
-const useAnswerVideoMutation = () => {
+const useVideoAnswerMutation = () => {
   const adoption = useMutation((videoId: number) =>
     adoptionVideoAnswer(videoId)
   );
@@ -31,4 +30,4 @@ const useAnswerVideoMutation = () => {
   return { adoption, remove };
 };
 
-export { useVideoAnswerList, useAnswerVideoMutation };
+export { useVideoAnswerList, useVideoAnswerMutation };

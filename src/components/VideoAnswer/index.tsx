@@ -38,8 +38,11 @@ const VideoAnswer: FC<PropsType> = ({
     setPage(newPage);
   };
 
-  const renderItem: ListRenderItem<VideoAnswerType> = ({ item }) => (
-    <VideoAnswerContent {...item} />
+  const renderItem: ListRenderItem<VideoAnswerType> = ({ item, index }) => (
+    <VideoAnswerContent
+      isCurrentPage={page === index && isCurrentPage}
+      {...item}
+    />
   );
 
   const list = useMemo(
