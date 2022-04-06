@@ -21,9 +21,15 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { Video } from "expo-av";
-import { useQuestionHashtag, useQuestionDetail } from "queries/Question";
+import {
+  useQuestionHashtag,
+  useQuestionDetail,
+  useQuestionMutation,
+} from "queries/Question";
 import axios from "axios";
-import { error } from "console";
+import { useQueryClient } from "react-query";
+import queryKeys from "constant/queryKeys";
+import useAlret from "hooks/useAlret";
 
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
@@ -65,6 +71,9 @@ const FeedContent: FC<Question & PropsType> = ({
   const { like, unLike } = useLikeMutation(id);
   const { isLoading, refetch, data } = useQuestionDetail(id);
   const videoRef = useRef<Video>(null);
+  const { remove } = useQuestionMutation();
+  const queryClient = useQueryClient();
+  const { showAlret, closeAlret } = useAlret();
 
   const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
   const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
@@ -100,13 +109,51 @@ const FeedContent: FC<Question & PropsType> = ({
     await refetch();
   }, [isLikeLoading, isLike, like, unLike]);
 
+  const onDeletePress = useCallback(async () => {
+    toolSheetRef.current.close();
+
+    showAlret({
+      title: "삭제하시겠습니까?",
+      content: "삭제한 질문은\n복구가 불가능합니다.",
+      buttons: [
+        {
+          color: "black",
+          text: "취소",
+          onPress: (id) => {
+            closeAlret(id);
+          },
+        },
+        {
+          color: "red",
+          text: "삭제",
+          onPress: async (alret) => {
+            closeAlret(alret);
+            await remove.mutateAsync(id);
+            queryClient.invalidateQueries(queryKeys.question);
+            showAlret({
+              title: "삭제 완료",
+              content: "질문이 삭제되었습니다.",
+              buttons: [
+                {
+                  text: "확인",
+                  color: "black",
+                  onPress: (id) => closeAlret(id),
+                },
+              ],
+            });
+          },
+        },
+      ],
+    });
+  }, [remove, queryClient, id]);
+
   const items: ToolItem[] = useMemo(
     () =>
       is_mine
         ? [
             {
               color: themeContext.colors.red.default,
-              onPress: () => {},
+              onPress: onDeletePress,
               text: "삭제하기",
             },
           ]
@@ -119,7 +166,7 @@ const FeedContent: FC<Question & PropsType> = ({
               text: "신고하기",
             },
           ],
-    [themeContext]
+    [themeContext, onDeletePress]
   );
 
   const reportItems: ToolItem[] = useMemo(
@@ -174,13 +221,18 @@ const FeedContent: FC<Question & PropsType> = ({
     [themeContext]
   );
 
-  useEffect(() => {
+  const onPageChange = useCallback(() => {
     if (isCurrentPage) {
-      videoRef.current.playAsync();
+      videoRef.current.playFromPositionAsync(0);
     } else {
-      videoRef.current.pauseAsync();
+      videoRef.current.stopAsync();
+      setIsMore(false);
     }
   }, [isCurrentPage]);
+
+  useEffect(() => {
+    onPageChange();
+  }, [onPageChange]);
 
   return (
     <Fragment>
