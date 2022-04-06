@@ -13,6 +13,7 @@ enum uri {
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
+  report = "/report",
 }
 
 export default uri;
