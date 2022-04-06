@@ -91,7 +91,7 @@ const FeedContent: FC<Question & PropsType> = ({
   );
 
   const onMorePress = () => {
-    LayoutAnimation.easeInEaseOut();
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsMore(!isMore);
   };
 

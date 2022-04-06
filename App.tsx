@@ -1,4 +1,4 @@
-import React, { View } from "react-native";
+import React, { Platform, UIManager, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
 import { ThemeProvider } from "styled-components/native";
@@ -36,6 +36,13 @@ if (__DEV__) {
   import("react-query-native-devtools").then(({ addPlugin }) => {
     addPlugin({ queryClient });
   });
+}
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
 export default function App() {

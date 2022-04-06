@@ -11,6 +11,7 @@ const { height, width } = Dimensions.get("screen");
 
 interface PropsType {
   onEndReached: () => void;
+  isCurrentPage: boolean;
 }
 
 const VideoAnswer: FC<PropsType> = () => {

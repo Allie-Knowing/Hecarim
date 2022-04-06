@@ -15,9 +15,14 @@ interface PropsType {
   dataList: Question[];
   index: number;
   onEndReached: () => void;
+  isCurrentPage: boolean;
 }
 
-const FeedVideos: FC<PropsType> = ({ dataList, onEndReached }) => {
+const FeedVideos: FC<PropsType> = ({
+  dataList,
+  onEndReached,
+  isCurrentPage,
+}) => {
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -26,7 +31,7 @@ const FeedVideos: FC<PropsType> = ({ dataList, onEndReached }) => {
   };
 
   const renderItem: ListRenderItem<Question> = ({ item, index }) => (
-    <FeedContent isCurrentPage={index === page} {...item} />
+    <FeedContent isCurrentPage={index === page && isCurrentPage} {...item} />
   );
 
   return (

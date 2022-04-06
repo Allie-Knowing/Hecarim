@@ -11,13 +11,10 @@ import Animated, {
   AnimateStyle,
   useAnimatedScrollHandler,
   useAnimatedRef,
-  useDerivedValue,
 } from "react-native-reanimated";
 import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
-import uniqueId from "constant/uniqueId";
-// import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
@@ -57,9 +54,9 @@ const QuestionList: FC<PropsType> = ({
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
   const outerRef = useAnimatedRef<Animated.ScrollView>();
-  const pageId = useSharedValue<string>(uniqueId());
   const isStack = useContext(isStackContext);
   const navigation = useMainStackNavigation();
+  const [page, setPage] = useState<number>(0);
 
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
@@ -90,6 +87,7 @@ const QuestionList: FC<PropsType> = ({
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       pageOffset.value = event.contentOffset.x / width;
+      setPage(Math.round(event.contentOffset.x / width));
     },
   });
 
@@ -104,11 +102,6 @@ const QuestionList: FC<PropsType> = ({
     }),
     [widths, topPad]
   );
-
-  useDerivedValue(() => {
-    // eslint-disable-next-line no-self-assign
-    pageId.value = pageId.value;
-  });
 
   return (
     <S.Wrapper style={{ height }}>
@@ -132,8 +125,9 @@ const QuestionList: FC<PropsType> = ({
           dataList={questionList}
           index={index}
           onEndReached={onQuestionEndReached}
+          isCurrentPage={page === 0}
         />
-        <VideoAnswer onEndReached={() => {}} />
+        <VideoAnswer isCurrentPage={page === 1} onEndReached={() => {}} />
       </Animated.ScrollView>
       {isStack && (
         <S.BackButton onPress={() => navigation.pop()}>
