@@ -5,9 +5,8 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   ListRenderItem,
-  Text,
 } from "react-native";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
 import { useVideoAnswerList } from "queries/Answer";
 import axios from "axios";
@@ -15,20 +14,15 @@ import axios from "axios";
 const { height, width } = Dimensions.get("screen");
 
 interface PropsType {
-  onEndReached: () => void;
   isCurrentPage: boolean;
   questionId: number;
 }
 
-const size = 20;
+const size = 2;
 
-const VideoAnswer: FC<PropsType> = ({
-  isCurrentPage,
-  onEndReached,
-  questionId,
-}) => {
+const VideoAnswer: FC<PropsType> = ({ isCurrentPage, questionId }) => {
   const [page, setPage] = useState(0);
-  const { data, isLoading, isError, error } = useVideoAnswerList(
+  const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(
     questionId,
     size
   );
@@ -56,6 +50,12 @@ const VideoAnswer: FC<PropsType> = ({
         : [],
     [data]
   );
+
+  const onEndReached = useCallback(() => {
+    if (!isError) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage]);
 
   if (isLoading) {
     return (
@@ -99,6 +99,7 @@ const VideoAnswer: FC<PropsType> = ({
       }
       data={list}
       renderItem={renderItem}
+      onEndReached={onEndReached}
     />
   );
 };

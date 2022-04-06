@@ -138,7 +138,6 @@ const QuestionList: FC<PropsType> = ({
         {currentQuestionId !== -1 && (
           <VideoAnswer
             isCurrentPage={page === 1}
-            onEndReached={() => {}}
             questionId={currentQuestionId}
           />
         )}
