@@ -1,6 +1,7 @@
 const queryKeys = {
   questionList: "question_list",
   question: "question",
+  answer: "answer",
   questionHashtag: "question_hashtag",
   questionId: (questionId: number) => `question_id_${questionId}`,
   textAnswerList: "text_answer_list",

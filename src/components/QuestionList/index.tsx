@@ -135,7 +135,13 @@ const QuestionList: FC<PropsType> = ({
           isCurrentPage={page === 0}
           setCurrentQuestionId={setCurrentQuestionId}
         />
-        <VideoAnswer isCurrentPage={page === 1} onEndReached={() => {}} />
+        {currentQuestionId !== -1 && (
+          <VideoAnswer
+            isCurrentPage={page === 1}
+            onEndReached={() => {}}
+            questionId={currentQuestionId}
+          />
+        )}
       </Animated.ScrollView>
       {isStack && (
         <S.BackButton onPress={() => navigation.pop()}>

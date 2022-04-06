@@ -6,9 +6,9 @@ import {
 import queryKeys from "constant/queryKeys";
 import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
-const useAnswerVideoList = (questionId: number, size: number) => {
+const useVideoAnswerList = (questionId: number, size: number) => {
   return useInfiniteQuery(
-    [queryKeys.question],
+    [queryKeys.answer],
     async ({ pageParam = 1 }) => {
       const response = await getVideoAnswerList(questionId, pageParam, size);
 
@@ -31,4 +31,4 @@ const useAnswerVideoMutation = () => {
   return { adoption, remove };
 };
 
-export { useAnswerVideoList, useAnswerVideoMutation };
+export { useVideoAnswerList, useAnswerVideoMutation };
