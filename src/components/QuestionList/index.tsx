@@ -2,7 +2,7 @@ import { Dimensions, Image, StyleSheet, ViewStyle } from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { useState } from "react";
 import Animated, {
   interpolate,
@@ -57,6 +57,13 @@ const QuestionList: FC<PropsType> = ({
   const isStack = useContext(isStackContext);
   const navigation = useMainStackNavigation();
   const [page, setPage] = useState<number>(0);
+  const [currentQuestionId, setCurrentQuestionId] = useState<number>(
+    questionList.length > 0 ? questionList[0].id : -1
+  );
+
+  useEffect(() => {
+    console.log(currentQuestionId);
+  }, [currentQuestionId]);
 
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
@@ -126,6 +133,7 @@ const QuestionList: FC<PropsType> = ({
           index={index}
           onEndReached={onQuestionEndReached}
           isCurrentPage={page === 0}
+          setCurrentQuestionId={setCurrentQuestionId}
         />
         <VideoAnswer isCurrentPage={page === 1} onEndReached={() => {}} />
       </Animated.ScrollView>

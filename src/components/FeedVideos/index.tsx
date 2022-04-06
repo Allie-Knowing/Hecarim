@@ -16,12 +16,14 @@ interface PropsType {
   index: number;
   onEndReached: () => void;
   isCurrentPage: boolean;
+  setCurrentQuestionId: (id: number) => void;
 }
 
 const FeedVideos: FC<PropsType> = ({
   dataList,
   onEndReached,
   isCurrentPage,
+  setCurrentQuestionId,
 }) => {
   const [page, setPage] = useState(0);
 
@@ -33,6 +35,12 @@ const FeedVideos: FC<PropsType> = ({
   const renderItem: ListRenderItem<Question> = ({ item, index }) => (
     <FeedContent isCurrentPage={index === page && isCurrentPage} {...item} />
   );
+
+  useEffect(() => {
+    if (dataList.length > 0) {
+      setCurrentQuestionId(dataList[page].id);
+    }
+  }, [page, dataList]);
 
   return (
     <S.Container
