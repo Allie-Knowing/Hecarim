@@ -62,6 +62,7 @@ const FeedContent: FC<Question & PropsType> = ({
   profile,
   user_id,
   isCurrentPage,
+  is_adoption,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
@@ -352,6 +353,7 @@ const FeedContent: FC<Question & PropsType> = ({
       </S.Container>
       <Portal>
         <CommentBottomSheet
+          isQuestionAdoption={is_adoption === 1}
           navigation={navigation}
           ref={commentBottomSheetRef}
           questionId={id}

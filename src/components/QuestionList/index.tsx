@@ -60,6 +60,9 @@ const QuestionList: FC<PropsType> = ({
   const [currentQuestionId, setCurrentQuestionId] = useState<number>(
     questionList.length > 0 ? questionList[0].id : -1
   );
+  const [isQuestionAdoption, setIsQuestionAdoption] = useState<number>(
+    questionList.length > 0 ? questionList[0].is_adoption : 1
+  );
 
   useEffect(() => {
     console.log(currentQuestionId);
@@ -143,6 +146,7 @@ const QuestionList: FC<PropsType> = ({
               questionList.find((value) => value.id === currentQuestionId)
                 ?.is_mine || false
             }
+            isQuestionAdoption={isQuestionAdoption}
           />
         )}
       </Animated.ScrollView>

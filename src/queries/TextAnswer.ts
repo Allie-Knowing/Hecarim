@@ -1,4 +1,5 @@
 import {
+  adoptionTextAnswer,
   deleteTextAnswer,
   getTextAnswerList,
   postTextAnswer,
@@ -42,5 +43,9 @@ export const useTextAnswerMutation = () => {
     deleteTextAnswer(commentId)
   );
 
-  return { post, remove };
+  const adoption = useMutation((commentId: number) =>
+    adoptionTextAnswer(commentId)
+  );
+
+  return { post, remove, adoption };
 };

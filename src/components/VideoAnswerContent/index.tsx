@@ -35,6 +35,7 @@ const dateToString = (date: Date) =>
 interface PropsType {
   isCurrentPage: boolean;
   isQuestionMine: boolean;
+  isQuestionAdoption: boolean;
 }
 
 const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
@@ -50,6 +51,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isCurrentPage,
   isQuestionMine,
   is_like,
+  isQuestionAdoption,
 }) => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
@@ -219,7 +221,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
             text: "신고하기",
           },
         ];
-    if (isQuestionMine && !is_mine) {
+    if (isQuestionMine && !is_mine && !isQuestionAdoption) {
       li.push({
         color: theme.colors.primary.default,
         onPress: onAdoption,

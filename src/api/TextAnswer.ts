@@ -27,3 +27,8 @@ export const deleteTextAnswer = async (commentId: number) => {
 
   return data;
 };
+
+export const adoptionTextAnswer = async (commentId: number) => {
+  const url = `${uri.commentAnswer}/${commentId}`;
+  return await instance.delete(url);
+};

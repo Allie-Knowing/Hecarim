@@ -17,6 +17,7 @@ interface PropsType {
   isCurrentPage: boolean;
   questionId: number;
   isQuestionMine: boolean;
+  isQuestionAdoption: number;
 }
 
 const size = 20;
@@ -25,6 +26,7 @@ const VideoAnswer: FC<PropsType> = ({
   isCurrentPage,
   questionId,
   isQuestionMine,
+  isQuestionAdoption,
 }) => {
   const [page, setPage] = useState(0);
   const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(
@@ -41,6 +43,7 @@ const VideoAnswer: FC<PropsType> = ({
     <VideoAnswerContent
       isQuestionMine={isQuestionMine}
       isCurrentPage={page === index && isCurrentPage}
+      isQuestionAdoption={isQuestionAdoption === 1}
       {...item}
     />
   );

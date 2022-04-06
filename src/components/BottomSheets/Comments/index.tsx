@@ -42,10 +42,11 @@ const TestImage = require("../../../assets/feed_test.jpg");
 interface PropsType {
   navigation: StackNavigationProp<any>;
   questionId: number;
+  isQuestionAdoption: boolean;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ navigation, questionId }, ref) => {
+  ({ navigation, questionId, isQuestionAdoption }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -146,7 +147,11 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       >
         <S.Container>
           <S.Title>댓글</S.Title>
-          <TextAnswerList questionId={questionId} isOpen={isOpen} />
+          <TextAnswerList
+            isQuestionAdoption={isQuestionAdoption}
+            questionId={questionId}
+            isOpen={isOpen}
+          />
         </S.Container>
         {input}
         <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
@@ -158,11 +163,16 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
 interface ListProps {
   isOpen: boolean;
   questionId: number;
+  isQuestionAdoption: boolean;
 }
 
 const size = 20;
 
-const TextAnswerList: FC<ListProps> = ({ isOpen, questionId }) => {
+const TextAnswerList: FC<ListProps> = ({
+  isOpen,
+  questionId,
+  isQuestionAdoption,
+}) => {
   const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
     questionId,
     size,
@@ -171,7 +181,13 @@ const TextAnswerList: FC<ListProps> = ({ isOpen, questionId }) => {
 
   const renderItem: ListRenderItem<getTextAnswerList> = useCallback(
     ({ item }) => {
-      return <Comment {...item} />;
+      return (
+        <Comment
+          questionId={questionId}
+          {...item}
+          isQuestionAdoption={isQuestionAdoption}
+        />
+      );
     },
     []
   );

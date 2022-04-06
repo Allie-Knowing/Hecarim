@@ -13,6 +13,7 @@ export interface Question {
   like_cnt: number;
   is_mine: boolean;
   is_like: true;
+  is_adoption: number;
 }
 
 export interface QuestionListResponse {
