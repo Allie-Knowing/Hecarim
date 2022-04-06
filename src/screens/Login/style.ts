@@ -30,5 +30,3 @@ export const LoginDescription = styled.Text`
   font: ${({ theme }) => theme.fonts.description1};
   color: ${({ theme }) => theme.colors.grayscale.scale60};
 `;
-
-export const LoginButtonList = styled.SectionList``;

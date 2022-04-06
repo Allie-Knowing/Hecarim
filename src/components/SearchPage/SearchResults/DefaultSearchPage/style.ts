@@ -7,6 +7,7 @@ export const View = styled(Animated.View)<{ height: number }>`
     background-color: ${({theme}) => theme.colors.grayscale.scale10};
     height: ${({height}) => height};
     margin-top: 10;
+    z-index: -1;
 `;
 
 export const Text = styled(Animated.Text)`

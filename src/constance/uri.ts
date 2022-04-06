@@ -15,6 +15,7 @@ enum uri {
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
   report = "/admin/report",
+  appleSignin = "/apple",
 }
 
 export default uri;

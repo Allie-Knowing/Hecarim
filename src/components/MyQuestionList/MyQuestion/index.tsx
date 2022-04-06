@@ -3,8 +3,6 @@ import React, { FC } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import * as S from "./style";
 
-const questionImage = require("../../../assets/feed_test.jpg");
-
 const { width } = Dimensions.get("screen");
 
 type Props = {
@@ -14,13 +12,15 @@ type Props = {
 const MyQuestion: FC<Props> = ({ question }) => {
   return (
     <TouchableOpacity activeOpacity={0.8}>
-      <S.Question
-        source={
-          question?.thumbnail ? { uri: question.thumbnail } : questionImage
-        }
-        imageWidth={width / 2 - 30}
-        resizeMode="cover"
-      />
+      {question?.thumbnail ? (
+        <S.Question
+          source={{ uri: question.thumbnail }}
+          imageWidth={width / 2 - 30}
+          resizeMode="cover"
+        />
+      ) : (
+        <S.DefaultQuestion imageWidth={width / 2 - 30} />
+      )}
     </TouchableOpacity>
   );
 };
