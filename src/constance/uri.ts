@@ -1,5 +1,6 @@
 enum uri {
   videoAnswer = "/answer/video",
+  videoAnswerDetail = "/answer/video/detail",
   videoAnswerAdoption = "/answer/video/adoption",
   commentAnswer = "/answer/text",
   googleSignin = "/google",

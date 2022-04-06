@@ -139,6 +139,10 @@ const QuestionList: FC<PropsType> = ({
           <VideoAnswer
             isCurrentPage={page === 1}
             questionId={currentQuestionId}
+            isQuestionMine={
+              questionList.find((value) => value.id === currentQuestionId)
+                ?.is_mine || false
+            }
           />
         )}
       </Animated.ScrollView>

@@ -22,7 +22,7 @@ import useAlret from "hooks/useAlret";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
-import { useVideoAnswerMutation } from "queries/Answer";
+import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
 
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
@@ -34,6 +34,7 @@ const dateToString = (date: Date) =>
 
 interface PropsType {
   isCurrentPage: boolean;
+  isQuestionMine: boolean;
 }
 
 const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
@@ -47,6 +48,8 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   user_id,
   video_url,
   isCurrentPage,
+  isQuestionMine,
+  is_like,
 }) => {
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
@@ -61,10 +64,11 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const { report } = useVideoMutation(id);
   const { showAlret, closeAlret } = useAlret();
   const queryClient = useQueryClient();
-  const { remove } = useVideoAnswerMutation();
+  const { remove, adoption } = useVideoAnswerMutation();
+  const { data, isLoading, refetch } = useVideoAnswerDetail(id);
 
-  // const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
-  // const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
+  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
+  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
 
   const onReportPress = useCallback(
     (description: string) => () => {
@@ -74,24 +78,24 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     []
   );
 
-  // const isLikeLoading = useMemo(
-  //   () => like.isLoading || unLike.isLoading || isLoading,
-  //   [like.isLoading, unLike.isLoading, isLoading]
-  // );
+  const isLikeLoading = useMemo(
+    () => like.isLoading || unLike.isLoading || isLoading,
+    [like.isLoading, unLike.isLoading, isLoading]
+  );
 
-  // const onLikePress = useCallback(async () => {
-  //   if (isLikeLoading) {
-  //     return;
-  //   }
+  const onLikePress = useCallback(async () => {
+    if (isLikeLoading) {
+      return;
+    }
 
-  //   if (!isLike) {
-  //     await like.mutateAsync();
-  //   } else {
-  //     await unLike.mutateAsync();
-  //   }
+    if (!isLike) {
+      await like.mutateAsync();
+    } else {
+      await unLike.mutateAsync();
+    }
 
-  //   await refetch();
-  // }, [isLikeLoading, isLike, like, unLike]);
+    await refetch();
+  }, [isLikeLoading, isLike, like, unLike]);
 
   const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
@@ -165,27 +169,65 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     onPageChange();
   }, [onPageChange]);
 
-  const items: ToolItem[] = useMemo(
-    () =>
-      is_mine
-        ? [
-            {
-              color: theme.colors.red.default,
-              onPress: onDeletePress,
-              text: "삭제하기",
-            },
-          ]
-        : [
-            {
-              color: theme.colors.red.default,
-              onPress: () => {
-                reportSheetRef.current.present();
-              },
-              text: "신고하기",
-            },
-          ],
-    [theme, onDeletePress]
+  const onAdoptionAccpet = useCallback(
+    async (alert: string) => {
+      closeAlret(alert);
+
+      await adoption.mutateAsync(id);
+
+      showAlret({
+        title: "채택되었습니다",
+        content: "답변이 채택되었습니다.",
+        buttons: [
+          { color: "black", onPress: (id) => closeAlret(id), text: "확인" },
+        ],
+      });
+
+      queryClient.invalidateQueries([queryKeys.answer]);
+    },
+    [closeAlret, adoption, id, queryClient]
   );
+
+  const onAdoption = useCallback(() => {
+    dismissAll();
+
+    showAlret({
+      title: "채택하시겠습니까?",
+      content: "답변 채택 후 채택 취소 혹은\n추가 채택이 불가능합니다.",
+      buttons: [
+        { color: "black", onPress: (id) => closeAlret(id), text: "취소" },
+        { color: "primary", onPress: onAdoptionAccpet, text: "채택" },
+      ],
+    });
+  }, [dismissAll, showAlret, closeAlret, onAdoptionAccpet]);
+
+  const items: ToolItem[] = useMemo(() => {
+    const li = is_mine
+      ? [
+          {
+            color: theme.colors.red.default,
+            onPress: onDeletePress,
+            text: "삭제하기",
+          },
+        ]
+      : [
+          {
+            color: theme.colors.red.default,
+            onPress: () => {
+              reportSheetRef.current.present();
+            },
+            text: "신고하기",
+          },
+        ];
+    if (isQuestionMine && !is_mine) {
+      li.push({
+        color: theme.colors.primary.default,
+        onPress: onAdoption,
+        text: "채택하기",
+      });
+    }
+    return li;
+  }, [theme, onDeletePress, isQuestionMine, onAdoption]);
 
   const reportItems: ToolItem[] = useMemo(
     () => [
@@ -253,6 +295,26 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
           <S.InfoOuter>
             <S.InfoContainer>
+              <View>
+                {is_adoption === 1 && (
+                  <View
+                    style={{
+                      justifyContent: "flex-start",
+                      alignSelf: "flex-start",
+                      marginBottom: 30,
+                    }}
+                  >
+                    <S.AdoptionContainer
+                      style={{
+                        borderTopRightRadius: 10,
+                        borderBottomRightRadius: 10,
+                      }}
+                    >
+                      <S.AdoptionText>채택된 답변</S.AdoptionText>
+                    </S.AdoptionContainer>
+                  </View>
+                )}
+              </View>
               <S.TitleContainer>
                 <View>
                   <S.A>A.&nbsp;</S.A>
@@ -269,9 +331,25 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
               <S.IconContainer>
                 <S.ProfileImage source={{ uri: profile }} />
               </S.IconContainer>
-              <S.IconContainer>
-                <S.Icon resizeMode="contain" source={Heart} />
-                <S.IconLabel>{formattedNumber(like_cnt)}</S.IconLabel>
+              <S.IconContainer onPress={onLikePress}>
+                <S.Icon
+                  style={{
+                    tintColor: isLike
+                      ? theme.colors.primary.default
+                      : theme.colors.grayscale.scale10,
+                  }}
+                  resizeMode="contain"
+                  source={Heart}
+                />
+                <S.IconLabel
+                  style={{
+                    color: isLike
+                      ? theme.colors.primary.default
+                      : theme.colors.grayscale.scale10,
+                  }}
+                >
+                  {formattedNumber(likeCnt)}
+                </S.IconLabel>
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {

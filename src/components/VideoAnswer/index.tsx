@@ -16,11 +16,16 @@ const { height, width } = Dimensions.get("screen");
 interface PropsType {
   isCurrentPage: boolean;
   questionId: number;
+  isQuestionMine: boolean;
 }
 
 const size = 20;
 
-const VideoAnswer: FC<PropsType> = ({ isCurrentPage, questionId }) => {
+const VideoAnswer: FC<PropsType> = ({
+  isCurrentPage,
+  questionId,
+  isQuestionMine,
+}) => {
   const [page, setPage] = useState(0);
   const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(
     questionId,
@@ -34,6 +39,7 @@ const VideoAnswer: FC<PropsType> = ({ isCurrentPage, questionId }) => {
 
   const renderItem: ListRenderItem<VideoAnswerType> = ({ item, index }) => (
     <VideoAnswerContent
+      isQuestionMine={isQuestionMine}
       isCurrentPage={page === index && isCurrentPage}
       {...item}
     />

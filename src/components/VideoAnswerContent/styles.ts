@@ -25,7 +25,7 @@ export const Content = styled.View`
   left: 0px;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding-right: 20px;
   align-items: flex-end;
   flex-direction: row;
 `;
@@ -40,6 +40,7 @@ export const InfoContainer = styled.View`
 
 export const TitleContainer = styled.View`
   flex-direction: row;
+  padding-left: 20px;
 `;
 
 export const Title = styled.Text`
@@ -101,4 +102,15 @@ export const BackBlack = styled(LinearGradient)`
   left: 0px;
   height: 50%;
   width: 100%;
+`;
+
+export const AdoptionContainer = styled.View`
+  left: 0px;
+  padding: 8px 16px;
+  background-color: ${({ theme }) => theme.colors.primary.default};
+`;
+
+export const AdoptionText = styled.Text`
+  font: ${({ theme }) => theme.fonts.body2};
+  color: ${({ theme }) => theme.colors.grayscale.scale10};
 `;

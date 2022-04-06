@@ -1,6 +1,7 @@
 import {
   adoptionVideoAnswer,
   deleteVideoAnswer,
+  getVideoAnswerDetail,
   getVideoAnswerList,
 } from "api/Answer";
 import queryKeys from "constant/queryKeys";
@@ -30,4 +31,12 @@ const useVideoAnswerMutation = () => {
   return { adoption, remove };
 };
 
-export { useVideoAnswerList, useVideoAnswerMutation };
+const useVideoAnswerDetail = (videoId: number) => {
+  return useQuery(
+    [queryKeys.answer, queryKeys.videoAnswerId(videoId)],
+    () => getVideoAnswerDetail(videoId),
+    { enabled: false }
+  );
+};
+
+export { useVideoAnswerList, useVideoAnswerMutation, useVideoAnswerDetail };
