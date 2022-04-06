@@ -1,12 +1,21 @@
-import { getRequestWithAccessToken } from "../default";
-import { getVideoUrlRequest } from "modules/dto/request/getVideoUrlRequest";
 import uri from "constance/uri";
+import { instance } from "utils/axios";
 
-export const getVideoUrl = async (access_token: string, request_body: getVideoUrlRequest) => {
-  const request = getRequestWithAccessToken(access_token);
-  const data = await request.post(`${uri.file}?type=${request_body.type}`, request_body.file, {
+interface responseType {
+  data: {
+    data: {
+      url: string;
+    };
+  };
+}
+
+export const getVideoUrl = async (type: "question" | "answer", file: string | FormData) => {
+  const data: responseType = await instance.post(`${uri.file}`, file, {
     headers: {
       "Content-Type": "multipart/form-data",
+    },
+    params: {
+      type,
     },
   });
 
