@@ -122,7 +122,6 @@ const CameraComponent: FC = (): JSX.Element => {
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
-      console.log(videoRecordPromise.uri);
       setUri(videoRecordPromise.uri);
       navigation.push("CameraDetail");
     }
