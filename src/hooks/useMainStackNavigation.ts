@@ -7,6 +7,8 @@ export type MainStackParamList = {
   Login: undefined;
   UserPage: undefined;
   Setting: undefined;
+  CameraPage: undefined;
+  CameraDetail: { questionId?: number | undefined };
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;
