@@ -32,7 +32,7 @@ import {
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlret";
+import useAlert from "hooks/useAlert";
 import { useVideoMutation } from "queries/Video";
 
 const Heart = require("../../assets/icons/heart.png");
@@ -77,7 +77,7 @@ const FeedContent: FC<Question & PropsType> = ({
   const videoRef = useRef<Video>(null);
   const { remove } = useQuestionMutation();
   const queryClient = useQueryClient();
-  const { showAlret, closeAlret } = useAlret();
+  const { showAlert, closeAlert } = useAlert();
   const { report } = useVideoMutation(id);
   const descriptionRef = useRef<string>("");
   const { dismissAll } = useBottomSheetModal();
@@ -122,23 +122,23 @@ const FeedContent: FC<Question & PropsType> = ({
 
     await report.mutateAsync(descriptionRef.current);
 
-    showAlret({
+    showAlert({
       title: "신고 제출 완료",
       content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
       buttons: [
         {
           text: "확인",
           color: "black",
-          onPress: (id) => closeAlret(id),
+          onPress: (id) => closeAlert(id),
         },
       ],
     });
-  }, [id, showAlret, dismissAll, closeAlret]);
+  }, [id, showAlert, dismissAll, closeAlert]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
 
-    showAlret({
+    showAlert({
       title: "삭제하시겠습니까?",
       content: "삭제한 질문은\n복구가 불가능합니다.",
       buttons: [
@@ -146,24 +146,24 @@ const FeedContent: FC<Question & PropsType> = ({
           color: "black",
           text: "취소",
           onPress: (id) => {
-            closeAlret(id);
+            closeAlert(id);
           },
         },
         {
           color: "red",
           text: "삭제",
           onPress: async (alret) => {
-            closeAlret(alret);
+            closeAlert(alret);
             await remove.mutateAsync(id);
             queryClient.invalidateQueries(queryKeys.question);
-            showAlret({
+            showAlert({
               title: "삭제 완료",
               content: "질문이 삭제되었습니다.",
               buttons: [
                 {
                   text: "확인",
                   color: "black",
-                  onPress: (id) => closeAlret(id),
+                  onPress: (id) => closeAlert(id),
                 },
               ],
             });
@@ -171,7 +171,7 @@ const FeedContent: FC<Question & PropsType> = ({
         },
       ],
     });
-  }, [remove, queryClient, id, closeAlret, showAlret, dismissAll]);
+  }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
 
   const items: ToolItem[] = useMemo(
     () =>

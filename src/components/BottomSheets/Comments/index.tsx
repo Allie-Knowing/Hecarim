@@ -31,7 +31,7 @@ import useIsLogin from "hooks/useIsLogin";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlert";
+import useAlert from "hooks/useAlert";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -54,7 +54,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const [text, setText] = useState<string>("");
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
-    const { showAlert: showAlret, closeAlert: closeAlret } = useAlret();
+    const { showAlert, closeAlert } = useAlert();
 
     const renderBackdrop = useCallback(
       (props) => (
@@ -89,11 +89,11 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
           queryKeys.textAnswerList,
         ]);
       } catch (error) {
-        showAlret({
+        showAlert({
           title: "글 답변 작성 실패",
           content: "다시 시도해주세요.",
           buttons: [
-            { text: "확인", color: "black", onPress: (id) => closeAlret(id) },
+            { text: "확인", color: "black", onPress: (id) => closeAlert(id) },
           ],
         });
       }

@@ -18,7 +18,7 @@ import { useTheme } from "styled-components/native";
 import { Portal } from "react-native-portalize";
 import { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
 import { useVideoMutation } from "queries/Video";
-import useAlret from "hooks/useAlret";
+import useAlert from "hooks/useAlert";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
@@ -62,7 +62,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const descriptionRef = useRef<string>("");
   const { dismissAll } = useBottomSheetModal();
   const { report } = useVideoMutation(id);
-  const { showAlret, closeAlret } = useAlret();
+  const { showAlert, closeAlert } = useAlert();
   const queryClient = useQueryClient();
   const { remove, adoption } = useVideoAnswerMutation();
   const { data, isLoading, refetch } = useVideoAnswerDetail(id);
@@ -113,23 +113,23 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
     await report.mutateAsync(descriptionRef.current);
 
-    showAlret({
+    showAlert({
       title: "신고 제출 완료",
       content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
       buttons: [
         {
           text: "확인",
           color: "black",
-          onPress: (id) => closeAlret(id),
+          onPress: (id) => closeAlert(id),
         },
       ],
     });
-  }, [id, showAlret, dismissAll, closeAlret]);
+  }, [id, showAlert, dismissAll, closeAlert]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
 
-    showAlret({
+    showAlert({
       title: "삭제하시겠습니까?",
       content: "삭제한 영상답변은\n복구가 불가능합니다.",
       buttons: [
@@ -137,25 +137,25 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
           color: "black",
           text: "취소",
           onPress: (id) => {
-            closeAlret(id);
+            closeAlert(id);
           },
         },
         {
           color: "red",
           text: "삭제",
           onPress: async (alret) => {
-            closeAlret(alret);
+            closeAlert(alret);
             await remove.mutateAsync(id);
             queryClient.invalidateQueries([queryKeys.answer]);
 
-            showAlret({
+            showAlert({
               title: "삭제 완료",
               content: "영상 답변이 삭제되었습니다.",
               buttons: [
                 {
                   text: "확인",
                   color: "black",
-                  onPress: (id) => closeAlret(id),
+                  onPress: (id) => closeAlert(id),
                 },
               ],
             });
@@ -163,7 +163,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
         },
       ],
     });
-  }, [remove, queryClient, id, closeAlret, showAlret, dismissAll]);
+  }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
 
   useEffect(() => {
     onPageChange();
@@ -171,35 +171,35 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
   const onAdoptionAccpet = useCallback(
     async (alert: string) => {
-      closeAlret(alert);
+      closeAlert(alert);
 
       await adoption.mutateAsync(id);
 
-      showAlret({
+      showAlert({
         title: "채택되었습니다",
         content: "답변이 채택되었습니다.",
         buttons: [
-          { color: "black", onPress: (id) => closeAlret(id), text: "확인" },
+          { color: "black", onPress: (id) => closeAlert(id), text: "확인" },
         ],
       });
 
       queryClient.invalidateQueries([queryKeys.answer]);
     },
-    [closeAlret, adoption, id, queryClient]
+    [closeAlert, adoption, id, queryClient]
   );
 
   const onAdoption = useCallback(() => {
     dismissAll();
 
-    showAlret({
+    showAlert({
       title: "채택하시겠습니까?",
       content: "답변 채택 후 채택 취소 혹은\n추가 채택이 불가능합니다.",
       buttons: [
-        { color: "black", onPress: (id) => closeAlret(id), text: "취소" },
+        { color: "black", onPress: (id) => closeAlert(id), text: "취소" },
         { color: "primary", onPress: onAdoptionAccpet, text: "채택" },
       ],
     });
-  }, [dismissAll, showAlret, closeAlret, onAdoptionAccpet]);
+  }, [dismissAll, showAlert, closeAlert, onAdoptionAccpet]);
 
   const items: ToolItem[] = useMemo(() => {
     const li = is_mine
