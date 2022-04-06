@@ -28,7 +28,7 @@ const Login: FC<Props> = ({ navigation }) => {
           <View>
             <GoogleButton {...navigation} />
             <NaverButton {...navigation} />
-            <AppleButton />
+            <AppleButton {...navigation} />
           </View>
         </S.LoginBtnContainer>
       </S.Content>

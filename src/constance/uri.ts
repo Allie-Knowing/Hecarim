@@ -12,6 +12,7 @@ enum uri {
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
+  appleSignin = "/apple",
 }
 
 export default uri;

@@ -6,6 +6,8 @@ type Props = {
   userId: number;
 };
 
+const defaultProfile = require("assets/profile.png");
+
 const Profile: FC<Props> = ({ userId }) => {
   const { data, isLoading, isError, error } = useProfile(userId);
 
@@ -14,7 +16,13 @@ const Profile: FC<Props> = ({ userId }) => {
       <S.Container>
         {data && (
           <>
-            <S.ProfileImage source={{ uri: data.data.data.profile }} />
+            <S.ProfileImage
+              source={
+                data.data.data.profile
+                  ? { uri: data.data.data.profile }
+                  : defaultProfile
+              }
+            />
             <S.ProfileContent>
               <S.Nickname>{data.data.data.name}</S.Nickname>
               <S.Description>
