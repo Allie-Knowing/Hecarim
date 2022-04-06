@@ -6,7 +6,7 @@ import {
   NativeScrollEvent,
   ListRenderItem,
 } from "react-native";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
@@ -42,7 +42,9 @@ const FeedVideos: FC<PropsType> = ({ dataList, onEndReached }) => {
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
-      keyExtractor={(item: Question) => `question_${item.id}`}
+      keyExtractor={(item: Question) =>
+        `question_${item.id}_${item.is_like}_${item.comment_cnt}_${item.like_cnt}`
+      }
       data={dataList}
       renderItem={renderItem}
       onEndReached={onEndReached}

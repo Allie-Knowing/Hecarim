@@ -3,9 +3,18 @@ import {
   getQuestionDetail,
   getQuestionHashtag,
   getQuestionList,
+  Question,
+  QuestionDetailResponse,
 } from "api/Question";
+import { AxiosResponse } from "axios";
 import queryKeys from "constant/queryKeys";
-import { useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { useCallback } from "react";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 
 const useQuestionList = (size: number) =>
   useInfiniteQuery(
@@ -21,10 +30,24 @@ const useQuestionList = (size: number) =>
     }
   );
 
-const useQuestionDetail = (videoId: number) =>
-  useQuery([queryKeys.question, queryKeys.questionId(videoId)], () =>
-    getQuestionDetail(videoId)
+interface Page {
+  page: number;
+  data: Question[];
+}
+
+interface Infinite {
+  pages: Page[];
+}
+
+const useQuestionDetail = (videoId: number) => {
+  return useQuery(
+    [queryKeys.question, queryKeys.questionId(videoId)],
+    () => getQuestionDetail(videoId),
+    {
+      enabled: false,
+    }
   );
+};
 
 const useQuestionHashtag = (videoId: number) =>
   useQuery(

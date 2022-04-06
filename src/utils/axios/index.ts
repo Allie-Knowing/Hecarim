@@ -19,6 +19,12 @@ export const refresh = async (error: AxiosError) => {
       storageKeys.refreshToken
     );
 
+    if (refreshToken === null) {
+      console.log("refresh fail");
+
+      return Promise.reject(error);
+    }
+
     //스토리지에서 토큰 삭제
     await Promise.all([
       localStorage.removeItem(storageKeys.accessToken),
@@ -39,7 +45,7 @@ export const refresh = async (error: AxiosError) => {
     ]);
 
     //axios 헤더 변경
-    error.config.headers["Authorization"] = `Bearer ${access_token}`;
+    error.config.headers.common["Authorization"] = `Bearer ${access_token}`;
     instance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${access_token}`;
@@ -66,22 +72,30 @@ export const refresh = async (error: AxiosError) => {
 export const instance = axios.create({
   baseURL: env.baseUrl,
   headers: {
-    Authorization:
-      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
+    common: {
+      "Content-Type": "application/json",
+      Authorization:
+        "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
+    },
   },
 });
 
 export const noTokenInstance = axios.create({
   baseURL: env.baseUrl,
   headers: {
-    Authorization:
-      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
+    common: {
+      Authorization:
+        "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
+    },
   },
 });
 
 instance.interceptors.request.use(
   async function (config) {
-    // config.headers[
+    // instance.defaults.headers.common["Authorization"] =
+    //   "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
+
+    // config.headers.common[
     //   "Authorization"
     // ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
 

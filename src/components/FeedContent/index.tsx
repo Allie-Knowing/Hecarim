@@ -21,9 +21,10 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { Video } from "expo-av";
-import { useQuestionHashtag } from "queries/Question";
+import { useQuestionHashtag, useQuestionDetail } from "queries/Question";
+import axios from "axios";
+import { error } from "console";
 
-const Test = require("../../assets/feed_test.jpg");
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
 const More = require("../../assets/icons/more.png");
@@ -34,6 +35,9 @@ const { height } = Dimensions.get("screen");
 interface PropsType {
   isCurrentPage: boolean;
 }
+
+const dateToString = (date: Date) =>
+  `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
 
 const FeedContent: FC<Question & PropsType> = ({
   id,
@@ -59,8 +63,16 @@ const FeedContent: FC<Question & PropsType> = ({
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
   const { like, unLike } = useLikeMutation(id);
-  const { data } = useQuestionHashtag(id);
+  const { isLoading, refetch, data } = useQuestionDetail(id);
   const videoRef = useRef<Video>(null);
+
+  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
+  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
+
+  const isLikeLoading = useMemo(
+    () => like.isLoading || unLike.isLoading || isLoading,
+    [like.isLoading, unLike.isLoading, isLoading]
+  );
 
   const onMorePress = () => {
     LayoutAnimation.easeInEaseOut();
@@ -74,26 +86,39 @@ const FeedContent: FC<Question & PropsType> = ({
     []
   );
 
+  const onLikePress = useCallback(async () => {
+    if (isLikeLoading) {
+      return;
+    }
+
+    if (!isLike) {
+      await like.mutateAsync();
+    } else {
+      await unLike.mutateAsync();
+    }
+
+    await refetch();
+  }, [isLikeLoading, isLike, like, unLike]);
+
   const items: ToolItem[] = useMemo(
-    () => [
-      {
-        color: themeContext.colors.primary.default,
-        onPress: () => {},
-        text: "채택하기",
-      },
-      {
-        color: themeContext.colors.red.default,
-        onPress: () => {
-          reportSheetRef.current.present();
-        },
-        text: "신고하기",
-      },
-      {
-        color: themeContext.colors.red.default,
-        onPress: () => {},
-        text: "삭제하기",
-      },
-    ],
+    () =>
+      is_mine
+        ? [
+            {
+              color: themeContext.colors.red.default,
+              onPress: () => {},
+              text: "삭제하기",
+            },
+          ]
+        : [
+            {
+              color: themeContext.colors.red.default,
+              onPress: () => {
+                reportSheetRef.current.present();
+              },
+              text: "신고하기",
+            },
+          ],
     [themeContext]
   );
 
@@ -179,7 +204,11 @@ const FeedContent: FC<Question & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              {isMore && <S.Description>2021년 12월 19일</S.Description>}
+              {isMore && (
+                <S.Description>
+                  {dateToString(new Date(created_at))}
+                </S.Description>
+              )}
               <S.Description numberOfLines={isMore ? undefined : 1}>
                 {description}
               </S.Description>
@@ -199,9 +228,11 @@ const FeedContent: FC<Question & PropsType> = ({
                 <S.Icon resizeMode="contain" source={Camera} />
                 <S.IconLabel>답변하기</S.IconLabel>
               </S.IconContainer>
-              <S.IconContainer>
-                <S.Icon resizeMode="contain" source={Heart} />
-                <S.IconLabel>{formattedNumber(like_cnt)}</S.IconLabel>
+              <S.IconContainer onPress={onLikePress}>
+                <Fragment>
+                  <S.Icon resizeMode="contain" source={Heart} />
+                  <S.IconLabel>{formattedNumber(likeCnt)}</S.IconLabel>
+                </Fragment>
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
@@ -239,10 +270,16 @@ interface HashtagProps {
 }
 
 const Hashtag: FC<HashtagProps> = ({ id }) => {
-  const { data, isLoading, isError } = useQuestionHashtag(id);
+  const { data, isLoading, isError, error } = useQuestionHashtag(id);
+
+  const hashtags = useMemo(() => data?.data.data || [], []);
 
   if (isLoading) {
     return <S.Description>해쉬태그 로딩 중...</S.Description>;
+  }
+
+  if (isError && axios.isAxiosError(error) && error.response.status === 404) {
+    return <S.Description>해쉬태그가 없습니다.</S.Description>;
   }
 
   if (isError) {
@@ -252,7 +289,7 @@ const Hashtag: FC<HashtagProps> = ({ id }) => {
   return (
     <Fragment>
       <S.HashTag>
-        {data.data.data.map((value) => `#${value.title}`).join(" ")}
+        {hashtags.map((value) => `#${value.title}`).join(" ")}
       </S.HashTag>
     </Fragment>
   );
