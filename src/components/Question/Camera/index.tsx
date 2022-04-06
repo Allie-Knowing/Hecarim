@@ -9,8 +9,9 @@ import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
+import isStackContext from "context/IsStackContext";
 
-type screenProp = StackNavigationProp<RootStackParamList, "CameraDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
 
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -21,6 +22,7 @@ const CameraComponent: FC = (): JSX.Element => {
   const [bestRatio, setBestRatio] = useState<string>();
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
   const { setUri } = useContext(cameraContext);
+  const isAnswer = useContext(isStackContext);
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
@@ -29,6 +31,7 @@ const CameraComponent: FC = (): JSX.Element => {
   const recordingImg = require("../../../assets/icons/recording.png");
   const recordImg = require("../../../assets/icons/record.png");
   const videoImg = require("../../../assets/icons/video.png");
+  const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
     cacheImage();
@@ -41,6 +44,7 @@ const CameraComponent: FC = (): JSX.Element => {
       Asset.fromModule("../../../assets/icons/recording.png").downloadAsync(),
       Asset.fromModule("../../../assets/icons/record.png").downloadAsync(),
       Asset.fromModule("../../../assets/icons/video.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/back-white.png").downloadAsync(),
     ]);
   };
 
@@ -65,7 +69,7 @@ const CameraComponent: FC = (): JSX.Element => {
             alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
-          navigation.navigate("CameraDetailPage");
+          navigation.push("CameraDetail");
         }
       });
     }
@@ -97,7 +101,8 @@ const CameraComponent: FC = (): JSX.Element => {
     for (let i = 0; i < availableRatioArra.length; i++) {
       ratioObjectArray[i] = {
         ratio: availableRatioArra[i],
-        realRatio: Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
+        realRatio:
+          Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
       };
     }
 
@@ -117,8 +122,9 @@ const CameraComponent: FC = (): JSX.Element => {
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
+      console.log(videoRecordPromise.uri);
       setUri(videoRecordPromise.uri);
-      navigation.navigate("CameraDetailPage");
+      navigation.push("CameraDetail");
     }
   };
 
@@ -130,21 +136,29 @@ const CameraComponent: FC = (): JSX.Element => {
   };
 
   const switchCamera = () => {
-    setCameraType(cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
   };
 
   const renderVideoRecordIndicator = (): JSX.Element => (
     <S.RecordIndicatorContainer>
       <S.RecordDot />
-      <S.RecordTitle>{"촬영중..."}</S.RecordTitle>
+      <S.RecordTitle>{"촬영중"}</S.RecordTitle>
     </S.RecordIndicatorContainer>
   );
 
   const renderVideoControl = (): JSX.Element => (
-    <S.Control>
+    <S.Control bottom={isAnswer ? 60 : 100}>
       {isVideoRecording ? (
         // 촬영중인 상태
-        <S.RecordVideoContainer activeOpacity={0.7} disabled={!isCameraReady} onPress={stopVideoRecording}>
+        <S.RecordVideoContainer
+          activeOpacity={0.7}
+          disabled={!isCameraReady}
+          onPress={stopVideoRecording}
+        >
           <S.RecordingVideoImage source={recordingImg} />
         </S.RecordVideoContainer>
       ) : (
@@ -175,6 +189,17 @@ const CameraComponent: FC = (): JSX.Element => {
   return (
     <S.QuestionWrapper>
       <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+        {isAnswer ? (
+          <S.GoBackContainer
+            onPress={() => {
+              navigation.pop(1);
+            }}
+          >
+            <S.GoBackImage source={backImage} />
+          </S.GoBackContainer>
+        ) : (
+          <></>
+        )}
         {isFocused && !isPickingVideo && (
           <Camera
             ref={(el) => setCameraRef(el)}
