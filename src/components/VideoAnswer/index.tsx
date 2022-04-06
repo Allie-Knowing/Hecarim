@@ -17,10 +17,6 @@ const VideoAnswer: FC = () => {
     setPage(newPage);
   };
 
-  useEffect(() => {
-    // console.log(page);
-  }, [page]);
-
   return (
     <S.Container
       style={{ height, width }}

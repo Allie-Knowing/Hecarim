@@ -1,4 +1,4 @@
-import useAlret from "hooks/useAlret";
+import useAlret from "hooks/useAlert";
 import {
   forwardRef,
   useCallback,
@@ -14,18 +14,18 @@ import {
   withTiming,
 } from "react-native-reanimated";
 import useThemeContext from "hooks/useThemeContext";
-import { AlretWithId, ButtonColor } from "../../context/AlretContext";
+import { AlertWithId, ButtonColor } from "../../context/AlertContext";
 import * as S from "./styles";
 
 export interface AlretRef {
   closeAnimation: (callback?: () => void) => void;
 }
 
-const Alert = forwardRef<AlretRef, AlretWithId>(
+const Alert = forwardRef<AlretRef, AlertWithId>(
   ({ title, content, buttons, id }, ref) => {
     const themeContext = useThemeContext();
     const offset = useSharedValue(0);
-    const { currentAlretId } = useAlret();
+    const { currentAlertId: currentAlretId } = useAlret();
 
     const colorMap = useMemo(
       () =>

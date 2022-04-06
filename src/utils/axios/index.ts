@@ -17,9 +17,10 @@ export const noTokenInstance = axios.create({
 });
 
 instance.interceptors.request.use(
-  function (config) {
-    config.headers["Authorization"] =
-      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
+  async function (config) {
+    config.headers[
+      "Authorization"
+    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
     return config;
   },
   function (error: AxiosError) {

@@ -1,9 +1,13 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
+import queryKeys from "constant/queryKeys";
+import useAlret from "hooks/useAlert";
 import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
+import { useTextAnswerMutation } from "queries/TextAnswer";
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
 import { TouchableHighlight } from "react-native";
 import { Portal } from "react-native-portalize";
+import { useQueryClient } from "react-query";
 import { useTheme } from "styled-components/native";
 import { useTextAnswer } from "utils/hooks/textAnswer";
 import * as S from "./styles";
@@ -44,11 +48,33 @@ const Comment: FC<getTextAnswerList> = ({
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
   const ref = useRef<BottomSheetModal>(null);
-  const { setState } = useTextAnswer();
+  const { remove } = useTextAnswerMutation();
+  const queryClient = useQueryClient();
+  const { closeAlert: closeAlret, showAlert: showAlret } = useAlret();
 
-  const onDeletePress = useCallback(() => {
-    setState.deleteTextAnswer({ commentId: id });
-  }, [id, setState]);
+  const onDeletePress = useCallback(async () => {
+    ref.current.close();
+    showAlret({
+      title: "삭제하시겠습니까?",
+      content: "삭제된 댓글은 복구가\n불가능 합니다.",
+      buttons: [
+        { text: "취소", color: "black", onPress: (id) => closeAlret(id) },
+        {
+          text: "삭제",
+          color: "red",
+          onPress: async (alret) => {
+            closeAlret(alret);
+            await remove.mutateAsync({ commentId: id });
+            queryClient.invalidateQueries([
+              queryKeys.question,
+              queryKeys.questionId(1),
+              queryKeys.textAnswerList,
+            ]);
+          },
+        },
+      ],
+    });
+  }, [id, remove]);
 
   const toolItem = useMemo<ToolItem[]>(
     () => [
