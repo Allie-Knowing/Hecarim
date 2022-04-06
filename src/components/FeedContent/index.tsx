@@ -13,14 +13,17 @@ import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetModal,
+  useBottomSheetModal,
+} from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
-import { Video } from "expo-av";
+import { Audio, Video } from "expo-av";
 import {
   useQuestionHashtag,
   useQuestionDetail,
@@ -30,6 +33,7 @@ import axios from "axios";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlret from "hooks/useAlret";
+import { useVideoMutation } from "queries/Video";
 
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
@@ -74,6 +78,9 @@ const FeedContent: FC<Question & PropsType> = ({
   const { remove } = useQuestionMutation();
   const queryClient = useQueryClient();
   const { showAlret, closeAlret } = useAlret();
+  const { report } = useVideoMutation(id);
+  const descriptionRef = useRef<string>("");
+  const { dismissAll } = useBottomSheetModal();
 
   const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
   const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
@@ -89,7 +96,8 @@ const FeedContent: FC<Question & PropsType> = ({
   };
 
   const onReportPress = useCallback(
-    () => () => {
+    (description: string) => () => {
+      descriptionRef.current = description;
       confirmSheetRef.current.present();
     },
     []
@@ -109,8 +117,26 @@ const FeedContent: FC<Question & PropsType> = ({
     await refetch();
   }, [isLikeLoading, isLike, like, unLike]);
 
+  const onSubmitPress = useCallback(async () => {
+    dismissAll();
+
+    await report.mutateAsync(descriptionRef.current);
+
+    showAlret({
+      title: "신고 제출 완료",
+      content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
+      buttons: [
+        {
+          text: "확인",
+          color: "black",
+          onPress: (id) => closeAlret(id),
+        },
+      ],
+    });
+  }, [id, showAlret, dismissAll, closeAlret]);
+
   const onDeletePress = useCallback(async () => {
-    toolSheetRef.current.close();
+    dismissAll();
 
     showAlret({
       title: "삭제하시겠습니까?",
@@ -145,7 +171,7 @@ const FeedContent: FC<Question & PropsType> = ({
         },
       ],
     });
-  }, [remove, queryClient, id]);
+  }, [remove, queryClient, id, closeAlret, showAlret, dismissAll]);
 
   const items: ToolItem[] = useMemo(
     () =>
@@ -173,32 +199,32 @@ const FeedContent: FC<Question & PropsType> = ({
     () => [
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("스팸"),
         text: "스팸",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("음란물 또는 불법촬영물"),
         text: "음란물 또는 불법촬영물",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("괴롭힘 또는 따돌림"),
         text: "괴롭힘 또는 따돌림",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("욕설 및 비방"),
         text: "욕설 및 비방",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("명예회손 또는 저작권 침해"),
         text: "명예회손 또는 저작권 침해",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: onReportPress(),
+        onPress: onReportPress("기타 사유"),
         text: "기타 사유",
       },
     ],
@@ -209,21 +235,24 @@ const FeedContent: FC<Question & PropsType> = ({
     () => [
       {
         color: themeContext.colors.red.default,
-        onPress: () => {},
+        onPress: onSubmitPress,
         text: "신고 제출하기",
       },
       {
         color: themeContext.colors.grayscale.scale100,
-        onPress: () => confirmSheetRef.current.dismiss(),
+        onPress: () => dismissAll(),
         text: "취소하기",
       },
     ],
-    [themeContext]
+    [themeContext, onSubmitPress, dismissAll]
   );
 
-  const onPageChange = useCallback(() => {
+  const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
-      videoRef.current.playFromPositionAsync(0);
+      await videoRef.current.playFromPositionAsync(0);
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+      });
     } else {
       videoRef.current.stopAsync();
       setIsMore(false);
@@ -242,6 +271,8 @@ const FeedContent: FC<Question & PropsType> = ({
           isLooping
           resizeMode="cover"
           ref={videoRef}
+          rate={1.0}
+          volume={1.0}
         />
         <S.BackBlack
           colors={["transparent", themeContext.colors.grayscale.scale100]}
@@ -340,7 +371,7 @@ interface HashtagProps {
 const Hashtag: FC<HashtagProps> = ({ id }) => {
   const { data, isLoading, isError, error } = useQuestionHashtag(id);
 
-  const hashtags = useMemo(() => data?.data.data || [], []);
+  const hashtags = useMemo(() => data?.data.data || [], [data]);
 
   if (isLoading) {
     return <S.Description>해쉬태그 로딩 중...</S.Description>;
