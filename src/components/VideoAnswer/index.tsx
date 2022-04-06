@@ -18,7 +18,7 @@ interface PropsType {
   questionId: number;
 }
 
-const size = 2;
+const size = 20;
 
 const VideoAnswer: FC<PropsType> = ({ isCurrentPage, questionId }) => {
   const [page, setPage] = useState(0);
