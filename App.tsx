@@ -25,6 +25,7 @@ import { useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -63,58 +64,60 @@ export default function App() {
   }
 
   return (
-    <isLoginContext.Provider value={isLogin}>
-      <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
-            <ThemeProvider theme={theme}>
-              <Provider store={store}>
-                <BottomSheetModalProvider>
-                  <AlretProvider>
-                    <NavigationContainer>
-                      <Host>
-                        <Root.Navigator
-                          initialRouteName="Main"
-                          screenOptions={{
-                            cardStyleInterpolator:
-                              CardStyleInterpolators.forHorizontalIOS,
-                          }}
-                        >
-                          <Root.Screen
-                            name="Main"
-                            component={BottomTabNavigation}
-                            options={{ headerShown: false }}
-                          />
-                          <Root.Screen
-                            name="StackedQuestionList"
-                            component={StackedQuestionList}
-                            options={{ headerShown: false }}
-                          />
-                          <Root.Screen
-                            name="Login"
-                            component={Login}
-                            options={{ headerShown: false }}
-                          />
-                          <Root.Screen
-                            name="Setting"
-                            component={Setting}
-                            options={{ title: "설정" }}
-                          />
-                          <Root.Screen
-                            name="UserPage"
-                            component={UserPage}
-                            options={{ title: "" }}
-                          />
-                        </Root.Navigator>
-                      </Host>
-                    </NavigationContainer>
-                  </AlretProvider>
-                </BottomSheetModalProvider>
-              </Provider>
-            </ThemeProvider>
-          </SafeAreaView>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </isLoginContext.Provider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <isLoginContext.Provider value={isLogin}>
+        <QueryClientProvider client={queryClient}>
+          <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+              <ThemeProvider theme={theme}>
+                <Provider store={store}>
+                  <BottomSheetModalProvider>
+                    <AlretProvider>
+                      <NavigationContainer>
+                        <Host>
+                          <Root.Navigator
+                            initialRouteName="Main"
+                            screenOptions={{
+                              cardStyleInterpolator:
+                                CardStyleInterpolators.forHorizontalIOS,
+                            }}
+                          >
+                            <Root.Screen
+                              name="Main"
+                              component={BottomTabNavigation}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="StackedQuestionList"
+                              component={StackedQuestionList}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="Login"
+                              component={Login}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="Setting"
+                              component={Setting}
+                              options={{ title: "설정" }}
+                            />
+                            <Root.Screen
+                              name="UserPage"
+                              component={UserPage}
+                              options={{ title: "" }}
+                            />
+                          </Root.Navigator>
+                        </Host>
+                      </NavigationContainer>
+                    </AlretProvider>
+                  </BottomSheetModalProvider>
+                </Provider>
+              </ThemeProvider>
+            </SafeAreaView>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </isLoginContext.Provider>
+    </GestureHandlerRootView>
   );
 }
