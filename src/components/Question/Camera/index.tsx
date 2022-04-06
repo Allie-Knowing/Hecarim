@@ -166,7 +166,11 @@ const CameraComponent: FC = (): JSX.Element => {
           <S.GetVideoContainer onPress={importMediaFromLibrary}>
             <S.VideoImage source={videoImg} />
           </S.GetVideoContainer>
-          <S.RecordVideoContainer onPress={recordVideo}>
+          <S.RecordVideoContainer
+            onPress={recordVideo}
+            onLongPress={recordVideo}
+            onPressOut={stopVideoRecording}
+          >
             <S.RecordImageStyle source={recordImg} />
           </S.RecordVideoContainer>
           <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
