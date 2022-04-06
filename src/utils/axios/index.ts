@@ -91,9 +91,11 @@ export const noTokenInstance = axios.create({
 });
 
 instance.interceptors.request.use(
-  async function (config) {
-    // instance.defaults.headers.common["Authorization"] =
-    //   "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
+  function (config) {
+    instance.defaults.headers.common["Authorization"] =
+      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
+    config.headers.common["Authorization"] =
+      "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss";
 
     // config.headers.common[
     //   "Authorization"
@@ -106,6 +108,15 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(function (response) {
-  return response;
-}, refresh);
+instance.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error: AxiosError) {
+    return Promise.reject(error);
+  }
+);
+
+// instance.interceptors.response.use(function (response) {
+//   return response;
+// }, refresh);

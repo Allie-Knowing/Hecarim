@@ -30,15 +30,6 @@ const useQuestionList = (size: number) =>
     }
   );
 
-interface Page {
-  page: number;
-  data: Question[];
-}
-
-interface Infinite {
-  pages: Page[];
-}
-
 const useQuestionDetail = (videoId: number) => {
   return useQuery(
     [queryKeys.question, queryKeys.questionId(videoId)],
