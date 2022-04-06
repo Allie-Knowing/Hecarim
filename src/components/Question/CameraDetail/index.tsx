@@ -14,9 +14,8 @@ import theme from "theme/theme";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
-
-import { getVideoUrl } from "utils/api/videoUrl";
-import { postVideoData } from "utils/api/videoData/index";
+import { useVideoUrlMutation } from "queries/useVideoUrl";
+import { postVideoDataMutation } from "queries/useVideoData";
 
 type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
 
@@ -33,6 +32,9 @@ const CameraDetail: FC = (): JSX.Element => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
+
+  const { videoUrl } = useVideoUrlMutation();
+  const { postQuestion, postAnswer } = postVideoDataMutation();
 
   const createFormData = (uri: string) => {
     const formData = new FormData();
@@ -55,21 +57,30 @@ const CameraDetail: FC = (): JSX.Element => {
       hashTagArr.push(value);
     });
 
-    getVideoUrl(isAnswer ? "answer" : "question", formData).then(async (res) => {
-      const request_body = isAnswer
-        ? {
-            title: title,
-            video_url: res.data.data.url,
-          }
-        : {
+    try {
+      const videoUrlResponse = await videoUrl.mutateAsync({
+        type: isAnswer ? "answer" : "question",
+        file: formData,
+      });
+      const url = videoUrlResponse.data.data.url;
+
+      isAnswer
+        ? await postAnswer.mutateAsync({
+            data: {
+              title: title,
+              video_url: url,
+            },
+            feed_id: 1,
+          })
+        : await postQuestion.mutateAsync({
             title: title,
             description: description,
             hash_tag: hashTagArr,
-            video_url: res.data.data.url,
-          };
-      await postVideoData(isAnswer, request_body);
-    });
-
+            video_url: url,
+          });
+    } catch (err) {
+      console.log(err);
+    }
     navigation.pop(1);
   };
 
