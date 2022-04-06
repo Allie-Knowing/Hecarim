@@ -6,7 +6,6 @@ import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
 
 export const postSigninApi = async (body: signinRequest) => {
-  console.log(body);
   let response = null;
 
   if (body.provider === "GOOGLE") {
