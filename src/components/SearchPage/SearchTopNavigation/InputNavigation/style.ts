@@ -1,7 +1,8 @@
 import styled from "styled-components/native";
-import { useTheme } from "styled-components";
+import Animated from "react-native-reanimated";
 
 export const Wrapper = styled.View<{ topPad:number }>`
+    position: relative;
     justify-content: center;
     align-items: center;
     border: 1px ${({theme}) => theme.colors.grayscale.scale20};
@@ -9,6 +10,12 @@ export const Wrapper = styled.View<{ topPad:number }>`
     border-radius: 10;
     height: 50px;
     width: 365px;
+`;
+
+export const Message = styled.Text`
+    color: ${({ theme }) => theme.colors.grayscale.scale50};
+    text-align: center;
+    font: ${({ theme }) => theme.fonts.body3};
 `;
 
 export const MagnifyImage = styled.Image`
@@ -39,13 +46,9 @@ export const ResetTextImage = styled.Image`
     z-index: 2;
 `;
 
-export const TitleAutoCompleteBox = styled.View`
-    position : absolute;
-    z-index: 3;
-    width: 365px;
-    height: 200px;
-`;
-
-export const TitleElement = styled.Text`
-    
+export const ValueMappingContainer = styled(Animated.ScrollView)`
+    position: absolute;
+    top: 0;
+    margin-top: 60px;
+    height: 400px;
 `;

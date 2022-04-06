@@ -41,9 +41,12 @@ module.exports = {
     "react/jsx-key": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "no-irregular-whitespace": "off",
-    "@typescript-eslint/restrict-plus-operands": "warn",
-    "react-hooks/exhaustive-deps": "warn",
-    "react-hooks/rules-of-hooks": "warn",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "indent": "off",
   },
   settings: {
     react: {

@@ -15,19 +15,13 @@ import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 
 const { height } = Dimensions.get("screen");
 
-interface Props {
-  searchTitle: searchTitleResponse;
-  getAutoComplete: (payload: searchPayload) => void;
-}
+interface Props {}
 
-const DefaultSearchPage: FC<Props> = ({ searchTitle, getAutoComplete }) => {
+const DefaultSearchPage: FC<Props> = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
-        <SearchTopNavigation
-          searchTitle={searchTitle}
-          getAutoComplete={getAutoComplete}
-        />
+        <SearchTopNavigation />
         <S.View height={height / 1.44}>
           <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
         </S.View>
