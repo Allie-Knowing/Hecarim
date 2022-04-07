@@ -3,7 +3,7 @@ import uri from "constance/uri";
 
 export const getVideoAnswerListApi = async () => {
   const request = getRequest();
-  const data = await request.get(uri.video_answer);
+  const data = await request.get(uri.videoAnswer);
   return data;
 }
 

@@ -1,16 +1,8 @@
-import {
-  Dimensions,
-  FlatList,
-  FlatListProps,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-} from "react-native";
+import { Dimensions, Image, StyleSheet, ViewStyle } from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect } from "react";
 import { useState } from "react";
 import Animated, {
   interpolate,
@@ -19,15 +11,13 @@ import Animated, {
   AnimateStyle,
   useAnimatedScrollHandler,
   useAnimatedRef,
-  useDerivedValue,
 } from "react-native-reanimated";
 import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback } from "react";
-import uniqueId from "constant/uniqueId";
-import { getVideoAnswerListResponse } from "modules/dto/response/answerResponse";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
+import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
 const navGap = 24;
@@ -50,21 +40,33 @@ const styles = StyleSheet.create({
 });
 
 interface PropsType {
-  questionList: string[];
+  questionList: Question[];
   index: number;
-  videoAnswerList: getVideoAnswerListResponse;
-  getVideoAnswerList: () => void;
+  onQuestionEndReached: () => void;
 }
 
-const QuestionList: FC<PropsType> = ({ questionList, index }) => {
+const QuestionList: FC<PropsType> = ({
+  questionList,
+  index,
+  onQuestionEndReached,
+}) => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
   const outerRef = useAnimatedRef<Animated.ScrollView>();
-  const pageValue = useSharedValue<number>(0);
-  const pageId = useSharedValue<string>(uniqueId());
   const isStack = useContext(isStackContext);
   const navigation = useMainStackNavigation();
+  const [page, setPage] = useState<number>(0);
+  const [currentQuestionId, setCurrentQuestionId] = useState<number>(
+    questionList.length > 0 ? questionList[0].id : -1
+  );
+  const [isQuestionAdoption, setIsQuestionAdoption] = useState<number>(
+    questionList.length > 0 ? questionList[0].is_adoption : 1
+  );
+
+  useEffect(() => {
+    console.log(currentQuestionId);
+  }, [currentQuestionId]);
 
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
@@ -95,6 +97,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
       pageOffset.value = event.contentOffset.x / width;
+      setPage(Math.round(event.contentOffset.x / width));
     },
   });
 
@@ -108,19 +111,6 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
       position: "absolute",
     }),
     [widths, topPad]
-  );
-
-  useDerivedValue(() => {
-    // eslint-disable-next-line no-self-assign
-    pageId.value = pageId.value;
-  });
-
-  const onNavPress = useCallback(
-    (index: number) => () => {
-      pageValue.value = index;
-      pageId.value = uniqueId();
-    },
-    [outerRef]
   );
 
   return (
@@ -141,8 +131,24 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         contentContainerStyle={{ flexGrow: 1 }}
         onScroll={scrollHandler}
       >
-        <FeedVideos dataList={questionList} index={index} />
-        <VideoAnswer />
+        <FeedVideos
+          dataList={questionList}
+          index={index}
+          onEndReached={onQuestionEndReached}
+          isCurrentPage={page === 0}
+          setCurrentQuestionId={setCurrentQuestionId}
+        />
+        {currentQuestionId !== -1 && (
+          <VideoAnswer
+            isCurrentPage={page === 1}
+            questionId={currentQuestionId}
+            isQuestionMine={
+              questionList.find((value) => value.id === currentQuestionId)
+                ?.is_mine || false
+            }
+            isQuestionAdoption={isQuestionAdoption}
+          />
+        )}
       </Animated.ScrollView>
       {isStack && (
         <S.BackButton onPress={() => navigation.pop()}>
@@ -157,17 +163,13 @@ const QuestionList: FC<PropsType> = ({ questionList, index }) => {
         style={[NavStyle("question"), questionNavStyle]}
         onLayout={onLayout("question")}
       >
-        <TouchableOpacity onPress={onNavPress(0)}>
-          <S.NavText>질문</S.NavText>
-        </TouchableOpacity>
+        <S.NavText>질문</S.NavText>
       </Animated.View>
       <Animated.View
         style={[NavStyle("answer"), answerNavStyle]}
         onLayout={onLayout("answer")}
       >
-        <TouchableOpacity onPress={onNavPress(1)}>
-          <S.NavText>영상 답변</S.NavText>
-        </TouchableOpacity>
+        <S.NavText>영상 답변</S.NavText>
       </Animated.View>
     </S.Wrapper>
   );

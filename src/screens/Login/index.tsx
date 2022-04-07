@@ -2,7 +2,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import AppleButton from "components/Buttons/Login/AppleButton";
 import GoogleButton from "components/Buttons/Login/GoogleButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
-import LoginHeader from "components/Header/Login";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import React, { FC } from "react";
 import { Dimensions, View } from "react-native";
@@ -20,7 +19,6 @@ const Login: FC<Props> = ({ navigation }) => {
 
   return (
     <S.Container>
-      <LoginHeader {...navigation} />
       <S.Content height={height - (50 + topPad)}>
         <S.Title>세상의 모든 질문을,{"\n"} Knowing.</S.Title>
         <S.LoginBtnContainer>
@@ -28,7 +26,7 @@ const Login: FC<Props> = ({ navigation }) => {
           <View>
             <GoogleButton {...navigation} />
             <NaverButton {...navigation} />
-            <AppleButton />
+            <AppleButton {...navigation} />
           </View>
         </S.LoginBtnContainer>
       </S.Content>

@@ -1,11 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Question } from "api/Question";
+
+export interface StackedQuestionListProps {
+  data: Question[];
+  index: number;
+}
+
+export interface StackedSearchQuestionProps {
+  title: string;
+}
 
 export type MainStackParamList = {
   Main: undefined;
-  StackedQuestionList: undefined;
+  SearchedQuestionsPage: StackedSearchQuestionProps;
+  StackedQuestionList: StackedQuestionListProps;
   Login: undefined;
-  UserPage: undefined;
+  UserPage: { userId: number };
   Setting: undefined;
   CameraPage: undefined;
   CameraDetail: { questionId?: number | undefined };

@@ -4,45 +4,52 @@ import { Text, TouchableOpacity } from "react-native";
 import * as S from "./styles";
 import env from "constant/env";
 import * as Google from "expo-auth-session/providers/google";
-import useSignin from "utils/hooks/signin/useSignin";
-import { SIGNIN } from "modules/redux/action/signin/interface";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
+import useSignin from "queries/Signin";
+import useAlert from "hooks/useAlert";
+import axios from "axios";
 
 const google = require("../../../assets/icons/login/google.png");
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
 const GoogleButton: FC<Props> = (navigation) => {
-  const { state, setState } = useSignin();
+  const { mutate, isSuccess, isError, error } = useSignin();
   const [request, response, prompAsync] = Google.useAuthRequest({
-    clientId: env.googleClientId.webId,
+    clientId: env.googleClientId,
     responseType: "id_token",
     redirectUri: env.redirectUrl,
     scopes: ["openid", "email", "profile"],
   });
+  const { closeAlert, showAlert } = useAlert();
 
   useEffect(() => {
-    setState.reset();
-  }, []);
-
-  useEffect(() => {
-    if (state.isSignin) {
+    if (isSuccess) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }
-  }, [state.isSignin]);
+  }, [isSuccess]);
 
   useEffect(() => {
-    if (state.error.type === SIGNIN) {
-      alert("로그인 정보가 잘못되었습니다.");
-      setState.reset();
+    if (isError && axios.isAxiosError(error) && error.response.status === 409) {
+      showAlert({
+        title: "사용중인 이메일입니다.",
+        content: "다른 계정으로 시도해주세요.",
+        buttons: [
+          {
+            text: "확인",
+            color: "black",
+            onPress: (id) => closeAlert(id),
+          },
+        ],
+      });
     }
-  }, [state.error]);
+  }, [isError]);
 
   const login = async () => {
     const response = await prompAsync();
     if (response.type === "success") {
-      setState.signin({
+      mutate({
         id_token: response.params.id_token,
         provider: "GOOGLE",
       });

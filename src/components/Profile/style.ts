@@ -31,3 +31,9 @@ export const Description = styled.Text`
   font: ${({ theme }) => theme.fonts.description1};
   margin-top: 4px;
 `;
+
+export const Message = styled.Text`
+  width: 100%;
+  margin-top: 100px;
+  text-align: center;
+`;

@@ -2,7 +2,7 @@ import { profileRequest } from "modules/dto/request/profileRequest";
 import {
   getProfile,
   getProfileQuestionList,
-  setId,
+  reset,
 } from "modules/redux/action/profile";
 import { useDispatch } from "react-redux";
 import useSelectState from "../default/useSelectState";
@@ -17,8 +17,8 @@ const useProfile = () => {
     questionList: (payload: profileRequest) => {
       dispatch(getProfileQuestionList(payload));
     },
-    setId: (payload: number) => {
-      dispatch(setId(payload));
+    reset: () => {
+      dispatch(reset());
     },
   };
 

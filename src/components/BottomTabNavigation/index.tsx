@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { Fragment, useContext } from "react";
+import React, { FC, Fragment, useContext, useEffect } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,7 +8,11 @@ import Icon from "./Icon";
 import Feed from "screens/Feed";
 import MyPage from "screens/MyPage/MyPage";
 import Question from "components/Question";
-import Search from "screens/Search";
+import Search from "screens/Search/DefaultSearchPage";
+import storageKeys from "constant/storageKeys";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
+import localStorage from "utils/localStorage";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -51,12 +55,23 @@ const screens: Screen[] = [
   },
 ];
 
+type Props = { navigation: StackNavigationProp<MainStackParamList, "Main"> };
+
 const { width } = Dimensions.get("window");
 
-const BottomTabNavigation = () => {
+const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   const themeContext = useContext(ThemeContext);
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [pressName, setPressName] = useState<string>("feed");
+
+  useEffect(() => {
+    const loginCheck = async () => {
+      if (!(await localStorage.getItem<string>(storageKeys.accessToken))) {
+        navigation.reset({ routes: [{ name: "Login" }] });
+      }
+    };
+    loginCheck();
+  }, []);
 
   return (
     <Fragment>

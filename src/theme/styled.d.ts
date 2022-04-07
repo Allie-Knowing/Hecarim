@@ -4,5 +4,5 @@ import { Theme } from "./theme";
 
 // and extend them!
 declare module "styled-components/native" {
-  export type DefaultTheme = Theme
+  export interface DefaultTheme extends Theme {}
 }

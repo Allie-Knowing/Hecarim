@@ -1,67 +1,220 @@
+/* eslint-disable indent */
 import Comment from "components/Comment";
-import { forwardRef, useContext, useEffect, useState } from "react";
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import {
+  forwardRef,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  FC,
+  Fragment,
+  RefObject,
+} from "react";
+import {
+  ListRenderItem,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet, { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetTextInput,
+} from "@gorhom/bottom-sheet";
 import * as S from "./styles";
-import DefaultBackDropComponent from "../DefaultBackdropComponent";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
+import { getTextAnswerList } from "../../../modules/dto/response/textAnswerResponse";
+import { useTextAnswerList, useTextAnswerMutation } from "queries/TextAnswer";
+import axios from "axios";
+import useIsLogin from "hooks/useIsLogin";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useQueryClient } from "react-query";
+import queryKeys from "constant/queryKeys";
+import useAlert from "hooks/useAlert";
 
-const { height } = Dimensions.get("screen");
 export interface CommentBottomSheetRefProps {
   open: () => void;
 }
 
 const TestImage = require("../../../assets/feed_test.jpg");
 
-const CommentBottomSheet = forwardRef<BottomSheet>((_, ref) => {
-  const themeContext = useContext(ThemeContext);
-  const { bottom: bottomPad } = useSafeAreaInsets();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [inputProps, isFocus] = useFocus();
+interface PropsType {
+  navigation: StackNavigationProp<any>;
+  questionId: number;
+  isQuestionAdoption: boolean;
+}
+
+const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
+  ({ navigation, questionId, isQuestionAdoption }, ref) => {
+    const themeContext = useContext(ThemeContext);
+    const { bottom: bottomPad } = useSafeAreaInsets();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [inputProps, isFocus] = useFocus();
+    const [text, setText] = useState<string>("");
+    const { post } = useTextAnswerMutation();
+    const queryClient = useQueryClient();
+    const { showAlert, closeAlert } = useAlert();
+
+    const renderBackdrop = useCallback(
+      (props) => (
+        <BottomSheetBackdrop
+          {...props}
+          disappearsOnIndex={-1}
+          appearsOnIndex={0}
+          enableTouchThrough={false}
+          pressBehavior={"close"}
+        />
+      ),
+      []
+    );
+
+    const onLoginPress = useCallback(() => {
+      (ref as RefObject<BottomSheet>).current.close();
+      navigation.push("Login");
+    }, [navigation, ref]);
+
+    const onAddPress = useCallback(async () => {
+      const t = text.trim();
+      if (t === "") {
+        return;
+      }
+      setText("");
+      try {
+        await post.mutateAsync({ questionId: questionId, content: t });
+
+        queryClient.invalidateQueries([
+          queryKeys.question,
+          queryKeys.questionId(questionId),
+          queryKeys.textAnswerList,
+        ]);
+      } catch (error) {
+        showAlert({
+          title: "글 답변 작성 실패",
+          content: "다시 시도해주세요.",
+          buttons: [
+            { text: "확인", color: "black", onPress: (id) => closeAlert(id) },
+          ],
+        });
+      }
+    }, [post, text, queryClient]);
+
+    return (
+      <BottomSheet
+        ref={ref}
+        snapPoints={["70%"]}
+        enablePanDownToClose
+        index={-1}
+        backdropComponent={renderBackdrop}
+        backgroundComponent={StyledBackgroundComponent}
+        handleIndicatorStyle={{
+          backgroundColor: themeContext.colors.grayscale.scale50,
+        }}
+        backgroundStyle={{
+          backgroundColor: themeContext.colors.grayscale.scale100,
+        }}
+        onChange={(index) => setIsOpen(index !== -1)}
+        keyboardBehavior="extend"
+      >
+        <S.Container>
+          <S.Title>댓글</S.Title>
+          <TextAnswerList
+            isQuestionAdoption={isQuestionAdoption}
+            questionId={questionId}
+            isOpen={isOpen}
+          />
+        </S.Container>
+        <S.InputContainer>
+          <S.InputProfile source={TestImage} />
+          <S.Input
+            placeholder="글 답변 작성하기..."
+            placeholderTextColor={themeContext.colors.grayscale.scale30}
+            {...inputProps}
+            value={text}
+            onChangeText={(e) => setText(e)}
+          />
+          <TouchableOpacity onPress={onAddPress}>
+            <S.Submit>추가</S.Submit>
+          </TouchableOpacity>
+        </S.InputContainer>
+        <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
+      </BottomSheet>
+    );
+  }
+);
+
+interface ListProps {
+  isOpen: boolean;
+  questionId: number;
+  isQuestionAdoption: boolean;
+}
+
+const size = 20;
+
+const TextAnswerList: FC<ListProps> = ({
+  isOpen,
+  questionId,
+  isQuestionAdoption,
+}) => {
+  const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
+    questionId,
+    size,
+    isOpen
+  );
+
+  const renderItem: ListRenderItem<getTextAnswerList> = useCallback(
+    ({ item }) => {
+      return (
+        <Comment
+          questionId={questionId}
+          {...item}
+          isQuestionAdoption={isQuestionAdoption}
+        />
+      );
+    },
+    []
+  );
+
+  const onEndReached = useCallback(() => {
+    if (!isError) {
+      fetchNextPage();
+    }
+  }, [isError]);
+
+  const list = useMemo(
+    () =>
+      data
+        ? (data.pages || [])
+            .map((value) => value.data)
+            .reduce(function (acc, cur) {
+              return acc.concat(cur);
+            })
+        : [],
+    [data]
+  );
+
+  if (isLoading) {
+    return <S.Message>글 답변 목록 로딩중...</S.Message>;
+  }
+
+  if (isError && axios.isAxiosError(error) && error.response.status !== 404) {
+    return <S.Message>글 답변 목록 오류</S.Message>;
+  }
 
   return (
-    <BottomSheet
-      ref={ref}
-      snapPoints={["70%"]}
-      enablePanDownToClose
-      index={-1}
-      backdropComponent={DefaultBackDropComponent(isOpen)}
-      backgroundComponent={StyledBackgroundComponent}
-      handleIndicatorStyle={{
-        backgroundColor: themeContext.colors.grayscale.scale50,
-      }}
-      backgroundStyle={{
-        backgroundColor: themeContext.colors.grayscale.scale100,
-      }}
-      onChange={(index) => setIsOpen(index !== -1)}
-      keyboardBehavior="extend"
-    >
-      <S.Container>
-        <S.Title>댓글</S.Title>
+    <Fragment>
+      {data && list.length > 0 ? (
         <S.List
-          data={[1, 2, 3, 4, 5, 6, 7]}
-          keyExtractor={(i) => `comment_${i}`}
-          renderItem={() => <Comment />}
+          data={list}
+          renderItem={renderItem}
           showsVerticalScrollIndicator={false}
+          onEndReached={onEndReached}
         />
-      </S.Container>
-      <S.InputContainer>
-        <S.InputProfile source={TestImage} />
-        <S.Input
-          placeholder="KJG04로 답변 추가"
-          placeholderTextColor={themeContext.colors.grayscale.scale30}
-          {...inputProps}
-        />
-        <TouchableOpacity>
-          <S.Submit>추가</S.Submit>
-        </TouchableOpacity>
-      </S.InputContainer>
-      <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
-    </BottomSheet>
+      ) : (
+        <S.Message>글 답변이 없습니다</S.Message>
+      )}
+    </Fragment>
   );
-});
+};
 
 export default CommentBottomSheet;

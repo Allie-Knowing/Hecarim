@@ -24,10 +24,10 @@ module.exports = {
   plugins: ["react", "react-hooks", "@typescript-eslint"],
   rules: {
     indent: ["error", 2, { SwitchCase: 1 }],
-    "no-empty-function": "off",
+    "no-empty-function": "warn",
     "@typescript-eslint/no-empty-function": "off",
-    "react/display-name": "off",
-    "react/prop-types": "off",
+    "react/display-name": "wran",
+    "react/prop-types": "wran",
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-empty-interface": "warn",
     "@typescript-eslint/no-var-requires": "off",
@@ -43,6 +43,10 @@ module.exports = {
     "no-irregular-whitespace": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/rules-of-hooks": "off",
+    "indent": "off",
   },
   settings: {
     react: {

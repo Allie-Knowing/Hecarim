@@ -7,6 +7,7 @@ import {
   deleteTextAnswer,
   getTextAnswerList,
   postTextAnswer,
+  resetTextAnswerList,
 } from "modules/redux/action/textAnswer";
 import { useDispatch } from "react-redux";
 import { useSelectState } from "../default";
@@ -23,6 +24,9 @@ const useTextAnswer = () => {
     },
     deleteTextAnswer: (payload: deleteTextAnswerRequest) => {
       dispatch(deleteTextAnswer(payload));
+    },
+    resetTextAnswerList: () => {
+      dispatch(resetTextAnswerList());
     },
   };
 

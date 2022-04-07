@@ -1,10 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Platform } from "react-native";
 import styled from "styled-components/native";
-
-interface MoreProps {
-  isMore: boolean;
-}
+import { Video as VideoC } from "expo-av";
 
 export const Container = styled.View`
   position: relative;
@@ -14,7 +11,7 @@ export const Container = styled.View`
   left: 0;
 `;
 
-export const Video = styled.Image`
+export const Video = styled(VideoC)`
   position: relative;
   top: 0px;
   left: 0px;
@@ -24,11 +21,11 @@ export const Video = styled.Image`
 
 export const Content = styled.View`
   position: absolute;
-  top: ${Platform.OS === "ios"? 0 : -20};
+  top: ${Platform.OS === "ios" ? 0 : -20};
   left: 0px;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding-right: 20px;
   align-items: flex-end;
   flex-direction: row;
 `;
@@ -43,6 +40,7 @@ export const InfoContainer = styled.View`
 
 export const TitleContainer = styled.View`
   flex-direction: row;
+  padding-left: 20px;
 `;
 
 export const Title = styled.Text`
@@ -104,4 +102,15 @@ export const BackBlack = styled(LinearGradient)`
   left: 0px;
   height: 50%;
   width: 100%;
+`;
+
+export const AdoptionContainer = styled.View`
+  left: 0px;
+  padding: 8px 16px;
+  background-color: ${({ theme }) => theme.colors.primary.default};
+`;
+
+export const AdoptionText = styled.Text`
+  font: ${({ theme }) => theme.fonts.body2};
+  color: ${({ theme }) => theme.colors.grayscale.scale10};
 `;

@@ -1,21 +1,37 @@
 import {
+  adoptionTextAnswer,
   deleteTextAnswer,
   getTextAnswerList,
   postTextAnswer,
 } from "api/TextAnswer";
 import queryKeys from "constant/queryKeys";
-import { useMutation, useQuery } from "react-query";
+import { useInfiniteQuery, useMutation } from "react-query";
 
 export const useTextAnswerList = (
   questionId: number,
-  page: number,
-  size: number
-) =>
-  useQuery(
-    [queryKeys.questionList, questionId, queryKeys.textAnswerList, page],
-    () => getTextAnswerList(questionId, page, size),
-    { keepPreviousData: true }
+  size: number,
+  enabled: boolean
+) => {
+  const key = [
+    queryKeys.question,
+    queryKeys.questionId(questionId),
+    queryKeys.textAnswerList,
+  ];
+
+  return useInfiniteQuery(
+    key,
+    async ({ pageParam = 1 }) => {
+      const response = await getTextAnswerList(questionId, pageParam, size);
+
+      return { page: pageParam, data: response.data.data };
+    },
+    {
+      enabled: enabled,
+      keepPreviousData: true,
+      getNextPageParam: (lastPage) => lastPage.page + 1,
+    }
   );
+};
 
 export const useTextAnswerMutation = () => {
   const post = useMutation(
@@ -27,5 +43,9 @@ export const useTextAnswerMutation = () => {
     deleteTextAnswer(commentId)
   );
 
-  return { post, remove };
+  const adoption = useMutation((commentId: number) =>
+    adoptionTextAnswer(commentId)
+  );
+
+  return { post, remove, adoption };
 };

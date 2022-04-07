@@ -9,6 +9,12 @@ export const Container = styled.View<{ height:number }>`
     border-top-color: ${({theme}) => theme.colors.grayscale.scale20};
 `;
 
+export const Message = styled.Text`
+    color: ${({ theme }) => theme.colors.grayscale.scale50};
+    text-align: center;
+    font: ${({ theme }) => theme.fonts.body3};
+`;
+
 export const ResultAmount = styled.Text`
     color: ${({ theme }) => theme.colors.grayscale.scale100};
     font: ${({ theme }) => theme.fonts.body3};
