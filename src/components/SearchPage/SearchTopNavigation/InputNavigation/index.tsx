@@ -3,18 +3,20 @@ import { Dimensions } from "react-native";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import * as S from "./style";
 import themeContext from "hooks/useThemeContext";
-import { useSearchMutation } from "queries/Search";
+import { useSearchResults, useSearchMutation } from "queries/Search";
 import InputValueMapping from "./InputValueMapping";
 
 interface PropsType {
   topPad: number;
+  title: string;
 }
+
+const { height, width } = Dimensions.get("screen");
 
 const Magnify = require("../../../../assets/icons/Search/Vector.png");
 const ResetText = require("../../../../assets/icons/Search/Reset_text.png");
 
-const InputNavigation: FC<PropsType> = ({ topPad }) => {
-  const { width } = Dimensions.get("screen");
+const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
   const [inputValue, setInputValue] = React.useState<string>("");
   const [checkValue, setCheckValue] = React.useState<boolean>(false);
   const navigation = useMainStackNavigation();
@@ -49,7 +51,7 @@ const InputNavigation: FC<PropsType> = ({ topPad }) => {
   }, [inputValue]);
 
   const pressHandler = useCallback(
-    (id: string, title: string) => {
+    (title: string) => {
       searchMutation.data?.data.data.map((result) => {
         if (title === result.title) {
           setInputValue(result.title);
@@ -87,7 +89,7 @@ const InputNavigation: FC<PropsType> = ({ topPad }) => {
         <S.MagnifyImage source={Magnify} />
         <S.Input
           topPad={topPad}
-          value={inputValue}
+          value={inputValue || title}
           onChange={InputHandler}
           onSubmitEditing={SubmitHandler}
           placeholder="제목을 입력해주세요..."
