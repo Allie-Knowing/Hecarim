@@ -4,7 +4,7 @@ import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from "constant/defaultStyle";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
@@ -15,11 +15,16 @@ import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
 import { useVideoUrlMutation } from "queries/useVideoUrl";
-import { postVideoDataMutation } from "queries/useVideoData";
+import { useVideoDataMutation } from "queries/useVideoData";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
+
+interface Props {
+  route: StackScreenProps<MainStackParamList, "CameraDetail">;
+}
 
 type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
 
-const CameraDetail: FC = (): JSX.Element => {
+const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   const { uri } = useContext(cameraContext);
   const isAnswer = useContext(isStackContext);
   const [borderBottomColor, setBorderBottomColor] = useState<string>(
@@ -34,8 +39,9 @@ const CameraDetail: FC = (): JSX.Element => {
   const [hashTag, setHashTag] = useState<string>("");
 
   const { videoUrl } = useVideoUrlMutation();
-  const { postQuestion, postAnswer } = postVideoDataMutation();
+  const { postQuestion, postAnswer } = useVideoDataMutation();
 
+  //formData 생성 함수
   const createFormData = (uri: string) => {
     const formData = new FormData();
     const data = {
@@ -49,6 +55,7 @@ const CameraDetail: FC = (): JSX.Element => {
     return formData as unknown as string;
   };
 
+  //동영상 업로드 함수
   const uploadVideo = async () => {
     const formData = createFormData(uri);
     const hashTagArr: string[] = [];
@@ -70,7 +77,7 @@ const CameraDetail: FC = (): JSX.Element => {
               title: title,
               video_url: url,
             },
-            feed_id: 1,
+            feed_id: route.route.params.questionId,
           })
         : await postQuestion.mutateAsync({
             title: title,
@@ -84,6 +91,7 @@ const CameraDetail: FC = (): JSX.Element => {
     navigation.pop(1);
   };
 
+  //이미지 캐싱 함수
   const cacheImage = () => {
     Promise.all([Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync()]);
   };
@@ -91,6 +99,12 @@ const CameraDetail: FC = (): JSX.Element => {
   useEffect(() => {
     cacheImage();
   }, []);
+
+  useEffect(() => {
+    console.log(videoUrl.isSuccess, postQuestion.isSuccess, postAnswer.isSuccess);
+    console.log(videoUrl.isError, postQuestion.isError, postAnswer.isError);
+    console.log(videoUrl.data, postQuestion.data, postAnswer.data);
+  }, [videoUrl, postQuestion, postAnswer]);
 
   return (
     <KeyboardAwareScrollView extraHeight={40} enableOnAndroid={true} enableAutomaticScroll={true}>
