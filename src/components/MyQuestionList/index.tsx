@@ -3,7 +3,7 @@ import { Question } from "api/Question";
 import axios from "axios";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import { useProfileQuestionList } from "queries/Profile";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
@@ -19,30 +19,28 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
   const { data, isLoading, isError, error } = useProfileQuestionList(userId);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-  const moveQuestionStack = useCallback(() => {
-    if (!data) return;
+  const moveQuestionStack = () => {
+    if (!data?.data?.data) return;
     const questionListData = data.data.data;
     const questionList: Question[] = [];
     for (let i = 0; i < questionListData.length; i++) {
-      console.log(questionListData[i].video_url);
       questionList.push({
         id: parseInt(questionListData[i].id),
         description: questionListData[i].video_description,
         title: questionListData[i].video_title,
-        video_url: questionList[i].video_url,
-        created_at: questionList[i].created_at,
-        user_id: questionList[i].user_id,
-        profile: questionList[i].profile,
-        comment_cnt: questionList[i].comment_cnt,
-        like_cnt: questionList[i].like_cnt,
-        is_mine: questionList[i].is_mine,
-        is_like: questionList[i].is_like,
-        is_adoption: questionList[i].is_adoption,
+        video_url: questionListData[i].video_url,
+        created_at: questionListData[i].created_at,
+        user_id: questionListData[i].user_id,
+        profile: questionListData[i].user_profile,
+        comment_cnt: questionListData[i].comment_cnt,
+        like_cnt: questionListData[i].like_cnt,
+        is_mine: questionListData[i].is_mine,
+        is_like: questionListData[i].is_like,
+        is_adoption: questionListData[i].is_adoption,
       });
     }
-    console.log(questionList);
-    // navigation.push("StackedQuestionList");/
-  }, [data]);
+    navigation.push("StackedQuestionList", { data: questionList, index: 0 });
+  };
 
   useEffect(() => {
     if (error && axios.isAxiosError(error) && error.response?.status === 404) {
