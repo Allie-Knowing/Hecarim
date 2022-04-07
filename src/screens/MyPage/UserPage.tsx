@@ -9,6 +9,7 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
 import { RouteProp } from "@react-navigation/native";
 import { useProfile } from "queries/Profile";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
@@ -16,13 +17,15 @@ type Props = {
 };
 
 const UserPage: FC<Props> = ({ route, navigation }) => {
+  const { top: topPad } = useSafeAreaInsets();
+
   return (
     <isStackContext.Provider value={true}>
-      <S.Container>
+      <S.UserContainer topPad={topPad}>
         <Profile userId={route.params.userId} />
         <MakeKnowingBanner />
         <MyQuestionList userId={route.params.userId} navigation={navigation} />
-      </S.Container>
+      </S.UserContainer>
     </isStackContext.Provider>
   );
 };
