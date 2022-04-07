@@ -7,10 +7,6 @@ import SearchedQuestions from "components/SearchPage/SearchResults/SearchedQuest
 import SearchedQuestionsPageHeader from "components/Header/SearchedQuestionsPage";
 import isStackContext from "context/IsStackContext";
 
-type Props = {
-  navigation: StackNavigationProp<MainStackParamList, "UserPage">;
-};
-
 const SearchedQuestionsPage: FC<
   StackScreenProps<MainStackParamList, "SearchedQuestionsPage">
 > = ({ navigation, route }) => {
