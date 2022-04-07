@@ -2,7 +2,7 @@ import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "..";
 import { Asset } from "expo-asset";
 import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
@@ -10,10 +10,15 @@ import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
+
+interface Props {
+  route?: StackScreenProps<MainStackParamList, "CameraPage">;
+}
 
 type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
 
-const CameraComponent: FC = (): JSX.Element => {
+const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
@@ -133,7 +138,7 @@ const CameraComponent: FC = (): JSX.Element => {
         maxDuration: MAX_DURATION,
       });
       setUri(videoRecordPromise.uri);
-      navigation.push("CameraDetail");
+      navigation.navigate("CameraDetail", { questionId: route.route.params.questionId });
     }
   };
 

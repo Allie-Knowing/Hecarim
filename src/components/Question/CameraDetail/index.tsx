@@ -100,12 +100,6 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
     cacheImage();
   }, []);
 
-  useEffect(() => {
-    console.log(videoUrl.isSuccess, postQuestion.isSuccess, postAnswer.isSuccess);
-    console.log(videoUrl.isError, postQuestion.isError, postAnswer.isError);
-    console.log(videoUrl.data, postQuestion.data, postAnswer.data);
-  }, [videoUrl, postQuestion, postAnswer]);
-
   return (
     <KeyboardAwareScrollView extraHeight={40} enableOnAndroid={true} enableAutomaticScroll={true}>
       <S.QuestionDetailWrapper topPad={TOP_PAD + HEADER_HEIGHT}>

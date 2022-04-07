@@ -7,7 +7,7 @@ import CameraDetail from "./CameraDetail";
 
 export type RootStackParamList = {
   Camera: undefined;
-  CameraDetail: undefined;
+  CameraDetail: undefined | { questionId?: number };
 };
 
 const Root = createStackNavigator<RootStackParamList>();
