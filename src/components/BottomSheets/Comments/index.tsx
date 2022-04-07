@@ -51,7 +51,6 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [inputProps, isFocus] = useFocus();
-    const isLogin = useIsLogin();
     const [text, setText] = useState<string>("");
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
@@ -100,34 +99,6 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       }
     }, [post, text, queryClient]);
 
-    const input = useMemo(() => {
-      if (isLogin) {
-        return (
-          <S.InputContainer>
-            <S.InputProfile source={TestImage} />
-            <S.Input
-              placeholder="글 답변 작성하기..."
-              placeholderTextColor={themeContext.colors.grayscale.scale30}
-              {...inputProps}
-              value={text}
-              onChangeText={(e) => setText(e)}
-            />
-            <TouchableOpacity onPress={onAddPress}>
-              <S.Submit>추가</S.Submit>
-            </TouchableOpacity>
-          </S.InputContainer>
-        );
-      } else {
-        return (
-          <TouchableWithoutFeedback onPress={onLoginPress}>
-            <S.InputContainer>
-              <S.InputMessage>로그인 후 답변 달기</S.InputMessage>
-            </S.InputContainer>
-          </TouchableWithoutFeedback>
-        );
-      }
-    }, [isLogin, onLoginPress, text, inputProps, themeContext, onAddPress]);
-
     return (
       <BottomSheet
         ref={ref}
@@ -153,7 +124,19 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
             isOpen={isOpen}
           />
         </S.Container>
-        {input}
+        <S.InputContainer>
+          <S.InputProfile source={TestImage} />
+          <S.Input
+            placeholder="글 답변 작성하기..."
+            placeholderTextColor={themeContext.colors.grayscale.scale30}
+            {...inputProps}
+            value={text}
+            onChangeText={(e) => setText(e)}
+          />
+          <TouchableOpacity onPress={onAddPress}>
+            <S.Submit>추가</S.Submit>
+          </TouchableOpacity>
+        </S.InputContainer>
         <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
       </BottomSheet>
     );
