@@ -11,6 +11,7 @@ import React, {
 import {
   Dimensions,
   LayoutAnimation,
+  Platform,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -97,7 +98,9 @@ const FeedContent: FC<Question & PropsType> = ({
   );
 
   const onMorePress = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (Platform.OS === "ios") {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    }
     setIsMore(!isMore);
   };
 
@@ -315,7 +318,7 @@ const FeedContent: FC<Question & PropsType> = ({
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
-                  // navigation.navigate("CameraPage", { questionId: id });
+                  navigation.navigate("CameraPage", { questionId: id });
                 }}
               >
                 <S.Icon resizeMode="contain" source={Camera} />
