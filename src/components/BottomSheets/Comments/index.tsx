@@ -128,7 +128,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
             placeholderTextColor={themeContext.colors.grayscale.scale30}
             {...inputProps}
             value={text}
-            onChangeText={(e) => setText(e)}
+            onChangeText={(e) => setText(e.substring(0, 500))}
           />
           <TouchableOpacity onPress={onAddPress}>
             <S.Submit>추가</S.Submit>
