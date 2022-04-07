@@ -81,10 +81,10 @@ instance.interceptors.request.use(
   async function (config) {
     instance.defaults.headers.common[
       "Authorization"
-    ] = `Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss`;
+    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
     config.headers.common[
       "Authorization"
-    ] = `Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss`;
+    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
 
     return config;
   },
