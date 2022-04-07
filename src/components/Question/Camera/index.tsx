@@ -9,8 +9,9 @@ import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
+import isStackContext from "context/IsStackContext";
 
-type screenProp = StackNavigationProp<RootStackParamList, "CameraDetailPage">;
+type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
 
 const CameraComponent: FC = (): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -21,6 +22,8 @@ const CameraComponent: FC = (): JSX.Element => {
   const [bestRatio, setBestRatio] = useState<string>();
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
   const { setUri } = useContext(cameraContext);
+  const isAnswer = useContext(isStackContext);
+  const [blockRecord, setBlockRecord] = useState(false);
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
@@ -29,21 +32,25 @@ const CameraComponent: FC = (): JSX.Element => {
   const recordingImg = require("../../../assets/icons/recording.png");
   const recordImg = require("../../../assets/icons/record.png");
   const videoImg = require("../../../assets/icons/video.png");
+  const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
     cacheImage();
     startCamera();
   }, []);
 
+  //이미지 캐싱 함수
   const cacheImage = () => {
     Promise.all([
       Asset.fromModule("../../../assets/icons/rotate.png").downloadAsync(),
       Asset.fromModule("../../../assets/icons/recording.png").downloadAsync(),
       Asset.fromModule("../../../assets/icons/record.png").downloadAsync(),
       Asset.fromModule("../../../assets/icons/video.png").downloadAsync(),
+      Asset.fromModule("../../../assets/icons/back-white.png").downloadAsync(),
     ]);
   };
 
+  //갤러리에서 영상 가져오는 함수
   const importMediaFromLibrary = async () => {
     setIsPickingVideo(true);
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -65,31 +72,35 @@ const CameraComponent: FC = (): JSX.Element => {
             alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
-          navigation.navigate("CameraDetailPage");
+          navigation.push("CameraDetail");
         }
       });
     }
     setIsPickingVideo(false);
   };
 
+  //카메라 준비 함수
   const onCameraReady = () => {
     getDeviceCameraRatio();
     setIsCameraReady(true);
   };
 
+  //카메라 권한 가져오는 함수
   const startCamera = async () => {
     const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
     const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
 
-    setHasPermission(CameraStatus === "granted" && VoiceStatus === "granted");
+    setHasPermission(CameraStatus === "granted" || VoiceStatus === "granted");
   };
 
+  //디바이스의 최적 카메라 비율을 사용하는 함수
   const getDeviceCameraRatio = async () => {
     const ratio = await cameraRef.getSupportedRatiosAsync();
     const bestRatio = extractBestRatio(ratio);
     setBestRatio(bestRatio);
   };
 
+  //디바이스의 최적 카메라 비율을 구하는 함수
   const extractBestRatio = (availableRatioArra: string[]) => {
     const ratioObjectArray: { ratio: string; realRatio: number }[] = [];
     const arrayOfAbs: number[] = [];
@@ -97,7 +108,8 @@ const CameraComponent: FC = (): JSX.Element => {
     for (let i = 0; i < availableRatioArra.length; i++) {
       ratioObjectArray[i] = {
         ratio: availableRatioArra[i],
-        realRatio: Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
+        realRatio:
+          Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
       };
     }
 
@@ -111,40 +123,69 @@ const CameraComponent: FC = (): JSX.Element => {
     return availableRatioArra[minRatioIndex];
   };
 
+  //동영상 녹화 함수
   const recordVideo = async () => {
-    if (cameraRef) {
+    blockRecordButton();
+    if (cameraRef && isFocused && !blockRecord) {
       setIsVideoRecording(true);
+
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
       setUri(videoRecordPromise.uri);
-      navigation.navigate("CameraDetailPage");
+      navigation.push("CameraDetail");
     }
   };
 
-  const stopVideoRecording = async () => {
-    if (cameraRef) {
-      await cameraRef.stopRecording();
+  //동영상 촬영 중지 함수
+  const stopVideoRecording = () => {
+    if (cameraRef && !blockRecord) {
+      cameraRef.stopRecording();
       setIsVideoRecording(false);
     }
+    blockRecordButton();
   };
 
+  //3초동안 함수 실행을 막는 함수
+  const blockRecordButton = () => {
+    setBlockRecord(true);
+    setTimeout(() => {
+      setBlockRecord(false);
+    }, 3000);
+  };
+
+  //카메라 전환 함수
   const switchCamera = () => {
-    setCameraType(cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back);
+    setCameraType(
+      cameraType === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
   };
 
-  const renderVideoRecordIndicator = (): JSX.Element => (
-    <S.RecordIndicatorContainer>
-      <S.RecordDot />
-      <S.RecordTitle>{"촬영중..."}</S.RecordTitle>
-    </S.RecordIndicatorContainer>
-  );
+  //동영상 촬영중이면 촬영중을 띄워주는 ui
+  const renderVideoRecordIndicator = (): JSX.Element =>
+    isVideoRecording ? (
+      <S.RecordIndicatorContainer>
+        <S.RecordDot />
+        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
+      </S.RecordIndicatorContainer>
+    ) : (
+      <S.RecordIndicatorContainer>
+        <S.RecordTitle>촬영 버튼을 짧게 눌러주세요</S.RecordTitle>
+      </S.RecordIndicatorContainer>
+    );
 
+  //동영상 촬영 컨트롤 ui
   const renderVideoControl = (): JSX.Element => (
-    <S.Control>
+    <S.Control bottom={isAnswer ? 60 : 100}>
       {isVideoRecording ? (
         // 촬영중인 상태
-        <S.RecordVideoContainer activeOpacity={0.7} disabled={!isCameraReady} onPress={stopVideoRecording}>
+        <S.RecordVideoContainer
+          activeOpacity={0.7}
+          disabled={!isCameraReady}
+          onPress={stopVideoRecording}
+        >
           <S.RecordingVideoImage source={recordingImg} />
         </S.RecordVideoContainer>
       ) : (
@@ -175,6 +216,17 @@ const CameraComponent: FC = (): JSX.Element => {
   return (
     <S.QuestionWrapper>
       <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+        {isAnswer ? (
+          <S.GoBackContainer
+            onPress={() => {
+              navigation.pop(1);
+            }}
+          >
+            <S.GoBackImage source={backImage} />
+          </S.GoBackContainer>
+        ) : (
+          <></>
+        )}
         {isFocused && !isPickingVideo && (
           <Camera
             ref={(el) => setCameraRef(el)}
@@ -191,7 +243,7 @@ const CameraComponent: FC = (): JSX.Element => {
         )}
 
         <View style={{ ...StyleSheet.absoluteFillObject }}>
-          {isVideoRecording && renderVideoRecordIndicator()}
+          {renderVideoRecordIndicator()}
           {renderVideoControl()}
         </View>
       </SafeAreaView>

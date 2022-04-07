@@ -1,29 +1,39 @@
 import uri from "constance/uri";
 import storageKeys from "constant/storageKeys";
-import { signinRequest } from "modules/dto/request/signinRequest";
-import { signinResponse } from "modules/dto/response/signinResponse";
 import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
 
-export const postSigninApi = async (body: signinRequest) => {
+interface SigninRequest {
+  provider: "GOOGLE" | "NAVER" | "APPLE";
+  id_token: string;
+}
+
+interface SigninResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export const postSigninApi = async (body: SigninRequest) => {
   let response = null;
 
   if (body.provider === "GOOGLE") {
-    response = await noTokenInstance.post<signinResponse>(
+    response = await noTokenInstance.post<SigninResponse>(
       `${uri.googleSignin}`,
       {
         id_token: body.id_token,
       }
     );
   } else if (body.provider === "NAVER") {
-    response = await noTokenInstance.post<signinResponse>(
+    console.log(body);
+
+    response = await noTokenInstance.post<SigninResponse>(
       `${uri.signin}${body.provider}`,
       {
         code: body.id_token,
       }
     );
   } else if (body.provider === "APPLE") {
-    response = await noTokenInstance.post<signinResponse>(uri.appleSignin, {
+    response = await noTokenInstance.post<SigninResponse>(uri.appleSignin, {
       id_token: body.id_token,
     });
   }

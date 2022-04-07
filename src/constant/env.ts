@@ -1,20 +1,11 @@
 import getEnvVars from "../../environment";
 
-const {
-  baseUrl,
-  googleIosClientId,
-  googleWebClientId,
-  naverUrl,
-  redirectUrl,
-  appleUrl,
-} = getEnvVars();
+const { baseUrl, googleClientId, naverUrl, redirectUrl, appleUrl } =
+  getEnvVars();
 
 const env = {
   baseUrl,
-  googleClientId: {
-    iosId: googleIosClientId,
-    webId: googleWebClientId,
-  },
+  googleClientId,
   naverUrl,
   appleUrl,
   redirectUrl,
