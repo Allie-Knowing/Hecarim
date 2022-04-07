@@ -4,6 +4,7 @@ import axios from "axios";
 import { Dimensions, FlatList, ListRenderItem, View } from "react-native";
 import { searchTitle } from "modules/dto/response/searchResponse";
 import { useSearchResults } from "queries/Search";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 import Results from "./Results";
 
@@ -15,22 +16,35 @@ interface Props {
 
 const SearchedQuestions: FC<Props> = ({ title }) => {
   const { data, isLoading, isError, error } = useSearchResults(title);
+  const navigation = useMainStackNavigation();
+
+  // const pressRenderItem = React.useCallback(() => {
+  //   navigation.navigate("StackedQuestionList", { questionList: , index: 0 });
+  // }, []);
 
   const renderItem: ListRenderItem<searchTitle> = ({ item }) => {
-    return <Results item={item} />;
+    if (item.thumbnail !== null) {
+      return (
+        <Results
+          item={item}
+          // pressRenderItem={pressRenderItem}
+        />
+      );
+    }
+    return null;
   };
 
   if (isLoading) {
-    return <S.Message>글 답변 목록 로딩중...</S.Message>;
+    return <S.Message>검색 결과 로딩중...</S.Message>;
   }
 
   if (isError && axios.isAxiosError(error) && error.response.status !== 404) {
-    return <S.Message>글 답변 목록 오류</S.Message>;
+    return <S.Message>검색 결과 오류</S.Message>;
   }
 
   return (
     <View style={{ width, backgroundColor: "#FFFFFF" }}>
-      <SearchTopNavigation />
+      <SearchTopNavigation title={title} />
       <S.Container height={height / 1.29}>
         <S.ResultAmount>검색된 질문 {data?.data.data.length}개</S.ResultAmount>
         <FlatList

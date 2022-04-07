@@ -9,11 +9,13 @@ const { width } = Dimensions.get("screen");
 
 interface PropsType {
   item: searchTitle;
+  // pressRenderItem: () => void;
 }
 
 const Results: FC<PropsType> = ({ item }) => {
   return (
     <S.SearchedResults
+      // onPress={() => pressRenderItem()}
       source={item.thumbnail ? { uri: item.thumbnail } : questionImage}
       imageWidth={width / 2 - 30}
       resizeMode="cover"

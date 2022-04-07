@@ -29,7 +29,7 @@ export const MagnifyImage = styled.Image`
 
 export const Input = styled.TextInput<{ topPad: number }>`
     padding: 0px 32px;
-    padding-bottom: ${Platform.OS === 'ios' ? 3 : 10}px;
+    padding-bottom: ${Platform.OS === 'ios' ? 3 : 0}px;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -52,6 +52,6 @@ export const ValueMappingContainer = styled(Animated.ScrollView)<{ topPad: numbe
     position: absolute;
     flex: 1;
     top: 0;
-    margin-top: 66px;
-    height: ${({ topPad }) => topPad + 450}px;
+    margin-top: 62px;
+    height: ${({ topPad }) => topPad + 500}px;
 `;

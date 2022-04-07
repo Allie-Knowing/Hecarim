@@ -21,7 +21,7 @@ const SearchedQuestionsPageHeader: FC<Props> = ({ stackNavigation }) => {
   const { top: topPad } = useSafeAreaInsets();
 
   const goBack = () => {
-    stackNavigation.popToTop();
+    stackNavigation.pop();
   };
 
   return (

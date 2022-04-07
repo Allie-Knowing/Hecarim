@@ -5,7 +5,7 @@ import { useTheme } from "styled-components/native";
 
 interface Props {
   value: searchTitle;
-  pressHandler: (id: string, title: string) => void;
+  pressHandler: (title: string) => void;
 }
 
 const InputValueMapping: FC<Props> = ({ value, pressHandler }) => {
@@ -16,7 +16,7 @@ const InputValueMapping: FC<Props> = ({ value, pressHandler }) => {
       <S.ResultContainer
         activeOpacity={1}
         underlayColor={theme.colors.grayscale.scale20}
-        onPress={() => pressHandler(value.id, value.title)}
+        onPress={() => pressHandler(value.title)}
       >
         <S.ResultInlineBox>
           <S.TitleResult>
