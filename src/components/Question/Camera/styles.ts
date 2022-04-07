@@ -6,10 +6,27 @@ export const QuestionWrapper = styled.View`
   overflow: scroll;
 `;
 
-export const Control = styled.View`
+export const GoBackContainer = styled.TouchableOpacity`
+  text-align: center;
+  font: ${({ theme }) => theme.fonts.body2};
+  z-index: 10;
+  left: 10;
+  width: 40;
+  height: 40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const GoBackImage = styled.Image`
+  width: 10;
+  height: 18;
+`;
+
+export const Control = styled.View<{ bottom: number }>`
   position: absolute;
   flex-direction: row;
-  bottom: 100px;
+  bottom: ${(props) => props.bottom};
   width: 100%;
   align-items: center;
   justify-content: space-between;
