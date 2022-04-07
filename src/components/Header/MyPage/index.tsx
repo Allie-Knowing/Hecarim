@@ -11,7 +11,7 @@ type Props = {
   stackNavigation: StackNavigationProp<MainStackParamList, "UserPage">;
 };
 
-const MyPageHeader: FC<Props> = ({ stackNavigation }) => {
+const DefaultPage: FC<Props> = ({ stackNavigation }) => {
   const { top: topPad } = useSafeAreaInsets();
 
   return (
@@ -29,4 +29,4 @@ const MyPageHeader: FC<Props> = ({ stackNavigation }) => {
   );
 };
 
-export default MyPageHeader;
+export default DefaultPage;
