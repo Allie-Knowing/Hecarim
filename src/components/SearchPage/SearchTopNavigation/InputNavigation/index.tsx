@@ -1,27 +1,23 @@
 import React, { FC, useRef, useCallback } from "react";
+import { Dimensions } from "react-native";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 import * as S from "./style";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "hooks/useSearchStackNavigation";
 import themeContext from "hooks/useThemeContext";
-import { searchTitleResponse } from "modules/dto/response/searchResponse";
 import { useSearchMutation } from "queries/Search";
 import InputValueMapping from "./InputValueMapping";
 
-interface Props {
+interface PropsType {
   topPad: number;
 }
 
 const Magnify = require("../../../../assets/icons/Search/Vector.png");
 const ResetText = require("../../../../assets/icons/Search/Reset_text.png");
 
-type screenProp = StackNavigationProp<RootStackParamList, "SearchedQuestions">;
-
-const InputNavigation: FC<Props> = ({ topPad }) => {
+const InputNavigation: FC<PropsType> = ({ topPad }) => {
+  const { width } = Dimensions.get("screen");
   const [inputValue, setInputValue] = React.useState<string>("");
   const [checkValue, setCheckValue] = React.useState<boolean>(false);
-  const navigation = useNavigation<screenProp>();
+  const navigation = useMainStackNavigation();
   const theme = themeContext();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchMutation = useSearchMutation();
@@ -36,8 +32,13 @@ const InputNavigation: FC<Props> = ({ topPad }) => {
   }, []);
 
   const SubmitHandler = () => {
-    searchMutation.data.data.data.map((value) => {
-      if (inputValue === value.title) navigation.navigate("SearchedQuestions");
+    searchMutation.data?.data.data.map((result) => {
+      if (inputValue === result.title) {
+        setInputValue(result.title);
+        navigation.navigate("SearchedQuestionsPage", {
+          title: result.title,
+        });
+      }
     });
   };
 
@@ -47,13 +48,27 @@ const InputNavigation: FC<Props> = ({ topPad }) => {
     return response;
   }, [inputValue]);
 
+  const pressHandler = useCallback(
+    (id: string, title: string) => {
+      searchMutation.data?.data.data.map((result) => {
+        if (title === result.title) {
+          setInputValue(result.title);
+          navigation.navigate("SearchedQuestionsPage", {
+            title: result.title,
+          });
+        }
+      });
+    },
+    [searchMutation]
+  );
+
   React.useEffect(() => {
     if (inputValue.length > 0) {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
-      timeoutRef.current = setTimeout(Search, 300);
+      timeoutRef.current = setTimeout(Search, 100);
 
       return setCheckValue(true);
     } else {
@@ -84,18 +99,21 @@ const InputNavigation: FC<Props> = ({ topPad }) => {
           </S.ResetImageContainer>
         )}
         <S.ValueMappingContainer
-          decelerationRate="fast"
-          snapToAlignment="start"
+          style={{ width }}
           bounces={false}
           bouncesZoom={false}
-          // scrollEventThrottle={1}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
+          topPad={topPad}
         >
           {searchMutation.data?.data.data &&
           searchMutation.data?.data.data.length > 0
             ? searchMutation.data?.data.data.map((value) => {
-                return <InputValueMapping key={value.id} value={value} />;
+                return (
+                  <InputValueMapping
+                    key={value.id}
+                    value={value}
+                    pressHandler={pressHandler}
+                  />
+                );
               })
             : null}
         </S.ValueMappingContainer>

@@ -17,7 +17,9 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import store from "modules/redux/store";
 import AlretProvider from "components/Providers/AlretProvider";
-import theme from "theme/theme";
+import DefaultSearchPage from "screens/Search/DefaultSearchPage";
+import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
+import BackBtn from "components/SearchPage/SearchResults/SearchedQuestions/BackBtn";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -25,6 +27,7 @@ import { useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
+import theme from "theme/theme";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -104,6 +107,11 @@ export default function App() {
                             name="UserPage"
                             component={UserPage}
                             options={{ title: "" }}
+                          />
+                          <Root.Screen
+                            name="SearchedQuestionsPage"
+                            component={SearchedQuestionsPage}
+                            options={{ headerShown: false }}
                           />
                         </Root.Navigator>
                       </Host>
