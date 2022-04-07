@@ -1,4 +1,6 @@
-import { ProfileQuestionType } from "modules/dto/response/getProfileQuestionListResponse";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ProfileQuestion } from "api/Profile";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
 import React, { FC } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import * as S from "./style";
@@ -6,12 +8,13 @@ import * as S from "./style";
 const { width } = Dimensions.get("screen");
 
 type Props = {
-  question: ProfileQuestionType;
+  question: ProfileQuestion;
+  moveQuestionStack: () => void;
 };
 
-const MyQuestion: FC<Props> = ({ question }) => {
+const MyQuestion: FC<Props> = ({ question, moveQuestionStack }) => {
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => moveQuestionStack()}>
       {question?.thumbnail ? (
         <S.Question
           source={{ uri: question.thumbnail }}

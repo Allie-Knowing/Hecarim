@@ -3,12 +3,12 @@ import storageKeys from "constant/storageKeys";
 import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
 
-interface SigninRequest {
+export interface SigninRequest {
   provider: "GOOGLE" | "NAVER" | "APPLE";
   id_token: string;
 }
 
-interface SigninResponse {
+export interface SigninResponse {
   access_token: string;
   refresh_token: string;
 }
@@ -24,8 +24,6 @@ export const postSigninApi = async (body: SigninRequest) => {
       }
     );
   } else if (body.provider === "NAVER") {
-    console.log(body);
-
     response = await noTokenInstance.post<SigninResponse>(
       `${uri.signin}${body.provider}`,
       {
@@ -37,8 +35,6 @@ export const postSigninApi = async (body: SigninRequest) => {
       id_token: body.id_token,
     });
   }
-
-  console.log(response);
 
   await Promise.all([
     localStorage.setItem<string>(

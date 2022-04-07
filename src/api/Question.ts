@@ -5,14 +5,14 @@ export interface Question {
   id: number;
   description: string;
   title: string;
-  video_url: string;
+  video_url: string | null;
   created_at: string;
   user_id: number;
   profile: string;
   comment_cnt: number;
   like_cnt: number;
   is_mine: boolean;
-  is_like: true;
+  is_like: boolean;
   is_adoption: number;
 }
 

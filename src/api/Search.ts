@@ -6,5 +6,4 @@ export const getSearchTitle = async (q: string) => {
   return await instance.get<searchTitleResponse>(uri.title, {
     params: { q },
   });
-
-}
+};

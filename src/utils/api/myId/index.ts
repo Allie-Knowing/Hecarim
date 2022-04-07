@@ -1,8 +1,7 @@
 import uri from "constance/uri";
-import { getRequestWithAccessToken } from "../default";
+import { instance } from "utils/axios";
 
 export const getMyId = async (accessToken: string) => {
-  const request = getRequestWithAccessToken(accessToken);
-  const data = await request.get(uri.myId);
+  const data = await instance.get(uri.myId);
   return data.data;
 };
