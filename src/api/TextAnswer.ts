@@ -2,18 +2,18 @@ import uri from "constance/uri";
 import { instance } from "utils/axios";
 
 export interface TextAnswer {
-  id: 69;
-  content: "ffggggg";
-  is_adoption: false;
-  created_at: "2022-04-05T13:40:43.602Z";
-  updated_at: "2022-04-05T13:40:43.602Z";
+  id: number;
+  content: string;
+  is_adoption: boolean;
+  created_at: string;
+  updated_at: string;
   user: {
-    id: 1;
-    profile: "https://src.hidoc.co.kr/image/lib/2021/4/28/1619598179113_0.jpg";
-    name: "손채건";
+    id: number;
+    profile: string;
+    name: string;
   };
-  is_mine: true;
-  is_like: false;
+  is_mine: boolean;
+  is_like: boolean;
 }
 
 export interface TextAnswerListResponse {

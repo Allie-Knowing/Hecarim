@@ -24,7 +24,6 @@ import BottomSheet, {
 import * as S from "./styles";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
-import { getTextAnswerList } from "../../../modules/dto/response/textAnswerResponse";
 import { useTextAnswerList, useTextAnswerMutation } from "queries/TextAnswer";
 import axios from "axios";
 import useIsLogin from "hooks/useIsLogin";
@@ -32,12 +31,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
+import { TextAnswer } from "api/TextAnswer";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
 }
-
-const TestImage = require("../../../assets/feed_test.jpg");
 
 interface PropsType {
   navigation: StackNavigationProp<any>;
@@ -117,7 +115,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
         keyboardBehavior="extend"
       >
         <S.Container>
-          <S.Title>댓글</S.Title>
+          <S.Title>글 답변</S.Title>
           <TextAnswerList
             isQuestionAdoption={isQuestionAdoption}
             questionId={questionId}
@@ -125,7 +123,6 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
           />
         </S.Container>
         <S.InputContainer>
-          <S.InputProfile source={TestImage} />
           <S.Input
             placeholder="글 답변 작성하기..."
             placeholderTextColor={themeContext.colors.grayscale.scale30}
@@ -162,18 +159,15 @@ const TextAnswerList: FC<ListProps> = ({
     isOpen
   );
 
-  const renderItem: ListRenderItem<getTextAnswerList> = useCallback(
-    ({ item }) => {
-      return (
-        <Comment
-          questionId={questionId}
-          {...item}
-          isQuestionAdoption={isQuestionAdoption}
-        />
-      );
-    },
-    []
-  );
+  const renderItem: ListRenderItem<TextAnswer> = useCallback(({ item }) => {
+    return (
+      <Comment
+        questionId={questionId}
+        {...item}
+        isQuestionAdoption={isQuestionAdoption}
+      />
+    );
+  }, []);
 
   const onEndReached = useCallback(() => {
     if (!isError) {
