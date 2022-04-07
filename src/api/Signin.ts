@@ -3,12 +3,12 @@ import storageKeys from "constant/storageKeys";
 import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
 
-interface SigninRequest {
+export interface SigninRequest {
   provider: "GOOGLE" | "NAVER" | "APPLE";
   id_token: string;
 }
 
-interface SigninResponse {
+export interface SigninResponse {
   access_token: string;
   refresh_token: string;
 }
