@@ -1,5 +1,5 @@
 import uri from "constance/uri";
-import { instance, noTokenInstance } from "utils/axios";
+import { instance } from "utils/axios";
 
 export interface Question {
   id: number;
@@ -21,7 +21,7 @@ export interface QuestionListResponse {
 }
 
 const getQuestionList = async (page: number, size: number) => {
-  return await noTokenInstance.get<QuestionListResponse>(uri.question, {
+  return await instance.get<QuestionListResponse>(uri.question, {
     params: { page, size },
   });
 };
@@ -36,7 +36,7 @@ export interface getHashtagResponse {
 }
 
 const getQuestionHashtag = async (videoId: number) => {
-  return await noTokenInstance.get<getHashtagResponse>(
+  return await instance.get<getHashtagResponse>(
     `${uri.question}/${videoId}/hashtag`
   );
 };
@@ -46,7 +46,7 @@ export interface QuestionDetailResponse {
 }
 
 const getQuestionDetail = async (videoId: number) => {
-  return await noTokenInstance.get<QuestionDetailResponse>(
+  return await instance.get<QuestionDetailResponse>(
     `${uri.question}/${videoId}`
   );
 };
