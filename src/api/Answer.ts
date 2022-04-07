@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import uri from "constance/uri";
-import { instance, noTokenInstance } from "utils/axios";
+import { instance } from "utils/axios";
 
 export interface VideoAnswer {
   id: number;
@@ -24,7 +24,7 @@ export const getVideoAnswerList = async (
   page: number,
   size: number
 ) => {
-  return await noTokenInstance.get<getVideoAnswerListResponse>(
+  return await instance.get<getVideoAnswerListResponse>(
     `${uri.videoAnswer}/${questionId}`,
     {
       params: { page, size },
@@ -45,7 +45,7 @@ interface getVideoAnswerDetailResponse {
 }
 
 export const getVideoAnswerDetail = async (videoId: number) => {
-  return await noTokenInstance.get<getVideoAnswerDetailResponse>(
+  return await instance.get<getVideoAnswerDetailResponse>(
     `${uri.videoAnswerDetail}/${videoId}`
   );
 };

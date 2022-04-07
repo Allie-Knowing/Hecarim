@@ -16,6 +16,8 @@ export const postSigninApi = async (body: signinRequest) => {
       }
     );
   } else if (body.provider === "NAVER") {
+    console.log(body);
+
     response = await noTokenInstance.post<signinResponse>(
       `${uri.signin}${body.provider}`,
       {
