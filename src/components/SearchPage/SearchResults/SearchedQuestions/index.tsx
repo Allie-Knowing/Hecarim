@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import * as S from "./style";
 import axios from "axios";
 import { Dimensions, FlatList, ListRenderItem, View } from "react-native";
-import { searchTitle } from "modules/dto/response/searchResponse";
+import { searchTitle } from "constance/search";
 import { useSearchResults } from "queries/Search";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";

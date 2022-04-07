@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import * as S from "./style";
-import { searchTitle } from "modules/dto/response/searchResponse";
+import { searchTitle } from "constance/search";
 import { useTheme } from "styled-components/native";
 
 interface Props {
