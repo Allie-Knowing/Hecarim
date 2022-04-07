@@ -23,6 +23,7 @@ const CameraComponent: FC = (): JSX.Element => {
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
   const { setUri } = useContext(cameraContext);
   const isAnswer = useContext(isStackContext);
+  const [blockRecord, setBlockRecord] = useState(false);
 
   const navigation = useNavigation<screenProp>();
   const isFocused = useIsFocused();
@@ -38,6 +39,7 @@ const CameraComponent: FC = (): JSX.Element => {
     startCamera();
   }, []);
 
+  //이미지 캐싱 함수
   const cacheImage = () => {
     Promise.all([
       Asset.fromModule("../../../assets/icons/rotate.png").downloadAsync(),
@@ -48,6 +50,7 @@ const CameraComponent: FC = (): JSX.Element => {
     ]);
   };
 
+  //갤러리에서 영상 가져오는 함수
   const importMediaFromLibrary = async () => {
     setIsPickingVideo(true);
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,24 +79,28 @@ const CameraComponent: FC = (): JSX.Element => {
     setIsPickingVideo(false);
   };
 
+  //카메라 준비 함수
   const onCameraReady = () => {
     getDeviceCameraRatio();
     setIsCameraReady(true);
   };
 
+  //카메라 권한 가져오는 함수
   const startCamera = async () => {
     const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
     const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
 
-    setHasPermission(CameraStatus === "granted" && VoiceStatus === "granted");
+    setHasPermission(CameraStatus === "granted" || VoiceStatus === "granted");
   };
 
+  //디바이스의 최적 카메라 비율을 사용하는 함수
   const getDeviceCameraRatio = async () => {
     const ratio = await cameraRef.getSupportedRatiosAsync();
     const bestRatio = extractBestRatio(ratio);
     setBestRatio(bestRatio);
   };
 
+  //디바이스의 최적 카메라 비율을 구하는 함수
   const extractBestRatio = (availableRatioArra: string[]) => {
     const ratioObjectArray: { ratio: string; realRatio: number }[] = [];
     const arrayOfAbs: number[] = [];
@@ -116,9 +123,12 @@ const CameraComponent: FC = (): JSX.Element => {
     return availableRatioArra[minRatioIndex];
   };
 
+  //동영상 녹화 함수
   const recordVideo = async () => {
-    if (cameraRef) {
+    blockRecordButton();
+    if (cameraRef && isFocused && !blockRecord) {
       setIsVideoRecording(true);
+
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
@@ -127,13 +137,24 @@ const CameraComponent: FC = (): JSX.Element => {
     }
   };
 
-  const stopVideoRecording = async () => {
-    if (cameraRef) {
-      await cameraRef.stopRecording();
+  //동영상 촬영 중지 함수
+  const stopVideoRecording = () => {
+    if (cameraRef && !blockRecord) {
+      cameraRef.stopRecording();
       setIsVideoRecording(false);
     }
+    blockRecordButton();
   };
 
+  //3초동안 함수 실행을 막는 함수
+  const blockRecordButton = () => {
+    setBlockRecord(true);
+    setTimeout(() => {
+      setBlockRecord(false);
+    }, 3000);
+  };
+
+  //카메라 전환 함수
   const switchCamera = () => {
     setCameraType(
       cameraType === Camera.Constants.Type.back
@@ -142,13 +163,20 @@ const CameraComponent: FC = (): JSX.Element => {
     );
   };
 
-  const renderVideoRecordIndicator = (): JSX.Element => (
-    <S.RecordIndicatorContainer>
-      <S.RecordDot />
-      <S.RecordTitle>{"촬영중"}</S.RecordTitle>
-    </S.RecordIndicatorContainer>
-  );
+  //동영상 촬영중이면 촬영중을 띄워주는 ui
+  const renderVideoRecordIndicator = (): JSX.Element =>
+    isVideoRecording ? (
+      <S.RecordIndicatorContainer>
+        <S.RecordDot />
+        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
+      </S.RecordIndicatorContainer>
+    ) : (
+      <S.RecordIndicatorContainer>
+        <S.RecordTitle>촬영 버튼을 짧게 눌러주세요</S.RecordTitle>
+      </S.RecordIndicatorContainer>
+    );
 
+  //동영상 촬영 컨트롤 ui
   const renderVideoControl = (): JSX.Element => (
     <S.Control bottom={isAnswer ? 60 : 100}>
       {isVideoRecording ? (
@@ -166,11 +194,7 @@ const CameraComponent: FC = (): JSX.Element => {
           <S.GetVideoContainer onPress={importMediaFromLibrary}>
             <S.VideoImage source={videoImg} />
           </S.GetVideoContainer>
-          <S.RecordVideoContainer
-            onPress={recordVideo}
-            onLongPress={recordVideo}
-            onPressOut={stopVideoRecording}
-          >
+          <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
           </S.RecordVideoContainer>
           <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
@@ -219,7 +243,7 @@ const CameraComponent: FC = (): JSX.Element => {
         )}
 
         <View style={{ ...StyleSheet.absoluteFillObject }}>
-          {isVideoRecording && renderVideoRecordIndicator()}
+          {renderVideoRecordIndicator()}
           {renderVideoControl()}
         </View>
       </SafeAreaView>
