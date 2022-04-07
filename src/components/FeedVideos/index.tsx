@@ -4,23 +4,43 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ListRenderItem,
 } from "react-native";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
 
 interface PropsType {
-  dataList: string[];
+  dataList: Question[];
   index: number;
+  onEndReached: () => void;
+  isCurrentPage: boolean;
+  setCurrentQuestionId: (id: number) => void;
 }
 
-const FeedVideos: FC<PropsType> = ({ dataList }) => {
-  const [, setPage] = useState(0);
+const FeedVideos: FC<PropsType> = ({
+  dataList,
+  onEndReached,
+  isCurrentPage,
+  setCurrentQuestionId,
+}) => {
+  const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
     setPage(newPage);
   };
+
+  const renderItem: ListRenderItem<Question> = ({ item, index }) => (
+    <FeedContent isCurrentPage={index === page && isCurrentPage} {...item} />
+  );
+
+  useEffect(() => {
+    if (dataList.length > 0) {
+      setCurrentQuestionId(dataList[page].id);
+    }
+  }, [page, dataList]);
 
   return (
     <S.Container
@@ -35,9 +55,12 @@ const FeedVideos: FC<PropsType> = ({ dataList }) => {
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
-      keyExtractor={(_, index) => index.toString()}
+      keyExtractor={(item: Question) =>
+        `question_${item.id}_${item.is_like}_${item.comment_cnt}_${item.like_cnt}`
+      }
       data={dataList}
-      renderItem={() => <FeedContent />}
+      renderItem={renderItem}
+      onEndReached={onEndReached}
     />
   );
 };

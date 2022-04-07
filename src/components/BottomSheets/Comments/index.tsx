@@ -31,7 +31,7 @@ import useIsLogin from "hooks/useIsLogin";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlert";
+import useAlert from "hooks/useAlert";
 
 export interface CommentBottomSheetRefProps {
   open: () => void;
@@ -41,19 +41,20 @@ const TestImage = require("../../../assets/feed_test.jpg");
 
 interface PropsType {
   navigation: StackNavigationProp<any>;
+  questionId: number;
+  isQuestionAdoption: boolean;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ navigation }, ref) => {
+  ({ navigation, questionId, isQuestionAdoption }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [inputProps, isFocus] = useFocus();
-    const isLogin = useIsLogin();
     const [text, setText] = useState<string>("");
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
-    const { showAlert: showAlret, closeAlert: closeAlret } = useAlret();
+    const { showAlert, closeAlert } = useAlert();
 
     const renderBackdrop = useCallback(
       (props) => (
@@ -80,51 +81,23 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       }
       setText("");
       try {
-        await post.mutateAsync({ questionId: 1, content: t });
+        await post.mutateAsync({ questionId: questionId, content: t });
 
         queryClient.invalidateQueries([
           queryKeys.question,
-          queryKeys.questionId(1),
+          queryKeys.questionId(questionId),
           queryKeys.textAnswerList,
         ]);
       } catch (error) {
-        showAlret({
+        showAlert({
           title: "글 답변 작성 실패",
           content: "다시 시도해주세요.",
           buttons: [
-            { text: "확인", color: "black", onPress: (id) => closeAlret(id) },
+            { text: "확인", color: "black", onPress: (id) => closeAlert(id) },
           ],
         });
       }
     }, [post, text, queryClient]);
-
-    const input = useMemo(() => {
-      if (!isLogin) {
-        return (
-          <S.InputContainer>
-            <S.InputProfile source={TestImage} />
-            <S.Input
-              placeholder="글 답변 작성하기..."
-              placeholderTextColor={themeContext.colors.grayscale.scale30}
-              {...inputProps}
-              value={text}
-              onChangeText={(e) => setText(e)}
-            />
-            <TouchableOpacity onPress={onAddPress}>
-              <S.Submit>추가</S.Submit>
-            </TouchableOpacity>
-          </S.InputContainer>
-        );
-      } else {
-        return (
-          <TouchableWithoutFeedback onPress={onLoginPress}>
-            <S.InputContainer>
-              <S.InputMessage>로그인 후 답변 달기</S.InputMessage>
-            </S.InputContainer>
-          </TouchableWithoutFeedback>
-        );
-      }
-    }, [isLogin, onLoginPress, text, inputProps, themeContext, onAddPress]);
 
     return (
       <BottomSheet
@@ -145,9 +118,25 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       >
         <S.Container>
           <S.Title>댓글</S.Title>
-          <TextAnswerList isOpen={isOpen} />
+          <TextAnswerList
+            isQuestionAdoption={isQuestionAdoption}
+            questionId={questionId}
+            isOpen={isOpen}
+          />
         </S.Container>
-        {input}
+        <S.InputContainer>
+          <S.InputProfile source={TestImage} />
+          <S.Input
+            placeholder="글 답변 작성하기..."
+            placeholderTextColor={themeContext.colors.grayscale.scale30}
+            {...inputProps}
+            value={text}
+            onChangeText={(e) => setText(e)}
+          />
+          <TouchableOpacity onPress={onAddPress}>
+            <S.Submit>추가</S.Submit>
+          </TouchableOpacity>
+        </S.InputContainer>
         <S.InputMargin style={{ height: isFocus ? 0 : bottomPad }} />
       </BottomSheet>
     );
@@ -156,18 +145,32 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
 
 interface ListProps {
   isOpen: boolean;
+  questionId: number;
+  isQuestionAdoption: boolean;
 }
 
-const TextAnswerList: FC<ListProps> = ({ isOpen }) => {
+const size = 20;
+
+const TextAnswerList: FC<ListProps> = ({
+  isOpen,
+  questionId,
+  isQuestionAdoption,
+}) => {
   const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
-    1,
-    20,
+    questionId,
+    size,
     isOpen
   );
 
   const renderItem: ListRenderItem<getTextAnswerList> = useCallback(
     ({ item }) => {
-      return <Comment {...item} />;
+      return (
+        <Comment
+          questionId={questionId}
+          {...item}
+          isQuestionAdoption={isQuestionAdoption}
+        />
+      );
     },
     []
   );

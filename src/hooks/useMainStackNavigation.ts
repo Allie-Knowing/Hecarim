@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { searchTitle } from "modules/dto/response/searchResponse";
+import { Question } from "api/Question";
 
 export interface StackedQuestionListProps {
-  data: string[];
+  data: Question[];
   index: number;
 }
 

@@ -1,6 +1,9 @@
 enum uri {
-  video_answer = "/answer/video",
-  comment_answer = "/answer/text",
+  videoAnswer = "/answer/video",
+  videoAnswerDetail = "/answer/video/detail",
+  videoAnswerAdoption = "/answer/video/adoption",
+  textAnswerAdoption = "/answer/adoption",
+  commentAnswer = "/answer/text",
   googleSignin = "/google",
   like = "/like",
   file = "/video/file",
@@ -12,6 +15,8 @@ enum uri {
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
+  report = "/admin/report",
+  appleSignin = "/apple",
 }
 
 export default uri;
