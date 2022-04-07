@@ -1,17 +1,15 @@
 import uri from "constance/uri";
 import { instance } from "utils/axios";
 
-interface ProfileResponse {
-  profile: string;
-  name: string;
-  video_cnt: number;
+export interface ProfileResponse {
+  data: { profile: string; name: string; video_cnt: number };
 }
 
-interface ProfileRequest {
+export interface ProfileRequest {
   id: number;
 }
 
-interface ProfileQuestion {
+export interface ProfileQuestion {
   id: string;
   video_description: string;
   video_title: string;
@@ -20,17 +18,19 @@ interface ProfileQuestion {
   video_url: string;
   created_at: string;
   comment_cnt: number;
+  user_id: number;
   like_cnt: number;
   is_mine: boolean;
   is_like: boolean;
   is_adoption: number;
 }
 
-interface GetProfileQuestionListResponse {
+export interface GetProfileQuestionListResponse {
   data: ProfileQuestion[];
 }
 
 export const getProfileApi = async (body: ProfileRequest) => {
+  console.log(body);
   const data = await instance.get<ProfileResponse>(
     `${uri.getProfile}${body.id}`
   );
