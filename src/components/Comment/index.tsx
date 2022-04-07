@@ -1,7 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import queryKeys from "constant/queryKeys";
-import useAlret from "hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
 import { useTextAnswerMutation } from "queries/TextAnswer";
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
@@ -37,26 +37,33 @@ function timeForToday(value: string) {
   return `${Math.floor(betweenTimeDay / 365)}년전`;
 }
 
-const Comment: FC<getTextAnswerList> = ({
+interface PropsType {
+  isQuestionAdoption: boolean;
+  questionId: number;
+}
+
+const Comment: FC<getTextAnswerList & PropsType> = ({
   user,
   content,
   id,
   is_mine,
   is_adoption,
+  isQuestionAdoption,
   created_at,
+  questionId,
 }) => {
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
   const ref = useRef<BottomSheetModal>(null);
-  const { remove } = useTextAnswerMutation();
+  const { remove, adoption } = useTextAnswerMutation();
   const queryClient = useQueryClient();
-  const { closeAlert: closeAlret, showAlert: showAlret } = useAlret();
+  const { closeAlert: closeAlret, showAlert: showAlret } = useAlert();
 
   const onDeletePress = useCallback(async () => {
     ref.current.close();
     showAlret({
       title: "삭제하시겠습니까?",
-      content: "삭제된 댓글은 복구가\n불가능 합니다.",
+      content: "삭제된 답변은 복구가\n불가능 합니다.",
       buttons: [
         { text: "취소", color: "black", onPress: (id) => closeAlret(id) },
         {
@@ -67,29 +74,62 @@ const Comment: FC<getTextAnswerList> = ({
             await remove.mutateAsync({ commentId: id });
             queryClient.invalidateQueries([
               queryKeys.question,
-              queryKeys.questionId(1),
+              queryKeys.questionId(questionId),
               queryKeys.textAnswerList,
             ]);
           },
         },
       ],
     });
-  }, [id, remove]);
+  }, [id, remove, questionId, id, closeAlret, showAlret]);
 
-  const toolItem = useMemo<ToolItem[]>(
-    () => [
-      {
+  const onAdoptionPress = useCallback(() => {
+    showAlret({
+      title: "채택하시겠습니까?",
+      content: "태책된 답변은 취소가\n불가능 합니다.",
+      buttons: [
+        { text: "취소", color: "black", onPress: (id) => closeAlret(id) },
+        {
+          text: "채택",
+          color: "primary",
+          onPress: async (alret) => {
+            closeAlret(alret);
+            await adoption.mutateAsync(id);
+            queryClient.invalidateQueries([
+              queryKeys.question,
+              queryKeys.questionId(questionId),
+            ]);
+          },
+        },
+      ],
+    });
+  }, [showAlret, closeAlret, adoption, queryClient, questionId, id]);
+
+  const toolItem = useMemo<ToolItem[]>(() => {
+    const item: ToolItem[] = [];
+    if (is_mine) {
+      item.push({
         color: theme.colors.red.default,
         text: "삭제하기",
         onPress: onDeletePress,
-      },
-    ],
-    [onDeletePress, theme.colors.red.default]
-  );
+      });
+    }
+
+    if (!isQuestionAdoption && is_adoption) {
+      item.push({
+        color: theme.colors.primary.default,
+        text: "채택하기",
+        onPress: onAdoptionPress,
+      });
+    }
+    return item;
+  }, [onDeletePress, theme, onAdoptionPress]);
 
   const onCommentPress = useCallback(() => {
-    ref.current.present();
-  }, []);
+    if (toolItem.length > 0) {
+      ref.current.present();
+    }
+  }, [toolItem]);
 
   return (
     <Fragment>

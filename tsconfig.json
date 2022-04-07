@@ -9,6 +9,6 @@
     "noImplicitAny": true,
     "baseUrl": "./src",
     "typeRoots": ["node_modules/@types", "src/types"],
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }

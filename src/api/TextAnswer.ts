@@ -7,7 +7,7 @@ export const getTextAnswerList = async (
   page: number,
   size: number
 ) => {
-  const url = `${uri.comment_answer}/${questionId}`;
+  const url = `${uri.commentAnswer}/${questionId}`;
 
   return await instance.get<getTextAnswerListResponse>(url, {
     params: { page, size },
@@ -15,15 +15,20 @@ export const getTextAnswerList = async (
 };
 
 export const postTextAnswer = async (questionId: number, content: string) => {
-  const url = `${uri.comment_answer}/${questionId}`;
+  const url = `${uri.commentAnswer}/${questionId}`;
   const data = await instance.post(url, { content });
 
   return data;
 };
 
 export const deleteTextAnswer = async (commentId: number) => {
-  const url = `${uri.comment_answer}/${commentId}`;
+  const url = `${uri.commentAnswer}/${commentId}`;
   const data = await instance.delete(url);
 
   return data;
+};
+
+export const adoptionTextAnswer = async (commentId: number) => {
+  const url = `${uri.commentAnswer}/${commentId}`;
+  return await instance.delete(url);
 };

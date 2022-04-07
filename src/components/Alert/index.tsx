@@ -1,4 +1,4 @@
-import useAlret from "hooks/useAlert";
+import useAlert from "hooks/useAlert";
 import {
   forwardRef,
   useCallback,
@@ -25,7 +25,7 @@ const Alert = forwardRef<AlretRef, AlertWithId>(
   ({ title, content, buttons, id }, ref) => {
     const themeContext = useThemeContext();
     const offset = useSharedValue(0);
-    const { currentAlertId: currentAlretId } = useAlret();
+    const { currentAlertId: currentAlretId } = useAlert();
 
     const colorMap = useMemo(
       () =>
