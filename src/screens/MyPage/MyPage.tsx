@@ -22,7 +22,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
         <MyPageHeader stackNavigation={navigation} />
         <Profile userId={data?.data?.data} />
         <MakeKnowingBanner />
-        <MyQuestionList userId={data?.data?.data} />
+        <MyQuestionList userId={data?.data?.data} navigation={navigation} />
       </S.Container>
     </isStackContext.Provider>
   );

@@ -21,7 +21,7 @@ const UserPage: FC<Props> = ({ route, navigation }) => {
       <S.Container>
         <Profile userId={route.params.userId} />
         <MakeKnowingBanner />
-        <MyQuestionList userId={route.params.userId} />
+        <MyQuestionList userId={route.params.userId} navigation={navigation} />
       </S.Container>
     </isStackContext.Provider>
   );
