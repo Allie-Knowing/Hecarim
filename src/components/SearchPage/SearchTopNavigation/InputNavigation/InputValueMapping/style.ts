@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 
-export const ResultContainer = styled.View`
+export const ResultContainer = styled.TouchableHighlight`
     display: flex;
     justify-content: center;
-    width: 365px;
-    height: 60px;
+    width: 100%;
+    height: 70px;
     background-color: ${({theme}) => theme.colors.grayscale.scale10};
     border-bottom-width: 1px;
     border-bottom-color: ${({theme}) => theme.colors.grayscale.scale20};

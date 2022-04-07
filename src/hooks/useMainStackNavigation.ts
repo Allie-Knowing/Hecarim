@@ -7,8 +7,13 @@ export interface StackedQuestionListProps {
   index: number;
 }
 
+export interface StackedSearchQuestionProps {
+  title: string;
+}
+
 export type MainStackParamList = {
   Main: undefined;
+  SearchedQuestionsPage: StackedSearchQuestionProps;
   StackedQuestionList: StackedQuestionListProps;
   Login: undefined;
   UserPage: { userId: number };
