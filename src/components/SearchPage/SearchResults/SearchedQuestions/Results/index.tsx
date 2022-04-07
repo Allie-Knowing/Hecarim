@@ -1,4 +1,4 @@
-import { searchTitle } from "modules/dto/response/searchResponse";
+import { searchTitle } from "constance/search";
 import React, { FC } from "react";
 import { Dimensions } from "react-native";
 import * as S from "./style";

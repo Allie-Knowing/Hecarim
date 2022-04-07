@@ -17,9 +17,7 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import store from "modules/redux/store";
 import AlretProvider from "components/Providers/AlretProvider";
-import DefaultSearchPage from "screens/Search/DefaultSearchPage";
 import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
-import BackBtn from "components/SearchPage/SearchResults/SearchedQuestions/BackBtn";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -118,10 +116,10 @@ export default function App() {
                               options={{ title: "" }}
                             />
                             <Root.Screen
-                            name="SearchedQuestionsPage"
-                            component={SearchedQuestionsPage}
-                            options={{ headerShown: false }}
-                          />
+                              name="SearchedQuestionsPage"
+                              component={SearchedQuestionsPage}
+                              options={{ headerShown: false }}
+                            />
                           </Root.Navigator>
                         </Host>
                       </NavigationContainer>
