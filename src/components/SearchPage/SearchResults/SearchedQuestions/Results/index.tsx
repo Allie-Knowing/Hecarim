@@ -16,7 +16,7 @@ const Results: FC<PropsType> = ({ item }) => {
     <S.SearchedResults
       source={item.thumbnail ? { uri: item.thumbnail } : questionImage}
       imageWidth={width / 2 - 30}
-      resizeMode="contain"
+      resizeMode="cover"
     />
   );
 };
