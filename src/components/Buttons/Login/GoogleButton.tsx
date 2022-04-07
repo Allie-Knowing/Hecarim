@@ -4,7 +4,6 @@ import { Text, TouchableOpacity } from "react-native";
 import * as S from "./styles";
 import env from "constant/env";
 import * as Google from "expo-auth-session/providers/google";
-import { SIGNIN } from "modules/redux/action/signin/interface";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import useSignin from "queries/Signin";

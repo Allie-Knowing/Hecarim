@@ -71,13 +71,6 @@ export const refresh = async (error: AxiosError) => {
 
 export const instance = axios.create({
   baseURL: env.baseUrl,
-  headers: {
-    common: {
-      "Content-Type": "application/json",
-      Authorization:
-        "Bearer eyJ0eXAiOiJhY2Nlc3MiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NDg2NTEwNjEsInN1YiI6IjEiLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NjUxMDYwfQ.FCSj2HgtWBlPZNNLrCNwC27g5Y415AaRXpwQY_pGHss",
-    },
-  },
 });
 
 export const noTokenInstance = axios.create({
@@ -89,7 +82,6 @@ instance.interceptors.request.use(
     instance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
-
     config.headers.common[
       "Authorization"
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;

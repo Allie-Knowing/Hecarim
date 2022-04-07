@@ -26,7 +26,7 @@ const LogoutButton: FC<Props> = ({ navigation }) => {
             closeAlret(alert);
             await localStorage.removeItem(storageKeys.accessToken);
             await localStorage.removeItem(storageKeys.refreshToken);
-            navigation.reset({ routes: [{ name: "Main" }] });
+            navigation.reset({ routes: [{ name: "Login" }] });
           },
         },
       ],
