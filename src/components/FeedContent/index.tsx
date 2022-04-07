@@ -8,7 +8,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions, LayoutAnimation, View } from "react-native";
+import {
+  Dimensions,
+  LayoutAnimation,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -301,7 +306,11 @@ const FeedContent: FC<Question & PropsType> = ({
           </S.InfoOuter>
           <View>
             <S.Icons>
-              <S.IconContainer>
+              <S.IconContainer
+                onPress={() => {
+                  navigation.push("UserPage", { userId: user_id });
+                }}
+              >
                 <S.ProfileImage source={{ uri: profile }} />
               </S.IconContainer>
               <S.IconContainer
