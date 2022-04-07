@@ -16,7 +16,7 @@ interface answerMutateType {
   feed_id: number;
 }
 
-export const postVideoDataMutation = () => {
+export const useVideoDataMutation = () => {
   const postQuestion = useMutation((mutation: questionMutateType) =>
     postQuestionVideoData(mutation)
   );
