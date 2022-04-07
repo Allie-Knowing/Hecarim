@@ -5,7 +5,7 @@ export const Container = styled.View<{
 }>`
   width: 100%;
   position: relative;
-  height: ${({ topPad }) => 30 + topPad}px;
+  height: ${({ topPad }) => 40 + topPad}px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -18,7 +18,7 @@ export const BackIcon = styled.Image<{
   width: 10px;
   height: 18px;
   margin-left: 20px;
-  margin-top: ${({ topPad }) => topPad - 10 }px;
+  margin-top: ${({ topPad }) => topPad }px;
 `;
 
 export const Title = styled.Text<{
@@ -27,5 +27,5 @@ export const Title = styled.Text<{
   width: 60%;
   color: ${({ theme }) => theme.colors.grayscale.scale100};
   font: ${({ theme }) => theme.fonts.body2};
-  margin-top: ${({ topPad }) => topPad - 6 }px;
+  margin-top: ${({ topPad }) => topPad }px;
 `;
