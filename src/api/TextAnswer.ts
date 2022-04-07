@@ -1,6 +1,24 @@
 import uri from "constance/uri";
-import { getTextAnswerListResponse } from "modules/dto/response/textAnswerResponse";
 import { instance } from "utils/axios";
+
+export interface TextAnswer {
+  id: 69;
+  content: "ffggggg";
+  is_adoption: false;
+  created_at: "2022-04-05T13:40:43.602Z";
+  updated_at: "2022-04-05T13:40:43.602Z";
+  user: {
+    id: 1;
+    profile: "https://src.hidoc.co.kr/image/lib/2021/4/28/1619598179113_0.jpg";
+    name: "손채건";
+  };
+  is_mine: true;
+  is_like: false;
+}
+
+export interface TextAnswerListResponse {
+  data: TextAnswer[];
+}
 
 export const getTextAnswerList = async (
   questionId: number,
@@ -9,7 +27,7 @@ export const getTextAnswerList = async (
 ) => {
   const url = `${uri.commentAnswer}/${questionId}`;
 
-  return await instance.get<getTextAnswerListResponse>(url, {
+  return await instance.get<TextAnswerListResponse>(url, {
     params: { page, size },
   });
 };

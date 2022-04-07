@@ -23,6 +23,7 @@ import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
 import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
@@ -68,6 +69,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const queryClient = useQueryClient();
   const { remove, adoption } = useVideoAnswerMutation();
   const { data, isLoading, refetch } = useVideoAnswerDetail(id);
+  const navigation = useMainStackNavigation();
 
   const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
   const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
@@ -330,7 +332,11 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
           </S.InfoOuter>
           <View>
             <S.Icons>
-              <S.IconContainer>
+              <S.IconContainer
+                onPress={() => {
+                  navigation.push("UserPage", { userId: user_id });
+                }}
+              >
                 <S.ProfileImage source={{ uri: profile }} />
               </S.IconContainer>
               <S.IconContainer onPress={onLikePress}>

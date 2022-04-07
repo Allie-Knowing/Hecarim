@@ -1,15 +1,14 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { TextAnswer } from "api/TextAnswer";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
-import { getTextAnswerList } from "modules/dto/response/textAnswerResponse";
 import { useTextAnswerMutation } from "queries/TextAnswer";
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
 import { TouchableHighlight } from "react-native";
 import { Portal } from "react-native-portalize";
 import { useQueryClient } from "react-query";
 import { useTheme } from "styled-components/native";
-import { useTextAnswer } from "utils/hooks/textAnswer";
 import * as S from "./styles";
 
 function timeForToday(value: string) {
@@ -42,7 +41,7 @@ interface PropsType {
   questionId: number;
 }
 
-const Comment: FC<getTextAnswerList & PropsType> = ({
+const Comment: FC<TextAnswer & PropsType> = ({
   user,
   content,
   id,
