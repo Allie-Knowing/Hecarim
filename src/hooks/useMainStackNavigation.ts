@@ -19,7 +19,7 @@ export type MainStackParamList = {
   Login: undefined;
   UserPage: { userId: number };
   Setting: undefined;
-  CameraPage: undefined;
+  CameraPage: { questionId?: number | undefined };
   CameraDetail: { questionId?: number | undefined };
 };
 
