@@ -19,7 +19,7 @@ import { useVideoDataMutation } from "queries/useVideoData";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 
 interface Props {
-  route: StackScreenProps<MainStackParamList, "CameraDetail">;
+  route?: StackScreenProps<MainStackParamList, "CameraDetail">;
 }
 
 type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
