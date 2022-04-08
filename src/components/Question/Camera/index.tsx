@@ -23,7 +23,8 @@ interface Props {
 type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 
 const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [hasAudioPermission, setHasAudioPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
@@ -105,7 +106,8 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
     const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
 
-    setHasPermission(CameraStatus === "granted" || VoiceStatus === "granted");
+    setHasCameraPermission(CameraStatus === "granted");
+    setHasAudioPermission(VoiceStatus === "granted");
   };
 
   //디바이스의 최적 카메라 비율을 사용하는 함수
@@ -221,12 +223,20 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     </S.Control>
   );
 
-  if (hasPermission === null) {
-    return <View />;
+  if (hasCameraPermission === false) {
+    return (
+      <S.Message>
+        <S.Text>설정에서 카메라 권한을 추가해주세요</S.Text>
+      </S.Message>
+    );
   }
 
-  if (hasPermission === false) {
-    return <Text>카메라에 권한이 없습니다.</Text>;
+  if (hasAudioPermission === false) {
+    return (
+      <S.Message>
+        <S.Text>설정에서 카메라 음성 권한을 추가해주세요</S.Text>
+      </S.Message>
+    );
   }
 
   return (
