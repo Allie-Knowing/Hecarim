@@ -276,7 +276,7 @@ const FeedContent: FC<Question & PropsType> = ({
     <Fragment>
       <S.Container style={{ height }}>
         <S.Video
-          source={{ uri: video_url }}
+          source={{ uri: isCurrentPage ? video_url : null }}
           isLooping
           resizeMode="cover"
           ref={videoRef}

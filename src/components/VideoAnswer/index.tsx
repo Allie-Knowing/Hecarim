@@ -20,7 +20,7 @@ interface PropsType {
   isQuestionAdoption: number;
 }
 
-const size = 20;
+const size = 10;
 
 const VideoAnswer: FC<PropsType> = ({
   isCurrentPage,

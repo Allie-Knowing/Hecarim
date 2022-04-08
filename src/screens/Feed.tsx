@@ -3,7 +3,7 @@ import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
 import { useQuestionList } from "queries/Question";
 
-const size = 20;
+const size = 10;
 
 const Feed: FC = () => {
   const { data, fetchNextPage, isError } = useQuestionList(size);
