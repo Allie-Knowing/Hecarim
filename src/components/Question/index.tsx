@@ -5,12 +5,12 @@ import CameraProvider from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
 import CameraDetail from "./CameraDetail";
 
-export type RootStackParamList = {
+export type CameraStackParamList = {
   Camera: undefined;
   CameraDetail: undefined | { questionId?: number };
 };
 
-const Root = createStackNavigator<RootStackParamList>();
+const Root = createStackNavigator<CameraStackParamList>();
 
 const Camera: FC = (): JSX.Element => {
   return (
