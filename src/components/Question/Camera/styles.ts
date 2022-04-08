@@ -103,3 +103,14 @@ export const RecordImageStyle = styled.Image`
   width: 60;
   height: 60;
 `;
+
+export const Message = styled.View`
+  background-color: ${({ theme }) => theme.colors.grayscale.scale100};
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Text = styled.Text`
+  font: ${({ theme }) => theme.fonts.subtitle2};
+  color: ${({ theme }) => theme.colors.grayscale.scale50};
+`;
