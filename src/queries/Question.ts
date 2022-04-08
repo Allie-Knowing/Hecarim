@@ -33,7 +33,7 @@ const useQuestionList = (size: number) =>
 
 const useStackQuestionList = (id: number[]) => {
   return useQuery(
-    [queryKeys.stackQuestion],
+    [queryKeys.stackQuestion, id],
     () => getStackQuestionList(id)
   );
 }
