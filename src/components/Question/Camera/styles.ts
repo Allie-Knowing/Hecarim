@@ -104,10 +104,19 @@ export const RecordImageStyle = styled.Image`
   height: 60;
 `;
 
-export const Message = styled.View`
+export const Container = styled.SafeAreaView`
+  position: relative;
+  flex: 1;
   background-color: ${({ theme }) => theme.colors.grayscale.scale100};
+  display: flex;
+  justify-content: center;
+`;
+
+export const Message = styled.View`
+  display: flex;
   justify-content: center;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.grayscale.scale100};
 `;
 
 export const Text = styled.Text`

@@ -225,17 +225,21 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   if (hasCameraPermission === false) {
     return (
-      <S.Message>
-        <S.Text>설정에서 카메라 권한을 추가해주세요</S.Text>
-      </S.Message>
+      <S.Container>
+        <S.Message>
+          <S.Text>설정에서 카메라 권한을 추가해주세요</S.Text>
+        </S.Message>
+      </S.Container>
     );
   }
 
   if (hasAudioPermission === false) {
     return (
-      <S.Message>
-        <S.Text>설정에서 카메라 음성 권한을 추가해주세요</S.Text>
-      </S.Message>
+      <S.Container style={{ ...StyleSheet.absoluteFillObject }}>
+        <S.Message>
+          <S.Text>설정에서 카메라 음성 권한을 추가해주세요</S.Text>
+        </S.Message>
+      </S.Container>
     );
   }
 
