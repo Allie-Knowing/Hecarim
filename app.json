@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Hecarim",
-    "slug": "Hecarim-frontend",
+    "name": "Knowing",
+    "slug": "Knowing",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/knowing.png",
