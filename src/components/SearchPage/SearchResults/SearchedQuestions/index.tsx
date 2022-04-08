@@ -4,9 +4,12 @@ import axios from "axios";
 import { Dimensions, FlatList, ListRenderItem, View } from "react-native";
 import { searchTitle } from "constance/search";
 import { useSearchResults } from "queries/Search";
-import useMainStackNavigation from "hooks/useMainStackNavigation";
+import useMainStackNavigation, {
+  StackedQuestionListProps,
+} from "hooks/useMainStackNavigation";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 import Results from "./Results";
+import { useStackQuestionList } from "queries/Question";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -16,20 +19,24 @@ interface Props {
 
 const SearchedQuestions: FC<Props> = ({ title }) => {
   const { data, isLoading, isError, error } = useSearchResults(title);
+  const { data: questionList } = useStackQuestionList(
+    data?.data.data.map((value) => Number(value.id)) || []
+  );
   const navigation = useMainStackNavigation();
 
-  // const pressRenderItem = React.useCallback(() => {
-  //   navigation.navigate("StackedQuestionList", { questionList: , index: 0 });
-  // }, []);
+  const pressRenderItem = React.useCallback(
+    (index: number) => () => {
+      navigation.navigate("StackedQuestionList", {
+        data: questionList?.data.data,
+        index: index,
+      });
+    },
+    [navigation, questionList]
+  );
 
-  const renderItem: ListRenderItem<searchTitle> = ({ item }) => {
+  const renderItem: ListRenderItem<searchTitle> = ({ item, index }) => {
     if (item.thumbnail !== null) {
-      return (
-        <Results
-          item={item}
-          // pressRenderItem={pressRenderItem}
-        />
-      );
+      return <Results item={item} pressRenderItem={pressRenderItem(index)} />;
     }
     return null;
   };

@@ -26,6 +26,10 @@ const getQuestionList = async (page: number, size: number) => {
   });
 };
 
+const getStackQuestionList = async (id: number[]) => {
+  return await instance.get<QuestionListResponse>(`${uri.stack_question}?id=${id.join(",")}`);
+}
+
 export interface Hashtag {
   id: number;
   title: string;
@@ -57,6 +61,7 @@ const deleteQuestion = async (videoId: number) => {
 
 export {
   getQuestionList,
+  getStackQuestionList,
   getQuestionHashtag,
   getQuestionDetail,
   deleteQuestion,

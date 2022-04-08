@@ -28,7 +28,7 @@ export const MagnifyImage = styled.Image`
 `;
 
 export const Input = styled.TextInput<{ topPad: number }>`
-    padding: 0px 32px;
+    padding: ${Platform.OS === 'android' ? 6 : 0}px 32px;
     padding-bottom: ${Platform.OS === 'ios' ? 3 : 0}px;
     width: 100%;
     height: 100%;

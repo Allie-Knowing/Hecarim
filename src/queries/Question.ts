@@ -3,6 +3,7 @@ import {
   getQuestionDetail,
   getQuestionHashtag,
   getQuestionList,
+  getStackQuestionList,
   Question,
   QuestionDetailResponse,
 } from "api/Question";
@@ -29,6 +30,13 @@ const useQuestionList = (size: number) =>
       getNextPageParam: (lastPage) => lastPage.page + 1,
     }
   );
+
+const useStackQuestionList = (id: number[]) => {
+  return useQuery(
+    [queryKeys.stackQuestion],
+    () => getStackQuestionList(id)
+  );
+}
 
 const useQuestionDetail = (videoId: number) => {
   return useQuery(
@@ -58,6 +66,7 @@ const useQuestionMutation = () => {
 
 export {
   useQuestionList,
+  useStackQuestionList,
   useQuestionMutation,
   useQuestionDetail,
   useQuestionHashtag,

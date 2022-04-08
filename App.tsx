@@ -6,7 +6,10 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
@@ -26,6 +29,7 @@ import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
 import theme from "theme/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -38,7 +42,10 @@ if (__DEV__) {
   });
 }
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -52,7 +59,9 @@ export default function App() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const check = useCallback(async () => {
-    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
+    const accessToken = await localStorage.getItem<string>(
+      storageKeys.accessToken
+    );
 
     setIsLogin(accessToken !== null);
   }, []);
@@ -80,7 +89,8 @@ export default function App() {
                           <Root.Navigator
                             initialRouteName="Main"
                             screenOptions={{
-                              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                              cardStyleInterpolator:
+                                CardStyleInterpolators.forHorizontalIOS,
                             }}
                           >
                             <Root.Screen
@@ -106,6 +116,11 @@ export default function App() {
                             <Root.Screen
                               name="UserPage"
                               component={UserPage}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="SearchedQuestionsPage"
+                              component={SearchedQuestionsPage}
                               options={{ headerShown: false }}
                             />
                             <Root.Screen

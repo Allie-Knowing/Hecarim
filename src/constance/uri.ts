@@ -11,6 +11,7 @@ enum uri {
   myId = "/user/my",
   auto_complete = "/search/autocomplete",
   question = "/question",
+  stack_question = "/question/video",
   answer = "/answer/video/",
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
