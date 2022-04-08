@@ -10,12 +10,12 @@ const { width } = Dimensions.get("screen");
 
 interface PropsType {
   item: searchTitle;
-  pressRenderItem: () => void;
+  moveQuestionStack: () => void;
 }
 
-const Results: FC<PropsType> = ({ item, pressRenderItem }) => {
+const Results: FC<PropsType> = ({ item, moveQuestionStack }) => {
   return (
-    <TouchableOpacity onPress={() => pressRenderItem()}>
+    <TouchableOpacity onPress={() => moveQuestionStack()}>
       <S.SearchedResults
         source={item.thumbnail ? { uri: item.thumbnail } : questionImage}
         imageWidth={width / 2 - 30}
