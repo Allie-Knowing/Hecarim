@@ -2,21 +2,25 @@ import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "..";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CameraStackParamList } from "..";
 import { Asset } from "expo-asset";
 import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
-import { MainStackParamList } from "hooks/useMainStackNavigation";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 
 interface Props {
-  route?: StackScreenProps<MainStackParamList, "CameraPage">;
+  route?: {
+    params: {
+      questionId: number;
+    };
+  };
 }
 
-type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
+type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 
 const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -26,11 +30,14 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
   const [bestRatio, setBestRatio] = useState<string>();
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
+  const [questionObject, setQuestionObject] = useState<number | undefined>();
   const { setUri } = useContext(cameraContext);
   const isAnswer = useContext(isStackContext);
   const [blockRecord, setBlockRecord] = useState(false);
 
-  const navigation = useNavigation<screenProp>();
+  const cameraNavigation = useNavigation<screenProp>();
+  const mainNavigation = useMainStackNavigation();
+
   const isFocused = useIsFocused();
 
   const rotateImg = require("../../../assets/icons/rotate.png");
@@ -40,6 +47,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
+    setQuestionObject(0);
     cacheImage();
     startCamera();
   }, []);
@@ -77,7 +85,9 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
             alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
-          navigation.push("CameraDetail");
+          isAnswer
+            ? mainNavigation.push("CameraDetail", { questionId: route.params.questionId })
+            : cameraNavigation.push("CameraDetail");
         }
       });
     }
@@ -133,12 +143,13 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     blockRecordButton();
     if (cameraRef && isFocused && !blockRecord) {
       setIsVideoRecording(true);
-
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
       });
       setUri(videoRecordPromise.uri);
-      navigation.navigate("CameraDetail", { questionId: route.route.params.questionId });
+      isAnswer
+        ? mainNavigation.navigate("CameraDetail", { questionId: route.params.questionId })
+        : cameraNavigation.navigate("CameraDetail");
     }
   };
 
@@ -224,7 +235,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
         {isAnswer ? (
           <S.GoBackContainer
             onPress={() => {
-              navigation.pop(1);
+              cameraNavigation.pop(1);
             }}
           >
             <S.GoBackImage source={backImage} />
