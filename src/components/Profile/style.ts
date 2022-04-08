@@ -37,3 +37,14 @@ export const Message = styled.Text`
   margin-top: 100px;
   text-align: center;
 `;
+
+export const Email = styled.Text`
+  color: ${({ theme }) => theme.colors.grayscale.scale50};
+  margin-left: 5px;
+`;
+
+export const NameContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;

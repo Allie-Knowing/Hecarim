@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from "react";
 import { Dimensions, View } from "react-native";
 import * as S from "./styles";
@@ -55,6 +56,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isQuestionAdoption,
 }) => {
   const isStack = useContext(isStackContext);
+  const [isStop, setIsStop] = useState<boolean>(false);
   const tabBarHeight = isStack ? 30 : 80;
   const { like, unLike } = useLikeMutation(id);
   const videoRef = useRef<Video>(null);
@@ -285,11 +287,16 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     [theme, onSubmitPress, dismissAll]
   );
 
+  const stopVideo = () => {
+    isStop ? videoRef.current.playAsync() : videoRef.current.pauseAsync();
+    setIsStop(!isStop);
+  };
+
   return (
     <Fragment>
-      <S.Container style={{ height }}>
+      <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
         <S.Video
-          source={{ uri: isCurrentPage ? video_url : null }}
+          source={{ uri: video_url }}
           isLooping
           resizeMode="cover"
           ref={videoRef}

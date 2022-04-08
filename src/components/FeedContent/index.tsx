@@ -71,6 +71,7 @@ const FeedContent: FC<Question & PropsType> = ({
   is_adoption,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
+  const [isStop, setIsStop] = useState<boolean>(false);
   const themeContext = useContext(ThemeContext);
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
@@ -272,11 +273,16 @@ const FeedContent: FC<Question & PropsType> = ({
     onPageChange();
   }, [onPageChange]);
 
+  const stopVideo = () => {
+    isStop ? videoRef.current.playAsync() : videoRef.current.pauseAsync();
+    setIsStop(!isStop);
+  };
+
   return (
     <Fragment>
-      <S.Container style={{ height }}>
+      <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
         <S.Video
-          source={{ uri: isCurrentPage ? video_url : null }}
+          source={{ uri: video_url }}
           isLooping
           resizeMode="cover"
           ref={videoRef}

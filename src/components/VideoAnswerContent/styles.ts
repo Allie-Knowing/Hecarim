@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { Video as VideoC } from "expo-av";
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   position: relative;
   width: 100%;
   height: 100%;
