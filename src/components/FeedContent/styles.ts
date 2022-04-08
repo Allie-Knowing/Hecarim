@@ -7,7 +7,7 @@ interface MoreProps {
   isMore: boolean;
 }
 
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   position: relative;
   width: 100%;
   height: 100%;

@@ -24,7 +24,10 @@ const Profile: FC<Props> = ({ userId }) => {
               }
             />
             <S.ProfileContent>
-              <S.Nickname>{data.data.data.name}</S.Nickname>
+              <S.NameContainer>
+                <S.Nickname>{data.data.data.name}</S.Nickname>
+                <S.Email>{data.data.data.email}</S.Email>
+              </S.NameContainer>
               <S.Description>
                 내가 올린 질문 {data.data.data.video_cnt}개
               </S.Description>
