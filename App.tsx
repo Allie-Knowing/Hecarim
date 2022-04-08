@@ -1,4 +1,4 @@
-import React, { Platform, UIManager, View } from "react-native";
+import React, { Platform, UIManager } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigation from "components/BottomTabNavigation";
 import { ThemeProvider } from "styled-components/native";
@@ -12,7 +12,6 @@ import { Host } from "react-native-portalize";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import AlretProvider from "components/Providers/AlretProvider";
-import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -39,10 +38,7 @@ if (__DEV__) {
   });
 }
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -56,9 +52,7 @@ export default function App() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const check = useCallback(async () => {
-    const accessToken = await localStorage.getItem<string>(
-      storageKeys.accessToken
-    );
+    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
 
     setIsLogin(accessToken !== null);
   }, []);
@@ -78,66 +72,66 @@ export default function App() {
           <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
               <ThemeProvider theme={theme}>
-                  <BottomSheetModalProvider>
-                    <AlretProvider>
-                      <NavigationContainer>
-                        <Host>
-                          <CameraProvider>
-                            <Root.Navigator
-                              initialRouteName="Main"
-                              screenOptions={{
-                                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-                              }}
-                            >
-                              <Root.Screen
-                                name="Main"
-                                component={BottomTabNavigation}
-                                options={{ headerShown: false }}
-                              />
-                              <Root.Screen
-                                name="StackedQuestionList"
-                                component={StackedQuestionList}
-                                options={{ headerShown: false }}
-                              />
-                              <Root.Screen
-                                name="Login"
-                                component={Login}
-                                options={{ headerShown: false }}
-                              />
-                              <Root.Screen
-                                name="Setting"
-                                component={Setting}
-                                options={{ title: "설정" }}
-                              />
-                              <Root.Screen
-                                name="UserPage"
-                                component={UserPage}
-                                options={{ headerShown: false }}
-                              />
-                              <Root.Screen
-                                name="CameraPage"
-                                component={() => (
-                                  <isStackContext.Provider value={true}>
-                                    <CameraComponent />
-                                  </isStackContext.Provider>
-                                )}
-                                options={{ headerShown: false }}
-                              />
-                              <Root.Screen
-                                name="CameraDetail"
-                                component={() => (
-                                  <isStackContext.Provider value={true}>
-                                    <CameraDetail />
-                                  </isStackContext.Provider>
-                                )}
-                                options={{ headerShown: false }}
-                              />
-                            </Root.Navigator> 
+                <BottomSheetModalProvider>
+                  <AlretProvider>
+                    <NavigationContainer>
+                      <Host>
+                        <CameraProvider>
+                          <Root.Navigator
+                            initialRouteName="Main"
+                            screenOptions={{
+                              cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                            }}
+                          >
+                            <Root.Screen
+                              name="Main"
+                              component={BottomTabNavigation}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="StackedQuestionList"
+                              component={StackedQuestionList}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="Login"
+                              component={Login}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="Setting"
+                              component={Setting}
+                              options={{ title: "설정" }}
+                            />
+                            <Root.Screen
+                              name="UserPage"
+                              component={UserPage}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="CameraPage"
+                              component={() => (
+                                <isStackContext.Provider value={true}>
+                                  <CameraComponent />
+                                </isStackContext.Provider>
+                              )}
+                              options={{ headerShown: false }}
+                            />
+                            <Root.Screen
+                              name="CameraDetail"
+                              component={() => (
+                                <isStackContext.Provider value={true}>
+                                  <CameraDetail />
+                                </isStackContext.Provider>
+                              )}
+                              options={{ headerShown: false }}
+                            />
+                          </Root.Navigator>
                         </CameraProvider>
-                        </Host>
-                      </NavigationContainer>
-                    </AlretProvider>
-                  </BottomSheetModalProvider>
+                      </Host>
+                    </NavigationContainer>
+                  </AlretProvider>
+                </BottomSheetModalProvider>
               </ThemeProvider>
             </SafeAreaView>
           </SafeAreaProvider>

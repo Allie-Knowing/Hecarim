@@ -4,8 +4,8 @@ import { Video } from "expo-av";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { FOOTER_HEIGHT, HEADER_HEIGHT } from "constant/defaultStyle";
-import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "..";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { CameraStackParamList } from "..";
 import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { SCREEN_HEIGHT } from "constant/camera";
@@ -16,13 +16,16 @@ import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
 import { useVideoUrlMutation } from "queries/useVideoUrl";
 import { useVideoDataMutation } from "queries/useVideoData";
-import { MainStackParamList } from "hooks/useMainStackNavigation";
 
 interface Props {
-  route?: StackScreenProps<MainStackParamList, "CameraDetail">;
+  route?: {
+    params: {
+      questionId: number;
+    };
+  };
 }
 
-type screenProp = StackNavigationProp<RootStackParamList, "CameraDetail">;
+type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 
 const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   const { uri } = useContext(cameraContext);
@@ -77,7 +80,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
               title: title,
               video_url: url,
             },
-            feed_id: route.route.params.questionId,
+            feed_id: route.params.questionId,
           })
         : await postQuestion.mutateAsync({
             title: title,
@@ -88,7 +91,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
     } catch (err) {
       console.log(err);
     }
-    navigation.pop(1);
+    isAnswer ? navigation.pop(2) : navigation.pop(1);
   };
 
   //이미지 캐싱 함수
