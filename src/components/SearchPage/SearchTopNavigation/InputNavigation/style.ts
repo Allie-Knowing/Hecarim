@@ -48,6 +48,10 @@ export const ResetTextImage = styled.Image`
     z-index: 2;
 `;
 
+export const WrapperOfScrollView = styled.View`
+    flex: 1;
+`;
+
 export const ValueMappingContainer = styled(Animated.ScrollView)<{ topPad: number}>`
     position: absolute;
     flex: 1;

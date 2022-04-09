@@ -35,7 +35,7 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
     });
   };
 
-  const renderItem: ListRenderItem<searchTitle> = ({ item, index }) => {
+  const renderItem: ListRenderItem<searchTitle> = ({ item }) => {
     if (item.thumbnail !== null) {
       return <Results item={item} moveQuestionStack={moveQuestionStack} />;
     }
