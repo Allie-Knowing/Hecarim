@@ -28,35 +28,12 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
   const moveQuestionStack = () => {
     if (!questionList?.data?.data) return;
     const questionListData = questionList.data.data;
-    const questionLists: Question[] = [];
-    for (let i = 0; i < questionListData.length; i++) {
-      questionLists.push({
-        id: questionListData[i].id,
-        description: questionListData[i].description,
-        title: questionListData[i].title,
-        video_url: questionListData[i].video_url,
-        created_at: questionListData[i].created_at,
-        user_id: questionListData[i].user_id,
-        profile: questionListData[i].profile,
-        comment_cnt: questionListData[i].comment_cnt,
-        like_cnt: questionListData[i].like_cnt,
-        is_mine: questionListData[i].is_mine,
-        is_like: questionListData[i].is_like,
-        is_adoption: questionListData[i].is_adoption,
-      });
-    }
-    navigation.push("StackedQuestionList", { data: questionLists, index: 0 });
-  };
 
-  // const pressRenderItem = React.useCallback(
-  //   (index: number) => () => {
-  //     navigation.navigate("StackedQuestionList", {
-  //       data: questionList?.data.data,
-  //       index: index,
-  //     });
-  //   },
-  //   [navigation, questionList]
-  // );
+    navigation.push("StackedQuestionList", {
+      data: questionListData,
+      index: 0,
+    });
+  };
 
   const renderItem: ListRenderItem<searchTitle> = ({ item, index }) => {
     if (item.thumbnail !== null) {
