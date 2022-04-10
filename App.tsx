@@ -12,7 +12,9 @@ import {
 } from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
-import { MainStackParamList } from "hooks/useMainStackNavigation";
+import useMainStackNavigation, {
+  MainStackParamList,
+} from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import AlretProvider from "components/Providers/AlretProvider";
 import Setting from "screens/Setting";
@@ -23,13 +25,15 @@ import CameraComponent from "components/Question/Camera";
 import isStackContext from "./src/context/IsStackContext";
 import CameraProvider from "context/CameraContext";
 import CameraDetail from "components/Question/CameraDetail";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
 import theme from "theme/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
+import RefreshError from "types/RefreshError";
+import useAlert from "hooks/useAlert";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -93,54 +97,7 @@ export default function App() {
                                 CardStyleInterpolators.forHorizontalIOS,
                             }}
                           >
-                            <Root.Screen
-                              name="Main"
-                              component={BottomTabNavigation}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="StackedQuestionList"
-                              component={StackedQuestionList}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="Login"
-                              component={Login}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="Setting"
-                              component={Setting}
-                              options={{ title: "설정" }}
-                            />
-                            <Root.Screen
-                              name="UserPage"
-                              component={UserPage}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="SearchedQuestionsPage"
-                              component={SearchedQuestionsPage}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="CameraPage"
-                              component={() => (
-                                <isStackContext.Provider value={true}>
-                                  <CameraComponent />
-                                </isStackContext.Provider>
-                              )}
-                              options={{ headerShown: false }}
-                            />
-                            <Root.Screen
-                              name="CameraDetail"
-                              component={() => (
-                                <isStackContext.Provider value={true}>
-                                  <CameraDetail />
-                                </isStackContext.Provider>
-                              )}
-                              options={{ headerShown: false }}
-                            />
+                            <MainNavigationScreen />
                           </Root.Navigator>
                         </CameraProvider>
                       </Host>
@@ -155,3 +112,80 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
+
+const MainNavigationScreen = () => {
+  const navigation = useMainStackNavigation();
+  const { closeAlert, showAlert } = useAlert();
+
+  const onError = useCallback(
+    (error: unknown) => {
+      if (error instanceof RefreshError) {
+        navigation.reset({ routes: [{ name: "Login" }] });
+
+        showAlert({
+          title: "로그인이 만료되었습니다.",
+          content: "다시 로그인 해주세요.",
+          buttons: [
+            { color: "black", text: "확인", onPress: (id) => closeAlert(id) },
+          ],
+        });
+      }
+    },
+    [navigation, closeAlert, showAlert]
+  );
+
+  queryClient.setDefaultOptions({ queries: { onError, retry: false } });
+
+  return (
+    <Fragment>
+      <Root.Screen
+        name="Main"
+        component={BottomTabNavigation}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="StackedQuestionList"
+        component={StackedQuestionList}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="Setting"
+        component={Setting}
+        options={{ title: "설정" }}
+      />
+      <Root.Screen
+        name="UserPage"
+        component={UserPage}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="SearchedQuestionsPage"
+        component={SearchedQuestionsPage}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="CameraPage"
+        component={() => (
+          <isStackContext.Provider value={true}>
+            <CameraComponent />
+          </isStackContext.Provider>
+        )}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="CameraDetail"
+        component={() => (
+          <isStackContext.Provider value={true}>
+            <CameraDetail />
+          </isStackContext.Provider>
+        )}
+        options={{ headerShown: false }}
+      />
+    </Fragment>
+  );
+};
