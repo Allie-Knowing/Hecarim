@@ -89,7 +89,7 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
         <S.MagnifyImage source={Magnify} />
         <S.Input
           topPad={topPad}
-          value={inputValue || title}
+          defaultValue={title}
           onChange={InputHandler}
           onSubmitEditing={SubmitHandler}
           placeholder="제목을 입력해주세요..."
@@ -100,27 +100,27 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
             <S.ResetTextImage source={ResetText} />
           </S.ResetImageContainer>
         )}
-        <S.WrapperOfScrollView>
-          <S.ValueMappingContainer
-            style={{ width }}
-            bounces={false}
-            bouncesZoom={false}
-            topPad={topPad}
-          >
-            {searchMutation.data?.data.data &&
-            searchMutation.data?.data.data.length > 0
-              ? searchMutation.data?.data.data.map((value) => {
-                  return (
-                    <InputValueMapping
-                      key={value.id}
-                      value={value}
-                      pressHandler={pressHandler}
-                    />
-                  );
-                })
-              : null}
-          </S.ValueMappingContainer>
-        </S.WrapperOfScrollView>
+        {/* <S.WrapperOfScrollView> */}
+        <S.ValueMappingContainer
+          style={{ width }}
+          bounces={false}
+          bouncesZoom={false}
+          topPad={topPad}
+        >
+          {searchMutation.data?.data.data &&
+          searchMutation.data?.data.data.length > 0
+            ? searchMutation.data?.data.data.map((value) => {
+                return (
+                  <InputValueMapping
+                    key={value.id}
+                    value={value}
+                    pressHandler={pressHandler}
+                  />
+                );
+              })
+            : null}
+        </S.ValueMappingContainer>
+        {/* </S.WrapperOfScrollView> */}
       </S.Wrapper>
     </>
   );
