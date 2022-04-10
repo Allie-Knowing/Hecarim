@@ -90,15 +90,7 @@ export default function App() {
                     <NavigationContainer>
                       <Host>
                         <CameraProvider>
-                          <Root.Navigator
-                            initialRouteName="Main"
-                            screenOptions={{
-                              cardStyleInterpolator:
-                                CardStyleInterpolators.forHorizontalIOS,
-                            }}
-                          >
-                            <MainNavigationScreen />
-                          </Root.Navigator>
+                          <MainNavigationScreen />
                         </CameraProvider>
                       </Host>
                     </NavigationContainer>
@@ -137,7 +129,12 @@ const MainNavigationScreen = () => {
   queryClient.setDefaultOptions({ queries: { onError, retry: false } });
 
   return (
-    <Fragment>
+    <Root.Navigator
+      initialRouteName="Main"
+      screenOptions={{
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+      }}
+    >
       <Root.Screen
         name="Main"
         component={BottomTabNavigation}
@@ -186,6 +183,6 @@ const MainNavigationScreen = () => {
         )}
         options={{ headerShown: false }}
       />
-    </Fragment>
+    </Root.Navigator>
   );
 };
