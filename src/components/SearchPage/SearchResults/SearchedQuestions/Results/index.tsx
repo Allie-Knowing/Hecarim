@@ -16,11 +16,15 @@ interface PropsType {
 const Results: FC<PropsType> = ({ item, moveQuestionStack }) => {
   return (
     <TouchableOpacity onPress={() => moveQuestionStack()}>
-      <S.SearchedResults
-        source={item.thumbnail ? { uri: item.thumbnail } : questionImage}
-        imageWidth={width / 2 - 30}
-        resizeMode="cover"
-      />
+      {item.thumbnail ? (
+        <S.SearchedResults
+          source={{ uri: item.thumbnail }}
+          imageWidth={width / 2 - 30}
+          resizeMode="cover"
+        />
+      ) : (
+        <S.DefaultQuestion imageWidth={width / 2 - 30} />
+      )}
     </TouchableOpacity>
   );
 };
