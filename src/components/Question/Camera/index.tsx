@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CameraStackParamList } from "..";
@@ -31,7 +31,6 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const [cameraRef, setCameraRef] = useState<null | Camera>(null);
   const [bestRatio, setBestRatio] = useState<string>();
   const [isPickingVideo, setIsPickingVideo] = useState<boolean>(false);
-  const [questionObject, setQuestionObject] = useState<number | undefined>();
   const { setUri } = useContext(cameraContext);
   const isAnswer = useContext(isStackContext);
   const [blockRecord, setBlockRecord] = useState(false);
@@ -48,7 +47,6 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
-    setQuestionObject(0);
     cacheImage();
     startCamera();
   }, []);

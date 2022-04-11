@@ -155,7 +155,6 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                       onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
                       onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
                       onChangeText={(text) => setTitle(text)}
-                      value={title}
                     />
                   </S.TitleInputContainer>
                 </S.InputBox>
@@ -171,7 +170,6 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                       onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
                       onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
                       onChangeText={(text) => setTitle(text)}
-                      value={title}
                     />
                   </S.TitleInputContainer>
                 </S.InputBox>
@@ -188,11 +186,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                 <S.InputBox>
                   <S.TitleText>해쉬태그</S.TitleText>
                   <S.TextArea
-                    placeholder="입력해주세요..."
+                    placeholder="공백 단위로 입력해주세요..."
                     multiline={true}
                     textAlignVertical={"center"}
                     onChangeText={(text) => setHashTag(text)}
-                    value={hashTag}
                   />
                 </S.InputBox>
               </S.InputContainer>
