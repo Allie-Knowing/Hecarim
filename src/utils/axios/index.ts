@@ -93,15 +93,6 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error: AxiosError) {
-    return Promise.reject(error);
-  }
-);
-
-// instance.interceptors.response.use(function (response) {
-//   return response;
-// }, refresh);
+instance.interceptors.response.use(function (response) {
+  return response;
+}, refresh);
