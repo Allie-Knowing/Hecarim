@@ -3,7 +3,7 @@ import { Dimensions } from "react-native";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import * as S from "./style";
 import themeContext from "hooks/useThemeContext";
-import { useSearchResults, useSearchMutation } from "queries/Search";
+import { useSearchMutation } from "queries/Search";
 import InputValueMapping from "./InputValueMapping";
 
 interface PropsType {
@@ -89,7 +89,7 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
         <S.MagnifyImage source={Magnify} />
         <S.Input
           topPad={topPad}
-          defaultValue={title}
+          defaultValue={inputValue}
           onChange={InputHandler}
           onSubmitEditing={SubmitHandler}
           placeholder="제목을 입력해주세요..."
@@ -100,13 +100,17 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
             <S.ResetTextImage source={ResetText} />
           </S.ResetImageContainer>
         )}
-        {/* <S.WrapperOfScrollView> */}
+      </S.Wrapper>
+      <S.WrapperOfScrollView>
         <S.ValueMappingContainer
-          style={{ width }}
+          style={{ height, width }}
           bounces={false}
           bouncesZoom={false}
           topPad={topPad}
         >
+          {searchMutation.data?.data.data.length > 0 ? (
+            <S.ResultViewTitle>추천 검색어</S.ResultViewTitle>
+          ) : null}
           {searchMutation.data?.data.data &&
           searchMutation.data?.data.data.length > 0
             ? searchMutation.data?.data.data.map((value) => {
@@ -120,8 +124,7 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
               })
             : null}
         </S.ValueMappingContainer>
-        {/* </S.WrapperOfScrollView> */}
-      </S.Wrapper>
+      </S.WrapperOfScrollView>
     </>
   );
 };
