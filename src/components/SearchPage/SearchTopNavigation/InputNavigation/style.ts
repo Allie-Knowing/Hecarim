@@ -8,7 +8,7 @@ export const Wrapper = styled.View<{ topPad:number }>`
     border: 1px ${({theme}) => theme.colors.grayscale.scale20};
     background-color: ${({theme}) => theme.colors.grayscale.scale20};
     border-radius: 10;
-    height: 72%;
+    height: ${Platform.OS === 'android' ? 72 : 58}%;
     width: 90%;
 `;
 
