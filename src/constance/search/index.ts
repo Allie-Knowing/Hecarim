@@ -5,6 +5,7 @@ export type searchPayload = {
 export type searchTitle = {
     id: string,
     title: string,
+    description: string,
     thumbnail: string
 }
 
