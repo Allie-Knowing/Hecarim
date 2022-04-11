@@ -1,5 +1,4 @@
 import styled from "styled-components/native";
-import Animated from "react-native-reanimated";
 import { Platform } from "react-native";
 
 export const Wrapper = styled.View<{ topPad:number }>`
@@ -9,8 +8,8 @@ export const Wrapper = styled.View<{ topPad:number }>`
     border: 1px ${({theme}) => theme.colors.grayscale.scale20};
     background-color: ${({theme}) => theme.colors.grayscale.scale20};
     border-radius: 10;
-    height: 50px;
-    width: 365px;
+    height: 72%;
+    width: 90%;
 `;
 
 export const Message = styled.Text`
@@ -49,13 +48,18 @@ export const ResetTextImage = styled.Image`
 `;
 
 export const WrapperOfScrollView = styled.View`
-    flex: 1;
+    position: relative;
+    top: 40%;
+    width: 100%;
+    z-index: 100;
 `;
 
-export const ValueMappingContainer = styled(Animated.ScrollView)<{ topPad: number}>`
+export const ValueMappingContainer = styled.ScrollView<{ topPad: number }>`
     position: absolute;
-    flex: 1;
-    top: 0;
-    margin-top: 62px;
-    height: ${({ topPad }) => topPad + 500}px;
+    padding: 0 12px;
+`;
+
+export const ResultViewTitle = styled.Text`
+    font: ${({ theme }) => theme.fonts.description2};
+    color: ${({ theme }) => theme.colors.grayscale.scale50};
 `;
