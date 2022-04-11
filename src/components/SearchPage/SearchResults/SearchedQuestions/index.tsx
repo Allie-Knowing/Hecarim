@@ -36,7 +36,7 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
   };
 
   const renderItem: ListRenderItem<searchTitle> = ({ item }) => {
-    if (item.thumbnail !== null) {
+    if (data.data.data.length > 0) {
       return <Results item={item} moveQuestionStack={moveQuestionStack} />;
     }
     return null;
@@ -58,7 +58,7 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
         <FlatList
           decelerationRate="fast"
           snapToAlignment="start"
-          data={data?.data.data}
+          data={data.data.data}
           renderItem={renderItem}
           keyExtractor={(item) => `result_${item.id}`}
           numColumns={2}
