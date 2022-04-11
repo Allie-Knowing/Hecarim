@@ -61,11 +61,14 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   //동영상 업로드 함수
   const uploadVideo = async () => {
     const formData = createFormData(uri);
-    const hashTagArr: string[] = [];
-
-    hashTag.split(" ").map((value) => {
-      hashTagArr.push(value);
-    });
+    const hashTagArr = hashTag
+      .split("#")
+      .filter((value) => {
+        return value.length > 0;
+      })
+      .map((value) => {
+        return value.replaceAll(" ", "");
+      });
 
     try {
       const videoUrlResponse = await videoUrl.mutateAsync({
@@ -186,7 +189,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                 <S.InputBox>
                   <S.TitleText>해쉬태그</S.TitleText>
                   <S.TextArea
-                    placeholder="공백 단위로 입력해주세요..."
+                    placeholder="해쉬태그 앞에 #을 붙여주세요"
                     multiline={true}
                     textAlignVertical={"center"}
                     onChangeText={(text) => setHashTag(text)}
