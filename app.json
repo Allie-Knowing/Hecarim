@@ -2,7 +2,7 @@
   "expo": {
     "name": "Knowing",
     "slug": "Knowing",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/knowing.png",
     "splash": {
@@ -16,7 +16,13 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.allie.knowing",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "android": {
       "package": "com.allie.knowing",
@@ -24,8 +30,13 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "permissions": [],
-      "versionCode": 2,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ],
+      "versionCode": 3,
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
