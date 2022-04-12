@@ -8,7 +8,7 @@ export interface Question {
   video_url: string | null;
   created_at: string;
   user_id: number;
-  profile: string;
+  profile: string | null;
   comment_cnt: number;
   like_cnt: number;
   is_mine: boolean;
@@ -27,8 +27,10 @@ const getQuestionList = async (page: number, size: number) => {
 };
 
 const getStackQuestionList = async (id: number[]) => {
-  return await instance.get<QuestionListResponse>(`${uri.stack_question}?id=${id.join(",")}`);
-}
+  return await instance.get<QuestionListResponse>(
+    `${uri.stack_question}?id=${id.join(",")}`
+  );
+};
 
 export interface Hashtag {
   id: number;

@@ -8,13 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  Dimensions,
-  LayoutAnimation,
-  Platform,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, LayoutAnimation, Platform, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -45,6 +39,8 @@ const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
 const More = require("../../assets/icons/more.png");
 const Camera = require("../../assets/icons/camera.png");
+const Play = require("../../assets/play.png");
+const defaultProfile = require("assets/profile.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -281,6 +277,7 @@ const FeedContent: FC<Question & PropsType> = ({
   return (
     <Fragment>
       <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
+        {isStop && <S.VideoStateIcon source={Play} />}
         <S.Video
           source={{ uri: video_url }}
           isLooping
@@ -317,13 +314,19 @@ const FeedContent: FC<Question & PropsType> = ({
             <S.Icons>
               <S.IconContainer
                 onPress={() => {
+                  videoRef.current.pauseAsync();
+                  setIsStop(true);
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage source={{ uri: profile }} />
+                <S.ProfileImage
+                  source={profile ? { uri: profile } : defaultProfile}
+                />
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
+                  videoRef.current.pauseAsync();
+                  setIsStop(true);
                   navigation.navigate("Camera", { questionId: id });
                 }}
               >

@@ -13,6 +13,16 @@ export const Container = styled.TouchableOpacity`
   height: 100%;
   top: 0px;
   left: 0px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const VideoStateIcon = styled.Image`
+  position: absolute;
+  z-index: 99;
+  width: 50px;
+  height: 60px;
+  opacity: 0.7;
 `;
 
 export const Video = styled(VideoAv)`

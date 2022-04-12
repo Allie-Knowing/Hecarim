@@ -28,6 +28,8 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
+const Play = require("../../assets/play.png");
+const defaultProfile = require("assets/profile.png");
 
 const { height } = Dimensions.get("screen");
 
@@ -295,6 +297,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   return (
     <Fragment>
       <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
+        {isStop && <S.VideoStateIcon source={Play} />}
         <S.Video
           source={{ uri: video_url }}
           isLooping
@@ -341,10 +344,14 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
             <S.Icons>
               <S.IconContainer
                 onPress={() => {
+                  videoRef.current.pauseAsync();
+                  setIsStop(true);
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage source={{ uri: profile }} />
+                <S.ProfileImage
+                  source={profile ? { uri: profile } : defaultProfile}
+                />
               </S.IconContainer>
               <S.IconContainer onPress={onLikePress}>
                 <S.Icon
