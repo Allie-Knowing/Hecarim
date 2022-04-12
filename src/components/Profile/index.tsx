@@ -29,7 +29,7 @@ const Profile: FC<Props> = ({ userId }) => {
                 <S.Email>{data.data.data.email}</S.Email>
               </S.NameContainer>
               <S.Description>
-                내가 올린 질문 {data.data.data.video_cnt}개
+                영상 질문 {data.data.data.video_cnt}개
               </S.Description>
             </S.ProfileContent>
           </>
