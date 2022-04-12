@@ -193,7 +193,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     isVideoRecording ? (
       <S.RecordIndicatorContainer>
         <S.RecordDot />
-        <S.RecordTitle>{""}</S.RecordTitle>
+        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
       </S.RecordIndicatorContainer>
     ) : (
       <S.RecordIndicatorContainer>
