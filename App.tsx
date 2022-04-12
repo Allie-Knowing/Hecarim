@@ -25,7 +25,7 @@ import CameraComponent from "components/Question/Camera";
 import isStackContext from "./src/context/IsStackContext";
 import CameraProvider from "context/CameraContext";
 import CameraDetail from "components/Question/CameraDetail";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
@@ -166,19 +166,19 @@ const MainNavigationScreen = () => {
         options={{ headerShown: false }}
       />
       <Root.Screen
-        name="CameraPage"
-        component={() => (
+        name="Camera"
+        component={(props) => (
           <isStackContext.Provider value={true}>
-            <CameraComponent />
+            <CameraComponent {...props} />
           </isStackContext.Provider>
         )}
         options={{ headerShown: false }}
       />
       <Root.Screen
         name="CameraDetail"
-        component={() => (
+        component={(props) => (
           <isStackContext.Provider value={true}>
-            <CameraDetail />
+            <CameraDetail {...props} />
           </isStackContext.Provider>
         )}
         options={{ headerShown: false }}

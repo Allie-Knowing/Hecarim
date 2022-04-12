@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from "react";
 import * as S from "./style";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { StackScreenProps } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import SearchedQuestions from "components/SearchPage/SearchResults/SearchedQuestions";

@@ -13,6 +13,8 @@ import storageKeys from "constant/storageKeys";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import localStorage from "utils/localStorage";
+import { useQueryClient } from "react-query";
+import queryKeys from "constant/queryKeys";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -63,6 +65,7 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   const themeContext = useContext(ThemeContext);
   const { bottom: bottomPad } = useSafeAreaInsets();
   const [pressName, setPressName] = useState<string>("feed");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const loginCheck = async () => {
@@ -72,6 +75,12 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
     };
     loginCheck();
   }, []);
+
+  useEffect(() => {
+    if (pressName === "feed") {
+      queryClient.invalidateQueries(queryKeys.question);
+    }
+  }, [pressName, queryClient]);
 
   return (
     <Fragment>

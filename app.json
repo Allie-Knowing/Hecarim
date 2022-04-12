@@ -16,13 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.allie.knowing",
-      "supportsTablet": true,
-      "permissions": [
-        "CAMERA",
-        "RECORD_AUDIO",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+      "supportsTablet": true
     },
     "android": {
       "package": "com.allie.knowing",
