@@ -1,5 +1,5 @@
 import React, { FC, useRef, useCallback } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, TouchableOpacity } from "react-native";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import * as S from "./style";
 import themeContext from "hooks/useThemeContext";
@@ -91,6 +91,7 @@ const InputNavigation: FC<PropsType> = ({ topPad, title }) => {
           topPad={topPad}
           defaultValue={inputValue}
           onChange={InputHandler}
+          // onFocus={() => navigation.navigate("Login")}
           onSubmitEditing={SubmitHandler}
           placeholder="제목을 입력해주세요..."
           placeholderTextColor={theme.colors.grayscale.scale50}

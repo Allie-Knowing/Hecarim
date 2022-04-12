@@ -48,7 +48,7 @@ export const ResetTextImage = styled.Image`
 `;
 
 export const WrapperOfScrollView = styled.View`
-    position: relative;
+    /* position: relative; */
     top: 40%;
     width: 100%;
     z-index: 100;
