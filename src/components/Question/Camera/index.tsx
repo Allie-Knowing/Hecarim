@@ -237,7 +237,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     return (
       <S.Container>
         <S.Message>
-          <S.Text>권한을 알 수 없음, 설정에서 권한을 추가해주세요</S.Text>
+          <S.Text>잠시만 기다려주세요...</S.Text>
         </S.Message>
       </S.Container>
     );
