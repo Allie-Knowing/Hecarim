@@ -60,6 +60,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 업로드 함수
   const uploadVideo = async () => {
+    if (title.length <= 0) {
+      alert("제목을 입력해주세요");
+      return;
+    }
     const formData = createFormData(uri);
     const hashTagArr = hashTag
       .split("#")
