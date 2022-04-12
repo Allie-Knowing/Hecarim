@@ -324,7 +324,7 @@ const FeedContent: FC<Question & PropsType> = ({
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
-                  navigation.navigate("CameraPage", { questionId: id });
+                  navigation.navigate("Camera", { questionId: id });
                 }}
               >
                 <S.Icon resizeMode="contain" source={Camera} />
