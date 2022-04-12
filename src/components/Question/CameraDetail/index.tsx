@@ -60,6 +60,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 업로드 함수
   const uploadVideo = async () => {
+    if (title.length <= 0) {
+      alert("제목을 입력해주세요");
+      return;
+    }
     const formData = createFormData(uri);
     const hashTagArr = hashTag
       .split("#")
@@ -75,13 +79,12 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
         type: isAnswer ? "answer" : "question",
         file: formData,
       });
-      const url = videoUrlResponse.data.data.url;
 
       isAnswer
         ? await postAnswer.mutateAsync({
             data: {
               title: title,
-              video_url: url,
+              video_url: videoUrlResponse.data.data.url,
             },
             feed_id: route.params.questionId,
           })
@@ -89,7 +92,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             title: title,
             description: description,
             hash_tag: hashTagArr,
-            video_url: url,
+            video_url: videoUrlResponse.data.data.url,
           });
     } catch (err) {
       console.log(err);
@@ -99,7 +102,20 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
 
   //이미지 캐싱 함수
   const cacheImage = () => {
-    Promise.all([Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync()]);
+    Promise.all([
+      Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync(),
+    ]);
+  };
+
+  const autoHashTag = (text: string) => {
+    const splittedText = text.split(" ").map((value) => {
+      if (value[0] === "#" || value.length === 0) return value;
+      else {
+        return (value = "#" + value);
+      }
+    });
+
+    setHashTag(splittedText.join(" "));
   };
 
   useEffect(() => {
@@ -107,7 +123,11 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   }, []);
 
   return (
-    <KeyboardAwareScrollView extraHeight={40} enableOnAndroid={true} enableAutomaticScroll={true}>
+    <KeyboardAwareScrollView
+      extraHeight={40}
+      enableOnAndroid={true}
+      enableAutomaticScroll={true}
+    >
       <S.QuestionDetailWrapper topPad={TOP_PAD + HEADER_HEIGHT}>
         <S.QuestionDetailHeader topPad={TOP_PAD}>
           <S.GoBackContainer
@@ -118,7 +138,9 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             <S.GoBackImage source={backImage} />
           </S.GoBackContainer>
           <S.InputQuestionInfoText>질문 정보 입력</S.InputQuestionInfoText>
-          {videoUrl.isLoading || postQuestion.isLoading || postAnswer.isLoading ? (
+          {videoUrl.isLoading ||
+          postQuestion.isLoading ||
+          postAnswer.isLoading ? (
             <S.UploadContainer>
               <S.UploadText color="#97979C">업로드중...</S.UploadText>
             </S.UploadContainer>
@@ -129,7 +151,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
           )}
         </S.QuestionDetailHeader>
         <S.QuestionDetailBody
-          height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}
+          height={
+            SCREEN_HEIGHT -
+            (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)
+          }
         >
           <ScrollView>
             <S.VideoContainer>
@@ -155,8 +180,12 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                     <S.TitleInput
                       placeholder="입력해주세요..."
                       placeholderTextColor={theme.colors.grayscale.scale30}
-                      onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
-                      onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
+                      onFocus={() =>
+                        setBorderBottomColor(theme.colors.primary.default)
+                      }
+                      onBlur={() =>
+                        setBorderBottomColor(theme.colors.grayscale.scale30)
+                      }
                       onChangeText={(text) => setTitle(text)}
                     />
                   </S.TitleInputContainer>
@@ -168,10 +197,14 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                   <S.TitleInputContainer borderColor={borderBottomColor}>
                     <S.TitleText>제목</S.TitleText>
                     <S.TitleInput
-                      placeholder="입력해주세요..."
+                      placeholder="입력해주세요"
                       placeholderTextColor={theme.colors.grayscale.scale30}
-                      onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
-                      onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
+                      onFocus={() =>
+                        setBorderBottomColor(theme.colors.primary.default)
+                      }
+                      onBlur={() =>
+                        setBorderBottomColor(theme.colors.grayscale.scale30)
+                      }
                       onChangeText={(text) => setTitle(text)}
                     />
                   </S.TitleInputContainer>
@@ -179,7 +212,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                 <S.InputBox>
                   <S.TitleText>설명</S.TitleText>
                   <S.TextArea
-                    placeholder="입력해주세요..."
+                    placeholder="입력해주세요"
                     multiline={true}
                     textAlignVertical={"center"}
                     onChangeText={(text) => setDescription(text)}
@@ -189,10 +222,11 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                 <S.InputBox>
                   <S.TitleText>해쉬태그</S.TitleText>
                   <S.TextArea
-                    placeholder="해쉬태그 앞에 #을 붙여주세요"
+                    placeholder="해쉬태그 입력 후 스페이스바를 눌러주세요"
                     multiline={true}
                     textAlignVertical={"center"}
-                    onChangeText={(text) => setHashTag(text)}
+                    onChangeText={(text) => autoHashTag(text)}
+                    value={hashTag}
                   />
                 </S.InputBox>
               </S.InputContainer>

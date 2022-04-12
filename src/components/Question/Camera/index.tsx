@@ -23,8 +23,12 @@ interface Props {
 type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 
 const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
-  const [hasAudioPermission, setHasAudioPermission] = useState<boolean | null>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState<
+    boolean | null
+  >(null);
+  const [hasAudioPermission, setHasAudioPermission] = useState<boolean | null>(
+    null
+  );
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
@@ -47,8 +51,15 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
+    (async () => {
+      const { status: CameraStatus } =
+        await Camera.requestCameraPermissionsAsync();
+      const { status: VoiceStatus } =
+        await Camera.requestMicrophonePermissionsAsync();
+      setHasCameraPermission(CameraStatus === "granted");
+      setHasAudioPermission(VoiceStatus === "granted");
+    })();
     cacheImage();
-    startCamera();
   }, []);
 
   //이미지 캐싱 함수
@@ -81,11 +92,15 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
-            alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
+            alert(
+              "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
+            );
           }
           setUri(res.uri);
           isAnswer
-            ? mainNavigation.push("CameraDetail", { questionId: route.params.questionId })
+            ? mainNavigation.push("CameraDetail", {
+                questionId: route.params.questionId,
+              })
             : cameraNavigation.push("CameraDetail");
         }
       });
@@ -99,15 +114,6 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     setIsCameraReady(true);
   };
 
-  //카메라 권한 가져오는 함수
-  const startCamera = async () => {
-    const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
-    const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
-
-    setHasCameraPermission(CameraStatus === "granted");
-    setHasAudioPermission(VoiceStatus === "granted");
-  };
-
   //디바이스의 최적 카메라 비율을 사용하는 함수
   const getDeviceCameraRatio = async () => {
     const ratio = await cameraRef.getSupportedRatiosAsync();
@@ -116,15 +122,16 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   };
 
   //디바이스의 최적 카메라 비율을 구하는 함수
-  const extractBestRatio = (availableRatioArra: string[]) => {
+  const extractBestRatio = (availableRatioArray: string[]) => {
     const ratioObjectArray: { ratio: string; realRatio: number }[] = [];
     const arrayOfAbs: number[] = [];
 
-    for (let i = 0; i < availableRatioArra.length; i++) {
+    for (let i = 0; i < availableRatioArray.length; i++) {
       ratioObjectArray[i] = {
-        ratio: availableRatioArra[i],
+        ratio: availableRatioArray[i],
         realRatio:
-          Number(availableRatioArra[i].split(":")[0]) / Number(availableRatioArra[i].split(":")[1]),
+          Number(availableRatioArray[i].split(":")[0]) /
+          Number(availableRatioArray[i].split(":")[1]),
       };
     }
 
@@ -135,7 +142,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     const minRatio = Math.min.apply(Math, arrayOfAbs);
     const minRatioIndex = arrayOfAbs.findIndex((value) => value === minRatio);
 
-    return availableRatioArra[minRatioIndex];
+    return availableRatioArray[minRatioIndex];
   };
 
   //동영상 녹화 함수
@@ -148,7 +155,9 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       });
       setUri(videoRecordPromise.uri);
       isAnswer
-        ? mainNavigation.navigate("CameraDetail", { questionId: route.params.questionId })
+        ? mainNavigation.navigate("CameraDetail", {
+            questionId: route.params.questionId,
+          })
         : cameraNavigation.navigate("CameraDetail");
     }
   };
@@ -184,7 +193,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     isVideoRecording ? (
       <S.RecordIndicatorContainer>
         <S.RecordDot />
-        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
+        <S.RecordTitle>{""}</S.RecordTitle>
       </S.RecordIndicatorContainer>
     ) : (
       <S.RecordIndicatorContainer>
@@ -213,13 +222,26 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
           <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
           </S.RecordVideoContainer>
-          <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
+          <S.FlipCameraContainer
+            disabled={!isCameraReady}
+            onPress={switchCamera}
+          >
             <S.FlipCameraImage source={rotateImg} />
           </S.FlipCameraContainer>
         </>
       )}
     </S.Control>
   );
+
+  if (hasAudioPermission === null || hasCameraPermission === null) {
+    return (
+      <S.Container>
+        <S.Message>
+          <S.Text>잠시만 기다려주세요...</S.Text>
+        </S.Message>
+      </S.Container>
+    );
+  }
 
   if (hasCameraPermission === false) {
     return (
@@ -241,42 +263,44 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     );
   }
 
-  return (
-    <S.QuestionWrapper>
-      <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-        {isAnswer ? (
-          <S.GoBackContainer
-            onPress={() => {
-              cameraNavigation.pop(1);
-            }}
-          >
-            <S.GoBackImage source={backImage} />
-          </S.GoBackContainer>
-        ) : (
-          <></>
-        )}
-        {isFocused && !isPickingVideo && (
-          <Camera
-            ref={(el) => setCameraRef(el)}
-            style={{ ...StyleSheet.absoluteFillObject }}
-            type={cameraType}
-            onCameraReady={onCameraReady}
-            onMountError={(error) => {
-              console.warn("cammera error", error);
-            }}
-            autoFocus={"on"}
-            useCamera2Api
-            ratio={bestRatio}
-          />
-        )}
+  if (hasAudioPermission && hasCameraPermission) {
+    return (
+      <S.QuestionWrapper>
+        <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
+          {isAnswer ? (
+            <S.GoBackContainer
+              onPress={() => {
+                cameraNavigation.pop(1);
+              }}
+            >
+              <S.GoBackImage source={backImage} />
+            </S.GoBackContainer>
+          ) : (
+            <></>
+          )}
+          {isFocused && !isPickingVideo && (
+            <Camera
+              ref={(el) => setCameraRef(el)}
+              style={{ ...StyleSheet.absoluteFillObject }}
+              type={cameraType}
+              onCameraReady={onCameraReady}
+              onMountError={(error) => {
+                console.warn("cammera error", error);
+              }}
+              autoFocus={"on"}
+              useCamera2Api
+              ratio={bestRatio}
+            />
+          )}
 
-        <View style={{ ...StyleSheet.absoluteFillObject }}>
-          {renderVideoRecordIndicator()}
-          {renderVideoControl()}
-        </View>
-      </SafeAreaView>
-    </S.QuestionWrapper>
-  );
+          <View style={{ ...StyleSheet.absoluteFillObject }}>
+            {renderVideoRecordIndicator()}
+            {renderVideoControl()}
+          </View>
+        </SafeAreaView>
+      </S.QuestionWrapper>
+    );
+  }
 };
 
 export default CameraComponent;
