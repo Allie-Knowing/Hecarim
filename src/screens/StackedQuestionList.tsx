@@ -10,6 +10,8 @@ const StackedQuestionList: FC<
   const data = useMemo(() => route.params.data || [], [route.params.data]);
   const index = useMemo(() => route.params.index || 0, [route.params.index]);
 
+  console.log(data);
+
   return (
     <isStackContext.Provider value={true}>
       <QuestionList
