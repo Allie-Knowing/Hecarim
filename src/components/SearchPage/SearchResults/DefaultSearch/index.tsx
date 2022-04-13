@@ -1,21 +1,29 @@
 import React, { FC } from "react";
-import { Dimensions, View } from "react-native";
-import * as S from "./style";
+import { View } from "react-native";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
-
-const { height } = Dimensions.get("screen");
+import SearchResultNavigation from "components/SearchPage/SearchResultNavigation";
 
 interface Props {
   title: string;
 }
 
 const DefaultSearch: FC<Props> = ({ title }) => {
+  const [inputValue, setInputValue] = React.useState<string>("");
+  const [checkValue, setCheckValue] = React.useState<boolean>(false);
   return (
     <View>
-      <SearchTopNavigation title={title} />
-      <S.View height={height / 1.44}>
-        <S.Text>검색을 통해 질문을 찾아보세요.</S.Text>
-      </S.View>
+      <SearchTopNavigation
+        title={title}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        checkValue={checkValue}
+        setCheckValue={setCheckValue}
+      />
+      <SearchResultNavigation
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        setCheckValue={setCheckValue}
+      />
     </View>
   );
 };
