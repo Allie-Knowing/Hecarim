@@ -19,6 +19,8 @@ interface Props {
 }
 
 const SearchedQuestions: FC<Props> = ({ title }) => {
+  const [inputValue, setInputValue] = React.useState<string>("");
+  const [checkValue, setCheckValue] = React.useState<boolean>(false);
   const { data, isLoading, isError, error } = useSearchResults(title);
   const { data: questionList } = useStackQuestionList(
     data?.data.data.map((value) => Number(value.id)) || []
@@ -52,8 +54,14 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
 
   return (
     <View style={{ width, backgroundColor: "#FFFFFF" }}>
-      <SearchTopNavigation title={title} />
-      <S.Container height={height / 1.29}>
+      <SearchTopNavigation
+        title={title}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        checkValue={checkValue}
+        setCheckValue={setCheckValue}
+      />
+      <S.Container>
         <S.ResultAmount>검색된 질문 {data?.data.data.length}개</S.ResultAmount>
         <FlatList
           decelerationRate="fast"
