@@ -1,10 +1,9 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View<{ height:number }>`
+export const Container = styled.View`
     width: 100%;
-    height: ${({ height }) => height};
+    height: 100%;
     background-color: ${({ theme }) => theme.colors.grayscale.scale10};
-    margin-top: 20;
     border-top-width: 10;
     border-top-color: ${({theme}) => theme.colors.grayscale.scale20};
 `;
