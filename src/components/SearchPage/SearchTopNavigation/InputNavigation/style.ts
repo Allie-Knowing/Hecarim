@@ -2,14 +2,12 @@ import styled from "styled-components/native";
 import { Platform } from "react-native";
 
 export const Wrapper = styled.View<{ topPad:number }>`
-    position: relative;
     justify-content: center;
     align-items: center;
     border: 1px ${({theme}) => theme.colors.grayscale.scale20};
     background-color: ${({theme}) => theme.colors.grayscale.scale20};
     border-radius: 10;
-    height: ${Platform.OS === 'android' ? 72 : 58}%;
-    width: 90%;
+    height: ${Platform.OS === 'android' ? 72 : 62}%;
 `;
 
 export const Message = styled.Text`
@@ -31,7 +29,6 @@ export const Input = styled.TextInput<{ topPad: number }>`
     padding-bottom: ${Platform.OS === 'ios' ? 3 : 0}px;
     width: 100%;
     height: 100%;
-    position: absolute;
     color: ${({theme}) => theme.colors.grayscale.scale100};
     font: ${({theme}) => theme.fonts.body3};
 `;
@@ -45,21 +42,4 @@ export const ResetTextImage = styled.Image`
     width: 18;
     height: 18;
     z-index: 2;
-`;
-
-export const WrapperOfScrollView = styled.View`
-    /* position: relative; */
-    top: 40%;
-    width: 100%;
-    z-index: 100;
-`;
-
-export const ValueMappingContainer = styled.ScrollView<{ topPad: number }>`
-    position: absolute;
-    padding: 0 12px;
-`;
-
-export const ResultViewTitle = styled.Text`
-    font: ${({ theme }) => theme.fonts.description2};
-    color: ${({ theme }) => theme.colors.grayscale.scale50};
 `;
