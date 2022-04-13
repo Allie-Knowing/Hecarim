@@ -2,7 +2,7 @@
   "expo": {
     "name": "Knowing",
     "slug": "Knowing",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./src/assets/knowing.png",
     "splash": {
@@ -31,7 +31,7 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "versionCode": 3,
+      "versionCode": 4,
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
