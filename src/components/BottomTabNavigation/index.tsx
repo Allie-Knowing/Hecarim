@@ -45,7 +45,7 @@ const screens: Screen[] = [
   },
   {
     name: "question",
-    label: "질문하기",
+    label: "질문",
     icon: QuestionIcon,
     component: Question,
   },
