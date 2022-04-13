@@ -39,6 +39,7 @@
     "react-devtools-core": "^4.24.3",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-auto-height-image": "^3.2.4",
     "react-native-debugger": "^1.1.0",
     "react-native-debugger-open": "^0.3.25",
     "react-native-dotenv": "^3.3.1",
