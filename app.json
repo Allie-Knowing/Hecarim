@@ -2,7 +2,7 @@
   "expo": {
     "name": "Knowing",
     "slug": "Knowing",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./src/assets/knowing.png",
     "splash": {
