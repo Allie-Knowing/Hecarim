@@ -40,6 +40,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
+  const [timer, setTimer] = useState<number | NodeJS.Timeout | any>(0);
 
   const { videoUrl } = useVideoUrlMutation();
   const { postQuestion, postAnswer } = useVideoDataMutation();
@@ -108,14 +109,22 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   };
 
   const autoHashTag = (text: string) => {
-    const splittedText = text.split(" ").map((value) => {
-      if (value[0] === "#" || value.length === 0) return value;
-      else {
-        return (value = "#" + value);
-      }
-    });
+    if (timer) {
+      clearTimeout(timer);
+    }
 
-    setHashTag(splittedText.join(" "));
+    const newTimer = setTimeout(() => {
+      const splittedText = text.split(" ").map((value) => {
+        if (value[0] === "#" || value.length === 0) return value;
+        else {
+          return (value = "#" + value);
+        }
+      });
+
+      setHashTag(splittedText.join(" "));
+    }, 500);
+
+    setTimer(newTimer);
   };
 
   useEffect(() => {
@@ -222,11 +231,11 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                 <S.InputBox>
                   <S.TitleText>해쉬태그</S.TitleText>
                   <S.TextArea
-                    placeholder="해쉬태그 입력 후 스페이스바를 눌러주세요"
+                    placeholder="입력해주세요"
                     multiline={true}
                     textAlignVertical={"center"}
                     onChangeText={(text) => autoHashTag(text)}
-                    value={hashTag}
+                    defaultValue={hashTag}
                   />
                 </S.InputBox>
               </S.InputContainer>
