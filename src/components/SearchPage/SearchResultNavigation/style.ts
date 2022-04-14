@@ -1,11 +1,13 @@
 import styled from "styled-components/native"
 
-export const Wrapper = styled.View`
+export const Wrapper = styled.View<{ height: number }>`
     margin-top: 10px;
     width: 100%;
+    height: ${({height }) => height};
     justify-content: center;
     align-items: center;
     background-color: ${({theme}) => theme.colors.grayscale.scale10};
+    flex-grow: 1;
 `;
 
 export const ValueMappingContainer = styled.ScrollView`

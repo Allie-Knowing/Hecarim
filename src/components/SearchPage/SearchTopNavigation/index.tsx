@@ -28,7 +28,6 @@ const SearchTopNavigation: FC<Props> = ({
         inputValue={inputValue}
         setInputValue={setInputValue}
         checkValue={checkValue}
-        setCheckValue={setCheckValue}
       />
     </S.Wrapper>
   );

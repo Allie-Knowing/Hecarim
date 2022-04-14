@@ -1,11 +1,9 @@
 import styled from "styled-components/native";
 
-export const Container = styled.View`
+export const Container = styled.View<{height: number}>`
     width: 100%;
-    height: 100%;
+    height: ${({ height }) => height};
     background-color: ${({ theme }) => theme.colors.grayscale.scale10};
-    border-top-width: 10;
-    border-top-color: ${({theme}) => theme.colors.grayscale.scale20};
 `;
 
 export const Message = styled.Text`

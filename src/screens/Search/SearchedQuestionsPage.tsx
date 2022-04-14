@@ -13,10 +13,10 @@ const SearchedQuestionsPage: FC<
 
   return (
     <isStackContext.Provider value={true}>
-      <S.Wrapper>
+      <S.SearchedQuestionPageWrapper>
         <SearchedQuestionsPageHeader stackNavigation={navigation} />
         <SearchedQuestions title={title} />
-      </S.Wrapper>
+      </S.SearchedQuestionPageWrapper>
     </isStackContext.Provider>
   );
 };

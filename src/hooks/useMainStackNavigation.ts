@@ -17,6 +17,8 @@ export type MainStackParamList = {
   SearchedQuestionsPage: StackedSearchQuestionProps;
   StackedQuestionList: StackedQuestionListProps;
   Login: undefined;
+  TermsOfService: undefined;
+  PrivacyPolicy: undefined;
   UserPage: { userId: number };
   Setting: undefined;
   Camera: { questionId?: number };

@@ -16,6 +16,8 @@ import useMainStackNavigation, {
   MainStackParamList,
 } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
+import TermsOfService from "screens/Login/TermsModal/TermsOfService";
+import PrivacyPolicy from "screens/Login/TermsModal/PrivacyPolicy";
 import AlretProvider from "components/Providers/AlretProvider";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
@@ -148,6 +150,16 @@ const MainNavigationScreen = () => {
       <Root.Screen
         name="Login"
         component={Login}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="TermsOfService"
+        component={TermsOfService}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="PrivacyPolicy"
+        component={PrivacyPolicy}
         options={{ headerShown: false }}
       />
       <Root.Screen

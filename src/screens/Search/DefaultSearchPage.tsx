@@ -7,10 +7,10 @@ import isStackContext from "context/IsStackContext";
 const DefaultSearchPage: FC = () => {
   return (
     <isStackContext.Provider value={false}>
-      <S.Wrapper>
+      <S.DefaultPageWrapper>
         <DefaultPageHeader />
         <DefaultSearch />
-      </S.Wrapper>
+      </S.DefaultPageWrapper>
     </isStackContext.Provider>
   );
 };

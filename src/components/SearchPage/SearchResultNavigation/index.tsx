@@ -63,7 +63,7 @@ const ResultNavigation: FC<PropsType> = ({
 
   return (
     <>
-      <S.Wrapper>
+      <S.Wrapper height={height - 200}>
         {inputValue ? (
           <S.ValueMappingContainer bounces={false} bouncesZoom={false}>
             {searchMutation.data?.data.data.length > 0 ? (

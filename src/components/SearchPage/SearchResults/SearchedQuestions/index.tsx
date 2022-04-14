@@ -53,17 +53,19 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
   }
 
   return (
-    <View style={{ width, backgroundColor: "#FFFFFF" }}>
-      <SearchTopNavigation
-        title={title}
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        checkValue={checkValue}
-        setCheckValue={setCheckValue}
-      />
-      <S.Container>
+    <S.Container height={height - 290}>
+      <View>
+        <SearchTopNavigation
+          title={title}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          checkValue={checkValue}
+          setCheckValue={setCheckValue}
+        />
         <S.ResultAmount>검색된 질문 {data?.data.data.length}개</S.ResultAmount>
         <FlatList
+          decelerationRate="fast"
+          snapToAlignment="start"
           data={data.data.data}
           renderItem={renderItem}
           keyExtractor={(item) => `result_${item.id}`}
@@ -75,8 +77,8 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
             overflow: "hidden",
           }}
         />
-      </S.Container>
-    </View>
+      </View>
+    </S.Container>
   );
 };
 
