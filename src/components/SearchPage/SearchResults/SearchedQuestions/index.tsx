@@ -64,8 +64,6 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
       <S.Container>
         <S.ResultAmount>검색된 질문 {data?.data.data.length}개</S.ResultAmount>
         <FlatList
-          decelerationRate="fast"
-          snapToAlignment="start"
           data={data.data.data}
           renderItem={renderItem}
           keyExtractor={(item) => `result_${item.id}`}
