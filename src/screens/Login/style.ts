@@ -35,15 +35,15 @@ export const LoginDescription = styled.Text`
 export const TermsContainer = styled.View`
   width: 100%;
   position: absolute;
-  bottom: 0;
+  bottom: 10;
   left: 0;
 `;
 
 export const LoginTermsBox = styled.Text`
   width: 100%;
   text-align: center;
-  font: ${({ theme }) => theme.fonts.description1};
-  color: ${({ theme }) => theme.colors.grayscale.scale50};
+  font: ${({ theme }) => theme.fonts.description2};
+  color: ${({ theme }) => theme.colors.grayscale.scale60};
 `;
 
 export const TermsPoint = styled.Text`

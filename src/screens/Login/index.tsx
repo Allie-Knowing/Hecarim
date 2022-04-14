@@ -38,7 +38,7 @@ const Login: FC<Props> = ({ navigation }) => {
             <S.TermsPoint
               onPress={() => stackNavigation.navigate("TermsOfService")}
             >
-              이용약관
+              {""} 이용약관
             </S.TermsPoint>
             에 동의하고,
             {"\n"}
@@ -46,7 +46,7 @@ const Login: FC<Props> = ({ navigation }) => {
             <S.TermsPoint
               onPress={() => stackNavigation.navigate("PrivacyPolicy")}
             >
-              개인정보 보호정책
+              {""} 개인정보 보호정책
             </S.TermsPoint>
             을 읽었음을 확인하는 것입니다.
           </S.LoginTermsBox>

@@ -10,9 +10,8 @@ import useMainStackNavigation, {
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 import Results from "./Results";
 import { useStackQuestionList } from "queries/Question";
-import { Question } from "api/Question";
 
-const { width, height } = Dimensions.get("screen");
+const { height } = Dimensions.get("screen");
 
 interface Props {
   title: string;
