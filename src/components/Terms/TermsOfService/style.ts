@@ -15,7 +15,7 @@ export const DescriptionContainer = styled.View`
     border: 1px solid ${({theme}) => theme.colors.grayscale.scale20};
     border-radius: 10px;
     margin: 20px 28px;
-    padding: 28 28px;
+    padding: 28px 28px;
 `;
 
 export const Description = styled.Text`
