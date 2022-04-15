@@ -17,7 +17,10 @@ type Props = StackNavigationProp<MainStackParamList, "Login">;
 const GoogleButton: FC<Props> = (navigation) => {
   const { mutate, isSuccess, isError, error } = useSignin();
   const [request, response, prompAsync] = Google.useAuthRequest({
-    clientId: env.googleClientId,
+    webClientId: env.googleClientId.webId,
+    iosClientId: env.googleClientId.iosId,
+    androidClientId: env.googleClientId.androidId,
+    clientId: env.googleClientId.webId,
     responseType: "id_token",
     redirectUri: env.redirectUrl,
     scopes: ["openid", "email", "profile"],

@@ -5,7 +5,11 @@ const { baseUrl, googleClientId, naverUrl, redirectUrl, appleUrl } =
 
 const env = {
   baseUrl,
-  googleClientId,
+  googleClientId: {
+    iosId: googleClientId.iosId,
+    androidId: googleClientId.androidId,
+    webId: googleClientId.webId,
+  },
   naverUrl,
   appleUrl,
   redirectUrl,
