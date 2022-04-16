@@ -20,9 +20,7 @@ export const refresh = async (error: AxiosError) => {
     );
 
     if (refreshToken === null) {
-      console.log("refresh fail");
-
-      return Promise.reject(error);
+      throw ReferenceError();
     }
 
     //스토리지에서 토큰 삭제
@@ -63,6 +61,7 @@ export const refresh = async (error: AxiosError) => {
       ]);
 
       //피드로 이동후 로그인 만료 알럿 띄우기
+      throw ReferenceError();
     }
 
     return Promise.reject(error);
