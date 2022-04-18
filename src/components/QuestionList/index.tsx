@@ -64,10 +64,6 @@ const QuestionList: FC<PropsType> = ({
     questionList.length > 0 ? questionList[0].is_adoption : 1
   );
 
-  useEffect(() => {
-    console.log(currentQuestionId);
-  }, [currentQuestionId]);
-
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
     transform: [
