@@ -122,7 +122,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       });
 
       setHashTag(splittedText.join(" "));
-    }, 500);
+    }, 800);
 
     setTimer(newTimer);
   };
