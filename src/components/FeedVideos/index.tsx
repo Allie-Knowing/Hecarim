@@ -25,7 +25,6 @@ const FeedVideos: FC<PropsType> = ({
   isCurrentPage,
   setCurrentQuestionId,
 }) => {
-  console.log(dataList);
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
