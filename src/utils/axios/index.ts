@@ -64,7 +64,7 @@ export const refresh = async (error: AxiosError) => {
       throw ReferenceError();
     }
 
-    return Promise.reject(error);
+    throw ReferenceError();
   }
 };
 

@@ -36,6 +36,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
 import RefreshError from "types/RefreshError";
 import useAlert from "hooks/useAlert";
+import { Audio } from "expo-av";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -54,6 +55,10 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+
+Audio.setAudioModeAsync({
+  playsInSilentModeIOS: true,
+});
 
 export default function App() {
   const [fontsLoaded] = useFonts({
