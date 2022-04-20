@@ -84,9 +84,7 @@ instance.interceptors.request.use(
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
     config.headers.common[
       "Authorization"
-    ] = `Bearer ${await localStorage.getItem<string>(
-      storageKeys.accessToken
-    )}123`;
+    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
 
     return config;
   },
