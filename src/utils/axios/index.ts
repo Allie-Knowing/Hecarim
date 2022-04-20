@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import env from "constant/env";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
+import RefreshError from "types/RefreshError";
 
 interface RefreshResponse {
   access_token: string;
@@ -20,7 +21,7 @@ export const refresh = async (error: AxiosError) => {
     );
 
     if (refreshToken === null) {
-      throw ReferenceError();
+      throw new RefreshError();
     }
 
     //스토리지에서 토큰 삭제
@@ -61,10 +62,10 @@ export const refresh = async (error: AxiosError) => {
       ]);
 
       //피드로 이동후 로그인 만료 알럿 띄우기
-      throw ReferenceError();
+      throw new RefreshError();
     }
 
-    throw ReferenceError();
+    throw new RefreshError();
   }
 };
 
@@ -83,7 +84,9 @@ instance.interceptors.request.use(
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
     config.headers.common[
       "Authorization"
-    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
+    ] = `Bearer ${await localStorage.getItem<string>(
+      storageKeys.accessToken
+    )}123`;
 
     return config;
   },

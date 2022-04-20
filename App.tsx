@@ -120,14 +120,6 @@ const MainNavigationScreen = () => {
     (error: unknown) => {
       if (error instanceof RefreshError) {
         navigation.reset({ routes: [{ name: "Login" }] });
-
-        showAlert({
-          title: "로그인이 만료되었습니다.",
-          content: "다시 로그인 해주세요.",
-          buttons: [
-            { color: "black", text: "확인", onPress: (id) => closeAlert(id) },
-          ],
-        });
       }
     },
     [navigation, closeAlert, showAlert]
