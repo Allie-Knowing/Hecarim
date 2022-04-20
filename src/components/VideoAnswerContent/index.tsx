@@ -108,9 +108,6 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
       await videoRef.current.playFromPositionAsync(0);
-      await Audio.setAudioModeAsync({
-        playsInSilentModeIOS: true,
-      });
     } else {
       videoRef.current.stopAsync();
     }
@@ -305,6 +302,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
           ref={videoRef}
           rate={1.0}
           volume={1.0}
+          style={{ backgroundColor: theme.colors.grayscale.scale100 }}
         />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
           <S.InfoOuter>

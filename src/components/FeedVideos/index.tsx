@@ -24,8 +24,8 @@ const FeedVideos: FC<PropsType> = ({
   onEndReached,
   isCurrentPage,
   setCurrentQuestionId,
+  index,
 }) => {
-  console.log(dataList);
   const [page, setPage] = useState(0);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -62,6 +62,7 @@ const FeedVideos: FC<PropsType> = ({
       data={dataList}
       renderItem={renderItem}
       onEndReached={onEndReached}
+      initialScrollIndex={index}
     />
   );
 };
