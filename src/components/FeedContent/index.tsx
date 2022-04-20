@@ -256,9 +256,6 @@ const FeedContent: FC<Question & PropsType> = ({
   const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
       await videoRef.current.playFromPositionAsync(0);
-      await Audio.setAudioModeAsync({
-        playsInSilentModeIOS: true,
-      });
     } else {
       videoRef.current.stopAsync();
       setIsMore(false);
@@ -285,6 +282,7 @@ const FeedContent: FC<Question & PropsType> = ({
           ref={videoRef}
           rate={1.0}
           volume={1.0}
+          style={{ backgroundColor: themeContext.colors.grayscale.scale100 }}
         />
         <S.BackBlack
           colors={["transparent", themeContext.colors.grayscale.scale100]}
