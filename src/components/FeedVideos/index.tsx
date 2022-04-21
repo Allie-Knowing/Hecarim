@@ -24,6 +24,7 @@ const FeedVideos: FC<PropsType> = ({
   onEndReached,
   isCurrentPage,
   setCurrentQuestionId,
+  index,
 }) => {
   const [page, setPage] = useState(0);
 
@@ -61,6 +62,7 @@ const FeedVideos: FC<PropsType> = ({
       data={dataList}
       renderItem={renderItem}
       onEndReached={onEndReached}
+      initialScrollIndex={index}
     />
   );
 };

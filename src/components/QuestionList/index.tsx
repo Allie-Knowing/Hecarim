@@ -1,4 +1,10 @@
-import { Dimensions, Image, StyleSheet, ViewStyle } from "react-native";
+import {
+  Dimensions,
+  Image,
+  NativeScrollEvent,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
@@ -11,6 +17,7 @@ import Animated, {
   AnimateStyle,
   useAnimatedScrollHandler,
   useAnimatedRef,
+  runOnJS,
 } from "react-native-reanimated";
 import { LayoutChangeEvent } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -90,10 +97,14 @@ const QuestionList: FC<PropsType> = ({
     ],
   }));
 
+  const onScroll = useCallback((event: NativeScrollEvent) => {
+    pageOffset.value = event.contentOffset.x / width;
+    setPage(Math.round(event.contentOffset.x / width));
+  }, []);
+
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
-      pageOffset.value = event.contentOffset.x / width;
-      setPage(Math.round(event.contentOffset.x / width));
+      runOnJS(onScroll)(event);
     },
   });
 
