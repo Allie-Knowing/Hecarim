@@ -1,6 +1,6 @@
 import LoginButtonLayout from "layout/loginButton";
 import React, { FC, useEffect } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { Platform, Text, TouchableOpacity } from "react-native";
 import * as S from "./styles";
 import env from "constant/env";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -43,7 +43,11 @@ const GoogleButton: FC<Props> = (navigation) => {
   const login = async () => {
     try {
       await GoogleSignIn.initAsync({
-        clientId: env.googleClientId.webId,
+        signInType: GoogleSignIn.TYPES.DEFAULT,
+        clientId:
+          Platform.OS === "android"
+            ? env.googleClientId.androidId
+            : env.googleClientId.iosId,
         scopes: [
           GoogleSignIn.SCOPES.OPEN_ID,
           GoogleSignIn.SCOPES.EMAIL,
@@ -52,19 +56,7 @@ const GoogleButton: FC<Props> = (navigation) => {
       });
       await GoogleSignIn.askForPlayServicesAsync();
       const response = await GoogleSignIn.signInAsync({});
-
       if (response.type === "success") {
-        showAlert({
-          title: "로그인 성공",
-          content: response.user.auth.idToken,
-          buttons: [
-            {
-              text: "확인",
-              color: "black",
-              onPress: (id) => closeAlert(id),
-            },
-          ],
-        });
         mutate({
           id_token: response.user.auth.idToken,
           provider: "GOOGLE",
@@ -74,7 +66,7 @@ const GoogleButton: FC<Props> = (navigation) => {
       console.log(error);
       showAlert({
         title: "로그인에 실패했습니다.",
-        content: "잠시 후 다시 시도하세요.",
+        content: error.message,
         buttons: [
           {
             text: "확인",

@@ -1,9 +1,9 @@
 import { postSigninApi } from "api/Signin";
-import { signinRequest } from "modules/dto/request/signinRequest";
+import { SigninRequest } from "api/Signin";
 import { useMutation } from "react-query";
 
 const useSignin = () => {
-  const signin = useMutation((body: signinRequest) => postSigninApi(body));
+  const signin = useMutation((body: SigninRequest) => postSigninApi(body));
   return signin;
 };
 
