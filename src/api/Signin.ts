@@ -16,24 +16,28 @@ export interface SigninResponse {
 export const postSigninApi = async (body: SigninRequest) => {
   let response = null;
 
-  if (body.provider === "GOOGLE") {
-    response = await noTokenInstance.post<SigninResponse>(
-      `${uri.googleSignin}`,
-      {
+  try {
+    if (body.provider === "GOOGLE") {
+      response = await noTokenInstance.post<SigninResponse>(
+        `${uri.googleSignin}`,
+        {
+          id_token: body.id_token,
+        }
+      );
+    } else if (body.provider === "NAVER") {
+      response = await noTokenInstance.post<SigninResponse>(
+        `${uri.signin}${body.provider}`,
+        {
+          code: body.id_token,
+        }
+      );
+    } else if (body.provider === "APPLE") {
+      response = await noTokenInstance.post<SigninResponse>(uri.appleSignin, {
         id_token: body.id_token,
-      }
-    );
-  } else if (body.provider === "NAVER") {
-    response = await noTokenInstance.post<SigninResponse>(
-      `${uri.signin}${body.provider}`,
-      {
-        code: body.id_token,
-      }
-    );
-  } else if (body.provider === "APPLE") {
-    response = await noTokenInstance.post<SigninResponse>(uri.appleSignin, {
-      id_token: body.id_token,
-    });
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
 
   await Promise.all([
