@@ -11,7 +11,8 @@ import axios from "axios";
 import useAlert from "hooks/useAlert";
 
 const naver = require("../../../assets/icons/login/naver.png");
-const URI = `${env.naverUrl}${env.redirectUrl}`;
+const redirectUrl = AuthSession.getRedirectUrl();
+const URI = env.naverUrl + redirectUrl;
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
@@ -42,9 +43,9 @@ const NaverButton: FC<Props> = (navigation) => {
   }, [isError]);
 
   const naverLogin = async () => {
+    alert(URI);
     const result = await AuthSession.startAsync({
       authUrl: URI,
-      returnUrl: env.redirectUrl,
     });
 
     if (result.type === "success") {
