@@ -13,10 +13,7 @@ import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet, {
-  BottomSheetModal,
-  useBottomSheetModal,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
@@ -24,11 +21,7 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { Audio, Video } from "expo-av";
-import {
-  useQuestionHashtag,
-  useQuestionDetail,
-  useQuestionMutation,
-} from "queries/Question";
+import { useQuestionHashtag, useQuestionDetail, useQuestionMutation } from "queries/Question";
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
@@ -297,14 +290,8 @@ const FeedContent: FC<Question & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              {isMore && (
-                <S.Description>
-                  {dateToString(new Date(created_at))}
-                </S.Description>
-              )}
-              <S.Description numberOfLines={isMore ? undefined : 1}>
-                {description}
-              </S.Description>
+              {isMore && <S.Description>{dateToString(new Date(created_at))}</S.Description>}
+              <S.Description numberOfLines={isMore ? undefined : 1}>{description}</S.Description>
               {isMore && <Hashtag id={id} />}
             </S.InfoContainer>
           </S.InfoOuter>
@@ -317,9 +304,7 @@ const FeedContent: FC<Question & PropsType> = ({
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage
-                  source={profile ? { uri: profile } : defaultProfile}
-                />
+                <S.ProfileImage source={profile ? { uri: profile } : defaultProfile} />
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
@@ -353,9 +338,7 @@ const FeedContent: FC<Question & PropsType> = ({
                   </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
-              <S.IconContainer
-                onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
-              >
+              <S.IconContainer onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}>
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(comment_cnt)}</S.IconLabel>
               </S.IconContainer>
@@ -376,6 +359,7 @@ const FeedContent: FC<Question & PropsType> = ({
           navigation={navigation}
           ref={commentBottomSheetRef}
           questionId={id}
+          is_mine={is_mine}
         />
         <Tool ref={toolSheetRef} items={items} />
         <Tool ref={reportSheetRef} items={reportItems} />
@@ -408,9 +392,7 @@ const Hashtag: FC<HashtagProps> = ({ id }) => {
 
   return (
     <Fragment>
-      <S.HashTag>
-        {hashtags.map((value) => `#${value.title}`).join(" ")}
-      </S.HashTag>
+      <S.HashTag>{hashtags.map((value) => `#${value.title}`).join(" ")}</S.HashTag>
     </Fragment>
   );
 };

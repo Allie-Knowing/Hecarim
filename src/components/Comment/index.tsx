@@ -15,9 +15,7 @@ function timeForToday(value: string) {
   const today = new Date();
   const timeValue = new Date(value);
 
-  const betweenTime = Math.floor(
-    (today.getTime() - timeValue.getTime()) / 1000 / 60
-  );
+  const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
   if (betweenTime < 1) return "방금전";
   if (betweenTime < 60) {
     return `${betweenTime}분전`;
@@ -39,6 +37,7 @@ function timeForToday(value: string) {
 interface PropsType {
   isQuestionAdoption: boolean;
   questionId: number;
+  isMine: boolean;
 }
 
 const Comment: FC<TextAnswer & PropsType> = ({
@@ -50,6 +49,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
   isQuestionAdoption,
   created_at,
   questionId,
+  isMine,
 }) => {
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
@@ -94,10 +94,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
           onPress: async (alret) => {
             closeAlret(alret);
             await adoption.mutateAsync(id);
-            queryClient.invalidateQueries([
-              queryKeys.question,
-              queryKeys.questionId(questionId),
-            ]);
+            queryClient.invalidateQueries([queryKeys.question, queryKeys.questionId(questionId)]);
           },
         },
       ],
@@ -114,7 +111,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
       });
     }
 
-    if (!isQuestionAdoption && is_adoption) {
+    if (!isQuestionAdoption && isMine) {
       item.push({
         color: theme.colors.primary.default,
         text: "채택하기",
@@ -132,12 +129,10 @@ const Comment: FC<TextAnswer & PropsType> = ({
 
   return (
     <Fragment>
-      <TouchableHighlight onPress={is_mine ? onCommentPress : undefined}>
+      <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : undefined}>
         <S.Container
           style={{
-            backgroundColor: is_adoption
-              ? theme.colors.primary.default
-              : undefined,
+            backgroundColor: is_adoption ? theme.colors.primary.default : undefined,
           }}
         >
           <S.ProfileImage source={{ uri: profile }} />

@@ -10,17 +10,10 @@ import {
   Fragment,
   RefObject,
 } from "react";
-import {
-  ListRenderItem,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { ListRenderItem, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetTextInput,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import * as S from "./styles";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
@@ -41,10 +34,11 @@ interface PropsType {
   navigation: StackNavigationProp<any>;
   questionId: number;
   isQuestionAdoption: boolean;
+  is_mine: boolean;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ navigation, questionId, isQuestionAdoption }, ref) => {
+  ({ navigation, questionId, isQuestionAdoption, is_mine }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -67,11 +61,6 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       []
     );
 
-    const onLoginPress = useCallback(() => {
-      (ref as RefObject<BottomSheet>).current.close();
-      navigation.push("Login");
-    }, [navigation, ref]);
-
     const onAddPress = useCallback(async () => {
       const t = text.trim();
       if (t === "") {
@@ -90,9 +79,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
         showAlert({
           title: "글 답변 작성 실패",
           content: "다시 시도해주세요.",
-          buttons: [
-            { text: "확인", color: "black", onPress: (id) => closeAlert(id) },
-          ],
+          buttons: [{ text: "확인", color: "black", onPress: (id) => closeAlert(id) }],
         });
       }
     }, [post, text, queryClient]);
@@ -117,6 +104,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
         <S.Container>
           <S.Title>글 답변</S.Title>
           <TextAnswerList
+            is_mine={is_mine}
             isQuestionAdoption={isQuestionAdoption}
             questionId={questionId}
             isOpen={isOpen}
@@ -144,15 +132,12 @@ interface ListProps {
   isOpen: boolean;
   questionId: number;
   isQuestionAdoption: boolean;
+  is_mine: boolean;
 }
 
 const size = 20;
 
-const TextAnswerList: FC<ListProps> = ({
-  isOpen,
-  questionId,
-  isQuestionAdoption,
-}) => {
+const TextAnswerList: FC<ListProps> = ({ isOpen, questionId, isQuestionAdoption, is_mine }) => {
   const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
     questionId,
     size,
@@ -162,6 +147,7 @@ const TextAnswerList: FC<ListProps> = ({
   const renderItem: ListRenderItem<TextAnswer> = useCallback(({ item }) => {
     return (
       <Comment
+        isMine={is_mine}
         questionId={questionId}
         {...item}
         isQuestionAdoption={isQuestionAdoption}
