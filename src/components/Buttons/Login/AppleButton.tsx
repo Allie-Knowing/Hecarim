@@ -62,6 +62,7 @@ const AppleButton: FC<Props> = (navigation) => {
             mutate({
               id_token: credential.identityToken,
               provider: "APPLE",
+              name: credential.fullName.nickname,
             });
           } catch (error) {
             showAlert({
