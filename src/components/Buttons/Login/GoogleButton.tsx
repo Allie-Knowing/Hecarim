@@ -5,17 +5,17 @@ import * as S from "./styles";
 import env from "constant/env";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
-import useSignin from "queries/Signin";
 import useAlert from "hooks/useAlert";
 import axios from "axios";
 import * as GoogleSignIn from "expo-google-sign-in";
+import useGoogleSignin from "queries/GoogleSignin";
 
 const google = require("../../../assets/icons/login/google.png");
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
 const GoogleButton: FC<Props> = (navigation) => {
-  const { mutate, isSuccess, isError, error } = useSignin();
+  const { mutate, isSuccess, isError, error } = useGoogleSignin();
   const { closeAlert, showAlert } = useAlert();
 
   useEffect(() => {
@@ -57,10 +57,10 @@ const GoogleButton: FC<Props> = (navigation) => {
       await GoogleSignIn.askForPlayServicesAsync();
       const response = await GoogleSignIn.signInAsync({});
       if (response.type === "success") {
-        alert(JSON.stringify(response.user));
         mutate({
-          id_token: response.user.auth.idToken,
-          provider: "GOOGLE",
+          name: response.user.displayName,
+          picture: response.user.photoURL,
+          email: response.user.email,
         });
       }
     } catch (error) {
