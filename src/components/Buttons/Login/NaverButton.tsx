@@ -44,6 +44,7 @@ const NaverButton: FC<Props> = (navigation) => {
   const naverLogin = async () => {
     const result = await AuthSession.startAsync({
       authUrl: URI,
+      returnUrl: env.redirectUrl,
     });
 
     if (result.type === "success") {

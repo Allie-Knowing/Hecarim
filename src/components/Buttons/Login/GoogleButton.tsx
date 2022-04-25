@@ -57,6 +57,7 @@ const GoogleButton: FC<Props> = (navigation) => {
       await GoogleSignIn.askForPlayServicesAsync();
       const response = await GoogleSignIn.signInAsync({});
       if (response.type === "success") {
+        alert(JSON.stringify(response.user));
         mutate({
           id_token: response.user.auth.idToken,
           provider: "GOOGLE",
