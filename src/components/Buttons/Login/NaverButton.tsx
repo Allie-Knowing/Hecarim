@@ -43,7 +43,6 @@ const NaverButton: FC<Props> = (navigation) => {
   }, [isError]);
 
   const naverLogin = async () => {
-    alert(URI);
     const result = await AuthSession.startAsync({
       authUrl: URI,
     });
