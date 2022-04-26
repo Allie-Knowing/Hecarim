@@ -196,6 +196,14 @@ const Comment: FC<TextAnswer & PropsType> = ({
         text: "삭제하기",
         onPress: onDeletePress,
       });
+    } else {
+      item.push({
+        color: theme.colors.red.default,
+        text: "신고하기",
+        onPress: () => {
+          reportSheetRef.current.present();
+        },
+      });
     }
 
     if (!isQuestionAdoption && isMine) {
@@ -205,6 +213,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
         onPress: onAdoptionPress,
       });
     }
+
     return item;
   }, [onDeletePress, theme, onAdoptionPress]);
 
