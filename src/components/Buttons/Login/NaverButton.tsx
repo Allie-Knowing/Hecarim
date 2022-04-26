@@ -56,10 +56,6 @@ const NaverButton: FC<Props> = (navigation) => {
     }
   };
 
-  useEffect(() => {
-    console.log(error);
-  }, [isError]);
-
   return (
     <TouchableOpacity onPress={naverLogin}>
       <LoginButtonLayout>

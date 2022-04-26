@@ -59,6 +59,7 @@ const AppleButton: FC<Props> = (navigation) => {
                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
               ],
             });
+            console.log(credential);
             mutate({
               id_token: credential.identityToken,
               provider: "APPLE",

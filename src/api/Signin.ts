@@ -43,7 +43,6 @@ export const postGoogleSigninApi = async (body: GoogleSigninRequest) => {
 
 export const postSigninApi = async (body: SigninRequest) => {
   let response = null;
-  console.log(body.name);
   try {
     if (body.provider === "NAVER") {
       response = await noTokenInstance.post<SigninResponse>(

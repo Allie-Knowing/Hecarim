@@ -64,7 +64,6 @@ const GoogleButton: FC<Props> = (navigation) => {
         });
       }
     } catch (error) {
-      console.log(error);
       showAlert({
         title: "로그인에 실패했습니다.",
         content: error.message,
