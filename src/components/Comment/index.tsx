@@ -1,4 +1,4 @@
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
 import { TextAnswer } from "api/TextAnswer";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import queryKeys from "constant/queryKeys";
@@ -54,9 +54,96 @@ const Comment: FC<TextAnswer & PropsType> = ({
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
   const ref = useRef<BottomSheetModal>(null);
-  const { remove, adoption } = useTextAnswerMutation();
+  const { remove, adoption, report } = useTextAnswerMutation();
   const queryClient = useQueryClient();
   const { closeAlert: closeAlret, showAlert: showAlret } = useAlert();
+  const descriptionRef = useRef<string>("");
+  const reportSheetRef = useRef<BottomSheetModal>(null);
+  const confirmSheetRef = useRef<BottomSheetModal>(null);
+  const { showAlert, closeAlert } = useAlert();
+  const { dismissAll } = useBottomSheetModal();
+
+  const onReportPress = useCallback(
+    (description: string) => () => {
+      descriptionRef.current = description;
+      confirmSheetRef.current.present();
+    },
+    []
+  );
+
+  const reportItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("스팸"),
+        text: "스팸",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("음란물 또는 불법촬영물"),
+        text: "음란물 또는 불법촬영물",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("괴롭힘 또는 따돌림"),
+        text: "괴롭힘 또는 따돌림",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("욕설 및 비방"),
+        text: "욕설 및 비방",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("명예회손 또는 저작권 침해"),
+        text: "명예회손 또는 저작권 침해",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: onReportPress("기타 사유"),
+        text: "기타 사유",
+      },
+    ],
+    [onReportPress, theme]
+  );
+
+  const onSubmitPress = useCallback(async () => {
+    dismissAll();
+
+    await report.mutateAsync({
+      videoId: questionId,
+      commentId: id,
+      description: descriptionRef.current,
+    });
+
+    showAlert({
+      title: "신고 제출 완료",
+      content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
+      buttons: [
+        {
+          text: "확인",
+          color: "black",
+          onPress: (id) => closeAlert(id),
+        },
+      ],
+    });
+  }, [id, showAlert, dismissAll, closeAlert]);
+
+  const comfirmItems: ToolItem[] = useMemo(
+    () => [
+      {
+        color: theme.colors.red.default,
+        onPress: onSubmitPress,
+        text: "신고 제출하기",
+      },
+      {
+        color: theme.colors.grayscale.scale100,
+        onPress: () => dismissAll(),
+        text: "취소하기",
+      },
+    ],
+    [theme, onSubmitPress, dismissAll]
+  );
 
   const onDeletePress = useCallback(async () => {
     ref.current.close();
@@ -156,6 +243,8 @@ const Comment: FC<TextAnswer & PropsType> = ({
       {is_mine && (
         <Portal>
           <Tool ref={ref} items={toolItem} />
+          <Tool ref={reportSheetRef} items={reportItems} />
+          <Tool ref={confirmSheetRef} items={comfirmItems} />
         </Portal>
       )}
     </Fragment>

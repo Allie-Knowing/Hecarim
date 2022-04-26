@@ -16,7 +16,8 @@ enum uri {
   title = "/search/title",
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
-  report = "/admin/report",
+  reportVideo = "/admin/report/video",
+  reportComment = "/admin/report/comment",
   appleSignin = "/apple",
 }
 

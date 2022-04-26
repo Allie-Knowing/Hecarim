@@ -20,11 +20,7 @@ export interface TextAnswerListResponse {
   data: TextAnswer[];
 }
 
-export const getTextAnswerList = async (
-  questionId: number,
-  page: number,
-  size: number
-) => {
+export const getTextAnswerList = async (questionId: number, page: number, size: number) => {
   const url = `${uri.commentAnswer}/${questionId}`;
 
   return await instance.get<TextAnswerListResponse>(url, {
@@ -49,4 +45,8 @@ export const deleteTextAnswer = async (commentId: number) => {
 export const adoptionTextAnswer = async (commentId: number) => {
   const url = `${uri.commentAnswer}/${commentId}`;
   return await instance.delete(url);
+};
+
+export const reportTextAnswer = async (videoId: number, commentId: number, description: string) => {
+  return await instance.post(uri.reportComment, { videoId, description, commentId });
 };
