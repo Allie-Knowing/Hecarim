@@ -65,6 +65,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       alert("제목을 입력해주세요");
       return;
     }
+
     const formData = createFormData(uri);
     const hashTagArr = hashTag
       .split("#")
@@ -72,7 +73,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
         return value.length > 0;
       })
       .map((value) => {
-        return value.replaceAll(" ", "");
+        return value.split(" ").join("");
       });
 
     try {
@@ -113,7 +114,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       clearTimeout(timer);
     }
 
-    const newTimer = setTimeout(() => {
+    const HashtagTimer = setTimeout(() => {
       const splittedText = text.split(" ").map((value) => {
         if (value[0] === "#" || value.length === 0) return value;
         else {
@@ -124,7 +125,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       setHashTag(splittedText.join(" "));
     }, 800);
 
-    setTimer(newTimer);
+    setTimer(HashtagTimer);
   };
 
   useEffect(() => {
