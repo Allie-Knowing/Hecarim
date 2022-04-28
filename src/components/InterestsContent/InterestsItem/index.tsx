@@ -5,24 +5,27 @@ import * as S from "./style";
 interface Props {
   title: string;
   image: ImageSourcePropType;
-  setItem: React.Dispatch<React.SetStateAction<Boolean[]>>;
-  item: Boolean[];
+  checkInterestsItem: (index: number) => void;
   index: number;
+  check: boolean;
 }
 
-const InterestsItem: FC<Props> = ({ title, image, item, setItem, index }) => {
-  const onPressCheck = () => {
-    let arr = item;
-    arr[index] = !item[index];
-    setItem(arr);
-  };
-
+const InterestsItem: FC<Props> = ({
+  title,
+  image,
+  checkInterestsItem,
+  index,
+  check,
+}) => {
   return (
-    <S.InterestsItemContainer activeOpacity={0.9} onPress={onPressCheck}>
-      <S.BackgroundImage source={image} resizeMode="cover"  check={item[index]}/>
+    <S.InterestsItemContainer
+      activeOpacity={0.9}
+      onPress={() => checkInterestsItem(index)}
+    >
+      <S.BackgroundImage source={image} resizeMode="cover" check={check} />
       <S.grayWrapper>
         <S.Title>{title}</S.Title>
-        <S.checkCircle check={item[index]} />
+        <S.checkCircle check={check} />
       </S.grayWrapper>
     </S.InterestsItemContainer>
   );

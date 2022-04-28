@@ -7,12 +7,12 @@ export const InterestsItemContainer = styled.TouchableOpacity`
 `;
 
 export const BackgroundImage = styled.Image<{
-  check: Boolean;
+  check: boolean;
 }>`
   width: 100%;
   height: 100%;
-  border-radius: 8px;
   z-index: 1;
+  border-radius: 8px;
   border: ${({ theme, check }) =>
     check ? `4px solid ${theme.colors.primary.default}` : "none"};
 `;
@@ -34,7 +34,7 @@ export const Title = styled.Text`
 `;
 
 export const checkCircle = styled.View<{
-  check: Boolean;
+  check: boolean;
 }>`
   width: 24px;
   height: 24px;
