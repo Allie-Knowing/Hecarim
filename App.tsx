@@ -130,7 +130,7 @@ const MainNavigationScreen = () => {
 
   return (
     <Root.Navigator
-      initialRouteName="InterestsSetting"
+      initialRouteName="Main"
       screenOptions={{
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
