@@ -13,6 +13,7 @@ const queryKeys = {
   profileQuestionList: "profile_question_list",
   myId: "my_id",
   page: (page: number) => `page_${page}`,
+  interests: "interests",
 } as const;
 
 export default queryKeys;
