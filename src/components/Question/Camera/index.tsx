@@ -23,12 +23,8 @@ interface Props {
 type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 
 const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
-  const [hasCameraPermission, setHasCameraPermission] = useState<
-    boolean | null
-  >(null);
-  const [hasAudioPermission, setHasAudioPermission] = useState<boolean | null>(
-    null
-  );
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [hasAudioPermission, setHasAudioPermission] = useState<boolean | null>(null);
   const [cameraType, setCameraType] = useState(Camera.Constants.Type.back);
   const [isCameraReady, setIsCameraReady] = useState<boolean>(false);
   const [isVideoRecording, setIsVideoRecording] = useState<boolean>(false);
@@ -52,10 +48,8 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   useEffect(() => {
     (async () => {
-      const { status: CameraStatus } =
-        await Camera.requestCameraPermissionsAsync();
-      const { status: VoiceStatus } =
-        await Camera.requestMicrophonePermissionsAsync();
+      const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
+      const { status: VoiceStatus } = await Camera.requestMicrophonePermissionsAsync();
       setHasCameraPermission(CameraStatus === "granted");
       setHasAudioPermission(VoiceStatus === "granted");
     })();
@@ -92,9 +86,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
           if (isLongerThan60s) {
-            alert(
-              "영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다."
-            );
+            alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
           }
           setUri(res.uri);
           isAnswer
@@ -222,10 +214,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
           <S.RecordVideoContainer onPress={recordVideo}>
             <S.RecordImageStyle source={recordImg} />
           </S.RecordVideoContainer>
-          <S.FlipCameraContainer
-            disabled={!isCameraReady}
-            onPress={switchCamera}
-          >
+          <S.FlipCameraContainer disabled={!isCameraReady} onPress={switchCamera}>
             <S.FlipCameraImage source={rotateImg} />
           </S.FlipCameraContainer>
         </>
@@ -267,17 +256,13 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     return (
       <S.QuestionWrapper>
         <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-          {isAnswer ? (
-            <S.GoBackContainer
-              onPress={() => {
-                cameraNavigation.pop(1);
-              }}
-            >
-              <S.GoBackImage source={backImage} />
-            </S.GoBackContainer>
-          ) : (
-            <></>
-          )}
+          <S.GoBackContainer
+            onPress={() => {
+              cameraNavigation.pop(1);
+            }}
+          >
+            <S.GoBackImage source={backImage} />
+          </S.GoBackContainer>
           {isFocused && !isPickingVideo && (
             <Camera
               ref={(el) => setCameraRef(el)}
