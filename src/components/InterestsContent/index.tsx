@@ -15,7 +15,7 @@ type Props = StackNavigationProp<MainStackParamList, "InterestsSetting">;
 const InterestsContent: FC<Props> = (navigation) => {
   const { top: topPad } = useSafeAreaInsets();
   const { closeAlert, showAlert } = useAlert();
-  const { mutate, isSuccess, isError, error } = useInterestsSetting();
+  const { mutate, isSuccess, isError } = useInterestsSetting();
   const [interestsCount, setInterestsCount] = useState<number>(0);
   const [interestsArr, setInterestsArr] = useState<boolean[]>([
     false,

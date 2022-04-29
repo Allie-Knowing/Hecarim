@@ -6,7 +6,7 @@ export const useGetInterests = () => {
   const useGetInterests = useQuery(
     [queryKeys.interests],
     async () => await getInterests(),
-    { refetchOnWindowFocus: false, enabled: true, retry: false }
+    { refetchOnWindowFocus: false, enabled: true, retry: false, cacheTime: 0 }
   );
 
   return useGetInterests;
