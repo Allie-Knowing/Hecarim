@@ -10,11 +10,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 
 const { height } = Dimensions.get("screen");
-type Props = {
-  navigation: StackNavigationProp<MainStackParamList, "InterestsSetting">;
-};
+type Props = StackNavigationProp<MainStackParamList, "InterestsSetting">;
 
-const InterestsContent: FC<Props> = ({ navigation }) => {
+const InterestsContent: FC<Props> = (navigation) => {
   const { top: topPad } = useSafeAreaInsets();
   const { closeAlert, showAlert } = useAlert();
   const { mutate, isSuccess, isError, error } = useInterestsSetting();
@@ -39,8 +37,6 @@ const InterestsContent: FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     if (isError) {
-      console.log(error);
-
       showAlert({
         title: "관심분야 설정에 실패했습니다.",
         content: "잠시후 다시 시도해주세요.",
