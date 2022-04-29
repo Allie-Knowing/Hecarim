@@ -42,11 +42,15 @@ export const deleteTextAnswer = async (commentId: number) => {
   return data;
 };
 
-export const adoptionTextAnswer = async (commentId: number) => {
-  const url = `${uri.commentAnswer}/${commentId}`;
-  return await instance.delete(url);
+export const adoptionTextAnswer = async (commentId: number, videoId: number) => {
+  const url = `${uri.textAnswerAdoption}/${commentId}`;
+  return await instance.put(url, { videoId });
 };
 
 export const reportTextAnswer = async (videoId: number, commentId: number, description: string) => {
-  return await instance.post(uri.reportComment, { videoId, description, commentId });
+  return await instance.post(uri.reportComment, {
+    video_id: videoId,
+    description,
+    comment_id: commentId,
+  });
 };

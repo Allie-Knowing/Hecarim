@@ -33,7 +33,9 @@ export const useTextAnswerMutation = () => {
 
   const remove = useMutation(({ commentId }: { commentId: number }) => deleteTextAnswer(commentId));
 
-  const adoption = useMutation((commentId: number) => adoptionTextAnswer(commentId));
+  const adoption = useMutation(({ commentId, videoId }: { commentId: number; videoId: number }) =>
+    adoptionTextAnswer(commentId, videoId)
+  );
 
   const report = useMutation(
     ({

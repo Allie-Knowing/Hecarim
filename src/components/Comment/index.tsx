@@ -170,9 +170,10 @@ const Comment: FC<TextAnswer & PropsType> = ({
   }, [id, remove, questionId, id, closeAlret, showAlret]);
 
   const onAdoptionPress = useCallback(() => {
+    ref.current.close();
     showAlret({
       title: "채택하시겠습니까?",
-      content: "태책된 답변은 취소가\n불가능 합니다.",
+      content: "채택된 답변은 취소가\n불가능 합니다.",
       buttons: [
         { text: "취소", color: "black", onPress: (id) => closeAlret(id) },
         {
@@ -180,7 +181,11 @@ const Comment: FC<TextAnswer & PropsType> = ({
           color: "primary",
           onPress: async (alret) => {
             closeAlret(alret);
-            await adoption.mutateAsync(id);
+            try {
+              await adoption.mutateAsync({ commentId: id, videoId: questionId });
+            } catch (error) {
+              console.log(error);
+            }
             queryClient.invalidateQueries([queryKeys.question, queryKeys.questionId(questionId)]);
           },
         },
@@ -219,7 +224,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
 
   const onCommentPress = useCallback(() => {
     if (toolItem.length > 0) {
-      ref.current.present();
+      ref.current?.present();
     }
   }, [toolItem]);
 
@@ -249,13 +254,11 @@ const Comment: FC<TextAnswer & PropsType> = ({
           </S.ContentContainer>
         </S.Container>
       </TouchableHighlight>
-      {is_mine && (
-        <Portal>
-          <Tool ref={ref} items={toolItem} />
-          <Tool ref={reportSheetRef} items={reportItems} />
-          <Tool ref={confirmSheetRef} items={comfirmItems} />
-        </Portal>
-      )}
+      <Portal>
+        <Tool ref={ref} items={toolItem} />
+        <Tool ref={reportSheetRef} items={reportItems} />
+        <Tool ref={confirmSheetRef} items={comfirmItems} />
+      </Portal>
     </Fragment>
   );
 };
