@@ -25,6 +25,7 @@ import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
 import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
+import { Player } from "components/Player";
 
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
@@ -107,9 +108,17 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
   const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
+      const status = await videoRef.current.getStatusAsync();
+      if (!status.isLoaded) {
+        await videoRef.current.loadAsync({ uri: video_url });
+      }
+      await videoRef.current.setIsLoopingAsync(true);
       await videoRef.current.playFromPositionAsync(0);
+      setIsStop(false);
     } else {
-      videoRef.current.stopAsync();
+      await videoRef.current.stopAsync();
+      await videoRef.current.setIsLoopingAsync(true);
+      setIsStop(false);
     }
   }, [isCurrentPage]);
 
@@ -183,9 +192,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       showAlert({
         title: "채택되었습니다",
         content: "답변이 채택되었습니다.",
-        buttons: [
-          { color: "black", onPress: (id) => closeAlert(id), text: "확인" },
-        ],
+        buttons: [{ color: "black", onPress: (id) => closeAlert(id), text: "확인" }],
       });
 
       queryClient.invalidateQueries([queryKeys.answer]);
@@ -294,16 +301,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   return (
     <Fragment>
       <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
-        {isStop && <S.VideoStateIcon source={Play} />}
-        <S.Video
-          source={{ uri: video_url }}
-          isLooping
-          resizeMode="cover"
-          ref={videoRef}
-          rate={1.0}
-          volume={1.0}
-          style={{ backgroundColor: theme.colors.grayscale.scale100 }}
-        />
+        <Player isStop={isStop} ref={videoRef} />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
           <S.InfoOuter>
             <S.InfoContainer>
@@ -333,9 +331,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              <S.Description>
-                {dateToString(new Date(created_at))}
-              </S.Description>
+              <S.Description>{dateToString(new Date(created_at))}</S.Description>
             </S.InfoContainer>
           </S.InfoOuter>
           <View>
@@ -347,9 +343,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage
-                  source={profile ? { uri: profile } : defaultProfile}
-                />
+                <S.ProfileImage source={profile ? { uri: profile } : defaultProfile} />
               </S.IconContainer>
               <S.IconContainer onPress={onLikePress}>
                 <S.Icon
@@ -363,9 +357,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                 />
                 <S.IconLabel
                   style={{
-                    color: isLike
-                      ? theme.colors.primary.default
-                      : theme.colors.grayscale.scale10,
+                    color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                   }}
                 >
                   {formattedNumber(likeCnt)}

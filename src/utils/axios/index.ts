@@ -16,15 +16,12 @@ export const refresh = async (error: AxiosError) => {
   }
   try {
     //리프레시 로직
-    const refreshToken = await localStorage.getItem<string>(
-      storageKeys.refreshToken
-    );
+    const refreshToken = await localStorage.getItem<string>(storageKeys.refreshToken);
 
     if (refreshToken === null) {
       throw new RefreshError();
     }
 
-    //스토리지에서 토큰 삭제
     await Promise.all([
       localStorage.removeItem(storageKeys.accessToken),
       localStorage.removeItem(storageKeys.refreshToken),
@@ -32,9 +29,13 @@ export const refresh = async (error: AxiosError) => {
 
     //서버에 리프레시 요청
     const { access_token, refresh_token } = (
-      await noTokenInstance.post<RefreshResponse>("/auth/refresh", {
-        refresh_token: refreshToken,
-      })
+      await noTokenInstance.post<RefreshResponse>(
+        "/refresh",
+        {},
+        {
+          headers: { "Refresh-Token": refreshToken },
+        }
+      )
     ).data;
 
     //스토리지에 토큰 저장
@@ -44,14 +45,14 @@ export const refresh = async (error: AxiosError) => {
     ]);
 
     //axios 헤더 변경
-    error.config.headers.common["Authorization"] = `Bearer ${access_token}`;
-    instance.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${access_token}`;
+    error.config.headers["Authorization"] = `Bearer ${access_token}`;
+    instance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
     //인증 오류난 요청으로 다시 요청 보내기
     return axios(error.config);
   } catch (error) {
+    console.log(error);
+
     //리프레시중 오류 발생
     if (axios.isAxiosError(error) && error.response.status === 401) {
       //리프레시 토큰 만료 됨
@@ -82,9 +83,9 @@ instance.interceptors.request.use(
     instance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
-    config.headers.common[
-      "Authorization"
-    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
+    config.headers.common["Authorization"] = `Bearer ${await localStorage.getItem<string>(
+      storageKeys.accessToken
+    )}`;
 
     return config;
   },

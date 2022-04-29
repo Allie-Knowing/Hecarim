@@ -3,10 +3,6 @@ import { Platform } from "react-native";
 import styled from "styled-components/native";
 import { Video as VideoAv } from "expo-av";
 
-interface MoreProps {
-  isMore: boolean;
-}
-
 export const Container = styled.TouchableOpacity`
   position: relative;
   width: 100%;
