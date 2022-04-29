@@ -1,11 +1,6 @@
 import FeedContent from "../FeedContent";
 import * as S from "./styles";
-import {
-  Dimensions,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  ListRenderItem,
-} from "react-native";
+import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
 import { FC, useEffect, useState } from "react";
 import { Question } from "api/Question";
 
@@ -56,9 +51,7 @@ const FeedVideos: FC<PropsType> = ({
       snapToInterval={height}
       showsVerticalScrollIndicator={false}
       onScroll={onScroll}
-      keyExtractor={(item: Question) =>
-        `question_${item.id}_${item.is_like}_${item.comment_cnt}_${item.like_cnt}`
-      }
+      keyExtractor={(item: Question) => `question_${item.id}`}
       data={dataList}
       renderItem={renderItem}
       onEndReached={onEndReached}

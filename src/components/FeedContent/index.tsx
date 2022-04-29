@@ -1,6 +1,7 @@
 import React, {
   FC,
   Fragment,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -8,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions, LayoutAnimation, Platform, View } from "react-native";
+import { Dimensions, GestureResponderEvent, LayoutAnimation, Platform, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -20,13 +21,14 @@ import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
-import { Audio, Video } from "expo-av";
+import { Video } from "expo-av";
 import { useQuestionHashtag, useQuestionDetail, useQuestionMutation } from "queries/Question";
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
 import { useVideoMutation } from "queries/Video";
+import { Player } from "components/Player";
 
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
@@ -248,35 +250,33 @@ const FeedContent: FC<Question & PropsType> = ({
 
   const onPageChange = useCallback(async () => {
     if (isCurrentPage) {
+      const status = await videoRef.current.getStatusAsync();
+      if (!status.isLoaded) {
+        await videoRef.current.loadAsync({ uri: video_url });
+      }
+      await videoRef.current.setIsLoopingAsync(true);
       await videoRef.current.playFromPositionAsync(0);
+      setIsStop(false);
     } else {
-      videoRef.current.stopAsync();
-      setIsMore(false);
+      await videoRef.current.stopAsync();
+      await videoRef.current.setIsLoopingAsync(true);
+      setIsStop(false);
     }
   }, [isCurrentPage]);
+
+  const changeVideoState = async () => {
+    isStop ? await videoRef.current.playAsync() : await videoRef.current.pauseAsync();
+    setIsStop(!isStop);
+  };
 
   useEffect(() => {
     onPageChange();
   }, [onPageChange]);
 
-  const stopVideo = () => {
-    isStop ? videoRef.current.playAsync() : videoRef.current.pauseAsync();
-    setIsStop(!isStop);
-  };
-
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
-        {isStop && <S.VideoStateIcon source={Play} />}
-        <S.Video
-          source={{ uri: video_url }}
-          isLooping
-          resizeMode="cover"
-          ref={videoRef}
-          rate={1.0}
-          volume={1.0}
-          style={{ backgroundColor: themeContext.colors.grayscale.scale100 }}
-        />
+      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+        <Player ref={videoRef} isStop={isStop} />
         <S.BackBlack
           colors={["transparent", themeContext.colors.grayscale.scale100]}
           style={{ height: `${isMore ? 50 : 0}%` }}
@@ -397,4 +397,4 @@ const Hashtag: FC<HashtagProps> = ({ id }) => {
   );
 };
 
-export default FeedContent;
+export default memo(FeedContent);
