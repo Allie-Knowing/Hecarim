@@ -5,6 +5,9 @@
 # 환경변수
 environment.ts
 
+#google-service
+google-services.json
+
 ### macOS ###
 # General
 .DS_Store
