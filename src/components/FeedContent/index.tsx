@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions, GestureResponderEvent, LayoutAnimation, Platform, View } from "react-native";
+import { Dimensions, LayoutAnimation, Platform, View } from "react-native";
 import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
@@ -41,6 +41,7 @@ const { height } = Dimensions.get("screen");
 
 interface PropsType {
   isCurrentPage: boolean;
+  isNextPage: boolean;
 }
 
 const dateToString = (date: Date) =>
@@ -60,6 +61,7 @@ const FeedContent: FC<Question & PropsType> = ({
   user_id,
   isCurrentPage,
   is_adoption,
+  isNextPage,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const [isStop, setIsStop] = useState<boolean>(false);
@@ -249,20 +251,22 @@ const FeedContent: FC<Question & PropsType> = ({
   );
 
   const onPageChange = useCallback(async () => {
-    if (isCurrentPage) {
+    if (isNextPage || isCurrentPage) {
       const status = await videoRef.current.getStatusAsync();
       if (!status.isLoaded) {
         await videoRef.current.loadAsync({ uri: video_url });
       }
-      await videoRef.current.setIsLoopingAsync(true);
+    }
+    if (isCurrentPage) {
       await videoRef.current.playFromPositionAsync(0);
+      await videoRef.current.setIsLoopingAsync(true);
       setIsStop(false);
     } else {
       await videoRef.current.stopAsync();
       await videoRef.current.setIsLoopingAsync(true);
       setIsStop(false);
     }
-  }, [isCurrentPage]);
+  }, [isCurrentPage, isNextPage]);
 
   const changeVideoState = async () => {
     isStop ? await videoRef.current.playAsync() : await videoRef.current.pauseAsync();

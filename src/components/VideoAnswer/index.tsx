@@ -1,11 +1,6 @@
 import VideoAnswerContent from "../VideoAnswerContent";
 import * as S from "./styles";
-import {
-  Dimensions,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  ListRenderItem,
-} from "react-native";
+import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
 import { FC, useCallback, useMemo, useState } from "react";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
 import { useVideoAnswerList } from "queries/Answer";
@@ -29,10 +24,7 @@ const VideoAnswer: FC<PropsType> = ({
   isQuestionAdoption,
 }) => {
   const [page, setPage] = useState(0);
-  const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(
-    questionId,
-    size
-  );
+  const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(questionId, size);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
@@ -43,6 +35,7 @@ const VideoAnswer: FC<PropsType> = ({
     <VideoAnswerContent
       isQuestionMine={isQuestionMine}
       isCurrentPage={page === index && isCurrentPage}
+      isNextPage={page + 1 === index && isCurrentPage}
       isQuestionAdoption={isQuestionAdoption === 1}
       {...item}
     />

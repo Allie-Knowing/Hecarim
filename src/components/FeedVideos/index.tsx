@@ -29,7 +29,11 @@ const FeedVideos: FC<PropsType> = ({
   };
 
   const renderItem: ListRenderItem<Question> = ({ item, index }) => (
-    <FeedContent isCurrentPage={index === page && isCurrentPage} {...item} />
+    <FeedContent
+      isNextPage={page + 1 === index && isCurrentPage}
+      isCurrentPage={index === page && isCurrentPage}
+      {...item}
+    />
   );
 
   useEffect(() => {

@@ -39,6 +39,7 @@ const dateToString = (date: Date) =>
 
 interface PropsType {
   isCurrentPage: boolean;
+  isNextPage: boolean;
   isQuestionMine: boolean;
   isQuestionAdoption: boolean;
 }
@@ -57,6 +58,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isQuestionMine,
   is_like,
   isQuestionAdoption,
+  isNextPage,
 }) => {
   const isStack = useContext(isStackContext);
   const [isStop, setIsStop] = useState<boolean>(false);
@@ -107,11 +109,13 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   }, [isLikeLoading, isLike, like, unLike]);
 
   const onPageChange = useCallback(async () => {
-    if (isCurrentPage) {
+    if (isNextPage || isCurrentPage) {
       const status = await videoRef.current.getStatusAsync();
       if (!status.isLoaded) {
         await videoRef.current.loadAsync({ uri: video_url });
       }
+    }
+    if (isCurrentPage) {
       await videoRef.current.setIsLoopingAsync(true);
       await videoRef.current.playFromPositionAsync(0);
       setIsStop(false);
@@ -120,7 +124,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       await videoRef.current.setIsLoopingAsync(true);
       setIsStop(false);
     }
-  }, [isCurrentPage]);
+  }, [isCurrentPage, isNextPage]);
 
   const onSubmitPress = useCallback(async () => {
     dismissAll();
