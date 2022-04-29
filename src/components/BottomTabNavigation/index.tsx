@@ -79,7 +79,6 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    console.log(data);
     if (data?.data?.length === 0) {
       navigation.reset({ routes: [{ name: "InterestsSetting" }] });
     }

@@ -15,7 +15,7 @@ export const ButtonTitle = styled.Text`
   font: ${({ theme }) => theme.fonts.body3};
 `;
 
-export const Logout = styled.Text`
+export const ButtonTitleRed = styled.Text`
   color: ${({ theme }) => theme.colors.red.default};
   font: ${({ theme }) => theme.fonts.body3};
 `;
