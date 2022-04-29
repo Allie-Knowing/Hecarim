@@ -215,7 +215,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
     }
 
     return item;
-  }, [onDeletePress, theme, onAdoptionPress]);
+  }, [onDeletePress, theme, onAdoptionPress, is_mine, isQuestionAdoption, isMine]);
 
   const onCommentPress = useCallback(() => {
     if (toolItem.length > 0) {
@@ -225,7 +225,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
 
   return (
     <Fragment>
-      <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : undefined}>
+      <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : () => {}}>
         <S.Container
           style={{
             backgroundColor: is_adoption ? theme.colors.primary.default : undefined,

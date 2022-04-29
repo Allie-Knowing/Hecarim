@@ -27,7 +27,7 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
   const navigation = useMainStackNavigation();
 
   const moveQuestionStack = () => {
-    if (!questionList?.data?.data) return;
+    if (!questionList?.data?.data) return false;
     const questionListData = questionList.data.data;
 
     navigation.push("StackedQuestionList", {
