@@ -37,6 +37,7 @@ import SearchedQuestionsPage from "screens/Search/SearchedQuestionsPage";
 import RefreshError from "types/RefreshError";
 import useAlert from "hooks/useAlert";
 import { Audio } from "expo-av";
+import Interests from "screens/Interests";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -190,6 +191,11 @@ const MainNavigationScreen = () => {
             <CameraDetail {...props} />
           </isStackContext.Provider>
         )}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="InterestsSetting"
+        component={Interests}
         options={{ headerShown: false }}
       />
     </Root.Navigator>
