@@ -1,6 +1,7 @@
 import React, {
   FC,
   Fragment,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -13,7 +14,7 @@ import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
 import isStackContext from "context/IsStackContext";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
-import { Audio, Video } from "expo-av";
+import { AVPlaybackStatus, Video } from "expo-av";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { useTheme } from "styled-components/native";
 import { Portal } from "react-native-portalize";
@@ -25,7 +26,6 @@ import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
 import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
-import { Player } from "components/Player";
 
 const Heart = require("../../assets/icons/heart.png");
 const More = require("../../assets/icons/more.png");
@@ -108,24 +108,6 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     await refetch();
   }, [isLikeLoading, isLike, like, unLike]);
 
-  const onPageChange = useCallback(async () => {
-    if (isNextPage || isCurrentPage) {
-      const status = await videoRef.current.getStatusAsync();
-      if (!status.isLoaded) {
-        await videoRef.current.loadAsync({ uri: video_url });
-      }
-    }
-    if (isCurrentPage) {
-      await videoRef.current.setIsLoopingAsync(true);
-      await videoRef.current.playFromPositionAsync(0);
-      setIsStop(false);
-    } else {
-      await videoRef.current.stopAsync();
-      await videoRef.current.setIsLoopingAsync(true);
-      setIsStop(false);
-    }
-  }, [isCurrentPage, isNextPage]);
-
   const onSubmitPress = useCallback(async () => {
     dismissAll();
 
@@ -182,10 +164,6 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       ],
     });
   }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
-
-  useEffect(() => {
-    onPageChange();
-  }, [onPageChange]);
 
   const onAdoptionAccpet = useCallback(
     async (alert: string) => {
@@ -297,15 +275,71 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     [theme, onSubmitPress, dismissAll]
   );
 
-  const stopVideo = () => {
-    isStop ? videoRef.current.playAsync() : videoRef.current.pauseAsync();
-    setIsStop(!isStop);
-  };
+  const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+
+  const onPageChange = useCallback(async () => {
+    if (isCurrentPage) {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: true,
+        positionMillis: 0,
+        isLooping: true,
+      });
+    } else {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: false,
+        positionMillis: 0,
+        isLooping: true,
+      });
+    }
+  }, [isCurrentPage]);
+
+  const load = useCallback(async () => {
+    if (isCurrentPage) {
+      const status = await videoRef.current.getStatusAsync();
+
+      if (!status.isLoaded && !isLoad) {
+        setIsLoad(true);
+        await videoRef.current.loadAsync({ uri: video_url });
+        console.log(video_url);
+      }
+    }
+  }, [isCurrentPage, video_url, isLoad]);
+
+  const changeVideoState = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && status.shouldPlay) {
+      await videoRef.current.pauseAsync();
+    } else if (status.isLoaded) {
+      await videoRef.current.playAsync();
+    }
+  }, [isStop]);
+
+  useEffect(() => {
+    load();
+    onPageChange();
+  }, [onPageChange, load]);
+
+  const onPlaybackStatusUpdate = useCallback((e: AVPlaybackStatus) => {
+    setVideoStatus(e);
+  }, []);
 
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
-        <Player isStop={isStop} ref={videoRef} />
+      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+        {isLoad && videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
+          <S.VideoStateIcon source={Play} />
+        )}
+        <S.Video
+          onPlaybackStatusUpdate={onPlaybackStatusUpdate}
+          isLooping
+          resizeMode="cover"
+          ref={videoRef}
+          rate={1.0}
+          volume={1.0}
+          style={{ backgroundColor: theme.colors.grayscale.scale100 }}
+        />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
           <S.InfoOuter>
             <S.InfoContainer>
@@ -387,4 +421,4 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   );
 };
 
-export default VideoAnswerContent;
+export default memo(VideoAnswerContent);

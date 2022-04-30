@@ -1,7 +1,7 @@
 import VideoAnswerContent from "../VideoAnswerContent";
 import * as S from "./styles";
 import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, memo, useCallback, useMemo, useState } from "react";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
 import { useVideoAnswerList } from "queries/Answer";
 import axios from "axios";
@@ -102,8 +102,9 @@ const VideoAnswer: FC<PropsType> = ({
       data={list}
       renderItem={renderItem}
       onEndReached={onEndReached}
+      initialNumToRender={2}
     />
   );
 };
 
-export default VideoAnswer;
+export default memo(VideoAnswer);

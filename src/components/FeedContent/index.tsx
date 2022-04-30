@@ -21,14 +21,13 @@ import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
-import { Video } from "expo-av";
+import { AVPlaybackStatus, Video } from "expo-av";
 import { useQuestionHashtag, useQuestionDetail, useQuestionMutation } from "queries/Question";
 import axios from "axios";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
 import { useVideoMutation } from "queries/Video";
-import { Player } from "components/Player";
 
 const Heart = require("../../assets/icons/heart.png");
 const Comment = require("../../assets/icons/comment.png");
@@ -65,7 +64,7 @@ const FeedContent: FC<Question & PropsType> = ({
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const [isStop, setIsStop] = useState<boolean>(false);
-  const themeContext = useContext(ThemeContext);
+  const theme = useContext(ThemeContext);
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
@@ -181,108 +180,144 @@ const FeedContent: FC<Question & PropsType> = ({
       is_mine
         ? [
             {
-              color: themeContext.colors.red.default,
+              color: theme.colors.red.default,
               onPress: onDeletePress,
               text: "삭제하기",
             },
           ]
         : [
             {
-              color: themeContext.colors.red.default,
+              color: theme.colors.red.default,
               onPress: () => {
                 reportSheetRef.current.present();
               },
               text: "신고하기",
             },
           ],
-    [themeContext, onDeletePress]
+    [theme, onDeletePress]
   );
 
   const reportItems: ToolItem[] = useMemo(
     () => [
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("스팸"),
         text: "스팸",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("음란물 또는 불법촬영물"),
         text: "음란물 또는 불법촬영물",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("괴롭힘 또는 따돌림"),
         text: "괴롭힘 또는 따돌림",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("욕설 및 비방"),
         text: "욕설 및 비방",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("명예회손 또는 저작권 침해"),
         text: "명예회손 또는 저작권 침해",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: onReportPress("기타 사유"),
         text: "기타 사유",
       },
     ],
-    [onReportPress, themeContext]
+    [onReportPress, theme]
   );
 
   const comfirmItems: ToolItem[] = useMemo(
     () => [
       {
-        color: themeContext.colors.red.default,
+        color: theme.colors.red.default,
         onPress: onSubmitPress,
         text: "신고 제출하기",
       },
       {
-        color: themeContext.colors.grayscale.scale100,
+        color: theme.colors.grayscale.scale100,
         onPress: () => dismissAll(),
         text: "취소하기",
       },
     ],
-    [themeContext, onSubmitPress, dismissAll]
+    [theme, onSubmitPress, dismissAll]
   );
 
+  const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+
   const onPageChange = useCallback(async () => {
-    if (isNextPage || isCurrentPage) {
+    if (isCurrentPage) {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: true,
+        positionMillis: 0,
+        isLooping: true,
+      });
+    } else {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: false,
+        positionMillis: 0,
+        isLooping: true,
+      });
+    }
+  }, [isCurrentPage]);
+
+  const load = useCallback(async () => {
+    if (isCurrentPage) {
       const status = await videoRef.current.getStatusAsync();
-      if (!status.isLoaded) {
+
+      if (!status.isLoaded && !isLoad) {
+        setIsLoad(true);
         await videoRef.current.loadAsync({ uri: video_url });
+        console.log(video_url);
       }
     }
-    if (isCurrentPage) {
-      await videoRef.current.playFromPositionAsync(0);
-      await videoRef.current.setIsLoopingAsync(true);
-      setIsStop(false);
-    } else {
-      await videoRef.current.stopAsync();
-      await videoRef.current.setIsLoopingAsync(true);
-      setIsStop(false);
-    }
-  }, [isCurrentPage, isNextPage]);
+  }, [isCurrentPage, video_url, isLoad]);
 
-  const changeVideoState = async () => {
-    isStop ? await videoRef.current.playAsync() : await videoRef.current.pauseAsync();
-    setIsStop(!isStop);
-  };
+  const changeVideoState = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && status.shouldPlay) {
+      await videoRef.current.pauseAsync();
+    } else if (status.isLoaded) {
+      await videoRef.current.playAsync();
+    }
+  }, [isStop]);
 
   useEffect(() => {
+    load();
     onPageChange();
-  }, [onPageChange]);
+  }, [onPageChange, load]);
+
+  const onPlaybackStatusUpdate = useCallback((e: AVPlaybackStatus) => {
+    setVideoStatus(e);
+  }, []);
 
   return (
     <Fragment>
       <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
-        <Player ref={videoRef} isStop={isStop} />
+        {videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
+          <S.VideoStateIcon source={Play} />
+        )}
+        <S.Video
+          onPlaybackStatusUpdate={onPlaybackStatusUpdate}
+          isLooping
+          resizeMode="cover"
+          ref={videoRef}
+          rate={1.0}
+          volume={1.0}
+          style={{ backgroundColor: theme.colors.grayscale.scale100 }}
+          onLoad={() => console.log(id, "load end")}
+          onLoadStart={() => console.log(id, "load start")}
+        />
         <S.BackBlack
-          colors={["transparent", themeContext.colors.grayscale.scale100]}
+          colors={["transparent", theme.colors.grayscale.scale100]}
           style={{ height: `${isMore ? 50 : 0}%` }}
         />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
@@ -325,17 +360,15 @@ const FeedContent: FC<Question & PropsType> = ({
                   <S.Icon
                     style={{
                       tintColor: isLike
-                        ? themeContext.colors.primary.default
-                        : themeContext.colors.grayscale.scale10,
+                        ? theme.colors.primary.default
+                        : theme.colors.grayscale.scale10,
                     }}
                     resizeMode="contain"
                     source={Heart}
                   />
                   <S.IconLabel
                     style={{
-                      color: isLike
-                        ? themeContext.colors.primary.default
-                        : themeContext.colors.grayscale.scale10,
+                      color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                     }}
                   >
                     {formattedNumber(likeCnt)}
