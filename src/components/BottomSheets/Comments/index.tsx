@@ -1,26 +1,15 @@
 /* eslint-disable indent */
 import Comment from "components/Comment";
-import {
-  forwardRef,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  FC,
-  Fragment,
-  RefObject,
-} from "react";
-import { ListRenderItem, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
+import { forwardRef, useContext, useState, useCallback, useMemo, FC, Fragment } from "react";
+import { ListRenderItem, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import * as S from "./styles";
 import useFocus from "hooks/useFocus";
 import StyledBackgroundComponent from "../StyledBackgroundComponent";
 import { useTextAnswerList, useTextAnswerMutation } from "queries/TextAnswer";
 import axios from "axios";
-import useIsLogin from "hooks/useIsLogin";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
@@ -31,14 +20,13 @@ export interface CommentBottomSheetRefProps {
 }
 
 interface PropsType {
-  navigation: StackNavigationProp<any>;
   questionId: number;
   isQuestionAdoption: boolean;
   is_mine: boolean;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ navigation, questionId, isQuestionAdoption, is_mine }, ref) => {
+  ({ questionId, isQuestionAdoption, is_mine }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -82,7 +70,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
           buttons: [{ text: "확인", color: "black", onPress: (id) => closeAlert(id) }],
         });
       }
-    }, [post, text, queryClient]);
+    }, [text, post, questionId, queryClient, showAlert, closeAlert]);
 
     return (
       <BottomSheet
@@ -128,6 +116,8 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
   }
 );
 
+CommentBottomSheet.displayName = "CommentBottomSheet";
+
 interface ListProps {
   isOpen: boolean;
   questionId: number;
@@ -144,22 +134,25 @@ const TextAnswerList: FC<ListProps> = ({ isOpen, questionId, isQuestionAdoption,
     isOpen
   );
 
-  const renderItem: ListRenderItem<TextAnswer> = useCallback(({ item }) => {
-    return (
-      <Comment
-        isMine={is_mine}
-        questionId={questionId}
-        {...item}
-        isQuestionAdoption={isQuestionAdoption}
-      />
-    );
-  }, []);
+  const renderItem: ListRenderItem<TextAnswer> = useCallback(
+    ({ item }) => {
+      return (
+        <Comment
+          isMine={is_mine}
+          questionId={questionId}
+          {...item}
+          isQuestionAdoption={isQuestionAdoption}
+        />
+      );
+    },
+    [isQuestionAdoption, is_mine, questionId]
+  );
 
   const onEndReached = useCallback(() => {
     if (!isError) {
       fetchNextPage();
     }
-  }, [isError]);
+  }, [fetchNextPage, isError]);
 
   const list = useMemo(
     () =>

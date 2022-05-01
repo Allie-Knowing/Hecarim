@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
-import Icon from "./Icon";
 import Feed from "screens/Feed";
 import MyPage from "screens/MyPage/MyPage";
 import Question from "components/Question";
@@ -16,11 +15,11 @@ import localStorage from "utils/localStorage";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useGetInterests } from "queries/Interests";
-
-const FeedIcon = require("../../assets/icons/navigation/feed.png");
-const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
-const SearchIcon = require("../../assets/icons/navigation/search.png");
-const QuestionIcon = require("../../assets/icons/navigation/question.png");
+import FeedIcon from "../../assets/icons/navigation/feed.png";
+import MyPageIcon from "../../assets/icons/navigation/mypage.png";
+import SearchIcon from "../../assets/icons/navigation/search.png";
+import QuestionIcon from "../../assets/icons/navigation/question.png";
+import Icon from "./Icon";
 
 const Tab = createBottomTabNavigator();
 
@@ -76,13 +75,13 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
       }
     };
     loginCheck();
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     if (data?.data?.length === 0) {
       navigation.reset({ routes: [{ name: "InterestsSetting" }] });
     }
-  }, [data]);
+  }, [data, navigation]);
 
   useEffect(() => {
     if (pressName === "feed") {
@@ -124,7 +123,14 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
               tabPress: () => setPressName(value.name),
             }}
             options={{
-              tabBarIcon: Icon(value.icon, value.label, pressName),
+              tabBarIcon: (props) => (
+                <Icon
+                  focused={props.focused}
+                  icon={value.icon}
+                  label={value.label}
+                  routeName={pressName}
+                />
+              ),
               tabBarShowLabel: false,
             }}
             component={value.component}

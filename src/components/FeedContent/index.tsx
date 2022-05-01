@@ -29,12 +29,12 @@ import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
 import { useVideoMutation } from "queries/Video";
 
-const Heart = require("../../assets/icons/heart.png");
-const Comment = require("../../assets/icons/comment.png");
-const More = require("../../assets/icons/more.png");
-const Camera = require("../../assets/icons/camera.png");
-const Play = require("../../assets/play.png");
-const defaultProfile = require("assets/profile.png");
+import Heart from "../../assets/icons/heart.png";
+import Comment from "../../assets/icons/comment.png";
+import More from "../../assets/icons/more.png";
+import Camera from "../../assets/icons/camera.png";
+import Play from "../../assets/play.png";
+import defaultProfile from "assets/profile.png";
 
 const { height } = Dimensions.get("screen");
 
@@ -60,10 +60,8 @@ const FeedContent: FC<Question & PropsType> = ({
   user_id,
   isCurrentPage,
   is_adoption,
-  isNextPage,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
-  const [isStop, setIsStop] = useState<boolean>(false);
   const theme = useContext(ThemeContext);
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
@@ -82,8 +80,14 @@ const FeedContent: FC<Question & PropsType> = ({
   const descriptionRef = useRef<string>("");
   const { dismissAll } = useBottomSheetModal();
 
-  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
-  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
+  const isLike = useMemo(
+    () => data?.data.data.is_like || is_like,
+    [data?.data.data.is_like, is_like]
+  );
+  const likeCnt = useMemo(
+    () => data?.data.data.like_cnt || like_cnt,
+    [data?.data.data.like_cnt, like_cnt]
+  );
 
   const isLikeLoading = useMemo(
     () => like.isLoading || unLike.isLoading || isLoading,
@@ -117,7 +121,7 @@ const FeedContent: FC<Question & PropsType> = ({
     }
 
     await refetch();
-  }, [isLikeLoading, isLike, like, unLike]);
+  }, [isLikeLoading, isLike, refetch, like, unLike]);
 
   const onSubmitPress = useCallback(async () => {
     dismissAll();
@@ -135,7 +139,7 @@ const FeedContent: FC<Question & PropsType> = ({
         },
       ],
     });
-  }, [id, showAlert, dismissAll, closeAlert]);
+  }, [dismissAll, report, showAlert, closeAlert]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -194,7 +198,7 @@ const FeedContent: FC<Question & PropsType> = ({
               text: "신고하기",
             },
           ],
-    [theme, onDeletePress]
+    [is_mine, theme.colors.red.default, onDeletePress]
   );
 
   const reportItems: ToolItem[] = useMemo(
@@ -288,7 +292,7 @@ const FeedContent: FC<Question & PropsType> = ({
     } else if (status.isLoaded) {
       await videoRef.current.playAsync();
     }
-  }, [isStop]);
+  }, []);
 
   useEffect(() => {
     load();
@@ -339,7 +343,6 @@ const FeedContent: FC<Question & PropsType> = ({
               <S.IconContainer
                 onPress={() => {
                   videoRef.current.pauseAsync();
-                  setIsStop(true);
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
@@ -348,7 +351,6 @@ const FeedContent: FC<Question & PropsType> = ({
               <S.IconContainer
                 onPress={() => {
                   videoRef.current.pauseAsync();
-                  setIsStop(true);
                   navigation.navigate("Camera", { questionId: id });
                 }}
               >
@@ -393,7 +395,6 @@ const FeedContent: FC<Question & PropsType> = ({
       <Portal>
         <CommentBottomSheet
           isQuestionAdoption={is_adoption === 1}
-          navigation={navigation}
           ref={commentBottomSheetRef}
           questionId={id}
           is_mine={is_mine}
