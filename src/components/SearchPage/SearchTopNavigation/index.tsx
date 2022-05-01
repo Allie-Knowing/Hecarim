@@ -11,13 +11,7 @@ interface Props {
   setCheckValue: (e: boolean) => void;
 }
 
-const SearchTopNavigation: FC<Props> = ({
-  title,
-  inputValue,
-  setInputValue,
-  checkValue,
-  setCheckValue,
-}) => {
+const SearchTopNavigation: FC<Props> = ({ title, inputValue, setInputValue, checkValue }) => {
   const { top: topPad } = useSafeAreaInsets();
 
   return (

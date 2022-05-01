@@ -57,7 +57,7 @@ const VideoAnswer: FC<PropsType> = ({
     if (!isError) {
       fetchNextPage();
     }
-  }, [fetchNextPage]);
+  }, [fetchNextPage, isError]);
 
   if (isLoading) {
     return (

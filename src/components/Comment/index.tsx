@@ -127,7 +127,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
         },
       ],
     });
-  }, [id, showAlert, dismissAll, closeAlert]);
+  }, [dismissAll, report, questionId, id, showAlert, closeAlert]);
 
   const comfirmItems: ToolItem[] = useMemo(
     () => [
@@ -167,7 +167,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
         },
       ],
     });
-  }, [id, remove, questionId, id, closeAlret, showAlret]);
+  }, [showAlret, closeAlret, remove, id, queryClient, questionId]);
 
   const onAdoptionPress = useCallback(() => {
     ref.current.close();
@@ -230,7 +230,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
 
   return (
     <Fragment>
-      <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : () => {}}>
+      <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : () => false}>
         <S.Container
           style={{
             backgroundColor: is_adoption ? theme.colors.primary.default : undefined,

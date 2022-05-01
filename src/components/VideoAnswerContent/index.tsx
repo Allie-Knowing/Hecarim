@@ -26,11 +26,10 @@ import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
 import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
-
-const Heart = require("../../assets/icons/heart.png");
-const More = require("../../assets/icons/more.png");
-const Play = require("../../assets/play.png");
-const defaultProfile = require("assets/profile.png");
+import Heart from "../../assets/icons/heart.png";
+import More from "../../assets/icons/more.png";
+import Play from "../../assets/play.png";
+import defaultProfile from "assets/profile.png";
 
 const { height } = Dimensions.get("screen");
 
@@ -58,10 +57,9 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isQuestionMine,
   is_like,
   isQuestionAdoption,
-  isNextPage,
 }) => {
   const isStack = useContext(isStackContext);
-  const [isStop, setIsStop] = useState<boolean>(false);
+  const [, setIsStop] = useState<boolean>(false);
   const tabBarHeight = isStack ? 30 : 80;
   const { like, unLike } = useLikeMutation(id);
   const videoRef = useRef<Video>(null);
@@ -78,8 +76,14 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const { data, isLoading, refetch } = useVideoAnswerDetail(id);
   const navigation = useMainStackNavigation();
 
-  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
-  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
+  const isLike = useMemo(
+    () => data?.data.data.is_like || is_like,
+    [data?.data.data.is_like, is_like]
+  );
+  const likeCnt = useMemo(
+    () => data?.data.data.like_cnt || like_cnt,
+    [data?.data.data.like_cnt, like_cnt]
+  );
 
   const onReportPress = useCallback(
     (description: string) => () => {
@@ -106,7 +110,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     }
 
     await refetch();
-  }, [isLikeLoading, isLike, like, unLike]);
+  }, [isLikeLoading, isLike, refetch, like, unLike]);
 
   const onSubmitPress = useCallback(async () => {
     dismissAll();
@@ -124,7 +128,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
         },
       ],
     });
-  }, [id, showAlert, dismissAll, closeAlert]);
+  }, [dismissAll, report, showAlert, closeAlert]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -179,7 +183,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
       queryClient.invalidateQueries([queryKeys.answer]);
     },
-    [closeAlert, adoption, id, queryClient]
+    [closeAlert, adoption, id, showAlert, queryClient]
   );
 
   const onAdoption = useCallback(() => {
@@ -221,7 +225,15 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       });
     }
     return li;
-  }, [theme, onDeletePress, isQuestionMine, onAdoption]);
+  }, [
+    is_mine,
+    theme.colors.red.default,
+    theme.colors.primary.default,
+    onDeletePress,
+    isQuestionMine,
+    isQuestionAdoption,
+    onAdoption,
+  ]);
 
   const reportItems: ToolItem[] = useMemo(
     () => [
@@ -314,7 +326,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     } else if (status.isLoaded) {
       await videoRef.current.playAsync();
     }
-  }, [isStop]);
+  }, []);
 
   useEffect(() => {
     load();
