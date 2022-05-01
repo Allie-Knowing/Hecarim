@@ -9,7 +9,6 @@ import * as S from "./style";
 import * as ImagePicker from "expo-image-picker";
 import { useNicknameEdit, useProfileEdit } from "queries/ProfileEdit";
 import useAlert from "hooks/useAlert";
-import uniqueId from "constant/uniqueId";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "PrivacyPolicy">;
@@ -58,7 +57,7 @@ const ProfileEditPage: FC<Props> = ({ navigation }) => {
     if (
       (nicknameEditSuccess && profileEditSuccess) ||
       (!profileFile && nicknameEditSuccess) ||
-      (!nickname && profileEditSuccess)
+      (nickname === "" && profileEditSuccess)
     ) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }

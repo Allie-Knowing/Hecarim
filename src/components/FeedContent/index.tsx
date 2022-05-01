@@ -218,7 +218,6 @@ const FeedContent: FC<Question & PropsType> = ({
       if (!status.isLoaded && !isLoad) {
         setIsLoad(true);
         await videoRef.current.loadAsync({ uri: video_url });
-        console.log(video_url);
       }
     }
   }, [isCurrentPage, video_url, isLoad]);
@@ -256,8 +255,6 @@ const FeedContent: FC<Question & PropsType> = ({
           rate={1.0}
           volume={1.0}
           style={{ backgroundColor: theme.colors.grayscale.scale100 }}
-          onLoad={() => console.log(id, "load end")}
-          onLoadStart={() => console.log(id, "load start")}
         />
         <S.BackBlack
           colors={["transparent", theme.colors.grayscale.scale100]}

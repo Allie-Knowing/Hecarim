@@ -256,7 +256,6 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       if (!status.isLoaded && !isLoad) {
         setIsLoad(true);
         await videoRef.current.loadAsync({ uri: video_url });
-        console.log(video_url);
       }
     }
   }, [isCurrentPage, video_url, isLoad]);
