@@ -38,6 +38,7 @@ import RefreshError from "types/RefreshError";
 import useAlert from "hooks/useAlert";
 import { Audio } from "expo-av";
 import Interests from "screens/Interests";
+import ProfileEditPage from "screens/ProfileEdit/ProfileEditPage";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -196,6 +197,11 @@ const MainNavigationScreen = () => {
       <Root.Screen
         name="InterestsSetting"
         component={Interests}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="ProfileEdit"
+        component={ProfileEditPage}
         options={{ headerShown: false }}
       />
     </Root.Navigator>
