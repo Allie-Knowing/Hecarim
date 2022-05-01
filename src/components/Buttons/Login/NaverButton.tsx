@@ -9,8 +9,8 @@ import env from "constant/env";
 import useSignin from "queries/Signin";
 import axios from "axios";
 import useAlert from "hooks/useAlert";
+import naver from "../../../assets/icons/login/naver.png";
 
-const naver = require("../../../assets/icons/login/naver.png");
 const redirectUrl = AuthSession.getRedirectUrl();
 const URI = env.naverUrl + redirectUrl;
 
@@ -24,7 +24,7 @@ const NaverButton: FC<Props> = (navigation) => {
     if (isSuccess) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigation]);
 
   useEffect(() => {
     if (isError && axios.isAxiosError(error) && error.response.status === 409) {
@@ -40,7 +40,7 @@ const NaverButton: FC<Props> = (navigation) => {
         ],
       });
     }
-  }, [isError]);
+  }, [closeAlert, error, isError, showAlert]);
 
   const naverLogin = async () => {
     const result = await AuthSession.startAsync({

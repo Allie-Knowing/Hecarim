@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import LoginButtonLayout from "layout/loginButton";
 import React, { FC, useEffect } from "react";
 import { Platform, Text, TouchableOpacity } from "react-native";
@@ -9,8 +10,7 @@ import useAlert from "hooks/useAlert";
 import axios from "axios";
 import * as GoogleSignIn from "expo-google-sign-in";
 import useGoogleSignin from "queries/GoogleSignin";
-
-const google = require("../../../assets/icons/login/google.png");
+import google from "../../../assets/icons/login/google.png";
 
 type Props = StackNavigationProp<MainStackParamList, "Login">;
 
@@ -22,7 +22,7 @@ const GoogleButton: FC<Props> = (navigation) => {
     if (isSuccess) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigation]);
 
   useEffect(() => {
     if (isError && axios.isAxiosError(error) && error.response.status === 409) {
@@ -38,16 +38,14 @@ const GoogleButton: FC<Props> = (navigation) => {
         ],
       });
     }
-  }, [isError]);
+  }, [closeAlert, error, isError, showAlert]);
 
   const login = async () => {
     try {
       await GoogleSignIn.initAsync({
         signInType: GoogleSignIn.TYPES.DEFAULT,
         clientId:
-          Platform.OS === "android"
-            ? env.googleClientId.androidId
-            : env.googleClientId.iosId,
+          Platform.OS === "android" ? env.googleClientId.androidId : env.googleClientId.iosId,
         scopes: [
           GoogleSignIn.SCOPES.OPEN_ID,
           GoogleSignIn.SCOPES.EMAIL,
@@ -55,7 +53,7 @@ const GoogleButton: FC<Props> = (navigation) => {
         ],
       });
       await GoogleSignIn.askForPlayServicesAsync();
-      const response = await GoogleSignIn.signInAsync({});
+      const response = await GoogleSignIn.signInAsync();
       if (response.type === "success") {
         mutate({
           name: response.user.displayName,

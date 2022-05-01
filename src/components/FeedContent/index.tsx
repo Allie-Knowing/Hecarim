@@ -22,19 +22,21 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { AVPlaybackStatus, Video } from "expo-av";
-import { useQuestionHashtag, useQuestionDetail, useQuestionMutation } from "queries/Question";
-import axios from "axios";
+import { useQuestionDetail, useQuestionMutation } from "queries/Question";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
 import { useVideoMutation } from "queries/Video";
 
-const Heart = require("../../assets/icons/heart.png");
-const Comment = require("../../assets/icons/comment.png");
-const More = require("../../assets/icons/more.png");
-const Camera = require("../../assets/icons/camera.png");
-const Play = require("../../assets/play.png");
-const defaultProfile = require("assets/profile.png");
+import Heart from "../../assets/icons/heart.png";
+import Comment from "../../assets/icons/comment.png";
+import More from "../../assets/icons/more.png";
+import Camera from "../../assets/icons/camera.png";
+import Play from "../../assets/play.png";
+import defaultProfile from "assets/profile.png";
+import ReportModal from "components/BottomSheets/ReportModal";
+import HashTag from "components/HashTag";
+import useBlock from "hooks/useBlock";
 
 const { height } = Dimensions.get("screen");
 
@@ -60,15 +62,12 @@ const FeedContent: FC<Question & PropsType> = ({
   user_id,
   isCurrentPage,
   is_adoption,
-  isNextPage,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
-  const [isStop, setIsStop] = useState<boolean>(false);
   const theme = useContext(ThemeContext);
   const commentBottomSheetRef = useRef<BottomSheet>(null);
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
-  const confirmSheetRef = useRef<BottomSheetModal>(null);
   const isStack = useContext(isStackContext);
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
@@ -79,11 +78,17 @@ const FeedContent: FC<Question & PropsType> = ({
   const queryClient = useQueryClient();
   const { showAlert, closeAlert } = useAlert();
   const { report } = useVideoMutation(id);
-  const descriptionRef = useRef<string>("");
   const { dismissAll } = useBottomSheetModal();
+  const { onBlockPress } = useBlock(id);
 
-  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
-  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
+  const isLike = useMemo(
+    () => data?.data.data.is_like || is_like,
+    [data?.data.data.is_like, is_like]
+  );
+  const likeCnt = useMemo(
+    () => data?.data.data.like_cnt || like_cnt,
+    [data?.data.data.like_cnt, like_cnt]
+  );
 
   const isLikeLoading = useMemo(
     () => like.isLoading || unLike.isLoading || isLoading,
@@ -97,12 +102,11 @@ const FeedContent: FC<Question & PropsType> = ({
     setIsMore(!isMore);
   };
 
-  const onReportPress = useCallback(
-    (description: string) => () => {
-      descriptionRef.current = description;
-      confirmSheetRef.current.present();
+  const onReport = useCallback(
+    async (description: string) => {
+      await report.mutateAsync(description);
     },
-    []
+    [report]
   );
 
   const onLikePress = useCallback(async () => {
@@ -117,25 +121,7 @@ const FeedContent: FC<Question & PropsType> = ({
     }
 
     await refetch();
-  }, [isLikeLoading, isLike, like, unLike]);
-
-  const onSubmitPress = useCallback(async () => {
-    dismissAll();
-
-    await report.mutateAsync(descriptionRef.current);
-
-    showAlert({
-      title: "신고 제출 완료",
-      content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
-      buttons: [
-        {
-          text: "확인",
-          color: "black",
-          onPress: (id) => closeAlert(id),
-        },
-      ],
-    });
-  }, [id, showAlert, dismissAll, closeAlert]);
+  }, [isLikeLoading, isLike, refetch, like, unLike]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -175,79 +161,36 @@ const FeedContent: FC<Question & PropsType> = ({
     });
   }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
 
-  const items: ToolItem[] = useMemo(
-    () =>
-      is_mine
-        ? [
-            {
-              color: theme.colors.red.default,
-              onPress: onDeletePress,
-              text: "삭제하기",
-            },
-          ]
-        : [
-            {
-              color: theme.colors.red.default,
-              onPress: () => {
-                reportSheetRef.current.present();
-              },
-              text: "신고하기",
-            },
-          ],
-    [theme, onDeletePress]
-  );
-
-  const reportItems: ToolItem[] = useMemo(
-    () => [
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("스팸"),
-        text: "스팸",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("음란물 또는 불법촬영물"),
-        text: "음란물 또는 불법촬영물",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("괴롭힘 또는 따돌림"),
-        text: "괴롭힘 또는 따돌림",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("욕설 및 비방"),
-        text: "욕설 및 비방",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("명예회손 또는 저작권 침해"),
-        text: "명예회손 또는 저작권 침해",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("기타 사유"),
-        text: "기타 사유",
-      },
-    ],
-    [onReportPress, theme]
-  );
-
-  const comfirmItems: ToolItem[] = useMemo(
-    () => [
-      {
+  const items: ToolItem[] = useMemo(() => {
+    const item: ToolItem[] = [];
+    if (is_mine) {
+      item.push({
         color: theme.colors.red.default,
-        onPress: onSubmitPress,
-        text: "신고 제출하기",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: () => dismissAll(),
-        text: "취소하기",
-      },
-    ],
-    [theme, onSubmitPress, dismissAll]
-  );
+        onPress: onDeletePress,
+        text: "삭제하기",
+      });
+    } else {
+      item.push(
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            reportSheetRef.current.present();
+          },
+          text: "신고하기",
+        },
+        {
+          text: "차단하기",
+          color: theme.colors.red.default,
+          onPress: () => {
+            dismissAll();
+            onBlockPress();
+          },
+        }
+      );
+    }
+
+    return item;
+  }, [is_mine, theme.colors.red.default, onDeletePress, dismissAll, onBlockPress]);
 
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
   const [isLoad, setIsLoad] = useState<boolean>(false);
@@ -288,7 +231,7 @@ const FeedContent: FC<Question & PropsType> = ({
     } else if (status.isLoaded) {
       await videoRef.current.playAsync();
     }
-  }, [isStop]);
+  }, []);
 
   useEffect(() => {
     load();
@@ -331,7 +274,7 @@ const FeedContent: FC<Question & PropsType> = ({
               </S.TitleContainer>
               {isMore && <S.Description>{dateToString(new Date(created_at))}</S.Description>}
               <S.Description numberOfLines={isMore ? undefined : 1}>{description}</S.Description>
-              {isMore && <Hashtag id={id} />}
+              {isMore && <HashTag id={id} />}
             </S.InfoContainer>
           </S.InfoOuter>
           <View>
@@ -339,7 +282,6 @@ const FeedContent: FC<Question & PropsType> = ({
               <S.IconContainer
                 onPress={() => {
                   videoRef.current.pauseAsync();
-                  setIsStop(true);
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
@@ -348,7 +290,6 @@ const FeedContent: FC<Question & PropsType> = ({
               <S.IconContainer
                 onPress={() => {
                   videoRef.current.pauseAsync();
-                  setIsStop(true);
                   navigation.navigate("Camera", { questionId: id });
                 }}
               >
@@ -393,43 +334,13 @@ const FeedContent: FC<Question & PropsType> = ({
       <Portal>
         <CommentBottomSheet
           isQuestionAdoption={is_adoption === 1}
-          navigation={navigation}
           ref={commentBottomSheetRef}
           questionId={id}
           is_mine={is_mine}
         />
         <Tool ref={toolSheetRef} items={items} />
-        <Tool ref={reportSheetRef} items={reportItems} />
-        <Tool ref={confirmSheetRef} items={comfirmItems} />
+        <ReportModal ref={reportSheetRef} reportCallback={onReport} />
       </Portal>
-    </Fragment>
-  );
-};
-
-interface HashtagProps {
-  id: number;
-}
-
-const Hashtag: FC<HashtagProps> = ({ id }) => {
-  const { data, isLoading, isError, error } = useQuestionHashtag(id);
-
-  const hashtags = useMemo(() => data?.data.data || [], [data]);
-
-  if (isLoading) {
-    return <S.Description>해쉬태그 로딩 중...</S.Description>;
-  }
-
-  if (isError && axios.isAxiosError(error) && error.response.status === 404) {
-    return <S.Description>해쉬태그가 없습니다.</S.Description>;
-  }
-
-  if (isError) {
-    return <S.Description>해쉬태그를 가져오는 중 오류 발생</S.Description>;
-  }
-
-  return (
-    <Fragment>
-      <S.HashTag>{hashtags.map((value) => `#${value.title}`).join(" ")}</S.HashTag>
     </Fragment>
   );
 };

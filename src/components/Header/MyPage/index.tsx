@@ -4,8 +4,7 @@ import React, { FC } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as S from "./style";
-
-const setting = require("assets/icons/MyPage/setting.png");
+import setting from "assets/icons/MyPage/setting.png";
 
 type Props = {
   stackNavigation: StackNavigationProp<MainStackParamList, "UserPage">;

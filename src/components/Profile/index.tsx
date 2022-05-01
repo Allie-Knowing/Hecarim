@@ -1,15 +1,14 @@
 import { useProfile } from "queries/Profile";
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import * as S from "./style";
+import defaultProfile from "assets/profile.png";
 
 type Props = {
   userId: number;
 };
 
-const defaultProfile = require("assets/profile.png");
-
 const Profile: FC<Props> = ({ userId }) => {
-  const { data, isLoading, isError, error } = useProfile(userId);
+  const { data, isLoading, error } = useProfile(userId);
 
   return (
     <>
@@ -17,20 +16,14 @@ const Profile: FC<Props> = ({ userId }) => {
         {data && (
           <>
             <S.ProfileImage
-              source={
-                data.data.data.profile
-                  ? { uri: data.data.data.profile }
-                  : defaultProfile
-              }
+              source={data.data.data.profile ? { uri: data.data.data.profile } : defaultProfile}
             />
             <S.ProfileContent>
               <S.NameContainer>
                 <S.Nickname>{data.data.data.name}</S.Nickname>
                 <S.Email>{data.data.data.email}</S.Email>
               </S.NameContainer>
-              <S.Description>
-                영상 질문 {data.data.data.video_cnt}개
-              </S.Description>
+              <S.Description>영상 질문 {data.data.data.video_cnt}개</S.Description>
             </S.ProfileContent>
           </>
         )}

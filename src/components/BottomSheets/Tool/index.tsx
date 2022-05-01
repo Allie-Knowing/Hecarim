@@ -23,12 +23,8 @@ export interface ToolItem {
 const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
   const { bottom: bottomPad } = useSafeAreaInsets();
   const themeContext = useThemeContext();
-  const {
-    animatedSnapPoints,
-    animatedContentHeight,
-    animatedHandleHeight,
-    handleContentLayout,
-  } = useBottomSheetDynamicSnapPoints(["CONTENT_HEIGHT"]);
+  const { animatedSnapPoints, animatedContentHeight, animatedHandleHeight, handleContentLayout } =
+    useBottomSheetDynamicSnapPoints(["CONTENT_HEIGHT"]);
 
   const renderBackdrop = useCallback(
     (props) => (
@@ -65,6 +61,7 @@ const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
         <S.Container>
           {items.map((value, index) => (
             <S.Button
+              key={value.text}
               style={{ borderTopWidth: index === 0 ? 0 : 1 }}
               onPress={value.onPress}
               underlayColor={themeContext.colors.grayscale.scale30}
@@ -79,5 +76,7 @@ const Tool = forwardRef<BottomSheetModal, PropsType>(({ items }, ref) => {
     </BottomSheetModal>
   );
 });
+
+Tool.displayName = "Tool";
 
 export default Tool;

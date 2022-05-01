@@ -1,6 +1,4 @@
-import { StackNavigationProp } from "@react-navigation/stack";
 import { ProfileQuestion } from "api/Profile";
-import { MainStackParamList } from "hooks/useMainStackNavigation";
 import React, { FC } from "react";
 import { Dimensions, TouchableOpacity } from "react-native";
 import * as S from "./style";

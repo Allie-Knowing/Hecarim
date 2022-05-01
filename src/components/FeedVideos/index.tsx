@@ -40,7 +40,7 @@ const FeedVideos: FC<PropsType> = ({
     if (dataList.length > 0) {
       setCurrentQuestionId(dataList[page].id);
     }
-  }, [page, dataList]);
+  }, [page, dataList, setCurrentQuestionId]);
 
   return (
     <S.Container

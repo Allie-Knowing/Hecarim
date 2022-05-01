@@ -1,9 +1,11 @@
 import React, { FC, useCallback } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import * as S from "./style";
 import themeContext from "hooks/useThemeContext";
 import { useSearchMutation } from "queries/Search";
+import Magnify from "../../../../assets/icons/Search/Vector.png";
+import ResetText from "../../../../assets/icons/Search/Reset_text.png";
 
 interface PropsType {
   topPad: number;
@@ -14,9 +16,6 @@ interface PropsType {
 }
 
 const { width } = Dimensions.get("screen");
-
-const Magnify = require("../../../../assets/icons/Search/Vector.png");
-const ResetText = require("../../../../assets/icons/Search/Reset_text.png");
 
 const InputNavigation: FC<PropsType> = ({
   topPad,
@@ -33,10 +32,13 @@ const InputNavigation: FC<PropsType> = ({
     setInputValue("");
   };
 
-  const InputHandler = useCallback((e) => {
-    const { text } = e.nativeEvent;
-    setInputValue(text);
-  }, []);
+  const InputHandler = useCallback(
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      const { text } = e.nativeEvent;
+      setInputValue(text);
+    },
+    [setInputValue]
+  );
 
   const SubmitHandler = () => {
     searchMutation.data?.data.data.map((result) => {
@@ -57,7 +59,6 @@ const InputNavigation: FC<PropsType> = ({
           topPad={topPad}
           defaultValue={inputValue || title}
           onChange={InputHandler}
-          // onFocus={() => navigation.navigate("Login")}
           onSubmitEditing={SubmitHandler}
           placeholder="제목을 입력해주세요..."
           placeholderTextColor={theme.colors.grayscale.scale50}
