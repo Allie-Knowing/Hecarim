@@ -55,7 +55,7 @@ const ResultNavigation: FC<PropsType> = ({ inputValue, setInputValue, setCheckVa
 
       return setCheckValue(false);
     }
-  }, [inputValue, Search, setCheckValue]);
+  }, [inputValue]);
 
   return (
     <>
