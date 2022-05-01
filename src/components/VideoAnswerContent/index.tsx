@@ -31,6 +31,7 @@ import More from "../../assets/icons/more.png";
 import Play from "../../assets/play.png";
 import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
+import useBlock from "hooks/useBlock";
 
 const { height } = Dimensions.get("screen");
 
@@ -74,6 +75,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const { remove, adoption } = useVideoAnswerMutation();
   const { data, isLoading, refetch } = useVideoAnswerDetail(id);
   const navigation = useMainStackNavigation();
+  const { onBlockPress } = useBlock(id);
 
   const isLike = useMemo(
     () => data?.data.data.is_like || is_like,
@@ -180,38 +182,51 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   }, [dismissAll, showAlert, closeAlert, onAdoptionAccpet]);
 
   const items: ToolItem[] = useMemo(() => {
-    const li = is_mine
-      ? [
-          {
-            color: theme.colors.red.default,
-            onPress: onDeletePress,
-            text: "삭제하기",
-          },
-        ]
-      : [
-          {
-            color: theme.colors.red.default,
-            onPress: () => {
-              reportSheetRef.current.present();
-            },
-            text: "신고하기",
-          },
-        ];
-    if (isQuestionMine && !is_mine && !isQuestionAdoption) {
-      li.push({
-        color: theme.colors.primary.default,
-        onPress: onAdoption,
-        text: "채택하기",
+    const item = [];
+
+    if (is_mine) {
+      item.push({
+        color: theme.colors.red.default,
+        onPress: onDeletePress,
+        text: "삭제하기",
       });
+    } else {
+      item.push(
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            reportSheetRef.current.present();
+          },
+          text: "신고하기",
+        },
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            dismissAll();
+            onBlockPress();
+          },
+          text: "차단하기",
+        }
+      );
+
+      if (isQuestionMine && !isQuestionAdoption) {
+        item.push({
+          color: theme.colors.primary.default,
+          onPress: onAdoption,
+          text: "채택하기",
+        });
+      }
     }
-    return li;
+
+    return item;
   }, [
     is_mine,
-    theme.colors.red.default,
-    theme.colors.primary.default,
+    theme,
     onDeletePress,
     isQuestionMine,
     isQuestionAdoption,
+    dismissAll,
+    onBlockPress,
     onAdoption,
   ]);
 

@@ -6,5 +6,5 @@ export const reportVideo = async (videoId: number, description: string) => {
 };
 
 export const blockVideo = async (videoId: number) => {
-  return await instance.post(uri.blockVideo, { videoId });
+  return await instance.post(`${uri.blockVideo}/${videoId}`);
 };

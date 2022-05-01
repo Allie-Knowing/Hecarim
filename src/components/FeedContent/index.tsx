@@ -36,6 +36,7 @@ import Play from "../../assets/play.png";
 import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
 import HashTag from "components/HashTag";
+import useBlock from "hooks/useBlock";
 
 const { height } = Dimensions.get("screen");
 
@@ -78,6 +79,7 @@ const FeedContent: FC<Question & PropsType> = ({
   const { showAlert, closeAlert } = useAlert();
   const { report } = useVideoMutation(id);
   const { dismissAll } = useBottomSheetModal();
+  const { onBlockPress } = useBlock(id);
 
   const isLike = useMemo(
     () => data?.data.data.is_like || is_like,
@@ -159,27 +161,36 @@ const FeedContent: FC<Question & PropsType> = ({
     });
   }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
 
-  const items: ToolItem[] = useMemo(
-    () =>
-      is_mine
-        ? [
-            {
-              color: theme.colors.red.default,
-              onPress: onDeletePress,
-              text: "삭제하기",
-            },
-          ]
-        : [
-            {
-              color: theme.colors.red.default,
-              onPress: () => {
-                reportSheetRef.current.present();
-              },
-              text: "신고하기",
-            },
-          ],
-    [is_mine, theme.colors.red.default, onDeletePress]
-  );
+  const items: ToolItem[] = useMemo(() => {
+    const item: ToolItem[] = [];
+    if (is_mine) {
+      item.push({
+        color: theme.colors.red.default,
+        onPress: onDeletePress,
+        text: "삭제하기",
+      });
+    } else {
+      item.push(
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            reportSheetRef.current.present();
+          },
+          text: "신고하기",
+        },
+        {
+          text: "차단하기",
+          color: theme.colors.red.default,
+          onPress: () => {
+            dismissAll();
+            onBlockPress();
+          },
+        }
+      );
+    }
+
+    return item;
+  }, [is_mine, theme.colors.red.default, onDeletePress, dismissAll, onBlockPress]);
 
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
   const [isLoad, setIsLoad] = useState<boolean>(false);
