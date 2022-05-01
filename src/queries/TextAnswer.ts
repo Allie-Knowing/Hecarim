@@ -14,9 +14,10 @@ export const useTextAnswerList = (questionId: number, size: number, enabled: boo
   return useInfiniteQuery(
     key,
     async ({ pageParam = 1 }) => {
-      const response = await getTextAnswerList(questionId, pageParam, size);
+      const page = Number(pageParam);
+      const response = await getTextAnswerList(questionId, page, size);
 
-      return { page: pageParam, data: response.data.data };
+      return { page, data: response.data.data };
     },
     {
       enabled: enabled,

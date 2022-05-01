@@ -4,26 +4,18 @@ import {
   getQuestionHashtag,
   getQuestionList,
   getStackQuestionList,
-  Question,
-  QuestionDetailResponse,
 } from "api/Question";
-import { AxiosResponse } from "axios";
 import queryKeys from "constant/queryKeys";
-import { useCallback } from "react";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "react-query";
 
 const useQuestionList = (size: number) =>
   useInfiniteQuery(
     [queryKeys.question],
     async ({ pageParam = 1 }) => {
-      const response = await getQuestionList(pageParam, size);
+      const page = Number(pageParam);
+      const response = await getQuestionList(page, size);
 
-      return { page: pageParam, data: response.data.data };
+      return { page: page, data: response.data.data };
     },
     {
       keepPreviousData: true,
@@ -32,11 +24,8 @@ const useQuestionList = (size: number) =>
   );
 
 const useStackQuestionList = (id: number[]) => {
-  return useQuery(
-    [queryKeys.stackQuestion, id],
-    () => getStackQuestionList(id)
-  );
-}
+  return useQuery([queryKeys.stackQuestion, id], () => getStackQuestionList(id));
+};
 
 const useQuestionDetail = (videoId: number) => {
   return useQuery(
@@ -49,13 +38,8 @@ const useQuestionDetail = (videoId: number) => {
 };
 
 const useQuestionHashtag = (videoId: number) =>
-  useQuery(
-    [
-      queryKeys.question,
-      queryKeys.questionId(videoId),
-      queryKeys.questionHashtag,
-    ],
-    () => getQuestionHashtag(videoId)
+  useQuery([queryKeys.question, queryKeys.questionId(videoId), queryKeys.questionHashtag], () =>
+    getQuestionHashtag(videoId)
   );
 
 const useQuestionMutation = () => {
