@@ -1,10 +1,10 @@
 import { useMutation } from "react-query";
-import { reportVideo } from "../api/Video";
+import { blockVideo, reportVideo } from "../api/Video";
 
 export const useVideoMutation = (videoId: number) => {
-  const report = useMutation((description: string) =>
-    reportVideo(videoId, description)
-  );
+  const report = useMutation((description: string) => reportVideo(videoId, description));
 
-  return { report };
+  const block = useMutation(() => blockVideo(videoId));
+
+  return { report, block };
 };
