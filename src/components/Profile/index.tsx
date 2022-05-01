@@ -9,7 +9,7 @@ type Props = {
 const defaultProfile = require("assets/profile.png");
 
 const Profile: FC<Props> = ({ userId }) => {
-  const { data, isLoading, isError, error } = useProfile(userId);
+  const { data, isLoading, error } = useProfile(userId);
 
   return (
     <>
