@@ -59,6 +59,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isQuestionMine,
   is_like,
   isQuestionAdoption,
+  isNextPage,
 }) => {
   const isStack = useContext(isStackContext);
   const [, setIsStop] = useState<boolean>(false);
@@ -250,7 +251,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   }, [isCurrentPage]);
 
   const load = useCallback(async () => {
-    if (isCurrentPage) {
+    if (isCurrentPage || isNextPage) {
       const status = await videoRef.current.getStatusAsync();
 
       if (!status.isLoaded && !isLoad) {
@@ -258,7 +259,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
         await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
       }
     }
-  }, [isCurrentPage, video_url, isLoad]);
+  }, [isCurrentPage, isNextPage, isLoad, video_url]);
 
   const changeVideoState = useCallback(async () => {
     const status = await videoRef.current.getStatusAsync();

@@ -62,6 +62,7 @@ const FeedContent: FC<Question & PropsType> = ({
   user_id,
   isCurrentPage,
   is_adoption,
+  isNextPage,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const theme = useContext(ThemeContext);
@@ -212,7 +213,7 @@ const FeedContent: FC<Question & PropsType> = ({
   }, [isCurrentPage]);
 
   const load = useCallback(async () => {
-    if (isCurrentPage) {
+    if (isCurrentPage || isNextPage) {
       const status = await videoRef.current.getStatusAsync();
 
       if (!status.isLoaded && !isLoad) {
@@ -220,7 +221,7 @@ const FeedContent: FC<Question & PropsType> = ({
         await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
       }
     }
-  }, [isCurrentPage, video_url, isLoad]);
+  }, [isCurrentPage, isNextPage, isLoad, video_url]);
 
   const changeVideoState = useCallback(async () => {
     const status = await videoRef.current.getStatusAsync();
