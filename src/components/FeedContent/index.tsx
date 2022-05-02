@@ -217,7 +217,7 @@ const FeedContent: FC<Question & PropsType> = ({
 
       if (!status.isLoaded && !isLoad) {
         setIsLoad(true);
-        await videoRef.current.loadAsync({ uri: video_url });
+        await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
       }
     }
   }, [isCurrentPage, video_url, isLoad]);
