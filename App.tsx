@@ -26,8 +26,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CameraComponent from "components/Question/Camera";
 import isStackContext from "./src/context/IsStackContext";
 import CameraProvider from "context/CameraContext";
+import IsUploadingProvider, {
+  IsUploadingContext,
+} from "context/IsUploadingContext";
+import UploadingStatusProvider from "context/UploadingStatusContext";
 import CameraDetail from "components/Question/CameraDetail";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
@@ -39,6 +43,7 @@ import useAlert from "hooks/useAlert";
 import { Audio } from "expo-av";
 import Interests from "screens/Interests";
 import ProfileEditPage from "screens/ProfileEdit/ProfileEditPage";
+import UploadingModal from "components/Question/UploadingModal";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -94,17 +99,30 @@ export default function App() {
           <SafeAreaProvider>
             <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
               <ThemeProvider theme={theme}>
-                <BottomSheetModalProvider>
-                  <AlretProvider>
-                    <NavigationContainer>
-                      <Host>
-                        <CameraProvider>
-                          <MainNavigationScreen />
-                        </CameraProvider>
-                      </Host>
-                    </NavigationContainer>
-                  </AlretProvider>
-                </BottomSheetModalProvider>
+                <IsUploadingProvider>
+                  <UploadingStatusProvider>
+                    <BottomSheetModalProvider>
+                      <AlretProvider>
+                        <NavigationContainer>
+                          <Host>
+                            <CameraProvider>
+                              <IsUploadingContext.Consumer>
+                                {(isUploading) =>
+                                  isUploading.isUploading ? (
+                                    <UploadingModal />
+                                  ) : (
+                                    <></>
+                                  )
+                                }
+                              </IsUploadingContext.Consumer>
+                              <MainNavigationScreen />
+                            </CameraProvider>
+                          </Host>
+                        </NavigationContainer>
+                      </AlretProvider>
+                    </BottomSheetModalProvider>
+                  </UploadingStatusProvider>
+                </IsUploadingProvider>
               </ThemeProvider>
             </SafeAreaView>
           </SafeAreaProvider>
