@@ -10,7 +10,7 @@ export const IsUploadingContext = createContext<uploadingContext>({
 });
 
 const IsUploadingProvider: FC = ({ children }) => {
-  const [isUploading, setIsUploading] = useState<boolean>();
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   return (
     <IsUploadingContext.Provider value={{ isUploading, setIsUploading }}>
