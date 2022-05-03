@@ -10,3 +10,8 @@ export const Title = styled.Text`
   font: ${({ theme }) => theme.fonts.subtitle2};
   color: ${({ theme }) => theme.colors.grayscale.scale100};
 `;
+
+export const IQHistoryList = styled.FlatList`
+  margin-top: 30px;
+  height: 300px;
+`;
