@@ -29,9 +29,11 @@ import CameraProvider from "context/CameraContext";
 import IsUploadingProvider, {
   IsUploadingContext,
 } from "context/IsUploadingContext";
-import UploadingStatusProvider from "context/UploadingStatusContext";
+import UploadingStatusProvider, {
+  UploadingStatusContext,
+} from "context/UploadingStatusContext";
 import CameraDetail from "components/Question/CameraDetail";
-import { useCallback, useEffect, useState, useContext } from "react";
+import { useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import isLoginContext from "context/IsLoginContext";
@@ -109,7 +111,13 @@ export default function App() {
                               <IsUploadingContext.Consumer>
                                 {(isUploading) =>
                                   isUploading.isUploading ? (
-                                    <UploadingModal />
+                                    <UploadingStatusContext.Consumer>
+                                      {(status) => (
+                                        <UploadingModal
+                                          status={status.status}
+                                        />
+                                      )}
+                                    </UploadingStatusContext.Consumer>
                                   ) : (
                                     <></>
                                   )
