@@ -47,7 +47,6 @@ export const TierImage = styled.Image`
 export const TireTitle = styled.Text`
   font: ${({ theme }) => theme.fonts.subtitle1};
   color: ${({ theme }) => theme.colors.grayscale.scale10};
-  margin-left: 20px;
 `;
 
 export const ShowTireButton = styled.TouchableOpacity`

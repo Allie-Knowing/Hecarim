@@ -20,6 +20,7 @@ enum uri {
   reportComment = "/admin/report/comment",
   appleSignin = "/apple",
   interests = "/interests",
+  wallet = "/wallet",
 }
 
 export default uri;
