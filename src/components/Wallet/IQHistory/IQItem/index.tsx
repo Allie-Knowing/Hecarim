@@ -1,27 +1,26 @@
-import React, { FC } from "react";
+import React, { FC, memo } from "react";
 import * as S from "./style";
 
 type Props = {
   item: {
-    title: string;
-    date: string;
-    point: number;
-    id: string;
+    amount: number;
+    created_at: string;
+    payment_type: string;
+    id: number;
   };
   index: number;
   separators: any;
 };
 
-const IQItem: FC<Props> = ({ item, index }) => {
-  const { title, date, point } = item;
-
+const IQItem: FC<Props> = ({ item }) => {
+  const { amount, created_at, payment_type } = item;
   return (
     <S.Container>
       <S.LeftContent>
-        <S.Description>{title}</S.Description>
-        <S.Date>{date}</S.Date>
+        <S.Description>{payment_type}</S.Description>
+        <S.Date>{created_at}</S.Date>
       </S.LeftContent>
-      <S.Point>{point > 0 ? `+${String(point)}` : String(point)} IQ</S.Point>
+      <S.Point>{amount > 0 ? `+${String(amount)}` : String(amount)} IQ</S.Point>
     </S.Container>
   );
 };

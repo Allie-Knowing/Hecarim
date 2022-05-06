@@ -1,5 +1,6 @@
-import { useWalletPoint } from "queries/Wallet";
-import React, { FC } from "react";
+import useAlert from "hooks/useAlert";
+import { useActivityScore, useWalletPoint } from "queries/Wallet";
+import React, { FC, useEffect } from "react";
 import { Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as S from "./style";
@@ -9,7 +10,25 @@ const TierImage = require("assets/tier.png");
 
 const WalletInfo: FC = () => {
   const { top: topPad } = useSafeAreaInsets();
-  const { data, isSuccess, isError, isLoading } = useWalletPoint();
+  const { data, isError, isLoading } = useWalletPoint();
+  const { data: activityData } = useActivityScore();
+  const { closeAlert, showAlert } = useAlert();
+
+  useEffect(() => {
+    if (isError) {
+      showAlert({
+        title: "정보를 불러오지 못했습니다.",
+        content: "잠시 후 시도해주세요.",
+        buttons: [
+          {
+            text: "확인",
+            color: "black",
+            onPress: (id) => closeAlert(id),
+          },
+        ],
+      });
+    }
+  }, [isError]);
 
   return (
     <>
@@ -49,7 +68,9 @@ const WalletInfo: FC = () => {
               <S.HoldingLine />
               <S.HoldingContent>
                 <S.HoldingTitle>오늘 활동점수</S.HoldingTitle>
-                <S.HoldingValue>12</S.HoldingValue>
+                <S.HoldingValue>
+                  {activityData ? activityData.action_point : "0"}
+                </S.HoldingValue>
               </S.HoldingContent>
             </S.HoldingContainer>
           </>
