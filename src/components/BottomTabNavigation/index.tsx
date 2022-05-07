@@ -2,7 +2,15 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import React, { FC, Fragment, memo, useCallback, useContext, useEffect, useMemo } from "react";
+import React, {
+  FC,
+  Fragment,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -19,6 +27,7 @@ import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useGetInterests } from "queries/Interests";
 import Wallet from "screens/Wallet";
+import Icon from "./Icon";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
