@@ -1,5 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import AppleButton from "components/Buttons/Login/AppleButton";
+import GoogleButton from "components/Buttons/Login/GoogleButton";
 import NaverButton from "components/Buttons/Login/NaverButton";
 import useMainStackNavigation, {
   MainStackParamList,
@@ -26,7 +27,7 @@ const Login: FC<Props> = ({ navigation }) => {
         <S.LoginBtnContainer>
           <S.LoginDescription>로그인 후 질문해보세요.</S.LoginDescription>
           <View>
-            {/* <GoogleButton {...navigation} /> */}
+            <GoogleButton {...navigation} />
             <NaverButton {...navigation} />
             <AppleButton {...navigation} />
           </View>
