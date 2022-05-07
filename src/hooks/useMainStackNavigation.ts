@@ -24,6 +24,7 @@ export type MainStackParamList = {
   Camera: { questionId?: number };
   CameraDetail: { questionId?: number };
   InterestsSetting: undefined;
+  Ask: undefined;
   ProfileEdit: undefined;
 };
 

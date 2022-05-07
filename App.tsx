@@ -6,15 +6,10 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
-import useMainStackNavigation, {
-  MainStackParamList,
-} from "hooks/useMainStackNavigation";
+import useMainStackNavigation, { MainStackParamList } from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import TermsOfService from "screens/Login/TermsModal/TermsOfService";
 import PrivacyPolicy from "screens/Login/TermsModal/PrivacyPolicy";
@@ -44,6 +39,7 @@ import RefreshError from "types/RefreshError";
 import useAlert from "hooks/useAlert";
 import { Audio } from "expo-av";
 import Interests from "screens/Interests";
+import Question from "components/Question";
 import ProfileEditPage from "screens/ProfileEdit/ProfileEditPage";
 import UploadingModal from "components/Question/UploadingModal";
 
@@ -58,10 +54,7 @@ if (__DEV__) {
   });
 }
 
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -79,9 +72,7 @@ export default function App() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const check = useCallback(async () => {
-    const accessToken = await localStorage.getItem<string>(
-      storageKeys.accessToken
-    );
+    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
 
     setIsLogin(accessToken !== null);
   }, []);
@@ -162,21 +153,13 @@ const MainNavigationScreen = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
-      <Root.Screen
-        name="Main"
-        component={BottomTabNavigation}
-        options={{ headerShown: false }}
-      />
+      <Root.Screen name="Main" component={BottomTabNavigation} options={{ headerShown: false }} />
       <Root.Screen
         name="StackedQuestionList"
         component={StackedQuestionList}
         options={{ headerShown: false }}
       />
-      <Root.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
+      <Root.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Root.Screen
         name="TermsOfService"
         component={TermsOfService}
@@ -187,16 +170,8 @@ const MainNavigationScreen = () => {
         component={PrivacyPolicy}
         options={{ headerShown: false }}
       />
-      <Root.Screen
-        name="Setting"
-        component={Setting}
-        options={{ title: "설정" }}
-      />
-      <Root.Screen
-        name="UserPage"
-        component={UserPage}
-        options={{ headerShown: false }}
-      />
+      <Root.Screen name="Setting" component={Setting} options={{ title: "설정" }} />
+      <Root.Screen name="UserPage" component={UserPage} options={{ headerShown: false }} />
       <Root.Screen
         name="SearchedQuestionsPage"
         component={SearchedQuestionsPage}
@@ -220,6 +195,7 @@ const MainNavigationScreen = () => {
         )}
         options={{ headerShown: false }}
       />
+      <Root.Screen name="Ask" component={Question} options={{ headerShown: false }} />
       <Root.Screen
         name="InterestsSetting"
         component={Interests}

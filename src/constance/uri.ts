@@ -21,6 +21,7 @@ enum uri {
   reportComment = "/admin/report/comment",
   appleSignin = "/apple",
   interests = "/interests",
+  wallet = "/wallet",
   nickname = "/nickname",
   profile = "/profile",
 }

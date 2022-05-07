@@ -255,17 +255,13 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     return (
       <S.QuestionWrapper>
         <SafeAreaView style={{ ...StyleSheet.absoluteFillObject }}>
-          {isAnswer ? (
-            <S.GoBackContainer
-              onPress={() => {
-                cameraNavigation.pop(1);
-              }}
-            >
-              <S.GoBackImage source={backImage} />
-            </S.GoBackContainer>
-          ) : (
-            <></>
-          )}
+          <S.GoBackContainer
+            onPress={() => {
+              cameraNavigation.pop(1);
+            }}
+          >
+            <S.GoBackImage source={backImage} />
+          </S.GoBackContainer>
           {isFocused && !isPickingVideo && (
             <Camera
               ref={(el) => setCameraRef(el)}

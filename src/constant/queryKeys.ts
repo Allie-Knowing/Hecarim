@@ -14,6 +14,9 @@ const queryKeys = {
   myId: "my_id",
   page: (page: number) => `page_${page}`,
   interests: "interests",
+  walletPoint: "wallet_point",
+  walletActivityScore: "wallet_activity_score",
+  IQHistory: "iq_history",
 } as const;
 
 export default queryKeys;
