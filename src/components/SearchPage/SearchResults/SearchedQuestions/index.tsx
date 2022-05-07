@@ -4,9 +4,7 @@ import axios from "axios";
 import { Dimensions, FlatList, ListRenderItem, View } from "react-native";
 import { searchTitle } from "constance/search";
 import { useSearchResults } from "queries/Search";
-import useMainStackNavigation, {
-  StackedQuestionListProps,
-} from "hooks/useMainStackNavigation";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 import SearchTopNavigation from "components/SearchPage/SearchTopNavigation";
 import Results from "./Results";
 import { useStackQuestionList } from "queries/Question";

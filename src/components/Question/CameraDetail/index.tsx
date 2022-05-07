@@ -13,9 +13,11 @@ import uniqueId from "constant/uniqueId";
 import theme from "theme/theme";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
+import { IsUploadingContext } from "context/IsUploadingContext";
 import isStackContext from "context/IsStackContext";
 import { useVideoUrlMutation } from "queries/useVideoUrl";
 import { useVideoDataMutation } from "queries/useVideoData";
+import backImage from "assets/icons/back-black.png";
 
 interface Props {
   route?: {
@@ -30,17 +32,19 @@ type screenProp = StackNavigationProp<CameraStackParamList, "CameraDetail">;
 const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   const { uri } = useContext(cameraContext);
   const isAnswer = useContext(isStackContext);
+  const { setIsUploading } = useContext(IsUploadingContext);
   const [borderBottomColor, setBorderBottomColor] = useState<string>(
     theme.colors.grayscale.scale30
   );
   const { top: TOP_PAD, bottom: BOTTOM_PAD } = useSafeAreaInsets();
   const navigation = useNavigation<screenProp>();
-  const backImage = require("../../../assets/icons/back-black.png");
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
-  const [timer, setTimer] = useState<number | NodeJS.Timeout | any>(0);
+  const [timer, setTimer] = useState<NodeJS.Timeout>(
+    setTimeout(() => false, 0)
+  );
 
   const { videoUrl } = useVideoUrlMutation();
   const { postQuestion, postAnswer } = useVideoDataMutation();
@@ -65,6 +69,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       alert("제목을 입력해주세요");
       return;
     }
+    setIsUploading(true);
 
     const formData = createFormData(uri);
     const hashTagArr = hashTag
@@ -77,6 +82,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       });
 
     try {
+      isAnswer ? navigation.pop(2) : navigation.pop(1);
       const videoUrlResponse = await videoUrl.mutateAsync({
         type: isAnswer ? "answer" : "question",
         file: formData,
@@ -96,10 +102,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             hash_tag: hashTagArr,
             video_url: videoUrlResponse.data.data.url,
           });
+      setIsUploading(false);
     } catch (err) {
       console.log(err);
     }
-    isAnswer ? navigation.pop(2) : navigation.pop(1);
   };
 
   //이미지 캐싱 함수

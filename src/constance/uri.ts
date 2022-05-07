@@ -17,10 +17,13 @@ enum uri {
   getProfileQuestionList = "/user/question/video/",
   signin = "/auth?provider=",
   reportVideo = "/admin/report/video",
+  blockVideo = "/user/block",
   reportComment = "/admin/report/comment",
   appleSignin = "/apple",
   interests = "/interests",
   wallet = "/wallet",
+  nickname = "/nickname",
+  profile = "/profile",
 }
 
 export default uri;

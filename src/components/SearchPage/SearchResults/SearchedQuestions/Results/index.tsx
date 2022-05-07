@@ -4,8 +4,6 @@ import { Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as S from "./style";
 
-const questionImage = require("../../../../../assets/feed_test.jpg");
-
 const { width } = Dimensions.get("screen");
 
 interface PropsType {

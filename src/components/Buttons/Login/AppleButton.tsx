@@ -20,7 +20,7 @@ const AppleButton: FC<Props> = (navigation) => {
     if (isSuccess) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigation]);
 
   useEffect(() => {
     if (isError && axios.isAxiosError(error) && error.response.status === 409) {
@@ -36,7 +36,7 @@ const AppleButton: FC<Props> = (navigation) => {
         ],
       });
     }
-  }, [isError]);
+  }, [closeAlert, error, isError, showAlert]);
 
   return (
     <S.AppleWrapper width={width}>

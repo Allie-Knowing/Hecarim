@@ -1,14 +1,8 @@
-import {
-  Dimensions,
-  Image,
-  NativeScrollEvent,
-  StyleSheet,
-  ViewStyle,
-} from "react-native";
+import { Dimensions, Image, NativeScrollEvent, StyleSheet, ViewStyle } from "react-native";
 import * as S from "./styles";
 import FeedVideos from "../../components/FeedVideos";
 import VideoAnswer from "components/VideoAnswer";
-import React, { FC, useContext, useEffect } from "react";
+import React, { FC, useContext, useMemo } from "react";
 import { useState } from "react";
 import Animated, {
   interpolate,
@@ -25,6 +19,7 @@ import { useCallback } from "react";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
+import BackIcon from "../../assets/icons/back.png";
 
 const { height, width } = Dimensions.get("screen");
 const navGap = 24;
@@ -32,8 +27,6 @@ interface WidthsType {
   question: number;
   answer: number;
 }
-
-const BackIcon = require("../../assets/icons/back.png");
 
 const styles = StyleSheet.create({
   outer: {
@@ -52,11 +45,7 @@ interface PropsType {
   onQuestionEndReached: () => void;
 }
 
-const QuestionList: FC<PropsType> = ({
-  questionList,
-  index,
-  onQuestionEndReached,
-}) => {
+const QuestionList: FC<PropsType> = ({ questionList, index, onQuestionEndReached }) => {
   const [widths, setWidths] = useState<WidthsType>({ question: 0, answer: 0 });
   const pageOffset = useSharedValue<number>(0);
   const { top: topPad } = useSafeAreaInsets();
@@ -67,8 +56,9 @@ const QuestionList: FC<PropsType> = ({
   const [currentQuestionId, setCurrentQuestionId] = useState<number>(
     questionList.length > 0 ? questionList[0].id : -1
   );
-  const [isQuestionAdoption, setIsQuestionAdoption] = useState<number>(
-    questionList.length > 0 ? questionList[0].is_adoption : 1
+  const isQuestionAdoption = useMemo<number>(
+    () => (questionList.length > 0 ? questionList[0].is_adoption : 1),
+    [questionList]
   );
 
   const questionNavStyle = useAnimatedStyle(() => ({
@@ -97,10 +87,13 @@ const QuestionList: FC<PropsType> = ({
     ],
   }));
 
-  const onScroll = useCallback((event: NativeScrollEvent) => {
-    pageOffset.value = event.contentOffset.x / width;
-    setPage(Math.round(event.contentOffset.x / width));
-  }, []);
+  const onScroll = useCallback(
+    (event: NativeScrollEvent) => {
+      pageOffset.value = event.contentOffset.x / width;
+      setPage(Math.round(event.contentOffset.x / width));
+    },
+    [pageOffset]
+  );
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -150,8 +143,7 @@ const QuestionList: FC<PropsType> = ({
             isCurrentPage={page === 1}
             questionId={currentQuestionId}
             isQuestionMine={
-              questionList.find((value) => value.id === currentQuestionId)
-                ?.is_mine || false
+              questionList.find((value) => value.id === currentQuestionId)?.is_mine || false
             }
             isQuestionAdoption={isQuestionAdoption}
           />
@@ -159,11 +151,7 @@ const QuestionList: FC<PropsType> = ({
       </Animated.ScrollView>
       {isStack && (
         <S.BackButton onPress={() => navigation.pop()}>
-          <Image
-            source={BackIcon}
-            style={{ height: 24, top: topPad + 20 }}
-            resizeMode="contain"
-          />
+          <Image source={BackIcon} style={{ height: 24, top: topPad + 20 }} resizeMode="contain" />
         </S.BackButton>
       )}
       <Animated.View
@@ -172,10 +160,7 @@ const QuestionList: FC<PropsType> = ({
       >
         <S.NavText>질문</S.NavText>
       </Animated.View>
-      <Animated.View
-        style={[NavStyle("answer"), answerNavStyle]}
-        onLayout={onLayout("answer")}
-      >
+      <Animated.View style={[NavStyle("answer"), answerNavStyle]} onLayout={onLayout("answer")}>
         <S.NavText>영상 답변</S.NavText>
       </Animated.View>
     </S.Wrapper>

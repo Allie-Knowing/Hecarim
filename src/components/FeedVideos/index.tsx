@@ -1,7 +1,7 @@
 import FeedContent from "../FeedContent";
 import * as S from "./styles";
 import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
-import { FC, useEffect, useState } from "react";
+import { FC, memo, useEffect, useState } from "react";
 import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
@@ -40,7 +40,7 @@ const FeedVideos: FC<PropsType> = ({
     if (dataList.length > 0) {
       setCurrentQuestionId(dataList[page].id);
     }
-  }, [page, dataList]);
+  }, [page, dataList, setCurrentQuestionId]);
 
   return (
     <S.Container
@@ -60,8 +60,9 @@ const FeedVideos: FC<PropsType> = ({
       renderItem={renderItem}
       onEndReached={onEndReached}
       initialScrollIndex={index}
+      initialNumToRender={2}
     />
   );
 };
 
-export default FeedVideos;
+export default memo(FeedVideos);

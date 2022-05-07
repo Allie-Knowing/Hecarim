@@ -11,6 +11,11 @@ import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
 import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
+import recordingImg from "../../../assets/icons/recording.png";
+import recordImg from "../../../assets/icons/record.png";
+import videoImg from "../../../assets/icons/video.png";
+import backImage from "../../../assets/icons/back-white.png";
+import rotateImg from "../../../assets/icons/rotate.png";
 
 interface Props {
   route?: {
@@ -39,12 +44,6 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const mainNavigation = useMainStackNavigation();
 
   const isFocused = useIsFocused();
-
-  const rotateImg = require("../../../assets/icons/rotate.png");
-  const recordingImg = require("../../../assets/icons/recording.png");
-  const recordImg = require("../../../assets/icons/record.png");
-  const videoImg = require("../../../assets/icons/video.png");
-  const backImage = require("../../../assets/icons/back-white.png");
 
   useEffect(() => {
     (async () => {
@@ -131,7 +130,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       arrayOfAbs.push(Math.abs(SCREEN_RATIO - ratioObjectArray[i].realRatio));
     }
 
-    const minRatio = Math.min.apply(Math, arrayOfAbs);
+    const minRatio = Math.min(...arrayOfAbs);
     const minRatioIndex = arrayOfAbs.findIndex((value) => value === minRatio);
 
     return availableRatioArray[minRatioIndex];

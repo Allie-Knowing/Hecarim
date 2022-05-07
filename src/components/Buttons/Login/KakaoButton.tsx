@@ -2,8 +2,8 @@ import LoginButtonLayout from "layout/loginButton";
 import React from "react";
 import * as S from "./styles";
 import { Text } from "react-native";
+import kakao from "../../../assets/icons/login/kakao.png";
 
-const kakao = require("../../../assets/icons/login/kakao.png");
 
 const NaverButton = () => {
   return (

@@ -33,7 +33,7 @@ const InterestsContent: FC<Props> = (navigation) => {
     if (isSuccess) {
       navigation.reset({ routes: [{ name: "Main" }] });
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigation]);
 
   useEffect(() => {
     if (isError) {
@@ -49,7 +49,7 @@ const InterestsContent: FC<Props> = (navigation) => {
         ],
       });
     }
-  }, [isError]);
+  }, [closeAlert, isError, showAlert]);
 
   const checkInterestsItem = (index: number) => {
     if (interestsCount >= 3 && !interestsArr[index]) {
@@ -60,7 +60,7 @@ const InterestsContent: FC<Props> = (navigation) => {
       ? setInterestsCount(interestsCount - 1)
       : setInterestsCount(interestsCount + 1);
 
-    let copyArr = [...interestsArr];
+    const copyArr = [...interestsArr];
     copyArr[index] = !interestsArr[index];
     setInterestsArr(copyArr);
   };

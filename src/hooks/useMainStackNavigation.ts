@@ -25,6 +25,7 @@ export type MainStackParamList = {
   CameraDetail: { questionId?: number };
   InterestsSetting: undefined;
   Ask: undefined;
+  ProfileEdit: undefined;
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;

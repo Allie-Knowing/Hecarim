@@ -13,11 +13,7 @@ interface PropsType {
 
 const { height } = Dimensions.get("screen");
 
-const ResultNavigation: FC<PropsType> = ({
-  inputValue,
-  setInputValue,
-  setCheckValue,
-}) => {
+const ResultNavigation: FC<PropsType> = ({ inputValue, setInputValue, setCheckValue }) => {
   const navigation = useMainStackNavigation();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const searchMutation = useSearchMutation();
@@ -26,7 +22,7 @@ const ResultNavigation: FC<PropsType> = ({
     const response = await searchMutation.mutateAsync(inputValue);
 
     return response;
-  }, [inputValue]);
+  }, [inputValue, searchMutation]);
 
   const pressHandler = useCallback(
     (title: string) => {
@@ -39,7 +35,7 @@ const ResultNavigation: FC<PropsType> = ({
         }
       });
     },
-    [searchMutation]
+    [navigation, searchMutation.data?.data.data, setInputValue]
   );
 
   React.useEffect(() => {
@@ -59,7 +55,7 @@ const ResultNavigation: FC<PropsType> = ({
 
       return setCheckValue(false);
     }
-  }, [inputValue, Search]);
+  }, [inputValue]);
 
   return (
     <>
@@ -69,24 +65,17 @@ const ResultNavigation: FC<PropsType> = ({
             {searchMutation.data?.data.data.length > 0 ? (
               <S.ResultViewTitle>추천 검색어</S.ResultViewTitle>
             ) : null}
-            {searchMutation.data?.data.data &&
-            searchMutation.data?.data.data.length > 0
+            {searchMutation.data?.data.data && searchMutation.data?.data.data.length > 0
               ? searchMutation.data?.data.data.map((value) => {
                   return (
-                    <InputValueMapping
-                      key={value.id}
-                      value={value}
-                      pressHandler={pressHandler}
-                    />
+                    <InputValueMapping key={value.id} value={value} pressHandler={pressHandler} />
                   );
                 })
               : null}
           </S.ValueMappingContainer>
         ) : (
           <S.DefaultContainerView height={height / 1.44}>
-            <S.DefaultContainer>
-              검색을 통해 질문을 찾아보세요.
-            </S.DefaultContainer>
+            <S.DefaultContainer>검색을 통해 질문을 찾아보세요.</S.DefaultContainer>
           </S.DefaultContainerView>
         )}
       </S.Wrapper>

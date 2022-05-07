@@ -16,7 +16,9 @@ export const refresh = async (error: AxiosError) => {
   }
   try {
     //리프레시 로직
-    const refreshToken = await localStorage.getItem<string>(storageKeys.refreshToken);
+    const refreshToken = await localStorage.getItem<string>(
+      storageKeys.refreshToken
+    );
 
     if (refreshToken === null) {
       throw new RefreshError();
@@ -46,7 +48,9 @@ export const refresh = async (error: AxiosError) => {
 
     //axios 헤더 변경
     error.config.headers["Authorization"] = `Bearer ${access_token}`;
-    instance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+    instance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${access_token}`;
 
     //인증 오류난 요청으로 다시 요청 보내기
     return axios(error.config);
@@ -83,9 +87,9 @@ instance.interceptors.request.use(
     instance.defaults.headers.common[
       "Authorization"
     ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
-    config.headers.common["Authorization"] = `Bearer ${await localStorage.getItem<string>(
-      storageKeys.accessToken
-    )}`;
+    config.headers.common[
+      "Authorization"
+    ] = `Bearer ${await localStorage.getItem<string>(storageKeys.accessToken)}`;
 
     return config;
   },

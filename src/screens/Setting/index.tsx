@@ -47,25 +47,20 @@ const Setting: FC<Props> = ({ navigation }) => {
     navigation.push("InterestsSetting");
   };
 
+  const profileEdit = () => {
+    navigation.push("ProfileEdit");
+  };
+
   const BUTTON_MAP = [
     {
       title: "프로필 수정",
       isRed: false,
-      onPressFunction: () => {
-        return;
-      },
+      onPressFunction: profileEdit,
     },
     {
       title: "관심분야 수정",
       isRed: false,
       onPressFunction: interestsSetting,
-    },
-    {
-      title: "알림 설정",
-      isRed: false,
-      onPressFunction: () => {
-        return;
-      },
     },
     {
       title: "문의하기",

@@ -1,6 +1,7 @@
 import React, {
   FC,
   Fragment,
+  memo,
   useCallback,
   useContext,
   useEffect,
@@ -13,7 +14,7 @@ import * as S from "./styles";
 import formattedNumber from "constant/formattedNumber";
 import isStackContext from "context/IsStackContext";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
-import { Audio, Video } from "expo-av";
+import { AVPlaybackStatus, Video } from "expo-av";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { useTheme } from "styled-components/native";
 import { Portal } from "react-native-portalize";
@@ -25,12 +26,12 @@ import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
 import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
-import { Player } from "components/Player";
-
-const Heart = require("../../assets/icons/heart.png");
-const More = require("../../assets/icons/more.png");
-const Play = require("../../assets/play.png");
-const defaultProfile = require("assets/profile.png");
+import Heart from "../../assets/icons/heart.png";
+import More from "../../assets/icons/more.png";
+import Play from "../../assets/play.png";
+import defaultProfile from "assets/profile.png";
+import ReportModal from "components/BottomSheets/ReportModal";
+import useBlock from "hooks/useBlock";
 
 const { height } = Dimensions.get("screen");
 
@@ -61,15 +62,13 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   isNextPage,
 }) => {
   const isStack = useContext(isStackContext);
-  const [isStop, setIsStop] = useState<boolean>(false);
+  const [, setIsStop] = useState<boolean>(false);
   const tabBarHeight = isStack ? 30 : 80;
   const { like, unLike } = useLikeMutation(id);
   const videoRef = useRef<Video>(null);
   const theme = useTheme();
   const toolSheetRef = useRef<BottomSheetModal>(null);
   const reportSheetRef = useRef<BottomSheetModal>(null);
-  const confirmSheetRef = useRef<BottomSheetModal>(null);
-  const descriptionRef = useRef<string>("");
   const { dismissAll } = useBottomSheetModal();
   const { report } = useVideoMutation(id);
   const { showAlert, closeAlert } = useAlert();
@@ -77,16 +76,15 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const { remove, adoption } = useVideoAnswerMutation();
   const { data, isLoading, refetch } = useVideoAnswerDetail(id);
   const navigation = useMainStackNavigation();
+  const { onBlockPress } = useBlock(id);
 
-  const isLike = useMemo(() => data?.data.data.is_like || is_like, [data]);
-  const likeCnt = useMemo(() => data?.data.data.like_cnt || like_cnt, [data]);
-
-  const onReportPress = useCallback(
-    (description: string) => () => {
-      descriptionRef.current = description;
-      confirmSheetRef.current.present();
-    },
-    []
+  const isLike = useMemo(
+    () => data?.data.data.is_like || is_like,
+    [data?.data.data.is_like, is_like]
+  );
+  const likeCnt = useMemo(
+    () => data?.data.data.like_cnt || like_cnt,
+    [data?.data.data.like_cnt, like_cnt]
   );
 
   const isLikeLoading = useMemo(
@@ -106,43 +104,14 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     }
 
     await refetch();
-  }, [isLikeLoading, isLike, like, unLike]);
+  }, [isLikeLoading, isLike, refetch, like, unLike]);
 
-  const onPageChange = useCallback(async () => {
-    if (isNextPage || isCurrentPage) {
-      const status = await videoRef.current.getStatusAsync();
-      if (!status.isLoaded) {
-        await videoRef.current.loadAsync({ uri: video_url });
-      }
-    }
-    if (isCurrentPage) {
-      await videoRef.current.setIsLoopingAsync(true);
-      await videoRef.current.playFromPositionAsync(0);
-      setIsStop(false);
-    } else {
-      await videoRef.current.stopAsync();
-      await videoRef.current.setIsLoopingAsync(true);
-      setIsStop(false);
-    }
-  }, [isCurrentPage, isNextPage]);
-
-  const onSubmitPress = useCallback(async () => {
-    dismissAll();
-
-    await report.mutateAsync(descriptionRef.current);
-
-    showAlert({
-      title: "신고 제출 완료",
-      content: `신고가 제출되었습니다.\n사유: '${descriptionRef.current}'`,
-      buttons: [
-        {
-          text: "확인",
-          color: "black",
-          onPress: (id) => closeAlert(id),
-        },
-      ],
-    });
-  }, [id, showAlert, dismissAll, closeAlert]);
+  const onReport = useCallback(
+    async (description: string) => {
+      await report.mutateAsync(description);
+    },
+    [report]
+  );
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -183,10 +152,6 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     });
   }, [remove, queryClient, id, closeAlert, showAlert, dismissAll]);
 
-  useEffect(() => {
-    onPageChange();
-  }, [onPageChange]);
-
   const onAdoptionAccpet = useCallback(
     async (alert: string) => {
       closeAlert(alert);
@@ -201,7 +166,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
       queryClient.invalidateQueries([queryKeys.answer]);
     },
-    [closeAlert, adoption, id, queryClient]
+    [closeAlert, adoption, id, showAlert, queryClient]
   );
 
   const onAdoption = useCallback(() => {
@@ -218,94 +183,118 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   }, [dismissAll, showAlert, closeAlert, onAdoptionAccpet]);
 
   const items: ToolItem[] = useMemo(() => {
-    const li = is_mine
-      ? [
-          {
-            color: theme.colors.red.default,
-            onPress: onDeletePress,
-            text: "삭제하기",
+    const item = [];
+
+    if (is_mine) {
+      item.push({
+        color: theme.colors.red.default,
+        onPress: onDeletePress,
+        text: "삭제하기",
+      });
+    } else {
+      item.push(
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            reportSheetRef.current.present();
           },
-        ]
-      : [
-          {
-            color: theme.colors.red.default,
-            onPress: () => {
-              reportSheetRef.current.present();
-            },
-            text: "신고하기",
+          text: "신고하기",
+        },
+        {
+          color: theme.colors.red.default,
+          onPress: () => {
+            dismissAll();
+            onBlockPress();
           },
-        ];
-    if (isQuestionMine && !is_mine && !isQuestionAdoption) {
-      li.push({
-        color: theme.colors.primary.default,
-        onPress: onAdoption,
-        text: "채택하기",
+          text: "차단하기",
+        }
+      );
+
+      if (isQuestionMine && !isQuestionAdoption) {
+        item.push({
+          color: theme.colors.primary.default,
+          onPress: onAdoption,
+          text: "채택하기",
+        });
+      }
+    }
+
+    return item;
+  }, [
+    is_mine,
+    theme,
+    onDeletePress,
+    isQuestionMine,
+    isQuestionAdoption,
+    dismissAll,
+    onBlockPress,
+    onAdoption,
+  ]);
+
+  const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
+  const [isLoad, setIsLoad] = useState<boolean>(false);
+
+  const onPageChange = useCallback(async () => {
+    if (isCurrentPage) {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: true,
+        positionMillis: 0,
+        isLooping: true,
+      });
+    } else {
+      await videoRef.current.setStatusAsync({
+        shouldPlay: false,
+        positionMillis: 0,
+        isLooping: true,
       });
     }
-    return li;
-  }, [theme, onDeletePress, isQuestionMine, onAdoption]);
+  }, [isCurrentPage]);
 
-  const reportItems: ToolItem[] = useMemo(
-    () => [
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("스팸"),
-        text: "스팸",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("음란물 또는 불법촬영물"),
-        text: "음란물 또는 불법촬영물",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("괴롭힘 또는 따돌림"),
-        text: "괴롭힘 또는 따돌림",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("욕설 및 비방"),
-        text: "욕설 및 비방",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("명예회손 또는 저작권 침해"),
-        text: "명예회손 또는 저작권 침해",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: onReportPress("기타 사유"),
-        text: "기타 사유",
-      },
-    ],
-    [onReportPress, theme]
-  );
+  const load = useCallback(async () => {
+    if (isCurrentPage || isNextPage) {
+      const status = await videoRef.current.getStatusAsync();
 
-  const comfirmItems: ToolItem[] = useMemo(
-    () => [
-      {
-        color: theme.colors.red.default,
-        onPress: onSubmitPress,
-        text: "신고 제출하기",
-      },
-      {
-        color: theme.colors.grayscale.scale100,
-        onPress: () => dismissAll(),
-        text: "취소하기",
-      },
-    ],
-    [theme, onSubmitPress, dismissAll]
-  );
+      if (!status.isLoaded && !isLoad) {
+        setIsLoad(true);
+        await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
+      }
+    }
+  }, [isCurrentPage, isNextPage, isLoad, video_url]);
 
-  const stopVideo = () => {
-    isStop ? videoRef.current.playAsync() : videoRef.current.pauseAsync();
-    setIsStop(!isStop);
-  };
+  const changeVideoState = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && status.shouldPlay) {
+      await videoRef.current.pauseAsync();
+    } else if (status.isLoaded) {
+      await videoRef.current.playAsync();
+    }
+  }, []);
+
+  useEffect(() => {
+    load();
+    onPageChange();
+  }, [onPageChange, load]);
+
+  const onPlaybackStatusUpdate = useCallback((e: AVPlaybackStatus) => {
+    setVideoStatus(e);
+  }, []);
 
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={stopVideo} activeOpacity={1}>
-        <Player isStop={isStop} ref={videoRef} />
+      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+        {isLoad && videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
+          <S.VideoStateIcon source={Play} />
+        )}
+        <S.Video
+          onPlaybackStatusUpdate={onPlaybackStatusUpdate}
+          isLooping
+          resizeMode="cover"
+          ref={videoRef}
+          rate={1.0}
+          volume={1.0}
+          style={{ backgroundColor: theme.colors.grayscale.scale100 }}
+        />
         <S.Content style={{ paddingBottom: tabBarHeight + 30 }}>
           <S.InfoOuter>
             <S.InfoContainer>
@@ -380,11 +369,10 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       </S.Container>
       <Portal>
         <Tool ref={toolSheetRef} items={items} />
-        <Tool ref={reportSheetRef} items={reportItems} />
-        <Tool ref={confirmSheetRef} items={comfirmItems} />
+        <ReportModal ref={reportSheetRef} reportCallback={onReport} />
       </Portal>
     </Fragment>
   );
 };
 
-export default VideoAnswerContent;
+export default memo(VideoAnswerContent);

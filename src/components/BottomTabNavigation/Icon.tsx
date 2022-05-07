@@ -6,8 +6,9 @@ import { ScreenName } from ".";
 
 interface PropsType {
   focused: boolean;
-  color: string;
-  size: number;
+  icon: any;
+  routeName: string;
+  label: string;
 }
 
 const Icon =
