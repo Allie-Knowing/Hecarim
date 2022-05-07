@@ -1,8 +1,9 @@
 import useAlert from "hooks/useAlert";
 import { useActivityScore, useWalletPoint } from "queries/Wallet";
-import React, { FC, useEffect } from "react";
-import { Text } from "react-native";
+import React, { FC, useEffect, useState } from "react";
+import { Modal, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import TireModal from "../TireModal";
 import * as S from "./style";
 
 const Logo = require("assets/icons/walletLogo.png");
@@ -13,6 +14,7 @@ const WalletInfo: FC = () => {
   const { data, isError, isLoading } = useWalletPoint();
   const { data: activityData } = useActivityScore();
   const { closeAlert, showAlert } = useAlert();
+  const [tireModal, setTireModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -32,6 +34,16 @@ const WalletInfo: FC = () => {
 
   return (
     <>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={tireModal}
+        onRequestClose={() => {
+          setTireModal(false);
+        }}
+      >
+        <TireModal closeModal={setTireModal} />
+      </Modal>
       <S.WalletInfoContainer topPad={topPad}>
         {isLoading && <Text>Loading...</Text>}
         {data && (
@@ -44,7 +56,11 @@ const WalletInfo: FC = () => {
               <S.TireInfo>
                 <S.TireTitle>{data.category_name}</S.TireTitle>
               </S.TireInfo>
-              <S.ShowTireButton>
+              <S.ShowTireButton
+                onPress={() => {
+                  setTireModal(true);
+                }}
+              >
                 <S.ShowTireButtonDescription>
                   등급보기
                 </S.ShowTireButtonDescription>
