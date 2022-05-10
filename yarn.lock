@@ -3828,6 +3828,13 @@ expo-structured-headers@~2.1.0:
   resolved "https://registry.npmjs.org/expo-structured-headers/-/expo-structured-headers-2.1.1.tgz"
   integrity sha512-0up4sfHHsiK2YLpTwD/ssUD2oeSGzVUeARnu/itKAJO4zHqjpc+m8N1s7HPSJcdC7fdDpMjzcdrDasT0o+cOAw==
 
+expo-tracking-transparency@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/expo-tracking-transparency/-/expo-tracking-transparency-2.1.0.tgz#74f44d660f0d0679fec556b3c76a22a930116e74"
+  integrity sha512-I63RxvM/gv/+1YlWaSA0wbBIZayPZ/fw2Ptg2NfPgFNYoEPBvCe+r7Ni3giODGsl3YEdPQyF1gJDr0/PO1QHsg==
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+
 expo-updates-interface@~0.5.0:
   version "0.5.1"
   resolved "https://registry.npmjs.org/expo-updates-interface/-/expo-updates-interface-0.5.1.tgz"

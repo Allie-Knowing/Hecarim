@@ -8,7 +8,6 @@ const env = {
   googleClientId: {
     iosId: googleClientId.iosId,
     androidId: googleClientId.androidId,
-    webId: googleClientId.webId,
   },
   naverUrl,
   appleUrl,
