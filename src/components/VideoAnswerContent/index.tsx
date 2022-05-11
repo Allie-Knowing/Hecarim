@@ -24,7 +24,7 @@ import useAlert from "hooks/useAlert";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import { useLikeMutation } from "queries/Like";
-import { useVideoAnswerDetail, useVideoAnswerMutation } from "queries/Answer";
+import { useVideoAnswerMutation } from "queries/Answer";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import Heart from "../../assets/icons/heart.png";
 import More from "../../assets/icons/more.png";
@@ -43,6 +43,7 @@ interface PropsType {
   isNextPage: boolean;
   isQuestionMine: boolean;
   isQuestionAdoption: boolean;
+  isFar: boolean;
 }
 
 const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
@@ -60,6 +61,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   is_like,
   isQuestionAdoption,
   isNextPage,
+  isFar,
 }) => {
   const isStack = useContext(isStackContext);
   const [, setIsStop] = useState<boolean>(false);
@@ -74,37 +76,32 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const { showAlert, closeAlert } = useAlert();
   const queryClient = useQueryClient();
   const { remove, adoption } = useVideoAnswerMutation();
-  const { data, isLoading, refetch } = useVideoAnswerDetail(id);
   const navigation = useMainStackNavigation();
   const { onBlockPress } = useBlock(id);
+  const [isLike, setIsLike] = useState<boolean>(is_like);
 
-  const isLike = useMemo(
-    () => data?.data.data.is_like || is_like,
-    [data?.data.data.is_like, is_like]
-  );
-  const likeCnt = useMemo(
-    () => data?.data.data.like_cnt || like_cnt,
-    [data?.data.data.like_cnt, like_cnt]
-  );
-
-  const isLikeLoading = useMemo(
-    () => like.isLoading || unLike.isLoading || isLoading,
-    [like.isLoading, unLike.isLoading, isLoading]
-  );
+  const likeTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const onLikePress = useCallback(async () => {
-    if (isLikeLoading) {
-      return;
+    if (likeTimeout.current) {
+      clearTimeout(likeTimeout.current);
+      likeTimeout.current = null;
     }
 
     if (!isLike) {
-      await like.mutateAsync();
+      setIsLike(true);
+      likeTimeout.current = setTimeout(() => {
+        like.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     } else {
-      await unLike.mutateAsync();
+      setIsLike(false);
+      likeTimeout.current = setTimeout(() => {
+        unLike.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     }
-
-    await refetch();
-  }, [isLikeLoading, isLike, refetch, like, unLike]);
+  }, [isLike, like, unLike]);
 
   const onReport = useCallback(
     async (description: string) => {
@@ -276,6 +273,19 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     onPageChange();
   }, [onPageChange, load]);
 
+  const unLoad = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && isFar) {
+      videoRef.current.unloadAsync();
+      setIsLoad(false);
+    }
+  }, [isFar]);
+
+  useEffect(() => {
+    unLoad();
+  }, [unLoad]);
+
   const onPlaybackStatusUpdate = useCallback((e: AVPlaybackStatus) => {
     setVideoStatus(e);
   }, []);
@@ -353,7 +363,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                     color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                   }}
                 >
-                  {formattedNumber(likeCnt)}
+                  {formattedNumber(like_cnt + (isLike ? 1 : 0))}
                 </S.IconLabel>
               </S.IconContainer>
               <S.IconContainer

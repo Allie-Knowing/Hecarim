@@ -32,6 +32,7 @@ const FeedVideos: FC<PropsType> = ({
     <FeedContent
       isNextPage={page + 1 === index && isCurrentPage}
       isCurrentPage={index === page && isCurrentPage}
+      isFar={isCurrentPage && index <= page - 3}
       {...item}
     />
   );
