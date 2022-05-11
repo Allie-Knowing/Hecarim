@@ -22,7 +22,7 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { AVPlaybackStatus, Video } from "expo-av";
-import { useQuestionDetail, useQuestionMutation } from "queries/Question";
+import { useQuestionMutation } from "queries/Question";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
@@ -43,6 +43,7 @@ const { height } = Dimensions.get("screen");
 interface PropsType {
   isCurrentPage: boolean;
   isNextPage: boolean;
+  isFar: boolean;
 }
 
 const dateToString = (date: Date) =>
@@ -63,6 +64,7 @@ const FeedContent: FC<Question & PropsType> = ({
   isCurrentPage,
   is_adoption,
   isNextPage,
+  isFar,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const theme = useContext(ThemeContext);
@@ -73,7 +75,6 @@ const FeedContent: FC<Question & PropsType> = ({
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
   const { like, unLike } = useLikeMutation(id);
-  const { isLoading, refetch, data } = useQuestionDetail(id);
   const videoRef = useRef<Video>(null);
   const { remove } = useQuestionMutation();
   const queryClient = useQueryClient();
@@ -82,11 +83,6 @@ const FeedContent: FC<Question & PropsType> = ({
   const { dismissAll } = useBottomSheetModal();
   const { onBlockPress } = useBlock(id);
   const [isLike, setIsLike] = useState<boolean>(is_like);
-
-  const isLikeLoading = useMemo(
-    () => like.isLoading || unLike.isLoading || isLoading,
-    [like.isLoading, unLike.isLoading, isLoading]
-  );
 
   const onMorePress = () => {
     if (Platform.OS === "ios") {
@@ -242,6 +238,19 @@ const FeedContent: FC<Question & PropsType> = ({
   const onPlaybackStatusUpdate = useCallback((e: AVPlaybackStatus) => {
     setVideoStatus(e);
   }, []);
+
+  const unLoad = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && isFar) {
+      videoRef.current.unloadAsync();
+      setIsLoad(false);
+    }
+  }, [isFar]);
+
+  useEffect(() => {
+    unLoad();
+  }, [unLoad]);
 
   return (
     <Fragment>

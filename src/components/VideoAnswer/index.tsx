@@ -36,6 +36,7 @@ const VideoAnswer: FC<PropsType> = ({
       isQuestionMine={isQuestionMine}
       isCurrentPage={page === index && isCurrentPage}
       isNextPage={page + 1 === index && isCurrentPage}
+      isFar={isCurrentPage && index <= page - 3}
       isQuestionAdoption={isQuestionAdoption === 1}
       {...item}
     />
