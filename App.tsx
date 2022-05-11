@@ -6,10 +6,15 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
-import useMainStackNavigation, { MainStackParamList } from "hooks/useMainStackNavigation";
+import useMainStackNavigation, {
+  MainStackParamList,
+} from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import TermsOfService from "screens/Login/TermsModal/TermsOfService";
 import PrivacyPolicy from "screens/Login/TermsModal/PrivacyPolicy";
@@ -17,7 +22,6 @@ import AlretProvider from "components/Providers/AlretProvider";
 import Setting from "screens/Setting";
 import UserPage from "screens/MyPage/UserPage";
 import { QueryClient, QueryClientProvider } from "react-query";
-
 import CameraComponent from "components/Question/Camera";
 import isStackContext from "./src/context/IsStackContext";
 import CameraProvider from "context/CameraContext";
@@ -42,6 +46,10 @@ import Interests from "screens/Interests";
 import Question from "components/Question";
 import ProfileEditPage from "screens/ProfileEdit/ProfileEditPage";
 import UploadingModal from "components/Question/UploadingModal";
+import {
+  requestTrackingPermissionsAsync,
+  useTrackingPermissions,
+} from "expo-tracking-transparency";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -54,7 +62,10 @@ if (__DEV__) {
   });
 }
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -72,13 +83,22 @@ export default function App() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const check = useCallback(async () => {
-    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
+    const accessToken = await localStorage.getItem<string>(
+      storageKeys.accessToken
+    );
 
     setIsLogin(accessToken !== null);
   }, []);
 
+  const appTracking = useCallback(async () => {
+    setTimeout(async () => {
+      await requestTrackingPermissionsAsync();
+    }, 500);
+  }, []);
+
   useEffect(() => {
     check();
+    appTracking();
   });
 
   if (!fontsLoaded) {
@@ -153,13 +173,21 @@ const MainNavigationScreen = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
-      <Root.Screen name="Main" component={BottomTabNavigation} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Main"
+        component={BottomTabNavigation}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="StackedQuestionList"
         component={StackedQuestionList}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="TermsOfService"
         component={TermsOfService}
@@ -170,8 +198,16 @@ const MainNavigationScreen = () => {
         component={PrivacyPolicy}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Setting" component={Setting} options={{ title: "설정" }} />
-      <Root.Screen name="UserPage" component={UserPage} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Setting"
+        component={Setting}
+        options={{ title: "설정" }}
+      />
+      <Root.Screen
+        name="UserPage"
+        component={UserPage}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="SearchedQuestionsPage"
         component={SearchedQuestionsPage}
@@ -195,7 +231,11 @@ const MainNavigationScreen = () => {
         )}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Ask" component={Question} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Ask"
+        component={Question}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="InterestsSetting"
         component={Interests}
