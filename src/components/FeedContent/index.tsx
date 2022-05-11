@@ -22,7 +22,7 @@ import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import { useLikeMutation } from "../../queries/Like";
 import { AVPlaybackStatus, Video } from "expo-av";
-import { useQuestionDetail, useQuestionMutation } from "queries/Question";
+import { useQuestionMutation } from "queries/Question";
 import { useQueryClient } from "react-query";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
@@ -43,6 +43,7 @@ const { height } = Dimensions.get("screen");
 interface PropsType {
   isCurrentPage: boolean;
   isNextPage: boolean;
+  isFar: boolean;
 }
 
 const dateToString = (date: Date) =>
@@ -63,6 +64,7 @@ const FeedContent: FC<Question & PropsType> = ({
   isCurrentPage,
   is_adoption,
   isNextPage,
+  isFar,
 }) => {
   const [isMore, setIsMore] = useState<boolean>(false);
   const theme = useContext(ThemeContext);
@@ -73,7 +75,6 @@ const FeedContent: FC<Question & PropsType> = ({
   const tabBarHeight = isStack ? 30 : 80;
   const navigation = useMainStackNavigation();
   const { like, unLike } = useLikeMutation(id);
-  const { isLoading, refetch, data } = useQuestionDetail(id);
   const videoRef = useRef<Video>(null);
   const { remove } = useQuestionMutation();
   const queryClient = useQueryClient();
@@ -81,20 +82,7 @@ const FeedContent: FC<Question & PropsType> = ({
   const { report } = useVideoMutation(id);
   const { dismissAll } = useBottomSheetModal();
   const { onBlockPress } = useBlock(id);
-
-  const isLike = useMemo(
-    () => data?.data.data.is_like || is_like,
-    [data?.data.data.is_like, is_like]
-  );
-  const likeCnt = useMemo(
-    () => data?.data.data.like_cnt || like_cnt,
-    [data?.data.data.like_cnt, like_cnt]
-  );
-
-  const isLikeLoading = useMemo(
-    () => like.isLoading || unLike.isLoading || isLoading,
-    [like.isLoading, unLike.isLoading, isLoading]
-  );
+  const [isLike, setIsLike] = useState<boolean>(is_like);
 
   const onMorePress = () => {
     if (Platform.OS === "ios") {
@@ -110,19 +98,28 @@ const FeedContent: FC<Question & PropsType> = ({
     [report]
   );
 
+  const likeTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const onLikePress = useCallback(async () => {
-    if (isLikeLoading) {
-      return;
+    if (likeTimeout.current) {
+      clearTimeout(likeTimeout.current);
+      likeTimeout.current = null;
     }
 
     if (!isLike) {
-      await like.mutateAsync();
+      setIsLike(true);
+      likeTimeout.current = setTimeout(() => {
+        like.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     } else {
-      await unLike.mutateAsync();
+      setIsLike(false);
+      likeTimeout.current = setTimeout(() => {
+        unLike.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     }
-
-    await refetch();
-  }, [isLikeLoading, isLike, refetch, like, unLike]);
+  }, [isLike, like, unLike]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -242,6 +239,19 @@ const FeedContent: FC<Question & PropsType> = ({
     setVideoStatus(e);
   }, []);
 
+  const unLoad = useCallback(async () => {
+    const status = await videoRef.current.getStatusAsync();
+
+    if (status.isLoaded && isFar) {
+      videoRef.current.unloadAsync();
+      setIsLoad(false);
+    }
+  }, [isFar]);
+
+  useEffect(() => {
+    unLoad();
+  }, [unLoad]);
+
   return (
     <Fragment>
       <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
@@ -310,7 +320,7 @@ const FeedContent: FC<Question & PropsType> = ({
                       color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                     }}
                   >
-                    {formattedNumber(likeCnt)}
+                    {formattedNumber(like_cnt + (isLike ? 1 : 0))}
                   </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
