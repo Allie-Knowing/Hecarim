@@ -81,15 +81,7 @@ const FeedContent: FC<Question & PropsType> = ({
   const { report } = useVideoMutation(id);
   const { dismissAll } = useBottomSheetModal();
   const { onBlockPress } = useBlock(id);
-
-  const isLike = useMemo(
-    () => data?.data.data.is_like || is_like,
-    [data?.data.data.is_like, is_like]
-  );
-  const likeCnt = useMemo(
-    () => data?.data.data.like_cnt || like_cnt,
-    [data?.data.data.like_cnt, like_cnt]
-  );
+  const [isLike, setIsLike] = useState<boolean>(is_like);
 
   const isLikeLoading = useMemo(
     () => like.isLoading || unLike.isLoading || isLoading,
@@ -110,19 +102,28 @@ const FeedContent: FC<Question & PropsType> = ({
     [report]
   );
 
+  const likeTimeout = useRef<NodeJS.Timeout | null>(null);
+
   const onLikePress = useCallback(async () => {
-    if (isLikeLoading) {
-      return;
+    if (likeTimeout.current) {
+      clearTimeout(likeTimeout.current);
+      likeTimeout.current = null;
     }
 
     if (!isLike) {
-      await like.mutateAsync();
+      setIsLike(true);
+      likeTimeout.current = setTimeout(() => {
+        like.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     } else {
-      await unLike.mutateAsync();
+      setIsLike(false);
+      likeTimeout.current = setTimeout(() => {
+        unLike.mutateAsync();
+        likeTimeout.current = null;
+      }, 1000);
     }
-
-    await refetch();
-  }, [isLikeLoading, isLike, refetch, like, unLike]);
+  }, [isLike, like, unLike]);
 
   const onDeletePress = useCallback(async () => {
     dismissAll();
@@ -310,7 +311,7 @@ const FeedContent: FC<Question & PropsType> = ({
                       color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                     }}
                   >
-                    {formattedNumber(likeCnt)}
+                    {formattedNumber(like_cnt + (isLike ? 1 : 0))}
                   </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
