@@ -1,7 +1,18 @@
 /* eslint-disable indent */
 import Comment from "components/Comment";
-import { forwardRef, useContext, useState, useCallback, useMemo, FC, Fragment } from "react";
-import { ListRenderItem, TouchableOpacity } from "react-native";
+import {
+  forwardRef,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  FC,
+  Fragment,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+} from "react";
+import { BackHandler, ListRenderItem, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeContext } from "styled-components/native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
@@ -35,6 +46,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
     const { post } = useTextAnswerMutation();
     const queryClient = useQueryClient();
     const { showAlert, closeAlert } = useAlert();
+    const bsRef = useRef<BottomSheet>(null);
 
     const renderBackdrop = useCallback(
       (props) => (
@@ -48,6 +60,20 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       ),
       []
     );
+
+    useEffect(() => {
+      const backAction = () => {
+        if (isOpen) {
+          bsRef.current.close();
+          return true;
+        }
+        return false;
+      };
+
+      const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+      return () => backHandler.remove();
+    }, [isOpen]);
 
     const onAddPress = useCallback(async () => {
       const t = text.trim();
@@ -72,9 +98,11 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
       }
     }, [text, post, questionId, queryClient, showAlert, closeAlert]);
 
+    useImperativeHandle(ref, () => bsRef.current);
+
     return (
       <BottomSheet
-        ref={ref}
+        ref={bsRef}
         snapPoints={["70%"]}
         enablePanDownToClose
         index={-1}
