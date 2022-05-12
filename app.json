@@ -14,6 +14,14 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/knowing.png"
+        }
+      ]
+    ],
     "ios": {
       "bundleIdentifier": "com.allie.knowing",
       "supportsTablet": true,

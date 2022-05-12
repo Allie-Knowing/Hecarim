@@ -97,6 +97,13 @@ export default function App() {
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         postExpoToken(token);
       }
+      if(Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "알람",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+        });
+      }
     }, 500);
   };
 
