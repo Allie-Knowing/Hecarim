@@ -46,10 +46,9 @@ import Interests from "screens/Interests";
 import Question from "components/Question";
 import ProfileEditPage from "screens/ProfileEdit/ProfileEditPage";
 import UploadingModal from "components/Question/UploadingModal";
-import {
-  requestTrackingPermissionsAsync,
-  useTrackingPermissions,
-} from "expo-tracking-transparency";
+import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
+import * as Notifications from "expo-notifications";
+import { postExpoToken } from "utils/api/notification";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -82,24 +81,29 @@ export default function App() {
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const check = useCallback(async () => {
+  const check = async () => {
     const accessToken = await localStorage.getItem<string>(
       storageKeys.accessToken
     );
 
     setIsLogin(accessToken !== null);
-  }, []);
+  };
 
-  const appTracking = useCallback(async () => {
+  const askPermissions = async () => {
     setTimeout(async () => {
       await requestTrackingPermissionsAsync();
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status === "granted") {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        postExpoToken(token);
+      }
     }, 500);
-  }, []);
+  };
 
   useEffect(() => {
     check();
-    appTracking();
-  });
+    askPermissions();
+  }, []);
 
   if (!fontsLoaded) {
     return <AppLoading />;

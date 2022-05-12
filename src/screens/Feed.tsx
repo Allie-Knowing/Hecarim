@@ -2,18 +2,11 @@ import React, { FC, useCallback, useEffect, useMemo } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
 import { useQuestionList } from "queries/Question";
-import { useNotificationPermission } from "hooks/useNotificationPermission";
-import { postExpoToken } from "utils/api/notification";
 
 const size = 10;
 
 const Feed: FC = () => {
   const { data, fetchNextPage, isError } = useQuestionList(size);
-  const { isGranted, token } = useNotificationPermission();
-
-  useEffect(() => {
-    postExpoToken(token);
-  }, [isGranted]);
 
   const onQuestionEndReached = useCallback(() => {
     if (!isError) {
