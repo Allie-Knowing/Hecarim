@@ -82,7 +82,6 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
       });
 
     try {
-      isAnswer ? navigation.pop(2) : navigation.pop(1);
       const videoUrlResponse = await videoUrl.mutateAsync({
         type: isAnswer ? "answer" : "question",
         file: formData,
@@ -103,6 +102,7 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             video_url: videoUrlResponse.data.data.url,
           });
       setIsUploading(false);
+      isAnswer ? navigation.pop(2) : navigation.pop(1);
     } catch (err) {
       console.log(err);
     }
