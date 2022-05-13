@@ -37,6 +37,7 @@ import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
 import HashTag from "components/HashTag";
 import useBlock from "hooks/useBlock";
+import useDoubleTap from "hooks/useDoubleTap";
 
 const { height } = Dimensions.get("screen");
 
@@ -252,9 +253,18 @@ const FeedContent: FC<Question & PropsType> = ({
     unLoad();
   }, [unLoad]);
 
+  const onlyLike = () => {
+    if (!isLike) {
+      setIsLike(true);
+      like.mutate();
+    }
+  };
+
+  const onScreenPress = useDoubleTap(200, changeVideoState, onlyLike);
+
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+      <S.Container style={{ height }} onPress={onScreenPress} activeOpacity={1}>
         {videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
           <S.VideoStateIcon source={Play} />
         )}
