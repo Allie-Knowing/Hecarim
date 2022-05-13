@@ -18,8 +18,9 @@ type Props = {
 const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
   const { data, isLoading, isError, error } = useProfileQuestionList(userId);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [isQuestion, setIsQuestion] = useState<boolean>(true);
 
-  const moveQuestionStack = () => {
+  const moveQuestionStack = (index: number) => {
     if (!data?.data?.data) return;
     const questionListData = data.data.data;
     const questionList: Question[] = [];
@@ -39,7 +40,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
         is_adoption: questionListData[i].is_adoption,
       });
     }
-    navigation.push("StackedQuestionList", { data: questionList, index: 0 });
+    navigation.push("StackedQuestionList", { data: questionList, index });
   };
 
   useEffect(() => {
@@ -50,19 +51,26 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
 
   return (
     <S.Container height={height - 290}>
+      <S.SwitchButton activeOpacity={1}>
+        <S.SwitchTextContainer>
+          <S.CurrentSwitchContent />
+          <S.SwitchText isWhite={isQuestion}>나의 질문</S.SwitchText>
+          <S.SwitchText isWhite={isQuestion}>나의 답변</S.SwitchText>
+        </S.SwitchTextContainer>
+      </S.SwitchButton>
       {data && (
         <View>
-          <S.Title>질문</S.Title>
+          <S.Title>내가 올린 질문 {12}개</S.Title>
           {data.data.data.length === 0 ? (
             <S.Notice>질문이 없습니다.</S.Notice>
           ) : (
             <S.QuestionContainer
               key={"#"}
               data={data.data.data}
-              renderItem={({ item }: any) => (
+              renderItem={({ item, index }: { item: any; index: number }) => (
                 <MyQuestion
                   question={item}
-                  moveQuestionStack={moveQuestionStack}
+                  moveQuestionStack={() => moveQuestionStack(index)}
                 />
               )}
               numColumns={2}

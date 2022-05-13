@@ -20,9 +20,8 @@ const MyPage: FC<Props> = ({ navigation }) => {
     <isStackContext.Provider value={false}>
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
-        <Profile userId={data?.data?.data} />
-        <MakeKnowingBanner />
-        <MyQuestionList userId={data?.data?.data} navigation={navigation} />
+        <Profile userId={data?.data.data} />
+        <MyQuestionList userId={data?.data.data} navigation={navigation} />
       </S.Container>
     </isStackContext.Provider>
   );
