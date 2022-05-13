@@ -49,6 +49,7 @@ import UploadingModal from "components/Question/UploadingModal";
 import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
+import * as Linking from 'expo-linking';
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -127,7 +128,14 @@ export default function App() {
                   <UploadingStatusProvider>
                     <BottomSheetModalProvider>
                       <AlretProvider>
-                        <NavigationContainer>
+                        <NavigationContainer linking={{
+                          prefixes: [Linking.createURL("/")],
+                          config: {
+                            screens: {
+                              SearchedQuestionsPage: "question/:title",
+                            }
+                          }
+                        }}>
                           <Host>
                             <CameraProvider>
                               <IsUploadingContext.Consumer>
