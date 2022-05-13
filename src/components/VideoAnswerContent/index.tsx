@@ -32,6 +32,7 @@ import Play from "../../assets/play.png";
 import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
 import useBlock from "hooks/useBlock";
+import useDoubleTap from "hooks/useDoubleTap";
 
 const { height } = Dimensions.get("screen");
 
@@ -290,9 +291,18 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     setVideoStatus(e);
   }, []);
 
+  const onlyLike = () => {
+    if (!isLike) {
+      setIsLike(true);
+      like.mutate();
+    }
+  };
+
+  const onScreenPress = useDoubleTap(200, changeVideoState, onlyLike);
+
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+      <S.Container style={{ height }} onPress={onScreenPress} activeOpacity={1}>
         {isLoad && videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
           <S.VideoStateIcon source={Play} />
         )}
