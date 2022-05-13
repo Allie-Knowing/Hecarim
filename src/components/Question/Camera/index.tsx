@@ -143,6 +143,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       setIsVideoRecording(true);
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
+        quality: 3,
       });
       setUri(videoRecordPromise.uri);
       isAnswer
