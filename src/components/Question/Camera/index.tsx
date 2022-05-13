@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, SafeAreaView } from "react-native";
+import { StyleSheet, View, SafeAreaView, Text } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CameraStackParamList } from "..";
@@ -16,6 +16,7 @@ import recordImg from "../../../assets/icons/record.png";
 import videoImg from "../../../assets/icons/video.png";
 import backImage from "../../../assets/icons/back-white.png";
 import rotateImg from "../../../assets/icons/rotate.png";
+import { useTimer } from "hooks/useTimer";
 
 interface Props {
   route?: {
@@ -44,6 +45,8 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const mainNavigation = useMainStackNavigation();
 
   const isFocused = useIsFocused();
+
+  const { time, startTimer, endTimer, resetTimer } = useTimer();
 
   useEffect(() => {
     (async () => {
@@ -138,6 +141,8 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 녹화 함수
   const recordVideo = async () => {
+    resetTimer();
+    startTimer();
     blockRecordButton();
     if (cameraRef && isFocused && !blockRecord) {
       setIsVideoRecording(true);
@@ -159,6 +164,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       cameraRef.stopRecording();
       setIsVideoRecording(false);
     }
+    endTimer();
     blockRecordButton();
   };
 
@@ -183,8 +189,11 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const renderVideoRecordIndicator = (): JSX.Element =>
     isVideoRecording ? (
       <S.RecordIndicatorContainer>
-        <S.RecordDot />
-        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+          <S.RecordDot />
+          <S.RecordTitle>촬영중</S.RecordTitle>
+        </View>
+        <S.RecordTitle>{(Math.floor(time / 60)).toString().padStart(2, "0")} : {(time % 60).toString().padStart(2, "0")}</S.RecordTitle>
       </S.RecordIndicatorContainer>
     ) : (
       <S.RecordIndicatorContainer>

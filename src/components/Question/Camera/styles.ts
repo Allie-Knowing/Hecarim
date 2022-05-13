@@ -73,7 +73,7 @@ export const FlipCameraContainer = styled.TouchableOpacity`
 `;
 
 export const RecordIndicatorContainer = styled.View`
-  flex-direction: row;
+  flex-direction: column;
   position: absolute;
   top: 25;
   align-self: center;
