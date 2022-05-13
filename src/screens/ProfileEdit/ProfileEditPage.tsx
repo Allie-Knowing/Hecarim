@@ -17,6 +17,8 @@ type Props = {
 const defaultProfile = require("assets/profile.png");
 const editImage = require("assets/icons/edit.png");
 
+const str_space = /\s/;
+
 const ProfileEditPage: FC<Props> = ({ navigation }) => {
   const { data: userId } = useMyId();
   const { data } = useProfile(userId.data.data);
@@ -93,6 +95,20 @@ const ProfileEditPage: FC<Props> = ({ navigation }) => {
   }, [data]);
 
   const submitProfileSetting = () => {
+    if (nickname !== "" && str_space.exec(nickname)) {
+      showAlert({
+        title: "공백을 제거해주세요.",
+        content: "공백은 입력할 수 없습니다.",
+        buttons: [
+          {
+            text: "확인",
+            color: "black",
+            onPress: (id) => closeAlert(id),
+          },
+        ],
+      });
+      return;
+    }
     if (nickname !== "" && profileFile) {
       nicknameEdit(nickname);
       profileEdit(profileFile);
