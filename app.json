@@ -51,6 +51,6 @@
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"]
     },
-    "scheme": "myapp"
+    "scheme": "knowing"
   }
 }
