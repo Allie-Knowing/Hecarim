@@ -24,6 +24,7 @@ enum uri {
   wallet = "/wallet",
   nickname = "/nickname",
   profile = "/profile",
+  profileAnswerList = "/user/answer/video/",
 }
 
 export default uri;

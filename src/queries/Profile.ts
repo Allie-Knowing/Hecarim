@@ -1,4 +1,8 @@
-import { getProfileApi, getProfilQuestionListApi } from "api/Profile";
+import {
+  getProfileAnswerListApi,
+  getProfileApi,
+  getProfilQuestionListApi,
+} from "api/Profile";
 import queryKeys from "constant/queryKeys";
 import { useQuery } from "react-query";
 
@@ -12,6 +16,16 @@ export const useProfileQuestionList = (userId: number) =>
   useQuery(
     [queryKeys.profileQuestionList, userId],
     () => getProfilQuestionListApi({ id: userId }),
+    {
+      enabled: true,
+      refetchOnMount: "always",
+    }
+  );
+
+export const useProfileAnswerList = (userId: number) =>
+  useQuery(
+    [queryKeys.profileQuestionList, userId],
+    () => getProfileAnswerListApi(userId),
     {
       enabled: true,
       refetchOnMount: "always",
