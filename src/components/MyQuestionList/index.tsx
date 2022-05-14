@@ -5,8 +5,10 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import { useProfileQuestionList } from "queries/Profile";
 import React, { FC, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
+import theme from "theme/theme";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
+import Switch from "./Switch";
 
 const { height } = Dimensions.get("window");
 
@@ -51,13 +53,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
 
   return (
     <S.Container height={height - 290}>
-      <S.SwitchButton activeOpacity={1}>
-        <S.SwitchTextContainer>
-          <S.CurrentSwitchContent />
-          <S.SwitchText isWhite={isQuestion}>나의 질문</S.SwitchText>
-          <S.SwitchText isWhite={isQuestion}>나의 답변</S.SwitchText>
-        </S.SwitchTextContainer>
-      </S.SwitchButton>
+      <Switch isLeft={isQuestion} setIsLeft={setIsQuestion} />
       {data && (
         <View>
           <S.Title>내가 올린 질문 {12}개</S.Title>
