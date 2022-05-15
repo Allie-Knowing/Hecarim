@@ -13,7 +13,7 @@ interface PropsType {
 
 const Results: FC<PropsType> = ({ item, moveQuestionStack }) => {
   return (
-    <TouchableOpacity onPress={() => moveQuestionStack()}>
+    <TouchableOpacity onPress={moveQuestionStack}>
       {item.thumbnail ? (
         <S.SearchedResults
           source={{ uri: item.thumbnail }}

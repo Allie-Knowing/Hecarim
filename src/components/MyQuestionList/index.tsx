@@ -19,7 +19,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
   const { data, isLoading, isError, error } = useProfileQuestionList(userId);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-  const moveQuestionStack = () => {
+  const moveQuestionStack = (index: number) => {
     if (!data?.data?.data) return;
     const questionListData = data.data.data;
     const questionList: Question[] = [];
@@ -39,7 +39,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
         is_adoption: questionListData[i].is_adoption,
       });
     }
-    navigation.push("StackedQuestionList", { data: questionList, index: 0 });
+    navigation.push("StackedQuestionList", { data: questionList, index });
   };
 
   useEffect(() => {
@@ -59,10 +59,10 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
             <S.QuestionContainer
               key={"#"}
               data={data.data.data}
-              renderItem={({ item }: any) => (
+              renderItem={({ item, index }: { item: any; index: number }) => (
                 <MyQuestion
                   question={item}
-                  moveQuestionStack={moveQuestionStack}
+                  moveQuestionStack={() => moveQuestionStack(index)}
                 />
               )}
               numColumns={2}
