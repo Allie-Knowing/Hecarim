@@ -24,7 +24,7 @@ export const useProfileQuestionList = (userId: number) =>
 
 export const useProfileAnswerList = (userId: number) =>
   useQuery(
-    [queryKeys.profileQuestionList, userId],
+    [queryKeys.profileAnswerList, userId],
     () => getProfileAnswerListApi(userId),
     {
       enabled: true,

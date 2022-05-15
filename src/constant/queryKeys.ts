@@ -17,6 +17,7 @@ const queryKeys = {
   walletPoint: "wallet_point",
   walletActivityScore: "wallet_activity_score",
   IQHistory: "iq_history",
+  profileAnswerList: "profile_answer_list",
 } as const;
 
 export default queryKeys;

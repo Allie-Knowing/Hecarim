@@ -2,10 +2,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Question } from "api/Question";
 import axios from "axios";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
-import { useProfileQuestionList } from "queries/Profile";
+import { useProfileAnswerList, useProfileQuestionList } from "queries/Profile";
 import React, { FC, useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
-import theme from "theme/theme";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
 import Switch from "./Switch";
@@ -19,6 +18,7 @@ type Props = {
 
 const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
   const { data, isLoading, isError, error } = useProfileQuestionList(userId);
+  const { data: answerList } = useProfileAnswerList(userId);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [isQuestion, setIsQuestion] = useState<boolean>(true);
 
@@ -51,12 +51,17 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (isQuestion) {
+    }
+  }, [isQuestion]);
+
   return (
     <S.Container height={height - 290}>
       <Switch isLeft={isQuestion} setIsLeft={setIsQuestion} />
       {data && (
         <View>
-          <S.Title>내가 올린 질문 {12}개</S.Title>
+          <S.Title>내가 올린 질문 {data.data.data.length}개</S.Title>
           {data.data.data.length === 0 ? (
             <S.Notice>질문이 없습니다.</S.Notice>
           ) : (
