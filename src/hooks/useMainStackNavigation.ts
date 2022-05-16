@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { VideoAnswer } from "api/Answer";
 import { Question } from "api/Question";
 import { searchTitle } from "constance/search";
 
@@ -10,6 +11,11 @@ export interface StackedQuestionListProps {
 
 export interface StackedSearchQuestionProps {
   title: string;
+}
+
+export interface StackedAnswerListProps {
+  data: VideoAnswer[];
+  index: number;
 }
 
 export type MainStackParamList = {
@@ -26,6 +32,7 @@ export type MainStackParamList = {
   InterestsSetting: undefined;
   Ask: undefined;
   ProfileEdit: undefined;
+  StackedAnswerList: StackedAnswerListProps;
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;

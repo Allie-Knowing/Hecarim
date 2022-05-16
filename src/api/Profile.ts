@@ -1,13 +1,22 @@
 import uri from "constance/uri";
 import { instance } from "utils/axios";
 
+export interface ProfileInfo {
+  name: string;
+  profile: string;
+  email: string;
+  follower_cnt: number;
+  following_cnt: number;
+  video_cnt: number;
+  answer_video_cnt: number;
+}
 export interface ProfileResponse {
   data: {
     name: string;
     profile: string;
     email: string;
-    follwer: number;
-    following: number;
+    follower_cnt: number;
+    following_cnt: number;
     video_cnt: number;
     answer_video_cnt: number;
   };
