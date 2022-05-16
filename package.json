@@ -15,6 +15,7 @@
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
+    "async-mutex": "^0.3.2",
     "axios": "0.21.4",
     "babel-plugin-styled-components": "^2.0.6",
     "eslint-plugin-react-hooks": "^4.4.0",
