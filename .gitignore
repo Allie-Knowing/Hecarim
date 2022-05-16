@@ -8,6 +8,9 @@ environment.ts
 #google-service
 google-services.json
 
+#app.json
+app.json
+
 ### macOS ###
 # General
 .DS_Store
