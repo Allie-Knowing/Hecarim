@@ -1963,7 +1963,7 @@
 
 "@types/styled-components@*":
   version "5.1.25"
-  resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.25.tgz#0177c4ab5fa7c6ed0565d36f597393dae3f380ad"
+  resolved "https://registry.npmjs.org/@types/styled-components/-/styled-components-5.1.25.tgz"
   integrity sha512-fgwl+0Pa8pdkwXRoVPP9JbqF0Ivo9llnmsm+7TCI330kbPIFd9qv1Lrhr37shf4tnxCOSu+/IgqM7uJXLWZZNQ==
   dependencies:
     "@types/hoist-non-react-statics" "*"
@@ -2332,6 +2332,13 @@ async-limiter@~1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz"
   integrity sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
+
+async-mutex@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/async-mutex/-/async-mutex-0.3.2.tgz#1485eda5bda1b0ec7c8df1ac2e815757ad1831df"
+  integrity sha512-HuTK7E7MT7jZEh1P9GtRW9+aTWiDWWi9InbZ5hjxrnRa39KS4BW04+xLBhYNS2aXhHUIKZSw3gj4Pn1pj+qGAA==
+  dependencies:
+    tslib "^2.3.1"
 
 async@^2.4.0:
   version "2.6.3"
@@ -3931,7 +3938,7 @@ expo-structured-headers@~2.1.0:
 
 expo-tracking-transparency@~2.1.0:
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/expo-tracking-transparency/-/expo-tracking-transparency-2.1.0.tgz#74f44d660f0d0679fec556b3c76a22a930116e74"
+  resolved "https://registry.npmjs.org/expo-tracking-transparency/-/expo-tracking-transparency-2.1.0.tgz"
   integrity sha512-I63RxvM/gv/+1YlWaSA0wbBIZayPZ/fw2Ptg2NfPgFNYoEPBvCe+r7Ni3giODGsl3YEdPQyF1gJDr0/PO1QHsg==
   dependencies:
     "@expo/config-plugins" "^4.0.2"
@@ -4295,7 +4302,7 @@ fs.realpath@^1.0.0:
 
 fsevents@^2.1.2:
   version "2.3.2"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
@@ -8320,7 +8327,7 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.1:
+tslib@^2.0.1, tslib@^2.3.1:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
