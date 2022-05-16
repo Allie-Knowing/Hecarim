@@ -10,6 +10,8 @@ type Props = {
 const Profile: FC<Props> = ({ userId }) => {
   const { data, isLoading, error } = useProfile(userId);
 
+  console.log(data);
+
   return (
     <>
       <S.Container>
