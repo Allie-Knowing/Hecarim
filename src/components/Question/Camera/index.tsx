@@ -72,7 +72,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     const videoData = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      quality: ImagePicker.UIImagePickerControllerQualityType.High,
+      quality: 3,
       base64: true,
       videoMaxDuration: MAX_DURATION,
       aspect: [4, 3],
@@ -143,6 +143,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       setIsVideoRecording(true);
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
+        quality: 3,
       });
       setUri(videoRecordPromise.uri);
       isAnswer
