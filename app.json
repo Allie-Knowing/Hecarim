@@ -29,10 +29,13 @@
         "CAMERA",
         "RECORD_AUDIO",
         "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE"
+        "WRITE_EXTERNAL_STORAGE",
+        "NOTIFICATIONS"
       ],
-      "versionCode": 13,
-      "softwareKeyboardLayoutMode": "pan"
+      "versionCode": 25,
+      "softwareKeyboardLayoutMode": "pan",
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
