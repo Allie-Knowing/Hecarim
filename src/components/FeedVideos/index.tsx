@@ -1,7 +1,12 @@
 import FeedContent from "../FeedContent";
 import * as S from "./styles";
-import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
-import { FC, memo, useEffect, useState } from "react";
+import {
+  Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  ListRenderItem,
+} from "react-native";
+import { FC, memo, useEffect, useRef, useState } from "react";
 import { Question } from "api/Question";
 
 const { height, width } = Dimensions.get("screen");
@@ -22,6 +27,7 @@ const FeedVideos: FC<PropsType> = ({
   index,
 }) => {
   const [page, setPage] = useState(0);
+  const flatListRef = useRef<any>(null);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
@@ -45,6 +51,7 @@ const FeedVideos: FC<PropsType> = ({
 
   return (
     <S.Container
+      ref={flatListRef}
       style={{ width, height }}
       decelerationRate="fast"
       snapToAlignment="start"
@@ -62,6 +69,12 @@ const FeedVideos: FC<PropsType> = ({
       onEndReached={onEndReached}
       initialScrollIndex={index}
       initialNumToRender={2}
+      onScrollToIndexFailed={({ index, averageItemLength }) => {
+        flatListRef.current?.scrollToOffset({
+          offset: index * averageItemLength,
+          animated: true,
+        });
+      }}
     />
   );
 };

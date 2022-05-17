@@ -1,10 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
+import { ProfileQuestion } from "api/Profile";
 import { Question } from "api/Question";
 import axios from "axios";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import { useProfileQuestionList } from "queries/Profile";
 import React, { FC, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, ListRenderItem, View } from "react-native";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
 
@@ -19,7 +20,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
   const { data, isLoading, isError, error } = useProfileQuestionList(userId);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
 
-  const moveQuestionStack = () => {
+  const moveQuestionStack = (index: number) => {
     if (!data?.data?.data) return;
     const questionListData = data.data.data;
     const questionList: Question[] = [];
@@ -39,8 +40,15 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
         is_adoption: questionListData[i].is_adoption,
       });
     }
-    navigation.push("StackedQuestionList", { data: questionList, index: 0 });
+    navigation.push("StackedQuestionList", { data: questionList, index });
   };
+
+  const renderItem: ListRenderItem<ProfileQuestion> = ({ item, index }) => (
+    <MyQuestion
+      question={item}
+      moveQuestionStack={() => moveQuestionStack(index)}
+    />
+  );
 
   useEffect(() => {
     if (error && axios.isAxiosError(error) && error.response?.status === 404) {
@@ -59,12 +67,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
             <S.QuestionContainer
               key={"#"}
               data={data.data.data}
-              renderItem={({ item }: any) => (
-                <MyQuestion
-                  question={item}
-                  moveQuestionStack={moveQuestionStack}
-                />
-              )}
+              renderItem={renderItem}
               numColumns={2}
               showsVerticalScrollIndicator={false}
               columnWrapperStyle={{
