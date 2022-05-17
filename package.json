@@ -27,6 +27,7 @@
     "expo-av": "~10.2.0",
     "expo-camera": "~12.1.2",
     "expo-constants": "~13.0.1",
+    "expo-firebase-analytics": "~6.0.0",
     "expo-font": "~10.0.4",
     "expo-google-app-auth": "^10.0.0",
     "expo-google-sign-in": "^10.1.1",
