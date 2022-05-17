@@ -34,7 +34,7 @@ export const TierContainer = styled.View`
   justify-content: space-between;
 `;
 
-export const TireInfo = styled.View`
+export const tierInfo = styled.View`
   flex-direction: row;
   align-items: center;
 `;
@@ -44,17 +44,17 @@ export const TierImage = styled.Image`
   height: 50px;
 `;
 
-export const TireTitle = styled.Text`
+export const tierTitle = styled.Text`
   font: ${({ theme }) => theme.fonts.subtitle1};
   color: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
 
-export const ShowTireButton = styled.TouchableOpacity`
+export const ShowtierButton = styled.TouchableOpacity`
   border-radius: 4px;
   border: 1px solid #fff;
 `;
 
-export const ShowTireButtonDescription = styled.Text`
+export const ShowtierButtonDescription = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale10};
   padding: 4px 8px;
 `;
