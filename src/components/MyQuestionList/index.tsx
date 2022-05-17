@@ -1,10 +1,11 @@
 import { StackNavigationProp } from "@react-navigation/stack";
+import { ProfileQuestion } from "api/Profile";
 import { Question } from "api/Question";
 import axios from "axios";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import { useProfileQuestionList } from "queries/Profile";
 import React, { FC, useEffect, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, ListRenderItem, View } from "react-native";
 import MyQuestion from "./MyQuestion";
 import * as S from "./style";
 
@@ -42,6 +43,13 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
     navigation.push("StackedQuestionList", { data: questionList, index });
   };
 
+  const renderItem: ListRenderItem<ProfileQuestion> = ({ item, index }) => (
+    <MyQuestion
+      question={item}
+      moveQuestionStack={() => moveQuestionStack(index)}
+    />
+  );
+
   useEffect(() => {
     if (error && axios.isAxiosError(error) && error.response?.status === 404) {
       setIsEmpty(true);
@@ -59,12 +67,7 @@ const MyQuestionList: FC<Props> = ({ userId, navigation }) => {
             <S.QuestionContainer
               key={"#"}
               data={data.data.data}
-              renderItem={({ item, index }: { item: any; index: number }) => (
-                <MyQuestion
-                  question={item}
-                  moveQuestionStack={() => moveQuestionStack(index)}
-                />
-              )}
+              renderItem={renderItem}
               numColumns={2}
               showsVerticalScrollIndicator={false}
               columnWrapperStyle={{
