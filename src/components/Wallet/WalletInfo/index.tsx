@@ -3,7 +3,7 @@ import { useActivityScore, useWalletPoint } from "queries/Wallet";
 import React, { FC, useEffect, useState } from "react";
 import { Modal, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import TireModal from "../TireModal";
+import TierModal from "../TierModal";
 import * as S from "./style";
 
 const Logo = require("assets/icons/walletLogo.png");
@@ -14,7 +14,7 @@ const WalletInfo: FC = () => {
   const { data, isError, isLoading } = useWalletPoint();
   const { data: activityData } = useActivityScore();
   const { closeAlert, showAlert } = useAlert();
-  const [tireModal, setTireModal] = useState<boolean>(false);
+  const [tierModal, settierModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (isError) {
@@ -37,12 +37,12 @@ const WalletInfo: FC = () => {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={tireModal}
+        visible={tierModal}
         onRequestClose={() => {
-          setTireModal(false);
+          settierModal(false);
         }}
       >
-        <TireModal closeModal={setTireModal} />
+        <TierModal closeModal={settierModal} />
       </Modal>
       <S.WalletInfoContainer topPad={topPad}>
         {isLoading && <Text>Loading...</Text>}
@@ -53,18 +53,18 @@ const WalletInfo: FC = () => {
               <S.HeaderTitle>지갑</S.HeaderTitle>
             </S.WalletHeader>
             <S.TierContainer>
-              <S.TireInfo>
-                <S.TireTitle>{data.category_name}</S.TireTitle>
-              </S.TireInfo>
-              <S.ShowTireButton
+              <S.tierInfo>
+                <S.tierTitle>{data.category_name}</S.tierTitle>
+              </S.tierInfo>
+              <S.ShowtierButton
                 onPress={() => {
-                  setTireModal(true);
+                  settierModal(true);
                 }}
               >
-                <S.ShowTireButtonDescription>
+                <S.ShowtierButtonDescription>
                   등급보기
-                </S.ShowTireButtonDescription>
-              </S.ShowTireButton>
+                </S.ShowtierButtonDescription>
+              </S.ShowtierButton>
             </S.TierContainer>
             <S.Accumulate>
               <S.AccumulateContent>
