@@ -9,11 +9,6 @@ const size = 10;
 
 const Feed: FC = () => {
   const { data, fetchNextPage, isError } = useQuestionList(size);
-  const { isGranted, token } = useNotificationPermission();
-
-  useEffect(() => {
-    postExpoToken(token);
-  }, [isGranted]);
 
   const onQuestionEndReached = useCallback(() => {
     if (!isError) {
