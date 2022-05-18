@@ -7,7 +7,7 @@ environment.ts
 
 #google-service
 google-services.json
-GoogleService-info.plist
+GoogleService-Info.plist
 
 #app.json
 app.json
