@@ -95,6 +95,7 @@ export default function App() {
       if (status === "granted") {
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         postExpoToken(token);
+        localStorage.setItem("isSendedToken", true);
       }
     }, 500);
   }, []);
@@ -102,6 +103,17 @@ export default function App() {
   useEffect(() => {
     check();
     appPermission();
+    (
+      async () => {
+        const isSendedToken = (await localStorage.getItem("isSendedToken")) ?? false;
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status === "granted" && !isSendedToken) {
+          const token = (await Notifications.getExpoPushTokenAsync()).data;
+          postExpoToken(token);
+          localStorage.setItem("isSendedToken", true);
+        }
+      }
+    )();
   }, []);
 
   if (!fontsLoaded) {
