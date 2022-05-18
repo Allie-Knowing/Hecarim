@@ -5,7 +5,6 @@ import localStorage from "utils/localStorage";
 import storageKeys from "constant/storageKeys";
 import RefreshError from "types/RefreshError";
 import { Mutex } from "async-mutex";
-import expiresTime from "constant/expiresTime";
 
 interface RefreshResponse {
   access_token: string;
@@ -14,25 +13,15 @@ interface RefreshResponse {
 
 const mutex = new Mutex();
 
-const requestRefresh = async (config: AxiosRequestConfig): Promise<AxiosRequestConfig> => {
+const refresh = async (error: any) => {
+  if (!axios.isAxiosError(error) || error.response.status !== 401) {
+    return Promise.reject(error);
+  }
+
+  //토큰 만료됨
   const release = await mutex.acquire();
 
   try {
-    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
-    const expiresAt = await localStorage.getItem<string>(storageKeys.expiresAt);
-
-    if (!accessToken || !expiresAt) {
-      throw new RefreshError();
-    }
-
-    if (new Date(expiresAt).getTime() > new Date().getTime()) {
-      //만료되지 않음
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-      config.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      return config;
-    }
-
-    //만료됨
     const refreshToken = await localStorage.getItem<string>(storageKeys.refreshToken);
 
     if (!refreshToken) {
@@ -50,23 +39,13 @@ const requestRefresh = async (config: AxiosRequestConfig): Promise<AxiosRequestC
       )
     ).data;
 
-    await Promise.all([
-      localStorage.setItem(storageKeys.accessToken, access_token),
-      localStorage.setItem(storageKeys.refreshToken, refresh_token),
-      localStorage.setItem(storageKeys.expiresAt, expiresTime()),
-    ]);
+    await localStorage.setItem(storageKeys.refreshToken, refresh_token);
+    await localStorage.setItem(storageKeys.accessToken, access_token);
 
-    config.headers["Authorization"] = `Bearer ${accessToken}`;
-    config.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    return config;
-  } catch (error) {
-    await Promise.all([
-      localStorage.removeItem(storageKeys.accessToken),
-      localStorage.removeItem(storageKeys.refreshToken),
-      localStorage.removeItem(storageKeys.expiresAt),
-    ]);
+    instance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+    error.config.headers["Authorization"] = `Bearer ${access_token}`;
 
-    throw new RefreshError();
+    return axios(error.config);
   } finally {
     release();
   }
@@ -80,4 +59,16 @@ export const noTokenInstance = axios.create({
   baseURL: env.baseUrl,
 });
 
-instance.interceptors.request.use(requestRefresh);
+const requestInterceptor = async (config: AxiosRequestConfig) => {
+  const access_token = await localStorage.getItem<string>(storageKeys.accessToken);
+
+  config.headers.common["Authorization"] = `Bearer ${access_token}`;
+  config.headers["Authorization"] = `Bearer ${access_token}`;
+  instance.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+
+  return config;
+};
+
+instance.interceptors.request.use(requestInterceptor);
+
+instance.interceptors.response.use((value) => value, refresh);
