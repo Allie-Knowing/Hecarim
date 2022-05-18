@@ -1,5 +1,4 @@
 import uri from "constance/uri";
-import expiresTime from "constant/expiresTime";
 import storageKeys from "constant/storageKeys";
 import { noTokenInstance } from "utils/axios";
 import localStorage from "utils/localStorage";
@@ -27,7 +26,6 @@ export const postGoogleSigninApi = async (body: GoogleSigninRequest) => {
     await Promise.all([
       localStorage.setItem<string>(storageKeys.accessToken, response.data.access_token),
       localStorage.setItem<string>(storageKeys.refreshToken, response.data.refresh_token),
-      localStorage.setItem<string>(storageKeys.expiresAt, expiresTime()),
     ]);
   } catch (error) {
     console.error(error);
@@ -54,6 +52,5 @@ export const postSigninApi = async (body: SigninRequest) => {
   await Promise.all([
     localStorage.setItem<string>(storageKeys.accessToken, response.data.access_token),
     localStorage.setItem<string>(storageKeys.refreshToken, response.data.refresh_token),
-    localStorage.setItem<string>(storageKeys.expiresAt, expiresTime()),
   ]);
 };
