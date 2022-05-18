@@ -204,7 +204,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 촬영 컨트롤 ui
   const renderVideoControl = (): JSX.Element => (
-    <S.Control bottom={isAnswer ? 60 : 100}>
+    <S.Control>
       {isVideoRecording ? (
         // 촬영중인 상태
         <S.RecordVideoContainer
