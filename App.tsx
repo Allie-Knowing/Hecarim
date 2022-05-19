@@ -50,7 +50,6 @@ import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
 import * as Linking from "expo-linking";
-import StackedAnswerList from "screens/StackedAnswerList";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -268,7 +267,6 @@ const MainNavigationScreen = () => {
         component={ProfileEditPage}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="StackedAnswerList" component={StackedAnswerList} />
     </Root.Navigator>
   );
 };

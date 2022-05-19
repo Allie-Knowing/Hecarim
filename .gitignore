@@ -9,6 +9,7 @@ environment.ts
 
 #google-service
 google-services.json
+GoogleService-Info.plist
 
 ### macOS ###
 # General

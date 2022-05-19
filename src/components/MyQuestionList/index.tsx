@@ -1,5 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import { ProfileAnswer, ProfileQuestion } from "api/Profile";
+import { ProfileQuestion } from "api/Profile";
+import { Question } from "api/Question";
 import { MainStackParamList } from "hooks/useMainStackNavigation";
 import { useProfileAnswerList, useProfileQuestionList } from "queries/Profile";
 import React, { FC, useEffect, useState } from "react";
@@ -31,15 +32,33 @@ const MyQuestionList: FC<Props> = ({
   } = useProfileQuestionList(userId);
   const { data: answerList } = useProfileAnswerList(userId);
   const [isQuestion, setIsQuestion] = useState<boolean>(true);
-  const [profileDataList, setProfileDataList] = useState<
-    ProfileQuestion[] | ProfileAnswer[]
-  >([]);
+  const [profileDataList, setProfileDataList] = useState<ProfileQuestion[]>([]);
 
   const moveQuestionStack = (index: number) => {
-    return;
+    if (profileDataList.length <= 0) return;
+    const navegationArray: Question[] = [];
+    for (let i = 0; i < profileDataList.length; i++) {
+      navegationArray.push({
+        id: parseInt(profileDataList[i].id),
+        description: profileDataList[i].video_description,
+        title: profileDataList[i].video_title,
+        video_url: profileDataList[i].video_url,
+        created_at: profileDataList[i].created_at,
+        user_id: profileDataList[i].user_id,
+        profile: profileDataList[i].user_profile,
+        comment_cnt: profileDataList[i].comment_cnt,
+        like_cnt: profileDataList[i].like_cnt,
+        is_mine: profileDataList[i].is_mine,
+        is_like: profileDataList[i].is_like,
+        is_adoption: profileDataList[i].is_adoption,
+      });
+    }
   };
 
   useEffect(() => {
+    console.log(questionList);
+    console.log(answerList);
+
     if (isQuestion) {
       setProfileDataList(questionList?.data.data || []);
     } else {

@@ -10,6 +10,7 @@ export interface ProfileInfo {
   video_cnt: number;
   answer_video_cnt: number;
 }
+
 export interface ProfileResponse {
   data: {
     name: string;
@@ -42,17 +43,6 @@ export interface ProfileQuestion {
   is_adoption: number;
 }
 
-export interface ProfileAnswer {
-  id: number;
-  video_description: string;
-  video_title: string;
-  thumbnail: string | null;
-  user_profile: string;
-  video_url: string;
-  created_at: string;
-  like_cnt: number;
-}
-
 export interface GetProfileQuestionListResponse {
   data: ProfileQuestion[];
 }
@@ -73,7 +63,7 @@ export const getProfilQuestionListApi = async (body: ProfileRequest) => {
 };
 
 export const getProfileAnswerListApi = async (userId: number) => {
-  const data = await instance.get<{ data: ProfileAnswer[] }>(
+  const data = await instance.get<GetProfileQuestionListResponse>(
     `${uri.profileAnswerList}${userId}?page=1&size=10000`
   );
 
