@@ -1,6 +1,7 @@
 import {
   adoptionVideoAnswer,
   deleteVideoAnswer,
+  getVideoAnswerCount,
   getVideoAnswerDetail,
   getVideoAnswerList,
 } from "api/Answer";
@@ -38,4 +39,10 @@ const useVideoAnswerDetail = (videoId: number) => {
   );
 };
 
-export { useVideoAnswerList, useVideoAnswerMutation, useVideoAnswerDetail };
+const useVideoAnswerCount = (videoId: number) => {
+  return useQuery([queryKeys.answer, queryKeys.questionId(videoId), queryKeys.count], () =>
+    getVideoAnswerCount(videoId)
+  );
+};
+
+export { useVideoAnswerList, useVideoAnswerMutation, useVideoAnswerDetail, useVideoAnswerCount };

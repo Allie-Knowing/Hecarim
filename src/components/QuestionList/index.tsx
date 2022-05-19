@@ -20,6 +20,8 @@ import isStackContext from "context/IsStackContext";
 import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { Question } from "api/Question";
 import BackIcon from "../../assets/icons/back.png";
+import { useRecoilValue } from "recoil";
+import videoAnswerCountState from "atom/videoAnswerCount";
 
 const { height, width } = Dimensions.get("screen");
 const navGap = 24;
@@ -60,6 +62,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index, onQuestionEndReached
     () => (questionList.length > 0 ? questionList[0].is_adoption : 1),
     [questionList]
   );
+  const videoAnswerCount = useRecoilValue(videoAnswerCountState);
 
   const questionNavStyle = useAnimatedStyle(() => ({
     opacity: interpolate(pageOffset.value, [0, 1], [1, 0.4]),
@@ -112,7 +115,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index, onQuestionEndReached
     }),
     [widths, topPad]
   );
-  
+
   return (
     <S.Wrapper style={{ height }}>
       <Animated.ScrollView
@@ -161,7 +164,7 @@ const QuestionList: FC<PropsType> = ({ questionList, index, onQuestionEndReached
         <S.NavText>질문</S.NavText>
       </Animated.View>
       <Animated.View style={[NavStyle("answer"), answerNavStyle]} onLayout={onLayout("answer")}>
-        <S.NavText>영상 답변</S.NavText>
+        <S.NavText>영상 답변 {videoAnswerCount}</S.NavText>
       </Animated.View>
     </S.Wrapper>
   );
