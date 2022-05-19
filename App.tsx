@@ -88,37 +88,35 @@ export default function App() {
     setIsLogin(accessToken !== null);
   }, []);
 
-  const appPermission = useCallback(async () => {
-    setTimeout(async () => {
-      await requestTrackingPermissionsAsync();
-      const { status } = await Notifications.requestPermissionsAsync();
-      if (status === "granted") {
-        const token = (await Notifications.getExpoPushTokenAsync()).data;
-        postExpoToken(token);
-        localStorage.setItem("isSendedToken", true);
-      }
-    }, 500);
-  }, []);
+  const appPermission = useCallback(() => setTimeout(requestTrackingPermissionsAsync, 500), []);
 
   useEffect(() => {
     check();
     appPermission();
-    (
-      async () => {
-        const isSendedToken = (await localStorage.getItem("isSendedToken")) ?? false;
-        const { status } = await Notifications.getPermissionsAsync();
-        if (status === "granted" && !isSendedToken) {
-          const token = (await Notifications.getExpoPushTokenAsync()).data;
-          postExpoToken(token);
-          localStorage.setItem("isSendedToken", true);
-        }
-      }
-    )();
   }, []);
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  const postToken = async () => {
+    const token = (await Notifications.getExpoPushTokenAsync()).data;
+    postExpoToken(token);
+    localStorage.setItem("isSendedToken", true);
   }
+
+  useEffect(() => {
+    if(isLogin) {
+      (
+        async () => {
+          const [isSendedToken, { status }] = await Promise.all([localStorage.getItem("isSendedToken"), Notifications.getPermissionsAsync()]);
+          if (status === "granted" && !isSendedToken) postToken();
+          else {
+            const { status } = await Notifications.requestPermissionsAsync();
+            if (status === "granted") postToken();
+          }
+        }
+      )();
+    }
+  }, [isLogin]);
+
+  if (!fontsLoaded) return <AppLoading />;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
