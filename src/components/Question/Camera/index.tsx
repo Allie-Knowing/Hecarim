@@ -192,9 +192,13 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       <S.RecordIndicatorContainer>
         <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
           <S.RecordDot />
-          <S.RecordTitle>촬영중</S.RecordTitle>
+          <S.RecordTitle>
+            {Math.floor(time / 60)
+              .toString()
+              .padStart(2, "0")}{" "}
+            : {(time % 60).toString().padStart(2, "0")}
+          </S.RecordTitle>
         </View>
-        <S.RecordTitle>{(Math.floor(time / 60)).toString().padStart(2, "0")} : {(time % 60).toString().padStart(2, "0")}</S.RecordTitle>
       </S.RecordIndicatorContainer>
     ) : (
       <S.RecordIndicatorContainer>
