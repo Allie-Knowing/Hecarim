@@ -23,11 +23,11 @@ export const GoBackImage = styled.Image`
   height: 18;
 `;
 
-export const Control = styled.View<{ bottom: number }>`
+export const Control = styled.View`
   position: absolute;
   flex-direction: row;
-  bottom: ${(props) => props.bottom};
   width: 100%;
+  bottom: 60;
   align-items: center;
   justify-content: space-between;
   padding-left: 20;
