@@ -25,6 +25,7 @@ enum uri {
   nickname = "/nickname",
   profile = "/profile",
   views = "/video/views",
+  count = "/count",
 }
 
 export default uri;
