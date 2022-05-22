@@ -32,6 +32,8 @@ import Play from "../../assets/play.png";
 import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
 import useBlock from "hooks/useBlock";
+import useDoubleTap from "hooks/useDoubleTap";
+import { useViewsMutation } from "queries/Views";
 
 const { height } = Dimensions.get("screen");
 
@@ -79,6 +81,7 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
   const navigation = useMainStackNavigation();
   const { onBlockPress } = useBlock(id);
   const [isLike, setIsLike] = useState<boolean>(is_like);
+  const views = useViewsMutation(id);
 
   const likeTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -158,7 +161,9 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
       showAlert({
         title: "채택되었습니다",
         content: "답변이 채택되었습니다.",
-        buttons: [{ color: "black", onPress: (id) => closeAlert(id), text: "확인" }],
+        buttons: [
+          { color: "black", onPress: (id) => closeAlert(id), text: "확인" },
+        ],
       });
 
       queryClient.invalidateQueries([queryKeys.answer]);
@@ -253,7 +258,10 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
 
       if (!status.isLoaded && !isLoad) {
         setIsLoad(true);
-        await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
+        await videoRef.current.loadAsync({
+          uri: video_url,
+          overrideFileExtensionAndroid: "m3u8",
+        });
       }
     }
   }, [isCurrentPage, isNextPage, isLoad, video_url]);
@@ -290,12 +298,28 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
     setVideoStatus(e);
   }, []);
 
+  const onlyLike = () => {
+    if (!isLike) {
+      setIsLike(true);
+      like.mutate();
+    }
+  };
+
+  useEffect(() => {
+    if (isCurrentPage) {
+      views.mutateAsync();
+    }
+  }, [isCurrentPage]);
+
+  const onScreenPress = useDoubleTap(200, changeVideoState, onlyLike);
+
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
-        {isLoad && videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
-          <S.VideoStateIcon source={Play} />
-        )}
+      <S.Container style={{ height }} onPress={onScreenPress} activeOpacity={1}>
+        {isLoad &&
+          videoStatus &&
+          videoStatus.isLoaded &&
+          !videoStatus.shouldPlay && <S.VideoStateIcon source={Play} />}
         <S.Video
           onPlaybackStatusUpdate={onPlaybackStatusUpdate}
           isLooping
@@ -334,7 +358,9 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              <S.Description>{dateToString(new Date(created_at))}</S.Description>
+              <S.Description>
+                {dateToString(new Date(created_at))}
+              </S.Description>
             </S.InfoContainer>
           </S.InfoOuter>
           <View>
@@ -346,7 +372,9 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage source={profile ? { uri: profile } : defaultProfile} />
+                <S.ProfileImage
+                  source={profile ? { uri: profile } : defaultProfile}
+                />
               </S.IconContainer>
               <S.IconContainer onPress={onLikePress}>
                 <S.Icon
@@ -360,7 +388,9 @@ const VideoAnswerContent: FC<VideoAnswerType & PropsType> = ({
                 />
                 <S.IconLabel
                   style={{
-                    color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
+                    color: isLike
+                      ? theme.colors.primary.default
+                      : theme.colors.grayscale.scale10,
                   }}
                 >
                   {formattedNumber(like_cnt + (isLike ? 1 : 0))}

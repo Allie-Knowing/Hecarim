@@ -14,7 +14,10 @@ import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet, { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+  BottomSheetModal,
+  useBottomSheetModal,
+} from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
@@ -37,6 +40,8 @@ import defaultProfile from "assets/profile.png";
 import ReportModal from "components/BottomSheets/ReportModal";
 import HashTag from "components/HashTag";
 import useBlock from "hooks/useBlock";
+import useDoubleTap from "hooks/useDoubleTap";
+import { useViewsMutation } from "queries/Views";
 
 const { height } = Dimensions.get("screen");
 
@@ -83,6 +88,7 @@ const FeedContent: FC<Question & PropsType> = ({
   const { dismissAll } = useBottomSheetModal();
   const { onBlockPress } = useBlock(id);
   const [isLike, setIsLike] = useState<boolean>(is_like);
+  const views = useViewsMutation(id);
 
   const onMorePress = () => {
     if (Platform.OS === "ios") {
@@ -188,7 +194,13 @@ const FeedContent: FC<Question & PropsType> = ({
     }
 
     return item;
-  }, [is_mine, theme.colors.red.default, onDeletePress, dismissAll, onBlockPress]);
+  }, [
+    is_mine,
+    theme.colors.red.default,
+    onDeletePress,
+    dismissAll,
+    onBlockPress,
+  ]);
 
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
   const [isLoad, setIsLoad] = useState<boolean>(false);
@@ -215,7 +227,10 @@ const FeedContent: FC<Question & PropsType> = ({
 
       if (!status.isLoaded && !isLoad) {
         setIsLoad(true);
-        await videoRef.current.loadAsync({ uri: video_url, overrideFileExtensionAndroid: "m3u8" });
+        await videoRef.current.loadAsync({
+          uri: video_url,
+          overrideFileExtensionAndroid: "m3u8",
+        });
       }
     }
   }, [isCurrentPage, isNextPage, isLoad, video_url]);
@@ -252,9 +267,24 @@ const FeedContent: FC<Question & PropsType> = ({
     unLoad();
   }, [unLoad]);
 
+  const onlyLike = () => {
+    if (!isLike) {
+      setIsLike(true);
+      like.mutate();
+    }
+  };
+
+  useEffect(() => {
+    if (isCurrentPage) {
+      views.mutateAsync();
+    }
+  }, [isCurrentPage]);
+
+  const onScreenPress = useDoubleTap(200, changeVideoState, onlyLike);
+
   return (
     <Fragment>
-      <S.Container style={{ height }} onPress={changeVideoState} activeOpacity={1}>
+      <S.Container style={{ height }} onPress={onScreenPress} activeOpacity={1}>
         {videoStatus && videoStatus.isLoaded && !videoStatus.shouldPlay && (
           <S.VideoStateIcon source={Play} />
         )}
@@ -280,8 +310,14 @@ const FeedContent: FC<Question & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              {isMore && <S.Description>{dateToString(new Date(created_at))}</S.Description>}
-              <S.Description numberOfLines={isMore ? undefined : 1}>{description}</S.Description>
+              {isMore && (
+                <S.Description>
+                  {dateToString(new Date(created_at))}
+                </S.Description>
+              )}
+              <S.Description numberOfLines={isMore ? undefined : 1}>
+                {description}
+              </S.Description>
               {isMore && <HashTag id={id} />}
             </S.InfoContainer>
           </S.InfoOuter>
@@ -293,7 +329,9 @@ const FeedContent: FC<Question & PropsType> = ({
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage source={profile ? { uri: profile } : defaultProfile} />
+                <S.ProfileImage
+                  source={profile ? { uri: profile } : defaultProfile}
+                />
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
@@ -317,14 +355,18 @@ const FeedContent: FC<Question & PropsType> = ({
                   />
                   <S.IconLabel
                     style={{
-                      color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
+                      color: isLike
+                        ? theme.colors.primary.default
+                        : theme.colors.grayscale.scale10,
                     }}
                   >
                     {formattedNumber(like_cnt + (isLike ? 1 : 0))}
                   </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
-              <S.IconContainer onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}>
+              <S.IconContainer
+                onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
+              >
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(comment_cnt)}</S.IconLabel>
               </S.IconContainer>

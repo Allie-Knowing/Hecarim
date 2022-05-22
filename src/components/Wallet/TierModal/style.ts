@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 
-export const TireModalContainer = styled.TouchableOpacity<{
+export const TierModalContainer = styled.TouchableOpacity<{
   width: number;
   height: number;
 }>`

@@ -24,19 +24,25 @@ const SearchedQuestions: FC<Props> = ({ title }) => {
   );
   const navigation = useMainStackNavigation();
 
-  const moveQuestionStack = () => {
-    if (!questionList?.data?.data) return false;
+  const moveQuestionStack = (index: number) => {
+    if (!questionList?.data?.data) return;
     const questionListData = questionList.data.data;
-
     navigation.push("StackedQuestionList", {
       data: questionListData,
-      index: 0,
+      index,
     });
   };
 
-  const renderItem: ListRenderItem<searchTitle> = ({ item }) => {
+  const renderItem: ListRenderItem<searchTitle> = ({ item, index }) => {
     if (data.data.data.length > 0) {
-      return <Results item={item} moveQuestionStack={moveQuestionStack} />;
+      return (
+        <Results
+          item={item}
+          moveQuestionStack={() => {
+            moveQuestionStack(index);
+          }}
+        />
+      );
     }
     return null;
   };

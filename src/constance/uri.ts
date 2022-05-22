@@ -24,6 +24,8 @@ enum uri {
   wallet = "/wallet",
   nickname = "/nickname",
   profile = "/profile",
+  views = "/video/views",
+  count = "/count",
   profileAnswerList = "/user/answer/video/",
 }
 

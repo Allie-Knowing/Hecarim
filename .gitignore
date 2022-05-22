@@ -11,6 +11,9 @@ environment.ts
 google-services.json
 GoogleService-Info.plist
 
+#app.json
+app.json
+
 ### macOS ###
 # General
 .DS_Store

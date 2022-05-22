@@ -19,17 +19,10 @@ export interface getVideoAnswerListResponse {
   data: VideoAnswer[];
 }
 
-export const getVideoAnswerList = async (
-  questionId: number,
-  page: number,
-  size: number
-) => {
-  return await instance.get<getVideoAnswerListResponse>(
-    `${uri.videoAnswer}/${questionId}`,
-    {
-      params: { page, size },
-    }
-  );
+export const getVideoAnswerList = async (questionId: number, page: number, size: number) => {
+  return await instance.get<getVideoAnswerListResponse>(`${uri.videoAnswer}/${questionId}`, {
+    params: { page, size },
+  });
 };
 
 export const adoptionVideoAnswer = async (videoId: number) => {
@@ -45,7 +38,14 @@ interface getVideoAnswerDetailResponse {
 }
 
 export const getVideoAnswerDetail = async (videoId: number) => {
-  return await instance.get<getVideoAnswerDetailResponse>(
-    `${uri.videoAnswerDetail}/${videoId}`
-  );
+  return await instance.get<getVideoAnswerDetailResponse>(`${uri.videoAnswerDetail}/${videoId}`);
+};
+
+interface GetVideoAnswerCountResponse {
+  data: {
+    video_answer_cnt: number;
+  };
+}
+export const getVideoAnswerCount = async (videoId: number) => {
+  return await instance.get<GetVideoAnswerCountResponse>(`${uri.question}/${videoId}${uri.count}`);
 };

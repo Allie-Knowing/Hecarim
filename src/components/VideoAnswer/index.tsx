@@ -1,10 +1,12 @@
 import VideoAnswerContent from "../VideoAnswerContent";
 import * as S from "./styles";
 import { Dimensions, NativeSyntheticEvent, NativeScrollEvent, ListRenderItem } from "react-native";
-import { FC, memo, useCallback, useMemo, useState } from "react";
+import { FC, memo, useCallback, useEffect, useMemo, useState } from "react";
 import { VideoAnswer as VideoAnswerType } from "api/Answer";
-import { useVideoAnswerList } from "queries/Answer";
+import { useVideoAnswerCount, useVideoAnswerList } from "queries/Answer";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import videoAnswerCountState from "atom/videoAnswerCount";
 
 const { height, width } = Dimensions.get("screen");
 
@@ -25,6 +27,8 @@ const VideoAnswer: FC<PropsType> = ({
 }) => {
   const [page, setPage] = useState(0);
   const { data, isLoading, isError, error, fetchNextPage } = useVideoAnswerList(questionId, size);
+  const { data: countData } = useVideoAnswerCount(questionId);
+  const setVideoAnswerCount = useSetRecoilState(videoAnswerCountState);
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const newPage = Math.round(e.nativeEvent.contentOffset.y / height);
@@ -53,6 +57,12 @@ const VideoAnswer: FC<PropsType> = ({
         : [],
     [data]
   );
+
+  useEffect(() => {
+    if (countData?.data?.data.video_answer_cnt) {
+      setVideoAnswerCount(countData.data.data.video_answer_cnt);
+    }
+  }, [countData, setVideoAnswerCount]);
 
   const onEndReached = useCallback(() => {
     if (!isError) {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, FC, useContext } from "react";
 import { Camera } from "expo-camera";
-import { StyleSheet, View, SafeAreaView } from "react-native";
+import { StyleSheet, View, SafeAreaView, Text } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { CameraStackParamList } from "..";
 import { Asset } from "expo-asset";
-import { MAX_DURATION, SCREEN_RATIO } from "../../../constant/camera";
+import { MAX_DURATION, SCREEN_RATIO, MIN_DURATION } from "../../../constant/camera";
 import * as ImagePicker from "expo-image-picker";
 import * as S from "./styles";
 import { cameraContext } from "context/CameraContext";
@@ -16,6 +16,7 @@ import recordImg from "../../../assets/icons/record.png";
 import videoImg from "../../../assets/icons/video.png";
 import backImage from "../../../assets/icons/back-white.png";
 import rotateImg from "../../../assets/icons/rotate.png";
+import { useTimer } from "hooks/useTimer";
 
 interface Props {
   route?: {
@@ -45,6 +46,8 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   const isFocused = useIsFocused();
 
+  const { time, startTimer, endTimer, resetTimer } = useTimer();
+
   useEffect(() => {
     (async () => {
       const { status: CameraStatus } = await Camera.requestCameraPermissionsAsync();
@@ -72,7 +75,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     const videoData = ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      quality: ImagePicker.UIImagePickerControllerQualityType.High,
+      quality: 3,
       base64: true,
       videoMaxDuration: MAX_DURATION,
       aspect: [4, 3],
@@ -84,15 +87,20 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       await videoData.then((res: ImagePicker.ImageInfo) => {
         if (!res.cancelled) {
           const isLongerThan60s = (res.duration ?? 0) / 1000 > MAX_DURATION;
+          const isShorterThan3s = (res.duration ?? 0) / 1000 < MIN_DURATION;
+
           if (isLongerThan60s) {
             alert("영상의 길이가 60초를 초과하여, 영상의 앞 60초만 사용됩니다.");
+          } else if (isShorterThan3s) {
+            alert("영상의 길이는 최소 3초 이상이어야 합니다.");
+          } else {
+            setUri(res.uri);
+            isAnswer
+              ? mainNavigation.push("CameraDetail", {
+                  questionId: route.params.questionId,
+                })
+              : cameraNavigation.push("CameraDetail");
           }
-          setUri(res.uri);
-          isAnswer
-            ? mainNavigation.push("CameraDetail", {
-                questionId: route.params.questionId,
-              })
-            : cameraNavigation.push("CameraDetail");
         }
       });
     }
@@ -138,11 +146,14 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 녹화 함수
   const recordVideo = async () => {
+    resetTimer();
+    startTimer();
     blockRecordButton();
     if (cameraRef && isFocused && !blockRecord) {
       setIsVideoRecording(true);
       const videoRecordPromise = await cameraRef.recordAsync({
         maxDuration: MAX_DURATION,
+        quality: 3,
       });
       setUri(videoRecordPromise.uri);
       isAnswer
@@ -159,6 +170,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
       cameraRef.stopRecording();
       setIsVideoRecording(false);
     }
+    endTimer();
     blockRecordButton();
   };
 
@@ -183,8 +195,15 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
   const renderVideoRecordIndicator = (): JSX.Element =>
     isVideoRecording ? (
       <S.RecordIndicatorContainer>
-        <S.RecordDot />
-        <S.RecordTitle>{"촬영중"}</S.RecordTitle>
+        <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+          <S.RecordDot />
+          <S.RecordTitle>
+            {Math.floor(time / 60)
+              .toString()
+              .padStart(2, "0")}{" "}
+            : {(time % 60).toString().padStart(2, "0")}
+          </S.RecordTitle>
+        </View>
       </S.RecordIndicatorContainer>
     ) : (
       <S.RecordIndicatorContainer>
@@ -194,7 +213,7 @@ const CameraComponent: FC<Props> = ({ route }): JSX.Element => {
 
   //동영상 촬영 컨트롤 ui
   const renderVideoControl = (): JSX.Element => (
-    <S.Control bottom={isAnswer ? 60 : 100}>
+    <S.Control>
       {isVideoRecording ? (
         // 촬영중인 상태
         <S.RecordVideoContainer
