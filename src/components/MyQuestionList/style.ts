@@ -18,6 +18,7 @@ export const Title = styled.Text`
 export const QuestionContainer = styled.FlatList`
   width: 100%;
   margin-top: 12px;
+  height: 500px;
 `;
 
 export const Notice = styled.Text`

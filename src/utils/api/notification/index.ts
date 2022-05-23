@@ -1,4 +1,4 @@
-import { instance } from "utils/axios"
+import { instance } from "utils/axios";
 
 export const postExpoToken = (token: string) => {
     console.log(123, token);

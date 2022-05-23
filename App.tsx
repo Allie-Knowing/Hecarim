@@ -6,10 +6,15 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack";
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import StackedQuestionList from "screens/StackedQuestionList";
 import { Host } from "react-native-portalize";
-import useMainStackNavigation, { MainStackParamList } from "hooks/useMainStackNavigation";
+import useMainStackNavigation, {
+  MainStackParamList,
+} from "hooks/useMainStackNavigation";
 import Login from "screens/Login";
 import TermsOfService from "screens/Login/TermsModal/TermsOfService";
 import PrivacyPolicy from "screens/Login/TermsModal/PrivacyPolicy";
@@ -20,8 +25,12 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CameraComponent from "components/Question/Camera";
 import isStackContext from "./src/context/IsStackContext";
 import CameraProvider from "context/CameraContext";
-import IsUploadingProvider, { IsUploadingContext } from "context/IsUploadingContext";
-import UploadingStatusProvider, { UploadingStatusContext } from "context/UploadingStatusContext";
+import IsUploadingProvider, {
+  IsUploadingContext,
+} from "context/IsUploadingContext";
+import UploadingStatusProvider, {
+  UploadingStatusContext,
+} from "context/UploadingStatusContext";
 import CameraDetail from "components/Question/CameraDetail";
 import { useCallback, useEffect, useState } from "react";
 import localStorage from "utils/localStorage";
@@ -40,6 +49,7 @@ import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
 import { RecoilRoot } from "recoil";
+import * as Linking from "expo-linking";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -52,7 +62,10 @@ if (__DEV__) {
   });
 }
 
-if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -69,17 +82,35 @@ export default function App() {
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const check = useCallback(async () => {
-    const accessToken = await localStorage.getItem<string>(storageKeys.accessToken);
+  const check = async () => {
+    const accessToken = await localStorage.getItem<string>(
+      storageKeys.accessToken
+    );
 
     setIsLogin(accessToken !== null);
-  }, []);
+  };
 
-  const appPermission = useCallback(() => setTimeout(requestTrackingPermissionsAsync, 500), []);
+  const askPermissions = async () => {
+    setTimeout(async () => {
+      await requestTrackingPermissionsAsync();
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status === "granted") {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        postExpoToken(token);
+      }
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "알람",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+        });
+      }
+    }, 500);
+  };
 
   useEffect(() => {
     check();
-    appPermission();
+    askPermissions();
   }, []);
 
   const postToken = async () => {
@@ -125,7 +156,11 @@ export default function App() {
                                   {(isUploading) =>
                                     isUploading.isUploading ? (
                                       <UploadingStatusContext.Consumer>
-                                        {(status) => <UploadingModal status={status.status} />}
+                                        {(status) => (
+                                          <UploadingModal
+                                            status={status.status}
+                                          />
+                                        )}
                                       </UploadingStatusContext.Consumer>
                                     ) : (
                                       <></>
@@ -171,13 +206,21 @@ const MainNavigationScreen = () => {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
-      <Root.Screen name="Main" component={BottomTabNavigation} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Main"
+        component={BottomTabNavigation}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="StackedQuestionList"
         component={StackedQuestionList}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="TermsOfService"
         component={TermsOfService}
@@ -188,8 +231,16 @@ const MainNavigationScreen = () => {
         component={PrivacyPolicy}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Setting" component={Setting} options={{ title: "설정" }} />
-      <Root.Screen name="UserPage" component={UserPage} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Setting"
+        component={Setting}
+        options={{ title: "설정" }}
+      />
+      <Root.Screen
+        name="UserPage"
+        component={UserPage}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="SearchedQuestionsPage"
         component={SearchedQuestionsPage}
@@ -213,8 +264,16 @@ const MainNavigationScreen = () => {
         )}
         options={{ headerShown: false }}
       />
-      <Root.Screen name="Ask" component={Question} options={{ headerShown: false }} />
-      <Root.Screen name="InterestsSetting" component={Interests} options={{ headerShown: false }} />
+      <Root.Screen
+        name="Ask"
+        component={Question}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="InterestsSetting"
+        component={Interests}
+        options={{ headerShown: false }}
+      />
       <Root.Screen
         name="ProfileEdit"
         component={ProfileEditPage}
