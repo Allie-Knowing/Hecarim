@@ -59,9 +59,7 @@ const VideoAnswer: FC<PropsType> = ({
   );
 
   useEffect(() => {
-    if (countData?.data?.data.video_answer_cnt) {
-      setVideoAnswerCount(countData.data.data.video_answer_cnt);
-    }
+    setVideoAnswerCount(countData?.data?.data.video_answer_cnt);
   }, [countData, setVideoAnswerCount]);
 
   const onEndReached = useCallback(() => {
