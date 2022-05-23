@@ -67,9 +67,6 @@ const MyQuestionList: FC<Props> = ({
   );
 
   useEffect(() => {
-    console.log(questionList);
-    console.log(answerList);
-
     if (isQuestion) {
       setProfileDataList(questionList?.data.data || []);
     } else {
