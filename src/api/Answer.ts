@@ -1,4 +1,3 @@
-import { AxiosResponse } from "axios";
 import uri from "constance/uri";
 import { instance } from "utils/axios";
 
