@@ -9,10 +9,10 @@ interface Props {
 
 const TierLine: FC<Props> = ({ tier, selection, iq }) => {
   return (
-    <S.TableLine isLast={tier === "현인"}>
-      <S.TableContent>{tier}</S.TableContent>
-      <S.TableContent>{selection}</S.TableContent>
-      <S.TableContent>{iq}</S.TableContent>
+    <S.TableLine>
+      <S.TableContent isBold={tier === "티어"}>{tier}</S.TableContent>
+      <S.TableContent isBold={tier === "티어"}>{selection}</S.TableContent>
+      <S.TableContent isBold={tier === "티어"}>{iq}</S.TableContent>
     </S.TableLine>
   );
 };
