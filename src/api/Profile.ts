@@ -1,8 +1,26 @@
 import uri from "constance/uri";
 import { instance } from "utils/axios";
 
+export interface ProfileInfo {
+  name: string;
+  profile: string;
+  email: string;
+  follower_cnt: number;
+  following_cnt: number;
+  video_cnt: number;
+  answer_video_cnt: number;
+}
+
 export interface ProfileResponse {
-  data: { profile: string; name: string; video_cnt: number; email: string };
+  data: {
+    name: string;
+    profile: string;
+    email: string;
+    follower_cnt: number;
+    following_cnt: number;
+    video_cnt: number;
+    answer_video_cnt: number;
+  };
 }
 
 export interface ProfileRequest {
@@ -39,6 +57,14 @@ export const getProfileApi = async (body: ProfileRequest) => {
 export const getProfilQuestionListApi = async (body: ProfileRequest) => {
   const data = await instance.get<GetProfileQuestionListResponse>(
     `${uri.getProfileQuestionList}${body.id}?page=1&size=10000`
+  );
+
+  return data;
+};
+
+export const getProfileAnswerListApi = async (userId: number) => {
+  const data = await instance.get<GetProfileQuestionListResponse>(
+    `${uri.profileAnswerList}${userId}?page=1&size=10000`
   );
 
   return data;

@@ -48,6 +48,8 @@ import UploadingModal from "components/Question/UploadingModal";
 import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
+import { RecoilRoot } from "recoil";
+import * as Linking from "expo-linking";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -80,39 +82,56 @@ export default function App() {
 
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
-  const check = useCallback(async () => {
+  const check = async () => {
     const accessToken = await localStorage.getItem<string>(
       storageKeys.accessToken
     );
 
     setIsLogin(accessToken !== null);
-  }, []);
+  };
 
-  const appPermission = useCallback(() => setTimeout(requestTrackingPermissionsAsync, 500), []);
+  const askPermissions = async () => {
+    setTimeout(async () => {
+      await requestTrackingPermissionsAsync();
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status === "granted") {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        postExpoToken(token);
+      }
+      if (Platform.OS === "android") {
+        Notifications.setNotificationChannelAsync("default", {
+          name: "알람",
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+        });
+      }
+    }, 500);
+  };
 
   useEffect(() => {
     check();
-    appPermission();
+    askPermissions();
   }, []);
 
   const postToken = async () => {
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     postExpoToken(token);
     localStorage.setItem("isSendedToken", true);
-  }
+  };
 
   useEffect(() => {
-    if(isLogin) {
-      (
-        async () => {
-          const [isSendedToken, { status }] = await Promise.all([localStorage.getItem("isSendedToken"), Notifications.getPermissionsAsync()]);
-          if (status === "granted" && !isSendedToken) postToken();
-          else {
-            const { status } = await Notifications.requestPermissionsAsync();
-            if (status === "granted") postToken();
-          }
+    if (isLogin) {
+      (async () => {
+        const [isSendedToken, { status }] = await Promise.all([
+          localStorage.getItem("isSendedToken"),
+          Notifications.getPermissionsAsync(),
+        ]);
+        if (status === "granted" && !isSendedToken) postToken();
+        else {
+          const { status } = await Notifications.requestPermissionsAsync();
+          if (status === "granted") postToken();
         }
-      )();
+      })();
     }
   }, [isLogin]);
 
@@ -122,42 +141,44 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <isLoginContext.Provider value={isLogin}>
         <QueryClientProvider client={queryClient}>
-          <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
-              <ThemeProvider theme={theme}>
-                <IsUploadingProvider>
-                  <UploadingStatusProvider>
-                    <BottomSheetModalProvider>
-                      <AlretProvider>
-                        <NavigationContainer>
-                          <Host>
-                            <CameraProvider>
-                              <IsUploadingContext.Consumer>
-                                {(isUploading) =>
-                                  isUploading.isUploading ? (
-                                    <UploadingStatusContext.Consumer>
-                                      {(status) => (
-                                        <UploadingModal
-                                          status={status.status}
-                                        />
-                                      )}
-                                    </UploadingStatusContext.Consumer>
-                                  ) : (
-                                    <></>
-                                  )
-                                }
-                              </IsUploadingContext.Consumer>
-                              <MainNavigationScreen />
-                            </CameraProvider>
-                          </Host>
-                        </NavigationContainer>
-                      </AlretProvider>
-                    </BottomSheetModalProvider>
-                  </UploadingStatusProvider>
-                </IsUploadingProvider>
-              </ThemeProvider>
-            </SafeAreaView>
-          </SafeAreaProvider>
+          <RecoilRoot>
+            <SafeAreaProvider>
+              <SafeAreaView style={{ flex: 1 }} edges={["left", "right"]}>
+                <ThemeProvider theme={theme}>
+                  <IsUploadingProvider>
+                    <UploadingStatusProvider>
+                      <BottomSheetModalProvider>
+                        <AlretProvider>
+                          <NavigationContainer>
+                            <Host>
+                              <CameraProvider>
+                                <IsUploadingContext.Consumer>
+                                  {(isUploading) =>
+                                    isUploading.isUploading ? (
+                                      <UploadingStatusContext.Consumer>
+                                        {(status) => (
+                                          <UploadingModal
+                                            status={status.status}
+                                          />
+                                        )}
+                                      </UploadingStatusContext.Consumer>
+                                    ) : (
+                                      <></>
+                                    )
+                                  }
+                                </IsUploadingContext.Consumer>
+                                <MainNavigationScreen />
+                              </CameraProvider>
+                            </Host>
+                          </NavigationContainer>
+                        </AlretProvider>
+                      </BottomSheetModalProvider>
+                    </UploadingStatusProvider>
+                  </IsUploadingProvider>
+                </ThemeProvider>
+              </SafeAreaView>
+            </SafeAreaProvider>
+          </RecoilRoot>
         </QueryClientProvider>
       </isLoginContext.Provider>
     </GestureHandlerRootView>

@@ -2,8 +2,6 @@ import React, { FC, useCallback, useEffect, useMemo } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
 import { useQuestionList } from "queries/Question";
-import { useNotificationPermission } from "hooks/useNotificationPermission";
-import { postExpoToken } from "utils/api/notification";
 
 const size = 10;
 

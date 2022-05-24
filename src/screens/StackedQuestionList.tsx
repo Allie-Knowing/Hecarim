@@ -13,7 +13,9 @@ const StackedQuestionList: FC<
   return (
     <isStackContext.Provider value={true}>
       <QuestionList
-        onQuestionEndReached={() => {}}
+        onQuestionEndReached={() => {
+          return;
+        }}
         questionList={data}
         index={index}
       />
