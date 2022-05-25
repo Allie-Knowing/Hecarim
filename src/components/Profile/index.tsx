@@ -8,9 +8,10 @@ type Props = {
   userInfo: ProfileInfo;
   isLoading: boolean;
   isError: boolean;
+  onPressFollower: () => void;
 };
 
-const Profile: FC<Props> = ({ userInfo, isError, isLoading }) => {
+const Profile: FC<Props> = ({ userInfo, isError, isLoading, onPressFollower }) => {
   return (
     <>
       <S.Container>
@@ -26,10 +27,12 @@ const Profile: FC<Props> = ({ userInfo, isError, isLoading }) => {
                 <S.Nickname>{userInfo.name}</S.Nickname>
                 <S.Email>{userInfo.email}</S.Email>
               </S.NameContainer>
-              {/* <S.Description>
-                팔로워 {data.data.data.follower_cnt} 팔로잉{" "}
-                {data.data.data.following_cnt}
-              </S.Description> */}
+              <S.DescriptionButton onPress={onPressFollower}>
+                <S.Description>
+                  팔로워 {userInfo.follower_cnt} 팔로잉{" "}
+                  {userInfo.following_cnt}
+                </S.Description>
+              </S.DescriptionButton>
             </S.ProfileContent>
           </>
         )}

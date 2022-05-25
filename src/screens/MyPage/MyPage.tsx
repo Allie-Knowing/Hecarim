@@ -25,6 +25,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
+          onPressFollower={() => navigation.push("Follower", { userId: data?.data.data })}
         />
         <MyQuestionList
           userId={data?.data.data}

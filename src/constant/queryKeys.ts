@@ -19,6 +19,8 @@ const queryKeys = {
   IQHistory: "iq_history",
   count: "count",
   profileAnswerList: "profile_answer_list",
+  follower: "follower",
+  following: "following",
 } as const;
 
 export default queryKeys;
