@@ -1,5 +1,6 @@
 import { FollowItem } from 'api/Follow';
 import styled from 'styled-components/native';
+import defaultProfile from "assets/profile.png";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props extends Omit<FollowItem, "id"> {
@@ -12,7 +13,7 @@ const FollowerItem = ({
 }: Props) => {
     return (
         <Container>
-            <Avatar source={{ uri: profile }} />
+            <Avatar source={profile ? { uri: profile } : defaultProfile} />
             <Name>{name}</Name>
         </Container>
     );

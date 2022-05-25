@@ -70,7 +70,7 @@ const Bar = styled(Animated.View)`
     height: 2px;
     background: ${({ theme }) => theme.colors.primary.default};
     position: absolute;
-    top: 100%;
+    bottom: 0;
     left: 0;
 `;
 
