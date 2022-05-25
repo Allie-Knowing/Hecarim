@@ -7,7 +7,6 @@ import TierModal from "../TierModal";
 import * as S from "./style";
 
 const Logo = require("assets/icons/walletLogo.png");
-const TierImage = require("assets/tier.png");
 
 const WalletInfo: FC = () => {
   const { top: topPad } = useSafeAreaInsets();
@@ -42,7 +41,7 @@ const WalletInfo: FC = () => {
           settierModal(false);
         }}
       >
-        <TierModal closeModal={settierModal} />
+        <TierModal closeModal={settierModal} {...data} />
       </Modal>
       <S.WalletInfoContainer topPad={topPad}>
         {isLoading && <Text>Loading...</Text>}
