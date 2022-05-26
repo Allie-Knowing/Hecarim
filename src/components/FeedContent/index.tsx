@@ -14,10 +14,7 @@ import * as S from "./styles";
 import { ThemeContext } from "styled-components/native";
 import formattedNumber from "constant/formattedNumber";
 import CommentBottomSheet from "components/BottomSheets/Comments";
-import BottomSheet, {
-  BottomSheetModal,
-  useBottomSheetModal,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import { Portal } from "react-native-portalize";
 import isStackContext from "context/IsStackContext";
@@ -194,13 +191,7 @@ const FeedContent: FC<Question & PropsType> = ({
     }
 
     return item;
-  }, [
-    is_mine,
-    theme.colors.red.default,
-    onDeletePress,
-    dismissAll,
-    onBlockPress,
-  ]);
+  }, [is_mine, theme.colors.red.default, onDeletePress, dismissAll, onBlockPress]);
 
   const [videoStatus, setVideoStatus] = useState<AVPlaybackStatus>(null);
   const [isLoad, setIsLoad] = useState<boolean>(false);
@@ -243,6 +234,11 @@ const FeedContent: FC<Question & PropsType> = ({
     } else if (status.isLoaded) {
       await videoRef.current.playAsync();
     }
+  }, []);
+
+  const onCommetProfilePress = useCallback(async () => {
+    await videoRef.current?.pauseAsync();
+    commentBottomSheetRef.current?.close();
   }, []);
 
   useEffect(() => {
@@ -295,6 +291,7 @@ const FeedContent: FC<Question & PropsType> = ({
           ref={videoRef}
           rate={1.0}
           volume={1.0}
+          shouldPlay={false}
           style={{ backgroundColor: theme.colors.grayscale.scale100 }}
         />
         <S.BackBlack
@@ -310,14 +307,8 @@ const FeedContent: FC<Question & PropsType> = ({
                 </View>
                 <S.Title>{title}</S.Title>
               </S.TitleContainer>
-              {isMore && (
-                <S.Description>
-                  {dateToString(new Date(created_at))}
-                </S.Description>
-              )}
-              <S.Description numberOfLines={isMore ? undefined : 1}>
-                {description}
-              </S.Description>
+              {isMore && <S.Description>{dateToString(new Date(created_at))}</S.Description>}
+              <S.Description numberOfLines={isMore ? undefined : 1}>{description}</S.Description>
               {isMore && <HashTag id={id} />}
             </S.InfoContainer>
           </S.InfoOuter>
@@ -329,9 +320,7 @@ const FeedContent: FC<Question & PropsType> = ({
                   navigation.push("UserPage", { userId: user_id });
                 }}
               >
-                <S.ProfileImage
-                  source={profile ? { uri: profile } : defaultProfile}
-                />
+                <S.ProfileImage source={profile ? { uri: profile } : defaultProfile} />
               </S.IconContainer>
               <S.IconContainer
                 onPress={() => {
@@ -355,18 +344,14 @@ const FeedContent: FC<Question & PropsType> = ({
                   />
                   <S.IconLabel
                     style={{
-                      color: isLike
-                        ? theme.colors.primary.default
-                        : theme.colors.grayscale.scale10,
+                      color: isLike ? theme.colors.primary.default : theme.colors.grayscale.scale10,
                     }}
                   >
                     {formattedNumber(like_cnt + (isLike ? 1 : 0))}
                   </S.IconLabel>
                 </Fragment>
               </S.IconContainer>
-              <S.IconContainer
-                onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}
-              >
+              <S.IconContainer onPress={() => commentBottomSheetRef.current?.snapToIndex(0)}>
                 <S.Icon resizeMode="contain" source={Comment} />
                 <S.IconLabel>{formattedNumber(comment_cnt)}</S.IconLabel>
               </S.IconContainer>
@@ -383,6 +368,7 @@ const FeedContent: FC<Question & PropsType> = ({
       </S.Container>
       <Portal>
         <CommentBottomSheet
+          onProfilePress={onCommetProfilePress}
           isQuestionAdoption={is_adoption === 1}
           ref={commentBottomSheetRef}
           questionId={id}
