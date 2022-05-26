@@ -22,6 +22,7 @@ const MyPage: FC<Props> = ({ navigation }) => {
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
         <Profile
+          userId={-1}
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
