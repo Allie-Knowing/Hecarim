@@ -9,6 +9,7 @@ export const Container = styled.View`
   padding-right: 10px;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 
 export const ProfileImage = styled.Image`
@@ -20,7 +21,6 @@ export const ProfileImage = styled.Image`
 
 export const ProfileContent = styled.View`
   margin-left: 16px;
-  justify-content: space-between;
   flex: 1;
 `;
 
@@ -52,7 +52,6 @@ export const NameContainer = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex: 1;
 `;
 
 export const FollowButton = styled.TouchableOpacity`
@@ -71,6 +70,7 @@ export const UnFollowButton = styled.TouchableOpacity`
   padding: 8px 16px;
   border-radius: 100px;
   color: ${({ theme }) => theme.colors.primary.default};
+  background-color: ${({ theme }) => theme.colors.grayscale.scale10};
   border: 1px solid ${({ theme }) => theme.colors.primary.default};
 `;
 
