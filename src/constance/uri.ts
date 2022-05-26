@@ -27,6 +27,8 @@ enum uri {
   views = "/video/views",
   count = "/count",
   profileAnswerList = "/user/answer/video/",
+  getFollower = "/follower",
+  getFollowing = "/following"
 }
 
 export default uri;

@@ -26,6 +26,9 @@ export const Nickname = styled.Text`
   font: ${({ theme }) => theme.fonts.body1};
 `;
 
+export const DescriptionButton = styled.TouchableOpacity`
+`;
+
 export const Description = styled.Text`
   color: ${({ theme }) => theme.colors.grayscale.scale50};
   font: ${({ theme }) => theme.fonts.description1};

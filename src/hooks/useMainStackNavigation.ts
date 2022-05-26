@@ -20,6 +20,7 @@ export type MainStackParamList = {
   TermsOfService: undefined;
   PrivacyPolicy: undefined;
   UserPage: { userId: number };
+  Follower: { userId: number };
   Setting: undefined;
   Camera: { questionId?: number };
   CameraDetail: { questionId?: number };

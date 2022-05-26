@@ -30,6 +30,7 @@ const UserPage: FC<Props> = ({ route, navigation }) => {
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
+          onPressFollower={() => navigation.push("Follower", { userId: route.params.userId })}
         />
         <MakeKnowingBanner />
         <MyQuestionList

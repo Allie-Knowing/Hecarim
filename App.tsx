@@ -49,7 +49,7 @@ import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
 import { RecoilRoot } from "recoil";
-import * as Linking from "expo-linking";
+import Follower from "screens/Follower";
 
 const Root = createStackNavigator<MainStackParamList>();
 const queryClient = new QueryClient({
@@ -86,6 +86,8 @@ export default function App() {
     const accessToken = await localStorage.getItem<string>(
       storageKeys.accessToken
     );
+
+    console.log(accessToken);
 
     setIsLogin(accessToken !== null);
   };
@@ -239,6 +241,11 @@ const MainNavigationScreen = () => {
       <Root.Screen
         name="UserPage"
         component={UserPage}
+        options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="Follower"
+        component={Follower}
         options={{ headerShown: false }}
       />
       <Root.Screen
