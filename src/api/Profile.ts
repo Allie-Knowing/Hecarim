@@ -36,6 +36,7 @@ export interface ProfileQuestion {
   video_url: string;
   created_at: string;
   comment_cnt: number;
+  views: number;
   user_id: number;
   like_cnt: number;
   is_mine: boolean;
