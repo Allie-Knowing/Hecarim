@@ -49,9 +49,7 @@ export interface GetProfileQuestionListResponse {
 }
 
 export const getProfileApi = async (body: ProfileRequest) => {
-  const data = await instance.get<ProfileResponse>(
-    `${uri.getProfile}${body.id}`
-  );
+  const data = await instance.get<ProfileResponse>(`${uri.getProfile}${body.id}`);
   return data;
 };
 

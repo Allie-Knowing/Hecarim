@@ -17,16 +17,13 @@ type Props = {
 
 const UserPage: FC<Props> = ({ route, navigation }) => {
   const { top: topPad } = useSafeAreaInsets();
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useProfile(route.params.userId);
+  const { data: userInfo, isLoading, isError } = useProfile(route.params.userId);
 
   return (
     <isStackContext.Provider value={true}>
       <S.UserContainer topPad={topPad}>
         <Profile
+          userId={route.params.userId}
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
