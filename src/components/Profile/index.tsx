@@ -1,4 +1,3 @@
-import { useFollowMutation, useIsFollow } from "queries/Follow";
 import React, { FC, useEffect, useState } from "react";
 import * as S from "./style";
 import defaultProfile from "assets/profile.png";
@@ -9,20 +8,29 @@ type Props = {
   isLoading: boolean;
   isError: boolean;
   onPressFollower: () => void;
-  userId: number;
+  isFollow?: boolean;
+  mutate?: (condition: boolean) => void;
+  isMy: boolean;
 };
 
-const Profile: FC<Props> = ({ userInfo, isError, isLoading, onPressFollower, userId }) => {
-  const { data } = useIsFollow(userId);
+const Profile: FC<Props> = ({
+  userInfo,
+  isError,
+  isLoading,
+  onPressFollower,
+  mutate,
+  isFollow: isFollowProp,
+  isMy,
+}) => {
   const [isFollow, setIsFollow] = useState(false);
-  const { mutateAsync } = useFollowMutation(userId);
   const [isClick, setClick] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setIsFollow(data.data.is_follow);
+    // eslint-disable-next-line no-extra-boolean-cast
+    if (!!isFollowProp) {
+      setIsFollow(isFollowProp);
     }
-  }, [data]);
+  }, [isFollowProp]);
 
   const onPressFollow = (condition: boolean) => {
     setClick(true);
@@ -30,18 +38,16 @@ const Profile: FC<Props> = ({ userInfo, isError, isLoading, onPressFollower, use
   };
 
   useEffect(() => {
-    if (userId !== -1 && isClick) {
+    if (isClick) {
       const timeout = setTimeout(() => {
-        console.log("123");
-
-        mutateAsync(isFollow);
+        mutate(isFollow);
       }, 1000);
 
       return () => {
         clearTimeout(timeout);
       };
     }
-  }, [isClick, isFollow, mutateAsync, userId]);
+  }, [isClick, isFollow, mutate]);
 
   return (
     <>
@@ -66,7 +72,7 @@ const Profile: FC<Props> = ({ userInfo, isError, isLoading, onPressFollower, use
                 </S.Description>
               </S.DescriptionButton>
             </S.ProfileContent>
-            {userId !== -1 &&
+            {!isMy &&
               (!isFollow ? (
                 <S.FollowButton onPress={() => onPressFollow(true)}>
                   <S.FollowButtonLabel>팔로우</S.FollowButtonLabel>
