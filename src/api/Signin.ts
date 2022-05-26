@@ -28,7 +28,7 @@ export const postGoogleSigninApi = async (body: GoogleSigninRequest) => {
       localStorage.setItem<string>(storageKeys.refreshToken, response.data.refresh_token),
     ]);
   } catch (error) {
-    console.error(error);
+    return;
   }
 };
 
@@ -46,7 +46,7 @@ export const postSigninApi = async (body: SigninRequest) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    return;
   }
 
   await Promise.all([

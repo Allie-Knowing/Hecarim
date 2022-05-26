@@ -87,12 +87,7 @@ const MyQuestionList: FC<Props> = ({
           <S.QuestionContainer
             key={"#"}
             data={profileDataList}
-            renderItem={({ item, index }: { item: any; index: number }) => (
-              <MyQuestion
-                question={item}
-                moveQuestionStack={() => moveQuestionStack(index)}
-              />
-            )}
+            renderItem={renderItem}
             numColumns={2}
             showsVerticalScrollIndicator={false}
             columnWrapperStyle={{
