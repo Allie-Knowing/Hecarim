@@ -34,10 +34,11 @@ interface PropsType {
   questionId: number;
   isQuestionAdoption: boolean;
   is_mine: boolean;
+  onProfilePress: () => void;
 }
 
 const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
-  ({ questionId, isQuestionAdoption, is_mine }, ref) => {
+  ({ questionId, isQuestionAdoption, is_mine, onProfilePress }, ref) => {
     const themeContext = useContext(ThemeContext);
     const { bottom: bottomPad } = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -120,6 +121,7 @@ const CommentBottomSheet = forwardRef<BottomSheet, PropsType>(
         <S.Container>
           <S.Title>글 답변</S.Title>
           <TextAnswerList
+            onProfilePress={onProfilePress}
             is_mine={is_mine}
             isQuestionAdoption={isQuestionAdoption}
             questionId={questionId}
@@ -151,11 +153,18 @@ interface ListProps {
   questionId: number;
   isQuestionAdoption: boolean;
   is_mine: boolean;
+  onProfilePress: () => void;
 }
 
 const size = 20;
 
-const TextAnswerList: FC<ListProps> = ({ isOpen, questionId, isQuestionAdoption, is_mine }) => {
+const TextAnswerList: FC<ListProps> = ({
+  isOpen,
+  questionId,
+  isQuestionAdoption,
+  is_mine,
+  onProfilePress,
+}) => {
   const { data, isLoading, isError, error, fetchNextPage } = useTextAnswerList(
     questionId,
     size,
@@ -166,6 +175,7 @@ const TextAnswerList: FC<ListProps> = ({ isOpen, questionId, isQuestionAdoption,
     ({ item }) => {
       return (
         <Comment
+          onProfilePress={onProfilePress}
           isMine={is_mine}
           questionId={questionId}
           {...item}
@@ -173,7 +183,7 @@ const TextAnswerList: FC<ListProps> = ({ isOpen, questionId, isQuestionAdoption,
         />
       );
     },
-    [isQuestionAdoption, is_mine, questionId]
+    [isQuestionAdoption, is_mine, onProfilePress, questionId]
   );
 
   const onEndReached = useCallback(() => {

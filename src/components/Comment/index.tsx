@@ -4,9 +4,10 @@ import ReportModal from "components/BottomSheets/ReportModal";
 import Tool, { ToolItem } from "components/BottomSheets/Tool";
 import queryKeys from "constant/queryKeys";
 import useAlert from "hooks/useAlert";
+import useMainStackNavigation from "hooks/useMainStackNavigation";
 import { useTextAnswerMutation } from "queries/TextAnswer";
 import { FC, Fragment, useCallback, useMemo, useRef } from "react";
-import { TouchableHighlight } from "react-native";
+import { TouchableHighlight, TouchableOpacity } from "react-native";
 import { Portal } from "react-native-portalize";
 import { useQueryClient } from "react-query";
 import { useTheme } from "styled-components/native";
@@ -39,6 +40,7 @@ interface PropsType {
   isQuestionAdoption: boolean;
   questionId: number;
   isMine: boolean;
+  onProfilePress: () => void;
 }
 
 const Comment: FC<TextAnswer & PropsType> = ({
@@ -51,6 +53,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
   created_at,
   questionId,
   isMine,
+  onProfilePress,
 }) => {
   const profile = useMemo(() => user?.profile || "", [user?.profile]);
   const theme = useTheme();
@@ -59,6 +62,7 @@ const Comment: FC<TextAnswer & PropsType> = ({
   const queryClient = useQueryClient();
   const { closeAlert: closeAlret, showAlert: showAlret } = useAlert();
   const reportSheetRef = useRef<BottomSheetModal>(null);
+  const navigation = useMainStackNavigation();
 
   const onReport = useCallback(
     async (description: string) => {
@@ -154,6 +158,11 @@ const Comment: FC<TextAnswer & PropsType> = ({
     }
   }, [toolItem]);
 
+  const onCommentProfilePress = useCallback(() => {
+    onProfilePress();
+    navigation.navigate("UserPage", { userId: user.id });
+  }, [navigation, onProfilePress, user.id]);
+
   return (
     <Fragment>
       <TouchableHighlight onPress={toolItem.length > 0 ? onCommentPress : () => false}>
@@ -162,7 +171,9 @@ const Comment: FC<TextAnswer & PropsType> = ({
             backgroundColor: is_adoption ? theme.colors.primary.default : undefined,
           }}
         >
-          <S.ProfileImage source={{ uri: profile }} />
+          <TouchableOpacity onPress={onCommentProfilePress}>
+            <S.ProfileImage source={{ uri: profile }} />
+          </TouchableOpacity>
           <S.ContentContainer>
             <S.HeaderContainer>
               <S.Name>{`${user.name || ""}`}</S.Name>
