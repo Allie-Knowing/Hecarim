@@ -48,7 +48,7 @@ const Container = styled.View`
     position: relative;
     display: flex;
     flex-direction: row;
-    background: white;
+    background: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
 
 const NavigationButton = styled.TouchableOpacity`

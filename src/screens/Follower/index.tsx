@@ -53,7 +53,7 @@ const Container = styled.View<{ top: number; }>`
   left: 0px;
   flex: 1;
   padding-top: ${({ top }) => top}px;
-  background: white;
+  background: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
   
 export default Follower;

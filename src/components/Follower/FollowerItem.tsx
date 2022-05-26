@@ -25,7 +25,7 @@ const Container = styled.View`
     display: flex;
     flex-direction: row;
     align-items: center;
-    background: white;
+    background: ${({ theme }) => theme.colors.grayscale.scale10};
 `;
 
 const Avatar = styled.Image`
