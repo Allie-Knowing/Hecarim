@@ -9,6 +9,7 @@ import isStackContext from "context/IsStackContext";
 import { RouteProp } from "@react-navigation/native";
 import { useProfile } from "queries/Profile";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useFollowMutation, useIsFollow } from "queries/Follow";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
@@ -17,19 +18,21 @@ type Props = {
 
 const UserPage: FC<Props> = ({ route, navigation }) => {
   const { top: topPad } = useSafeAreaInsets();
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useProfile(route.params.userId);
+  const { data: userInfo, isLoading, isError } = useProfile(route.params.userId);
+  const { data } = useIsFollow(route.params.userId);
+  const { mutateAsync } = useFollowMutation(route.params.userId);
 
   return (
     <isStackContext.Provider value={true}>
       <S.UserContainer topPad={topPad}>
         <Profile
+          isMy={false}
+          isFollow={data?.data.is_follow}
+          mutate={mutateAsync}
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
+          onPressFollower={() => navigation.push("Follower", { userId: route.params.userId })}
         />
         <MakeKnowingBanner />
         <MyQuestionList

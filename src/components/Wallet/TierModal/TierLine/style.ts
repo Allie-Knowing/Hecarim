@@ -1,17 +1,16 @@
 import styled from "styled-components/native";
 
-export const TableLine = styled.View<{
-  isLast: boolean;
-}>`
+export const TableLine = styled.View`
   width: 100%;
   flex-direction: row;
-  border-bottom-width: ${({ isLast }) => (isLast ? "0px" : "1px")};
-  border-bottom-color: black;
+  justify-content: space-around;
   padding: 5px 0px;
 `;
 
-export const TableContent = styled.Text`
-  width: 33%;
+export const TableContent = styled.Text<{ isBold: boolean }>`
+  width: 25%;
   padding: 0px 5px;
   padding-left: 3px;
-`;
+  font-size: 10px;
+  font-weight: ${({ isBold }) => (isBold ? "bold" : "normal")};
+`;  

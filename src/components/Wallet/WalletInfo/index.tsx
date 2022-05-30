@@ -46,7 +46,7 @@ const WalletInfo: FC<Props> = ({ navigation }) => {
           settierModal(false);
         }}
       >
-        <TierModal closeModal={settierModal} />
+        <TierModal closeModal={settierModal} {...data} />
       </Modal>
       <S.WalletInfoContainer topPad={topPad}>
         {isLoading && <Text>Loading...</Text>}

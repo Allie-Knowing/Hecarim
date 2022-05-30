@@ -1,11 +1,13 @@
+import { getPointResponse } from "api/Wallet";
 import React, { FC } from "react";
 import { Dimensions, GestureResponderEvent } from "react-native";
 import * as S from "./style";
 import TierLine from "./TierLine";
+import Logo from "assets/icons/walletLogo.png";
 
 const { width, height } = Dimensions.get("window");
 
-interface Props {
+interface Props extends getPointResponse {
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -62,7 +64,18 @@ const DATA = [
   },
 ];
 
-const TierModal: FC<Props> = ({ closeModal }) => {
+const nextTire = (currentTire: string) => {
+  return DATA[DATA.findIndex(({ tier }) => tier === currentTire) + 1].tier;
+};
+
+const TierModal: FC<Props> = ({
+  closeModal,
+  category_name,
+  next_tot_iq,
+  tot_cnt,
+  next_adoption_cnt,
+  adoption_cnt,
+}) => {
   const closetierModal = (e: GestureResponderEvent) => {
     if (e.target === e.currentTarget) closeModal(false);
   };
@@ -74,13 +87,41 @@ const TierModal: FC<Props> = ({ closeModal }) => {
       onPress={closetierModal}
       activeOpacity={1}
     >
-      <S.Content>
-        <S.Table>
+      <S.TireModalContent>
+        <S.Header>
+          <S.Logo source={Logo} />
+          <S.TireName>{category_name}</S.TireName>
+          <S.NextTire>
+            {nextTire(category_name)}까지{" "}
+            {tot_cnt - next_tot_iq < 0
+              ? `${next_tot_iq - tot_cnt} IQ `
+              : `${next_adoption_cnt - adoption_cnt} 채택 수 `}
+            남았습니다.
+          </S.NextTire>
+        </S.Header>
+        <S.TireGaugeContainer>
+          <S.TireBarBackground>
+            <S.TireBar
+              width={
+                (tot_cnt / next_tot_iq) * 100 <= 100
+                  ? (tot_cnt / next_tot_iq) * 100
+                  : 100
+              }
+            />
+          </S.TireBarBackground>
+          <S.TireDescription>
+            <S.TireDescriptionFont>{category_name}</S.TireDescriptionFont>
+            <S.TireDescriptionFont>
+              {nextTire(category_name)}
+            </S.TireDescriptionFont>
+          </S.TireDescription>
+        </S.TireGaugeContainer>
+        <S.TireTable>
           {DATA.map((v, i) => {
             return <TierLine {...v} key={i} />;
           })}
-        </S.Table>
-      </S.Content>
+        </S.TireTable>
+      </S.TireModalContent>
     </S.TierModalContainer>
   );
 };

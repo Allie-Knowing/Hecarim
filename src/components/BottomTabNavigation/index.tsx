@@ -28,6 +28,8 @@ import queryKeys from "constant/queryKeys";
 import { useGetInterests } from "queries/Interests";
 import Wallet from "screens/Wallet";
 import Icon from "./Icon";
+import * as S from './styles';
+import { RouteProp } from "@react-navigation/native";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -79,7 +81,7 @@ const screens: Screen[] = [
   },
 ];
 
-type Props = { navigation: StackNavigationProp<MainStackParamList, "Main"> };
+type Props = { navigation: StackNavigationProp<MainStackParamList, "Main">; };
 
 const { width } = Dimensions.get("window");
 
@@ -89,6 +91,19 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   const [pressName, setPressName] = useState<ScreenName>("feed");
   const queryClient = useQueryClient();
   const { data } = useGetInterests();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(isPressed) {
+      navigation.push("Ask");
+      setIsModalOpen(false);
+    }
+  }, [isPressed]);
+
+  useEffect(() => {
+    setIsPressed(false);
+  }, [isModalOpen]);
 
   const loginCheck = useCallback(async () => {
     if (!(await localStorage.getItem<string>(storageKeys.accessToken))) {
@@ -147,7 +162,7 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
               tabPress: (e) => {
                 if (value.name === "question") {
                   e.preventDefault();
-                  navigation.push("Ask");
+                  setIsModalOpen(true);
                 } else {
                   setPressName(value.name);
                 }
@@ -161,6 +176,17 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
           />
         ))}
       </Tab.Navigator>
+      {
+        isModalOpen && (
+          <S.ModalBackground onPress={() => setIsPressed(true)} height={Dimensions.get("window").height}>
+            <S.Modal>
+              <S.ModalContent>
+                질의 형식이 아닌 질문 혹은 질문과 관련 없는 영상일 경우 무통보 삭제 될 수 있습니다.
+              </S.ModalContent>
+            </S.Modal>
+          </S.ModalBackground>
+        )
+      }
     </Fragment>
   );
 };

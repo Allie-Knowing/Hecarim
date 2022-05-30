@@ -36,6 +36,7 @@ export interface ProfileQuestion {
   video_url: string;
   created_at: string;
   comment_cnt: number;
+  views: number;
   user_id: number;
   like_cnt: number;
   is_mine: boolean;
@@ -48,9 +49,7 @@ export interface GetProfileQuestionListResponse {
 }
 
 export const getProfileApi = async (body: ProfileRequest) => {
-  const data = await instance.get<ProfileResponse>(
-    `${uri.getProfile}${body.id}`
-  );
+  const data = await instance.get<ProfileResponse>(`${uri.getProfile}${body.id}`);
   return data;
 };
 

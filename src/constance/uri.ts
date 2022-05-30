@@ -28,6 +28,8 @@ enum uri {
   count = "/count",
   profileAnswerList = "/user/answer/video/",
   exchangeCash = "/user/cash/exchange",
+  getFollower = "/follower",
+  getFollowing = "/following"
 }
 
 export default uri;

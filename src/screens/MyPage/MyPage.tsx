@@ -22,9 +22,11 @@ const MyPage: FC<Props> = ({ navigation }) => {
       <S.Container>
         <MyPageHeader stackNavigation={navigation} />
         <Profile
+          isMy={true}
           userInfo={userInfo?.data.data}
           isLoading={isLoading}
           isError={isError}
+          onPressFollower={() => navigation.push("Follower", { userId: data?.data.data })}
         />
         <MyQuestionList
           userId={data?.data.data}
