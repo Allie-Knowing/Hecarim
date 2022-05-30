@@ -1,4 +1,5 @@
 import uri from "constance/uri";
+import { BANK } from "constance/wallet/bank";
 import { instance } from "utils/axios";
 
 export interface getPointResponse {
@@ -15,6 +16,13 @@ export interface getActivityScoreResponse {
   action_point: number;
 }
 
+export interface postExchangeCashRequest {
+  cash: number;
+  bank: BANK;
+  account_owner: string;
+  account_number: string;
+}
+
 export const getWalletPoint = async () => {
   const data = await instance.get<{ data: getPointResponse }>(uri.wallet);
   return data?.data?.data;
@@ -25,4 +33,13 @@ export const getActivityScore = async () => {
     `${uri.wallet}/action`
   );
   return data?.data?.data;
+};
+
+export const postExchangeCash = async (
+  requestBody: postExchangeCashRequest
+) => {
+  const data = await instance.post(uri.exchangeCash, requestBody);
+  console.log(data);
+
+  return data;
 };
