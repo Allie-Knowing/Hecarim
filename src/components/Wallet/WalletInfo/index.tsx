@@ -5,10 +5,15 @@ import { Modal, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import TierModal from "../TierModal";
 import * as S from "./style";
+import Logo from "assets/icons/walletLogo.png";
+import { MainStackParamList } from "hooks/useMainStackNavigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const Logo = require("assets/icons/walletLogo.png");
+type Props = {
+  navigation: StackNavigationProp<MainStackParamList, "Main">;
+};
 
-const WalletInfo: FC = () => {
+const WalletInfo: FC<Props> = ({ navigation }) => {
   const { top: topPad } = useSafeAreaInsets();
   const { data, isError, isLoading } = useWalletPoint();
   const { data: activityData } = useActivityScore();
@@ -52,18 +57,29 @@ const WalletInfo: FC = () => {
               <S.HeaderTitle>지갑</S.HeaderTitle>
             </S.WalletHeader>
             <S.TierContainer>
-              <S.tierInfo>
-                <S.tierTitle>{data.category_name}</S.tierTitle>
-              </S.tierInfo>
-              <S.ShowtierButton
-                onPress={() => {
-                  settierModal(true);
-                }}
-              >
-                <S.ShowtierButtonDescription>
-                  등급보기
-                </S.ShowtierButtonDescription>
-              </S.ShowtierButton>
+              <S.TierInfo>
+                <S.TierTitle>{data.category_name}</S.TierTitle>
+              </S.TierInfo>
+              <S.WalletHeaderButtonContainer>
+                <S.ExchangeButton
+                  onPress={() => {
+                    navigation.push("Exchange", { iq: data.cur_cnt });
+                  }}
+                >
+                  <S.WalletHeaderButtonDescription>
+                    현금교환
+                  </S.WalletHeaderButtonDescription>
+                </S.ExchangeButton>
+                <S.WalletHeaderButton
+                  onPress={() => {
+                    settierModal(true);
+                  }}
+                >
+                  <S.WalletHeaderButtonDescription>
+                    등급보기
+                  </S.WalletHeaderButtonDescription>
+                </S.WalletHeaderButton>
+              </S.WalletHeaderButtonContainer>
             </S.TierContainer>
             <S.Accumulate>
               <S.AccumulateContent>

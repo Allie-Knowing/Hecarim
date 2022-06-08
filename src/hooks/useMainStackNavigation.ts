@@ -27,6 +27,7 @@ export type MainStackParamList = {
   InterestsSetting: undefined;
   Ask: undefined;
   ProfileEdit: undefined;
+  Exchange: { iq: number };
 };
 
 type screenProp = StackNavigationProp<MainStackParamList>;

@@ -9,13 +9,12 @@ import * as S from "./style";
 import * as ImagePicker from "expo-image-picker";
 import { useNicknameEdit, useProfileEdit } from "queries/ProfileEdit";
 import useAlert from "hooks/useAlert";
+import defaultProfile from "assets/profile.png";
+import editImage from "assets/icons/edit.png";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "PrivacyPolicy">;
 };
-
-const defaultProfile = require("assets/profile.png");
-const editImage = require("assets/icons/edit.png");
 
 const str_space = /\s/;
 

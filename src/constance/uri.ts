@@ -27,6 +27,7 @@ enum uri {
   views = "/video/views",
   count = "/count",
   profileAnswerList = "/user/answer/video/",
+  exchangeCash = "/user/cash/exchange",
   getFollower = "/follower",
   getFollowing = "/following"
 }

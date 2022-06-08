@@ -1,6 +1,11 @@
-import { getActivityScore, getWalletPoint } from "api/Wallet";
+import {
+  getActivityScore,
+  getWalletPoint,
+  postExchangeCash,
+  postExchangeCashRequest,
+} from "api/Wallet";
 import queryKeys from "constant/queryKeys";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 export const useWalletPoint = () =>
   useQuery([queryKeys.walletPoint], () => getWalletPoint(), {
@@ -15,3 +20,6 @@ export const useActivityScore = () =>
     retry: false,
     cacheTime: 0,
   });
+
+export const useExchangeCash = () =>
+  useMutation((body: postExchangeCashRequest) => postExchangeCash(body));

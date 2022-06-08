@@ -40,6 +40,7 @@ import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import * as Notifications from "expo-notifications";
 import { postExpoToken } from "utils/api/notification";
 import { RecoilRoot } from "recoil";
+import ExchangePage from "screens/Exchange";
 import Follower from "screens/Follower";
 
 const Root = createStackNavigator<MainStackParamList>();
@@ -237,6 +238,14 @@ const MainNavigationScreen = () => {
         name="ProfileEdit"
         component={ProfileEditPage}
         options={{ headerShown: false }}
+      />
+      <Root.Screen
+        name="Exchange"
+        component={ExchangePage}
+        options={{
+          title: "IQ 현금교환",
+          headerBackTitle: " ",
+        }}
       />
     </Root.Navigator>
   );
