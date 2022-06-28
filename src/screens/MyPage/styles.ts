@@ -18,3 +18,13 @@ export const Container = styled.View`
   left: 0px;
   flex: 1;
 `;
+
+export const AdContainer = styled.View`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  padding: 5px;
+`;

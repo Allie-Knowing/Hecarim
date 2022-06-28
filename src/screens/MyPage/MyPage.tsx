@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { StackNavigationProp } from "@react-navigation/stack";
 import MyPageHeader from "components/Header/MyPage";
 import Profile from "components/Profile";
@@ -8,6 +8,8 @@ import { MainStackParamList } from "hooks/useMainStackNavigation";
 import isStackContext from "context/IsStackContext";
 import { useMyId } from "queries/MyId";
 import { useProfile } from "queries/Profile";
+import { AdMobBanner } from "expo-ads-admob";
+import getEnvVars from "../../../environment";
 
 type Props = {
   navigation: StackNavigationProp<MainStackParamList, "UserPage">;
@@ -16,6 +18,7 @@ type Props = {
 const MyPage: FC<Props> = ({ navigation }) => {
   const { data } = useMyId();
   const { data: userInfo, isLoading, isError } = useProfile(data?.data.data);
+  const [adError, setAdError] = useState(false);
 
   return (
     <isStackContext.Provider value={false}>
@@ -28,6 +31,19 @@ const MyPage: FC<Props> = ({ navigation }) => {
           isError={isError}
           onPressFollower={() => navigation.push("Follower", { userId: data?.data.data })}
         />
+        <S.AdContainer>
+          {!adError && (
+            <AdMobBanner
+              bannerSize="smartBannerPortrait"
+              servePersonalizedAds={true}
+              onDidFailToReceiveAdWithError={(error) => {
+                setAdError(true);
+                alert(error);
+              }}
+              adUnitID={getEnvVars().googleAdLicense}
+            />
+          )}
+        </S.AdContainer>
         <MyQuestionList
           userId={data?.data.data}
           navigation={navigation}
