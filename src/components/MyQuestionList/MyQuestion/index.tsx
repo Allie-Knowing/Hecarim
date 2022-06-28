@@ -21,21 +21,28 @@ const MyQuestion: FC<Props> = ({ question, moveQuestionStack }) => {
           <S.QuestionImage source={{ uri: question.thumbnail }} resizeMode="cover" />
           <S.QuestionInformation>
             <S.QuestionInformationIcon source={play} />
-            <S.QuestionInformationText>{(() => {
-              console.log(reduceNumberLength(question.views));
-              return reduceNumberLength(question.views);
-            })()}</S.QuestionInformationText>
+            <S.QuestionInformationText>
+              {(() => {
+                return reduceNumberLength(question.views);
+              })()}
+            </S.QuestionInformationText>
             <S.QuestionInformationIcon source={heart} />
-            <S.QuestionInformationText>{reduceNumberLength(question.like_cnt)}</S.QuestionInformationText>
+            <S.QuestionInformationText>
+              {reduceNumberLength(question.like_cnt)}
+            </S.QuestionInformationText>
           </S.QuestionInformation>
         </S.Question>
       ) : (
         <S.DefaultQuestion imageWidth={width / 2 - 30}>
           <S.QuestionInformation>
             <S.QuestionInformationIcon source={play} />
-            <S.QuestionInformationText>{reduceNumberLength(question.views)}</S.QuestionInformationText>
+            <S.QuestionInformationText>
+              {reduceNumberLength(question.views)}
+            </S.QuestionInformationText>
             <S.QuestionInformationIcon source={heart} />
-            <S.QuestionInformationText>{reduceNumberLength(question.like_cnt)}</S.QuestionInformationText>
+            <S.QuestionInformationText>
+              {reduceNumberLength(question.like_cnt)}
+            </S.QuestionInformationText>
           </S.QuestionInformation>
         </S.DefaultQuestion>
       )}
