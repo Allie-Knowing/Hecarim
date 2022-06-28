@@ -23,7 +23,6 @@ const MyQuestion: FC<Props> = ({ question, moveQuestionStack }) => {
             <S.QuestionInformationIcon source={play} />
             <S.QuestionInformationText>
               {(() => {
-                console.log(reduceNumberLength(question.views));
                 return reduceNumberLength(question.views);
               })()}
             </S.QuestionInformationText>
