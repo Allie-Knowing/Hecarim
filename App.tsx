@@ -141,12 +141,10 @@ export default function App() {
                               <CameraProvider>
                                 <IsUploadingContext.Consumer>
                                   {(isUploading) =>
-                                    isUploading.isUploading ? (
+                                    isUploading.isUploading && (
                                       <UploadingStatusContext.Consumer>
                                         {(status) => <UploadingModal status={status.status} />}
                                       </UploadingStatusContext.Consumer>
-                                    ) : (
-                                      <></>
                                     )
                                   }
                                 </IsUploadingContext.Consumer>
