@@ -31,7 +31,7 @@ export const QuestionInformation = styled.View`
   bottom: 0;
   padding: 12px 14px;
   background-color: ${({ theme }) => theme.colors.grayscale.scale100};
-  opacity: .2;
+  opacity: 0.6;
   display: flex;
   flex-direction: row;
   align-items: center;
