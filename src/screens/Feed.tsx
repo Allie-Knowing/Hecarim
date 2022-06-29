@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from "react";
+import React, { FC, useCallback, useMemo } from "react";
 import QuestionList from "components/QuestionList";
 import isStackContext from "context/IsStackContext";
 import { useQuestionList } from "queries/Question";
