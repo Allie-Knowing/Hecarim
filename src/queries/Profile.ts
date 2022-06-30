@@ -1,10 +1,11 @@
 import {
+  deleteWithdrawal,
   getProfileAnswerListApi,
   getProfileApi,
   getProfilQuestionListApi,
 } from "api/Profile";
 import queryKeys from "constant/queryKeys";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 export const useProfile = (userId: number) =>
   useQuery([queryKeys.profile, userId], () => getProfileApi({ id: userId }), {
@@ -31,3 +32,5 @@ export const useProfileAnswerList = (userId: number) =>
       refetchOnMount: "always",
     }
   );
+
+export const useDeleteWithdrawal = () => useMutation(() => deleteWithdrawal());

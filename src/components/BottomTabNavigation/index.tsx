@@ -103,17 +103,19 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
         storageKeys.isFirstQuestionUpload
       );
 
-      const adModalCloseAt = new Date(
-        await localStorage.getItem(storageKeys.adModalCloseAt)
+      const adModalCloseAt: string = await localStorage.getItem(
+        storageKeys.adModalCloseAt
       );
 
       if (!adModalCloseAt && isFirstQuestion !== "true") {
         return true;
       }
 
+      const closeAt = new Date(adModalCloseAt);
+
       const today = new Date();
       const DAY = 1000 * 60 * 60 * 24;
-      const diffDay = (today.getDate() - adModalCloseAt.getTime()) / DAY;
+      const diffDay = (today.getDate() - closeAt.getTime()) / DAY;
 
       if (isFirstQuestion !== "true" && diffDay > 1) {
         return true;
@@ -123,6 +125,8 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
     };
 
     checkFirstQuestion().then((res) => {
+      console.log(res);
+
       if (res) {
         setTimeout(() => {
           firstQuestionBottomSheet.current?.snapToIndex(0);

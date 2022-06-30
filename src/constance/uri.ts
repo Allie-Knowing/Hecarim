@@ -29,7 +29,8 @@ enum uri {
   profileAnswerList = "/user/answer/video/",
   exchangeCash = "/user/cash/exchange",
   getFollower = "/follower",
-  getFollowing = "/following"
+  getFollowing = "/following",
+  user = "/user",
 }
 
 export default uri;

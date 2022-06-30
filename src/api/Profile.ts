@@ -49,7 +49,9 @@ export interface GetProfileQuestionListResponse {
 }
 
 export const getProfileApi = async (body: ProfileRequest) => {
-  const data = await instance.get<ProfileResponse>(`${uri.getProfile}${body.id}`);
+  const data = await instance.get<ProfileResponse>(
+    `${uri.getProfile}${body.id}`
+  );
   return data;
 };
 
@@ -65,6 +67,13 @@ export const getProfileAnswerListApi = async (userId: number) => {
   const data = await instance.get<GetProfileQuestionListResponse>(
     `${uri.profileAnswerList}${userId}?page=1&size=10000`
   );
+
+  return data;
+};
+
+export const deleteWithdrawal = async () => {
+  const data = await instance.delete(uri.user);
+  console.log(data);
 
   return data;
 };
