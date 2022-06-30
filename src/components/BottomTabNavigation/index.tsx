@@ -4,12 +4,12 @@ import {
 } from "@react-navigation/bottom-tabs";
 import React, {
   FC,
-  Fragment,
   memo,
   useCallback,
   useContext,
   useEffect,
   useMemo,
+  useRef,
 } from "react";
 import { useState } from "react";
 import { Dimensions } from "react-native";
@@ -28,8 +28,10 @@ import queryKeys from "constant/queryKeys";
 import { useGetInterests } from "queries/Interests";
 import Wallet from "screens/Wallet";
 import Icon from "./Icon";
-import * as S from './styles';
-import { RouteProp } from "@react-navigation/native";
+import * as S from "./styles";
+import { Portal } from "react-native-portalize";
+import FirstQuestionModal from "components/BottomSheets/FirstQuestionModal/FirstQuestionModal";
+import BottomSheet from "@gorhom/bottom-sheet";
 
 const FeedIcon = require("../../assets/icons/navigation/feed.png");
 const MyPageIcon = require("../../assets/icons/navigation/mypage.png");
@@ -81,7 +83,7 @@ const screens: Screen[] = [
   },
 ];
 
-type Props = { navigation: StackNavigationProp<MainStackParamList, "Main">; };
+type Props = { navigation: StackNavigationProp<MainStackParamList, "Main"> };
 
 const { width } = Dimensions.get("window");
 
@@ -93,9 +95,44 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   const { data } = useGetInterests();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isPressed, setIsPressed] = useState<boolean>(false);
+  const firstQuestionBottomSheet = useRef<BottomSheet>(null);
 
   useEffect(() => {
-    if(isPressed) {
+    const checkFirstQuestion = async () => {
+      const isFirstQuestion = await localStorage.getItem(
+        storageKeys.isFirstQuestionUpload
+      );
+
+      const adModalCloseAt = new Date(
+        await localStorage.getItem(storageKeys.adModalCloseAt)
+      );
+
+      if (!adModalCloseAt && isFirstQuestion !== "true") {
+        return true;
+      }
+
+      const today = new Date();
+      const DAY = 1000 * 60 * 60 * 24;
+      const diffDay = (today.getDate() - adModalCloseAt.getTime()) / DAY;
+
+      if (isFirstQuestion !== "true" && diffDay > 1) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    checkFirstQuestion().then((res) => {
+      if (res) {
+        setTimeout(() => {
+          firstQuestionBottomSheet.current?.snapToIndex(0);
+        }, 200);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isPressed) {
       navigation.push("Ask");
       setIsModalOpen(false);
     }
@@ -152,7 +189,7 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
   );
 
   return (
-    <Fragment>
+    <>
       <Tab.Navigator screenOptions={screenOptions} initialRouteName="feed">
         {screens.map((value) => (
           <Tab.Screen
@@ -176,18 +213,27 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
           />
         ))}
       </Tab.Navigator>
-      {
-        isModalOpen && (
-          <S.ModalBackground onPress={() => setIsPressed(true)} height={Dimensions.get("window").height}>
-            <S.Modal>
-              <S.ModalContent>
-                질의 형식이 아닌 질문 혹은 질문과 관련 없는 영상일 경우 무통보 삭제 될 수 있습니다.
-              </S.ModalContent>
-            </S.Modal>
-          </S.ModalBackground>
-        )
-      }
-    </Fragment>
+      {isModalOpen && (
+        <S.ModalBackground
+          onPress={() => setIsPressed(true)}
+          height={Dimensions.get("window").height}
+        >
+          <S.Modal>
+            <S.ModalContent>
+              질의 형식이 아닌 질문 혹은 질문과 관련 없는 영상일 경우 무통보
+              삭제 될 수 있습니다.
+            </S.ModalContent>
+          </S.Modal>
+        </S.ModalBackground>
+      )}
+
+      <Portal>
+        <FirstQuestionModal
+          ref={firstQuestionBottomSheet}
+          navigation={navigation}
+        />
+      </Portal>
+    </>
   );
 };
 

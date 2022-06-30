@@ -100,7 +100,6 @@ const MyQuestionList: FC<Props> = ({
         </View>
       )}
       {isLoading && <S.Notice>잠시만 기다려주세요.</S.Notice>}
-      {!isLoading && isError && <S.Notice>잠시 후 다시 시도하세요.</S.Notice>}
       {profileDataList.length === 0 && !isLoading && (
         <View>
           <S.Title>질문</S.Title>

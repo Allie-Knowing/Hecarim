@@ -18,6 +18,8 @@ import isStackContext from "context/IsStackContext";
 import { useVideoUrlMutation } from "queries/useVideoUrl";
 import { useVideoDataMutation } from "queries/useVideoData";
 import backImage from "assets/icons/back-black.png";
+import localStorage from "utils/localStorage";
+import storageKeys from "constant/storageKeys";
 
 interface Props {
   route?: {
@@ -42,7 +44,9 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [hashTag, setHashTag] = useState<string>("");
-  const [timer, setTimer] = useState<NodeJS.Timeout>(setTimeout(() => false, 0));
+  const [timer, setTimer] = useState<NodeJS.Timeout>(
+    setTimeout(() => false, 0)
+  );
 
   const { videoUrl } = useVideoUrlMutation();
   const { postQuestion, postAnswer } = useVideoDataMutation();
@@ -101,6 +105,9 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             hash_tag: hashTagArr,
             video_url: videoUrlResponse.data.data.url,
           });
+      if (!isAnswer) {
+        localStorage.setItem(storageKeys.isFirstQuestionUpload, "true");
+      }
       setIsUploading(false);
     } catch (err) {
       console.log(err);
@@ -109,7 +116,9 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
 
   //이미지 캐싱 함수
   const cacheImage = () => {
-    Promise.all([Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync()]);
+    Promise.all([
+      Asset.fromModule("../../../assets/icons/back-black.png").downloadAsync(),
+    ]);
   };
 
   const autoHashTag = (text: string) => {
@@ -136,7 +145,11 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
   }, []);
 
   return (
-    <KeyboardAwareScrollView extraHeight={40} enableOnAndroid={true} enableAutomaticScroll={true}>
+    <KeyboardAwareScrollView
+      extraHeight={40}
+      enableOnAndroid={true}
+      enableAutomaticScroll={true}
+    >
       <S.QuestionDetailWrapper topPad={TOP_PAD + HEADER_HEIGHT}>
         <S.QuestionDetailHeader topPad={TOP_PAD}>
           <S.GoBackContainer
@@ -147,7 +160,9 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
             <S.GoBackImage source={backImage} />
           </S.GoBackContainer>
           <S.InputQuestionInfoText>질문 정보 입력</S.InputQuestionInfoText>
-          {videoUrl.isLoading || postQuestion.isLoading || postAnswer.isLoading ? (
+          {videoUrl.isLoading ||
+          postQuestion.isLoading ||
+          postAnswer.isLoading ? (
             <S.UploadContainer>
               <S.UploadText color="#97979C">업로드중...</S.UploadText>
             </S.UploadContainer>
@@ -158,7 +173,10 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
           )}
         </S.QuestionDetailHeader>
         <S.QuestionDetailBody
-          height={SCREEN_HEIGHT - (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)}
+          height={
+            SCREEN_HEIGHT -
+            (TOP_PAD + BOTTOM_PAD + HEADER_HEIGHT + FOOTER_HEIGHT)
+          }
         >
           <ScrollView>
             <S.VideoContainer>
@@ -184,8 +202,12 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                     <S.TitleInput
                       placeholder="입력해주세요..."
                       placeholderTextColor={theme.colors.grayscale.scale30}
-                      onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
-                      onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
+                      onFocus={() =>
+                        setBorderBottomColor(theme.colors.primary.default)
+                      }
+                      onBlur={() =>
+                        setBorderBottomColor(theme.colors.grayscale.scale30)
+                      }
                       onChangeText={(text) => setTitle(text)}
                     />
                   </S.TitleInputContainer>
@@ -199,8 +221,12 @@ const CameraDetail: FC<Props> = ({ route }): JSX.Element => {
                     <S.TitleInput
                       placeholder="입력해주세요"
                       placeholderTextColor={theme.colors.grayscale.scale30}
-                      onFocus={() => setBorderBottomColor(theme.colors.primary.default)}
-                      onBlur={() => setBorderBottomColor(theme.colors.grayscale.scale30)}
+                      onFocus={() =>
+                        setBorderBottomColor(theme.colors.primary.default)
+                      }
+                      onBlur={() =>
+                        setBorderBottomColor(theme.colors.grayscale.scale30)
+                      }
                       onChangeText={(text) => setTitle(text)}
                     />
                   </S.TitleInputContainer>
