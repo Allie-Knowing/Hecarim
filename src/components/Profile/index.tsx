@@ -55,16 +55,15 @@ const Profile: FC<Props> = ({
         {userInfo && (
           <>
             <S.ProfileImage
-              source={userInfo.profile ? { uri: userInfo.profile } : defaultProfile}
+              source={
+                userInfo.profile ? { uri: userInfo.profile } : defaultProfile
+              }
             />
             <S.ProfileContent>
               <S.NameContainer>
                 <S.Nickname ellipsizeMode="tail" numberOfLines={1}>
                   {userInfo.name}
                 </S.Nickname>
-                <S.Email ellipsizeMode="tail" numberOfLines={1}>
-                  {userInfo.email}
-                </S.Email>
               </S.NameContainer>
               <S.DescriptionButton onPress={onPressFollower}>
                 <S.Description>
