@@ -125,8 +125,6 @@ const BottomTabNavigation: FC<Props> = ({ navigation }) => {
     };
 
     checkFirstQuestion().then((res) => {
-      console.log(res);
-
       if (res) {
         setTimeout(() => {
           firstQuestionBottomSheet.current?.snapToIndex(0);
